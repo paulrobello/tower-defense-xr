@@ -1,0 +1,40 @@
+{
+  "name": "tower-defense-xr",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "packageManager": "bun@1.4.4",
+  "scripts": {
+    "prepare-assets": "bun scripts/prepare-assets.ts",
+    "dev": "bun run prepare-assets && bun --bun vite --host 0.0.0.0 --port 4272 --strictPort",
+    "build": "bun run prepare-assets && bun --bun vite build",
+    "iwer-build": "bun run prepare-assets && bun --bun vite build --mode iwer --outDir dist-iwer",
+    "preview": "bun --bun vite preview --host 0.0.0.0 --port 4273 --strictPort",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "biome check --error-on-warnings .",
+    "fmt": "biome format --write .",
+    "dev-stop": "bun scripts/dev-stop.ts",
+    "dev-restart": "bun scripts/dev-restart.ts"
+  },
+  "dependencies": {
+    "@par/xr-workspace": "file:../mux-xr/packages/xr-workspace",
+    "three": "0.186.1",
+    "troika-three-text": "0.52.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.15",
+    "@types/node": "26.6.4",
+    "@types/three": "0.186.0",
+    "@types/webxr": "0.5.24",
+    "bun-types": "1.4.4",
+    "fake-indexeddb": "6.2.8",
+    "happy-dom": "21.0.4",
+    "iwer": "2.8.0",
+    "playwright": "1.63.0",
+    "typescript": "7.0.2",
+    "vite": "8.3.5",
+    "vitest": "5.0.3"
+  }
+}

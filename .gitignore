@@ -1,0 +1,14 @@
+node_modules/
+dist/
+dist-iwer/
+public/assets/xr-hands/
+public/fonts/
+.local/
+output/
+test-results/
+playwright-report/
+coverage/
+.env
+.env.*
+!.env.example
+*.local.md
