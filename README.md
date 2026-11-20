@@ -18,11 +18,11 @@ Room-scale WebXR mixed-reality tactical sci-fi tower defense for Meta Quest 3 (s
 
 | Phase | Status |
 | --- | --- |
-| P0 — Foundation & Deploy Pipeline | Planned (backlog on shared kanban board) |
-| P1 — Room-Scale MR, Occlusion & Hybrid Placement | Planned |
-| P2 — Combat Simulation, Navigation & 12-Wave Slice | Planned |
-| P3 — Art Direction & Blender AAA Asset Production | Planned |
-| P4 — AAA Rendering, FX & Spatial Audio | Planned |
+| P0 — Foundation & Deploy Pipeline | Local complete (`P0-T1`–`P0-T5` done; `P0-T6` CI ready, awaiting push/DNS approval) |
+| P1 — Room-Scale MR, Occlusion & Hybrid Placement | Complete (verified via unit tests + 19/19 seated/standing IWER XR walk; physical Quest check in P5) |
+| P2 — Combat Simulation, Navigation & 12-Wave Slice | Complete (218 unit tests + 12/12 desktop campaign + 8/8 IWER combat walk passing) |
+| P3 — Art Direction & Blender AAA Asset Production | Ready to start (`P3-T1` Higgsfield style board & art bible next) |
+| P4 — AAA Rendering, FX & Spatial Audio | Planned (`P4-T4` ElevenLabs SFX unblocked; includes `P4-T6` radial menu re-skin) |
 | P5 — Quest 3 Tuning, Verification & Release | Planned |
 
 *Development ports `4272` (dev) and `4273` (preview) are reserved in `~/.claude/used_ports.md`. Deployment target: `https://rift-bastion.pardev.net/`.*
