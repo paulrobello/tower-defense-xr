@@ -60,6 +60,14 @@
   - Implement `src/audio/engine.ts`: Web Audio API spatial `PannerNode` (HRTF/equalpower tunable) synced to Three.js listener pose, strict voice-pool caps per cue family (preventing Quest speaker clipping during 14-turret volleys), priority ducking (Core alarm & Boss roar duck ambient/turret bed slightly), seamless bar-aligned or smooth crossfade music transitions driven by game state/wave, gesture unlock, focus/visibility pause-resume, independent Music/SFX volume/mute controls, and full cleanup on reset/exit.
 - **Verification:** Automated audio validator verifies post-encode LUFS, peak, gapless loop seam, and `0.5L + 0.5R` mono compatibility; Playwright browser audio test verifies gesture unlock, bounded voice count, mute/volume persistence, and clean missing-file resilience; `make checkall` passes.
 
+#### `P4-T6`: Tactical Sci-Fi Radial Menu Re-Skin (`RadialMenuTheme` + Higgsfield Icon Badges)
+- **Dependencies:** `plans/phase-1-room-mr-and-placement.md` (`P1-T5`), `plans/phase-3-art-direction-and-blender-assets.md` (`P3-T2` approved Higgsfield UI icons)
+- **Scope:**
+  - Opt the `@par/xr-workspace` Build Wheel and Turret Command Wheel (`src/xr/radial-controls.ts`) into a bespoke **Rift Bastion Tactical Sci-Fi** `RadialMenuTheme` matching `docs/art-bible.md` (gunmetal/brushed-titanium wedge backing, subtle chamfered bezel ring, high-contrast cyan hover / amber affordability / crimson disabled states, crisp Troika SDF cost badges, and promoted Higgsfield RGBA turret & command icon decals on each wedge).
+  - Preserve 100% of `@par/xr-workspace`'s input convention (thumbstick open/tilt/laser/trigger selection, grip suppression, hit areas without coplanar depth fighting per `webxr.md`).
+  - Keep desktop quick-build bar / command strip visually harmonized with the same palette and icon atlas.
+- **Verification:** GPU Playwright + IWER capture verifies Build Wheel and Turret Command Wheel readability at working distance and oblique angles with zero z-fighting, intact hit areas, and `make checkall && make checkall-ci` green.
+
 ---
 
 ## Phase 4 Exit Criteria
