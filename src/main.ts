@@ -52,7 +52,9 @@ import {
   createCalibrationController,
   createCalibrationPreview,
   extractHeadsetPoseFromObject,
+  type HeadsetPose,
   type PortalAnchor,
+  yawFromForward,
 } from './xr/calibration.ts';
 import { createTurretPlacementController, type TurretPlacementController } from './xr/placement.ts';
 import { createXrRadialControls, type XrRadialControls } from './xr/radial-controls.ts';
@@ -471,6 +473,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
   };
 
   let detachRadialSession: (() => void) | null = null;
+  let pendingXrCalibrationPose = false;
   let wasPresenting = shell.xr.state.presenting;
   const unsubXr = shell.xr.subscribe((xrState) => {
     syncXrStatus();
@@ -493,11 +496,13 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
         if (state.phase === 'title') {
           state.transition('calibrate', 'xr-enter');
+          pendingXrCalibrationPose = true;
           const xrPose = extractHeadsetPoseFromObject(shell.renderer.xr.getCamera());
           calibration.beginCalibration(xrPose);
           tacticalHud.recenterToHeadset(xrPose);
         }
       } else {
+        pendingXrCalibrationPose = false;
         detachRadialSession?.();
         detachRadialSession = null;
         radialControls.reset();
@@ -716,6 +721,28 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
     // 1. Ingest XR spatial surfaces, depth-sensing, radial menu, and controller placement
     if (frame && shell.xr.reference) {
+      if (pendingXrCalibrationPose && state.phase === 'calibrate') {
+        const viewerPose = frame.getViewerPose(shell.xr.reference);
+        if (viewerPose) {
+          pendingXrCalibrationPose = false;
+          const t = viewerPose.transform;
+          const q = new THREE.Quaternion(
+            t.orientation.x,
+            t.orientation.y,
+            t.orientation.z,
+            t.orientation.w,
+          );
+          const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(q);
+          const liveXrPose: HeadsetPose = {
+            position: { x: t.position.x, y: t.position.y, z: t.position.z },
+            yaw: yawFromForward({ x: fwd.x, y: fwd.y, z: fwd.z }),
+          };
+          calibration.beginCalibration(liveXrPose);
+          tacticalHud.recenterToHeadset(liveXrPose);
+          syncTacticalHud();
+        }
+      }
+
       const hasLivePlanes =
         ((frame.detectedPlanes as Set<XRPlane> | undefined)?.size ?? 0) > 0 ||
         ((frame.detectedMeshes as Set<XRMesh> | undefined)?.size ?? 0) > 0;
