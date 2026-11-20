@@ -1,0 +1,559 @@
+import 'fake-indexeddb/auto';
+import * as THREE from 'three';
+import { describe, expect, it } from 'vitest';
+import {
+  CORE_BASTION_SPEC,
+  ENEMIES,
+  ENEMY_IDS,
+  getTurretTierStats,
+  TURRET_KINDS,
+  type TurretKind,
+} from '../src/content/index.ts';
+import { createActionBus } from '../src/core/action-bus.ts';
+import { createOcclusionController } from '../src/mr/occlusion.ts';
+import { createPersistStore } from '../src/persist/store.ts';
+import { createBlockoutRenderer } from '../src/render/blockouts.ts';
+import { createSettingsStore } from '../src/settings/store.ts';
+import { createCombatSimulation } from '../src/sim/engine.ts';
+import { createMissionOverlay } from '../src/ui/mission-overlay.ts';
+import {
+  createThreatChevrons,
+  evaluateThreatIndicators,
+  NEAR_CORE_THREAT_RADIUS_M,
+  PORTAL_THREAT_ALERT_DURATION_SEC,
+  projectThreatDirection,
+} from '../src/ui/threat-chevrons.ts';
+
+describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invaders, Instanced FX)', () => {
+  it('creates Core Bastion and Rift Portals with aperture masks and reacts to core-hit events', () => {
+    const scene = new THREE.Scene();
+    const occlusion = createOcclusionController({ initialMode: 'auto-depth' });
+    const renderer = createBlockoutRenderer(scene, occlusion);
+    const sim = createCombatSimulation({ seed: 20261120 });
+
+    renderer.syncFromSim(sim.getState(), sim.drainEvents(), 1 / 60);
+
+    // Core Bastion positioned at sim corePosition
+    expect(renderer.coreBastion.group.position.z).toBeCloseTo(sim.getState().corePosition.z, 3);
+    expect(renderer.coreBastion.pedestalMesh.name).toBe('core-bastion-pedestal');
+    expect(renderer.coreBastion.shieldRingMesh.name).toBe('core-bastion-shield-ring');
+    expect(renderer.coreBastion.energyCoreMesh.position.y).toBeLessThanOrEqual(
+      CORE_BASTION_SPEC.heightM,
+    );
+
+    // 4 Rift Portals created with aperture mask meshes
+    expect(renderer.portals.size).toBe(4);
+    for (const portal of renderer.portals.values()) {
+      expect(portal.apertureMaskMesh).not.toBeNull();
+      expect(portal.frameMesh.name).toContain('portal-frame-');
+      expect(portal.interiorMesh.name).toContain('portal-interior-');
+    }
+
+    // Trigger core-hit event and verify shield flare reaction
+    renderer.syncFromSim(
+      sim.getState(),
+      [
+        {
+          type: 'core-hit',
+          tick: 10,
+          timeSec: 0.2,
+          enemyId: 'enemy-1',
+          archetypeId: 'skitter-crawler',
+          damage: 4,
+          remainingCoreHp: 96,
+          maxCoreHp: 100,
+          position: sim.getState().corePosition,
+        },
+      ],
+      0.016,
+    );
+    expect(renderer.coreBastion.hitFlashRemainingSec).toBeGreaterThan(0);
+    expect(renderer.coreBastion.shieldMaterial.color.getHex()).toBe(0xff3b5c);
+
+    renderer.dispose();
+    occlusion.dispose();
+  });
+
+  it('builds all 4 turret roles across T1 -> T2 -> T3 upgrades, surface-clamp vs hover-pod mounts, recoil, and EMP disruption halo', () => {
+    const scene = new THREE.Scene();
+    const renderer = createBlockoutRenderer(scene);
+    const sim = createCombatSimulation({
+      seed: 42,
+      startingCredits: 9000,
+    });
+
+    const placements: Array<{
+      kind: TurretKind;
+      position: { x: number; y: number; z: number };
+      mountProfile: 'surface-clamp' | 'hover-pod';
+      surfaceId?: string;
+    }> = [
+      {
+        kind: 'autocannon',
+        position: { x: -1.1, y: 0, z: 0.4 },
+        mountProfile: 'surface-clamp',
+        surfaceId: 'sim-floor-main',
+      },
+      {
+        kind: 'plasma-mortar',
+        position: { x: -0.4, y: 0, z: 0.4 },
+        mountProfile: 'surface-clamp',
+        surfaceId: 'sim-floor-main',
+      },
+      {
+        kind: 'cryo-arc',
+        position: { x: 0.4, y: 1.25, z: 0.4 },
+        mountProfile: 'hover-pod',
+      },
+      {
+        kind: 'rail-sniper',
+        position: { x: 1.1, y: 1.35, z: 0.4 },
+        mountProfile: 'hover-pod',
+      },
+    ];
+
+    const placedIds: string[] = [];
+    for (const p of placements) {
+      const res = sim.placeTurret({
+        kind: p.kind,
+        position: p.position,
+        mountProfile: p.mountProfile,
+        surfaceId: p.surfaceId,
+      });
+      expect(res.ok).toBe(true);
+      if (res.turret) placedIds.push(res.turret.id);
+    }
+
+    renderer.syncFromSim(sim.getState(), sim.drainEvents(), 1 / 60);
+    expect(renderer.turrets.size).toBe(4);
+
+    // Check T1 dimensions, mount profile visibility, and barrel counts
+    for (let i = 0; i < TURRET_KINDS.length; i += 1) {
+      const kind = TURRET_KINDS[i] as TurretKind;
+      const id = placedIds[i] as string;
+      const blockout = renderer.turrets.get(id);
+      expect(blockout).toBeDefined();
+      if (!blockout) continue;
+
+      const t1Stats = getTurretTierStats(kind, 'T1');
+      expect(blockout.tier).toBe('T1');
+      expect(blockout.barrelGroup.userData.tier).toBe('T1');
+      expect(blockout.barrelGroup.userData.barrelCount).toBe(t1Stats.blockout.barrelCount);
+      expect(blockout.headMesh.scale.x).toBeCloseTo(t1Stats.blockout.headWidthM, 4);
+      expect(blockout.headMesh.scale.y).toBeCloseTo(t1Stats.blockout.headHeightM, 4);
+      expect(blockout.headMesh.scale.z).toBeCloseTo(t1Stats.blockout.headLengthM, 4);
+
+      const expectedHover = placements[i]?.mountProfile === 'hover-pod';
+      expect(blockout.hoverPodGroup.visible).toBe(expectedHover);
+      expect(blockout.clampMountGroup.visible).toBe(!expectedHover);
+      expect(blockout.empHaloGroup.visible).toBe(false);
+    }
+
+    // Upgrade all 4 turrets to T2 and verify silhouettes update
+    for (const id of placedIds) {
+      const up = sim.upgradeTurret(id);
+      expect(up.ok).toBe(true);
+      expect(up.tier).toBe('T2');
+    }
+    renderer.syncFromSim(sim.getState(), sim.drainEvents(), 1 / 60);
+
+    for (let i = 0; i < TURRET_KINDS.length; i += 1) {
+      const kind = TURRET_KINDS[i] as TurretKind;
+      const id = placedIds[i] as string;
+      const blockout = renderer.turrets.get(id);
+      expect(blockout).toBeDefined();
+      if (!blockout) continue;
+      const t2Stats = getTurretTierStats(kind, 'T2');
+      expect(blockout.tier).toBe('T2');
+      expect(blockout.barrelGroup.userData.tier).toBe('T2');
+      expect(blockout.barrelGroup.userData.barrelCount).toBe(t2Stats.blockout.barrelCount);
+      expect(blockout.headMesh.scale.x).toBeCloseTo(t2Stats.blockout.headWidthM, 4);
+    }
+
+    // Upgrade all 4 turrets to T3 and verify T3 rotary/siege/tri-pylon/twin-rail silhouettes
+    for (const id of placedIds) {
+      const up = sim.upgradeTurret(id);
+      expect(up.ok).toBe(true);
+      expect(up.tier).toBe('T3');
+    }
+    renderer.syncFromSim(sim.getState(), sim.drainEvents(), 1 / 60);
+
+    for (let i = 0; i < TURRET_KINDS.length; i += 1) {
+      const kind = TURRET_KINDS[i] as TurretKind;
+      const id = placedIds[i] as string;
+      const blockout = renderer.turrets.get(id);
+      expect(blockout).toBeDefined();
+      if (!blockout) continue;
+      const t3Stats = getTurretTierStats(kind, 'T3');
+      expect(blockout.tier).toBe('T3');
+      expect(blockout.barrelGroup.userData.tier).toBe('T3');
+      expect(blockout.barrelGroup.userData.barrelCount).toBe(t3Stats.blockout.barrelCount);
+    }
+
+    // Spawn a Rift Disruptor right next to turret-1 so it pulses EMP disruption
+    const firstId = placedIds[0] ?? 'turret-1';
+    const firstTurret = sim.getTurret(firstId);
+    expect(firstTurret).toBeDefined();
+    if (!firstTurret) return;
+    sim.debugSpawnEnemy('rift-disruptor', {
+      position: {
+        x: firstTurret.position.x,
+        y: firstTurret.position.y + 0.3,
+        z: firstTurret.position.z,
+      },
+      initialEmpCooldownSec: 0,
+    });
+
+    const tickRes = sim.tick();
+    renderer.syncFromSim(tickRes.state, sim.drainEvents(), 1 / 60);
+
+    const disruptedTurretBlockout = renderer.turrets.get(firstId);
+    expect(disruptedTurretBlockout).toBeDefined();
+    if (!disruptedTurretBlockout) return;
+    expect(disruptedTurretBlockout.isDisrupted).toBe(true);
+    expect(disruptedTurretBlockout.empHaloGroup.visible).toBe(true);
+    expect(disruptedTurretBlockout.accentMaterial.emissiveIntensity).toBeCloseTo(0.2, 3);
+
+    renderer.dispose();
+  });
+
+  it('renders all 5 invader archetypes, cryo-slow cyan frost tint, Apex Broodlord Boss Phase-2 armor cracks, instanced HP bars, and pooled weapon FX', () => {
+    const scene = new THREE.Scene();
+    const renderer = createBlockoutRenderer(scene);
+    const sim = createCombatSimulation({
+      seed: 99,
+      startingCredits: 5000,
+    });
+
+    // Place a Cryo-Arc, Autocannon, Plasma Mortar, and Rail Sniper
+    sim.placeTurret({
+      kind: 'cryo-arc',
+      position: { x: -0.7, y: 0, z: -0.4 },
+      mountProfile: 'surface-clamp',
+      surfaceId: 'sim-floor-main',
+    });
+    sim.placeTurret({
+      kind: 'autocannon',
+      position: { x: 0.7, y: 0, z: -0.4 },
+      mountProfile: 'surface-clamp',
+      surfaceId: 'sim-floor-main',
+    });
+    sim.placeTurret({
+      kind: 'plasma-mortar',
+      position: { x: -0.7, y: 0, z: 0.3 },
+      mountProfile: 'surface-clamp',
+      surfaceId: 'sim-floor-main',
+    });
+    const railRes = sim.placeTurret({
+      kind: 'rail-sniper',
+      position: { x: 0.7, y: 0, z: 0.3 },
+      mountProfile: 'surface-clamp',
+      surfaceId: 'sim-floor-main',
+      priority: 'strongest',
+    });
+    expect(railRes.ok).toBe(true);
+
+    // Spawn all 5 enemy archetypes (keep Disruptor EMP on cooldown and Boss near portal > 1.5 m from turrets)
+    const spawnedIds: Record<string, string> = {};
+    for (let i = 0; i < ENEMY_IDS.length; i += 1) {
+      const archetypeId = ENEMY_IDS[i] ?? 'skitter-crawler';
+      const enemy = sim.debugSpawnEnemy(archetypeId, {
+        portalIndex: i % 4,
+        distanceAlongPath: archetypeId === 'apex-broodlord' ? 0.15 : 1.3 + i * 0.15,
+        initialEmpCooldownSec: 10,
+      });
+      spawnedIds[archetypeId] = enemy.id;
+    }
+
+    // Run ticks so turrets fire (cryo slow + chain, kinetic tracer, mortar shell, rail beam)
+    const stepRes = sim.runTicks(4);
+    renderer.syncFromSim(stepRes.state, stepRes.events, 0.03);
+
+    expect(renderer.enemies.size).toBe(5);
+    expect(renderer.hpBgInstancedMesh.count).toBe(5);
+    expect(renderer.hpFillInstancedMesh.count).toBe(5);
+
+    // Weapon FX pools must be active after turrets fire
+    const totalActiveFx =
+      renderer.fxCounts.activeTracers +
+      renderer.fxCounts.activeMortarShells +
+      renderer.fxCounts.activeCryoSegments +
+      renderer.fxCounts.activeRailBeams;
+    expect(totalActiveFx).toBeGreaterThan(0);
+
+    // Verify cryo-slowed enemy exhibits cyan frost ring and frost tint
+    const slowedSimEnemy = stepRes.state.enemies.find(
+      (e) => e.slowFactor > 0 && e.slowRemainingSec > 0,
+    );
+    expect(slowedSimEnemy).toBeDefined();
+    if (slowedSimEnemy) {
+      const slowedBlockout = renderer.enemies.get(slowedSimEnemy.id);
+      expect(slowedBlockout?.isCryoSlowed).toBe(true);
+      expect(slowedBlockout?.frostRingMesh.visible).toBe(true);
+    }
+
+    // Drive Apex Broodlord Boss below 50% HP via a live Rail Sniper hit to trigger Phase-2 molten armor-crack transition
+    const bossId = spawnedIds['apex-broodlord'] ?? '';
+    const bossEntity = sim.getEnemy(bossId);
+    expect(bossEntity).toBeDefined();
+    if (!bossEntity) return;
+    expect(bossEntity.isBoss).toBe(true);
+    expect(bossEntity.isBossPhase2).toBe(false);
+
+    // Put boss just above the 50% threshold and step until Rail Sniper ('strongest' priority) strikes it
+    bossEntity.hp = ENEMIES['apex-broodlord'].maxHp * 0.5 + 5;
+    const bossTick = sim.runTicks(90);
+    renderer.syncFromSim(bossTick.state, bossTick.events, 1 / 60);
+
+    const bossBlockout = renderer.enemies.get(bossId);
+    expect(bossBlockout).toBeDefined();
+    if (!bossBlockout) return;
+    expect(bossBlockout.isBossPhase2).toBe(true);
+    expect(bossBlockout.crackMaterial?.opacity).toBeGreaterThan(0.9);
+    expect(bossBlockout.accentMaterial.emissiveIntensity).toBeGreaterThanOrEqual(1.9);
+
+    // Dispose cleanly and verify scene cleanup
+    renderer.dispose();
+    expect(renderer.turrets.size).toBe(0);
+    expect(renderer.enemies.size).toBe(0);
+    expect(renderer.portals.size).toBe(0);
+    expect(scene.getObjectByName('rift-bastion-blockouts-root')).toBeUndefined();
+  });
+});
+
+describe('P2-T5: ThreatChevrons (Off-FOV Angular Projection & Portal/Core Threat Filtering)', () => {
+  const viewer = {
+    position: { x: 0, y: 1.2, z: 1.5 },
+    yaw: 0, // Facing -Z (0, 0, -1)
+  };
+  const corePosition = { x: 0, y: 0.78, z: 0 };
+
+  it('projects in-FOV vs off-FOV left/right/behind/above threats with exact edge angles', () => {
+    // 1. Dead ahead in FOV (-Z)
+    const ahead = projectThreatDirection(viewer, { x: 0, y: 1.2, z: -1.5 });
+    expect(ahead.offFov).toBe(false);
+    expect(ahead.azimuthRad).toBeCloseTo(0, 4);
+
+    // 2. Off-FOV 90 deg to the right (+X)
+    const right = projectThreatDirection(viewer, { x: 2.5, y: 1.2, z: 1.5 });
+    expect(right.offFov).toBe(true);
+    expect(right.azimuthRad).toBeCloseTo(Math.PI / 2, 3);
+    expect(right.edgeAngleRad).toBeCloseTo(0, 3);
+    expect(right.edgeNdcX).toBeCloseTo(1, 3);
+
+    // 3. Off-FOV 90 deg to the left (-X)
+    const left = projectThreatDirection(viewer, { x: -2.5, y: 1.2, z: 1.5 });
+    expect(left.offFov).toBe(true);
+    expect(left.azimuthRad).toBeCloseTo(-Math.PI / 2, 3);
+    expect(Math.abs(left.edgeAngleRad)).toBeCloseTo(Math.PI, 3);
+    expect(left.edgeNdcX).toBeCloseTo(-1, 3);
+
+    // 4. Directly above (+Y ceiling portal)
+    const above = projectThreatDirection(viewer, { x: 0, y: 3.5, z: 1.5 });
+    expect(above.offFov).toBe(true);
+    expect(above.edgeAngleRad).toBeCloseTo(Math.PI / 2, 3);
+    expect(above.edgeNdcY).toBeCloseTo(1, 3);
+  });
+
+  it('filters enemies strictly by <= 1.8 m Core distance and off-FOV cone, plus 4.0 s portal-opened alerts', () => {
+    const indicators = evaluateThreatIndicators({
+      viewer,
+      corePosition,
+      enemies: [
+        // Inside 1.8 m of Core AND off-FOV (to the right at x = 1.4, z = 1.0 -> dist to Core ~1.73 m <= 1.8 m)
+        {
+          id: 'enemy-near-offfov',
+          archetypeId: 'skitter-crawler',
+          position: { x: 1.4, y: 0.78, z: 1.0 },
+          hp: 80,
+          isBoss: false,
+        },
+        // Inside 1.8 m of Core BUT directly in front of viewer (in FOV) -> should NOT show chevron
+        {
+          id: 'enemy-near-infov',
+          archetypeId: 'skitter-crawler',
+          position: { x: 0, y: 1.0, z: 0 },
+          hp: 80,
+          isBoss: false,
+        },
+        // Off-FOV BUT > 1.8 m from Core (x = 2.4 -> dist 2.4 m > 1.8 m) -> should NOT show chevron
+        {
+          id: 'enemy-far-offfov',
+          archetypeId: 'carapace-brute',
+          position: { x: 2.4, y: 0.78, z: 0 },
+          hp: 440,
+          isBoss: false,
+        },
+      ],
+      portalAlerts: [
+        {
+          portalId: 'portal-west',
+          position: { x: -2.4, y: 1.4, z: 1.2 },
+          waveNumber: 3,
+          remainingSec: 3.2,
+        },
+      ],
+    });
+
+    expect(NEAR_CORE_THREAT_RADIUS_M).toBe(1.8);
+    expect(indicators.map((d) => d.sourceId)).toEqual(['enemy-near-offfov', 'portal-west']);
+    expect(indicators[0]?.kind).toBe('near-core');
+    expect(indicators[0]?.distanceToCoreM).toBeLessThanOrEqual(1.8);
+    expect(indicators[1]?.kind).toBe('portal-opened');
+
+    // Verify stateful ThreatChevrons DOM & XR ring update and 4.0 s portal alert expiry
+    const container = document.createElement('div');
+    const chevrons = createThreatChevrons({ container, initialMode: 'desktop' });
+
+    const camera = new THREE.PerspectiveCamera(65, 16 / 9, 0.05, 50);
+    camera.position.set(0, 1.2, 1.5);
+    camera.lookAt(0, 1.2, -1);
+    camera.updateMatrixWorld(true);
+
+    chevrons.update({
+      snapshot: {
+        corePosition,
+        enemies: [],
+      },
+      events: [
+        {
+          type: 'portal-opened',
+          tick: 1,
+          timeSec: 0.016,
+          portalId: 'portal-east',
+          portalIndex: 3,
+          position: { x: 2.4, y: 1.4, z: 1.2 },
+          normal: { x: -1, y: 0, z: 0 },
+          waveNumber: 2,
+        },
+      ],
+      dt: 0.1,
+      camera,
+    });
+
+    expect(chevrons.activeThreats.length).toBe(1);
+    expect(chevrons.activeThreats[0]?.sourceId).toBe('portal-east');
+    const activeDomBadge = container.querySelector('[data-source-id="portal-east"]') as HTMLElement;
+    expect(activeDomBadge).not.toBeNull();
+    expect(activeDomBadge.hidden).toBe(false);
+
+    // Advance past the 4.0 s portal alert window and verify automatic expiry
+    chevrons.update({
+      snapshot: { corePosition, enemies: [] },
+      dt: PORTAL_THREAT_ALERT_DURATION_SEC + 0.2,
+      camera,
+    });
+    expect(chevrons.activeThreats.length).toBe(0);
+
+    chevrons.dispose();
+  });
+});
+
+describe('P2-T5: MissionOverlay (IndexedDB Recording, Stars, New Best Badge & JSON Backup)', () => {
+  it('records completed mission runs to IndexedDB, computes 1–3 stars, shows NEW BEST badge, and exports/imports backup JSON', async () => {
+    const container = document.createElement('div');
+    const persistStore = createPersistStore({
+      dbName: `test-mission-overlay-${Date.now()}-${Math.random()}`,
+    });
+    await persistStore.init();
+
+    const bus = createActionBus();
+    const settingsStore = createSettingsStore();
+    const overlay = createMissionOverlay({
+      persistStore,
+      actionBus: bus,
+      settingsStore,
+      container,
+      initialMode: 'desktop',
+    });
+
+    // 1. Present a 2-star Victory run (75% Core HP -> 2 stars)
+    const firstState = await overlay.presentResult({
+      victory: true,
+      score: 4200,
+      wavesCleared: 12,
+      totalWaves: 12,
+      remainingCoreHp: 75,
+      maxCoreHp: 100,
+      seed: 1234,
+      runKey: 'run-1',
+    });
+
+    expect(firstState.open).toBe(true);
+    expect(firstState.victory).toBe(true);
+    expect(firstState.stars).toBe(2);
+    expect(firstState.isNewBest).toBe(true);
+    expect(firstState.records.bestScore).toBe(4200);
+    expect(firstState.records.bestStars).toBe(2);
+    expect(firstState.records.totalRuns).toBe(1);
+
+    const newBestEl = container.querySelector('[data-mission="new-best"]') as HTMLElement;
+    const starsEl = container.querySelector('[data-mission="stars"]') as HTMLElement;
+    const scoreEl = container.querySelector('[data-mission="score"]') as HTMLElement;
+    expect(newBestEl.hidden).toBe(false);
+    expect(starsEl.textContent).toContain('★ ★ ☆');
+    expect(scoreEl.textContent).toBe('4200');
+
+    // 2. Present a lower-score Defeat run (0 stars, not a new best)
+    const secondState = await overlay.presentResult({
+      victory: false,
+      score: 1800,
+      wavesCleared: 6,
+      totalWaves: 12,
+      remainingCoreHp: 0,
+      maxCoreHp: 100,
+      seed: 1235,
+      runKey: 'run-2',
+    });
+
+    expect(secondState.victory).toBe(false);
+    expect(secondState.stars).toBe(0);
+    expect(secondState.isNewBest).toBe(false);
+    expect(secondState.records.bestScore).toBe(4200);
+    expect(secondState.records.bestStars).toBe(2);
+    expect(secondState.records.totalRuns).toBe(2);
+    expect(newBestEl.hidden).toBe(true);
+
+    // 3. Present a 3-star Victory run (95% Core HP -> 3 stars, NEW BEST!)
+    const thirdState = await overlay.presentResult({
+      victory: true,
+      score: 6850,
+      wavesCleared: 12,
+      totalWaves: 12,
+      remainingCoreHp: 95,
+      maxCoreHp: 100,
+      seed: 1236,
+      runKey: 'run-3',
+    });
+
+    expect(thirdState.stars).toBe(3);
+    expect(thirdState.isNewBest).toBe(true);
+    expect(thirdState.isNewBestStars).toBe(true);
+    expect(thirdState.isNewBestScore).toBe(true);
+    expect(thirdState.records.bestScore).toBe(6850);
+    expect(thirdState.records.bestStars).toBe(3);
+    expect(starsEl.textContent).toContain('★ ★ ★');
+    expect(newBestEl.hidden).toBe(false);
+
+    // 4. Export backup JSON, clear records, and re-import backup JSON
+    const exportedJson = await overlay.exportBackup();
+    expect(exportedJson).toContain('"bestScore": 6850');
+
+    await persistStore.clearMissionRecords();
+    const cleared = await persistStore.loadMissionRecords();
+    expect(cleared.bestScore).toBe(0);
+
+    // Reject corrupt JSON without clobbering state
+    await expect(overlay.importBackup('{corrupt')).rejects.toThrow();
+    expect(overlay.state.backupError).toBe(true);
+
+    // Import valid backup JSON
+    const imported = await overlay.importBackup(exportedJson);
+    expect(imported.missionRecords.bestScore).toBe(6850);
+    expect(imported.missionRecords.bestStars).toBe(3);
+    expect(overlay.state.backupError).toBe(false);
+
+    overlay.dispose();
+    persistStore.close();
+  });
+});
