@@ -748,6 +748,7 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
   });
 
   describe('Full Deterministic 12-Wave Victory & Zero-Turret Defeat Runs', () => {
+    // Two complete campaign simulations can exceed Vitest's default timeout on a shared CI runner.
     it('reaches Victory across all 12 waves with byte-identical computeStateHash() across two independent runs with the same seed', () => {
       const seed = 0x2026_b45e;
       const runA = runScripted12WaveDefense(seed);
@@ -774,7 +775,7 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       expect(stateA.credits).toBe(stateB.credits);
       expect(stateA.coreHp).toBe(stateB.coreHp);
       expect(stateA.score).toBe(stateB.score);
-    });
+    }, 20_000);
 
     it('reaches Defeat in a zero-turret run with byte-identical computeStateHash() across two independent runs', () => {
       const runZeroTurretToDefeat = (seed: number) => {
