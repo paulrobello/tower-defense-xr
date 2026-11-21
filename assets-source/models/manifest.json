@@ -5188,6 +5188,218 @@
           "tolerance": 16
         }
       ]
+    },
+    {
+      "file": "carapace-brute/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "714e5266343051274dff3577dadf5bdc4224431eb66360255b332d7c5290292a",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Prow face",
+          "x": 870,
+          "y": 887,
+          "rgb": [
+            49,
+            61,
+            77
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 93,
+          "y": 697,
+          "rgb": [
+            28,
+            25,
+            28
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye slit 1",
+          "x": 62,
+          "y": 187,
+          "rgb": [
+            255,
+            161,
+            43
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Dorsal vent",
+          "x": 289,
+          "y": 459,
+          "rgb": [
+            255,
+            123,
+            24
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "carapace-brute/normal.ktx2",
+      "role": "normal",
+      "sha256": "531a16bab8b2781b4818c3a2fb3e0a94fbfcb33cc258c4f59a6ce70ae5ac0039",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Prow face",
+          "x": 870,
+          "y": 887,
+          "rgb": [
+            159,
+            150,
+            249
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 93,
+          "y": 697,
+          "rgb": [
+            123,
+            128,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye slit 1",
+          "x": 62,
+          "y": 187,
+          "rgb": [
+            152,
+            147,
+            251
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Dorsal vent",
+          "x": 289,
+          "y": 459,
+          "rgb": [
+            131,
+            135,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "carapace-brute/orm.ktx2",
+      "role": "orm",
+      "sha256": "f0459e24ca5dd45603103d3a440e75286fc15d337cfde0328c3cc7d75e3e82d3",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Prow face",
+          "x": 870,
+          "y": 887,
+          "rgb": [
+            0,
+            93,
+            28
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 93,
+          "y": 697,
+          "rgb": [
+            255,
+            146,
+            9
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye slit 1",
+          "x": 62,
+          "y": 187,
+          "rgb": [
+            0,
+            76,
+            11
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Dorsal vent",
+          "x": 289,
+          "y": 459,
+          "rgb": [
+            21,
+            95,
+            9
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "carapace-brute/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "766bcf7ad42229feedf2ddbf67ee88406ea1c00e794e270705409130952212aa",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Prow face",
+          "x": 870,
+          "y": 887,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 93,
+          "y": 697,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye slit 1",
+          "x": 62,
+          "y": 187,
+          "rgb": [
+            255,
+            161,
+            43
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Dorsal vent",
+          "x": 289,
+          "y": 459,
+          "rgb": [
+            255,
+            123,
+            24
+          ],
+          "tolerance": 16
+        }
+      ]
     }
   ],
   "models": [
@@ -6830,6 +7042,66 @@
           "normal": "wasp-skimmer/normal.ktx2",
           "orm": "wasp-skimmer/orm.ktx2",
           "emissive": "wasp-skimmer/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "carapace-brute",
+      "lod": 0,
+      "file": "carapace-brute/carapace-brute-lod0.glb",
+      "sha256": "bca48e122bda16e010cbe301450265ec8e362978b27a6f19d2a4ca9a00e62daa",
+      "limits": {
+        "triangles": 9000,
+        "materials": 1,
+        "bones": 28,
+        "sockets": 0,
+        "texture_size": 1024
+      },
+      "sockets": {},
+      "animations": [
+        "stomp_walk",
+        "armor_brace",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Brute slate carapace": {
+          "basecolor": "carapace-brute/basecolor.ktx2",
+          "normal": "carapace-brute/normal.ktx2",
+          "orm": "carapace-brute/orm.ktx2",
+          "emissive": "carapace-brute/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "carapace-brute",
+      "lod": 1,
+      "file": "carapace-brute/carapace-brute-lod1.glb",
+      "sha256": "59ea5bdd425e57c93f59ade894d4ee54f8f86be5bc6b0969a80671fea9b5b546",
+      "limits": {
+        "triangles": 4500,
+        "materials": 1,
+        "bones": 28,
+        "sockets": 0,
+        "texture_size": 1024
+      },
+      "sockets": {},
+      "animations": [
+        "stomp_walk",
+        "armor_brace",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Brute slate carapace": {
+          "basecolor": "carapace-brute/basecolor.ktx2",
+          "normal": "carapace-brute/normal.ktx2",
+          "orm": "carapace-brute/orm.ktx2",
+          "emissive": "carapace-brute/emissive.ktx2"
         }
       }
     }

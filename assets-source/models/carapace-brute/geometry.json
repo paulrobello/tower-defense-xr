@@ -1,0 +1,228 @@
+{
+  "high": {
+    "triangles": 62008,
+    "extent_XYZ_m": [
+      0.4618467688560486,
+      0.5208687484264374,
+      0.48006054759025574
+    ],
+    "support_z_m": 0.0
+  },
+  "bake": {
+    "normal_correspondence_texels": 745100,
+    "normal": {
+      "sha256": "f30684dcb79c083cd2bd988cbd9d2ffe424c22f4b56e4c1d805a61205dbb89e8",
+      "samples": [
+        {
+          "surface": "Prow face",
+          "x": 870,
+          "y": 887,
+          "rgb": [
+            159,
+            150,
+            249
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 93,
+          "y": 697,
+          "rgb": [
+            123,
+            128,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye slit 1",
+          "x": 62,
+          "y": 187,
+          "rgb": [
+            152,
+            147,
+            251
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Dorsal vent",
+          "x": 289,
+          "y": 459,
+          "rgb": [
+            131,
+            135,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "basecolor": {
+      "sha256": "84d19a59d4df02fa5c4f907a80631015cf71f8a63ea106486e0e09f3ff9ecdf1",
+      "samples": [
+        {
+          "surface": "Prow face",
+          "x": 870,
+          "y": 887,
+          "rgb": [
+            49,
+            61,
+            77
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 93,
+          "y": 697,
+          "rgb": [
+            28,
+            25,
+            28
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye slit 1",
+          "x": 62,
+          "y": 187,
+          "rgb": [
+            255,
+            161,
+            43
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Dorsal vent",
+          "x": 289,
+          "y": 459,
+          "rgb": [
+            255,
+            123,
+            24
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "orm": {
+      "sha256": "ae9152d218f4b9f390eb34d9473977d1d264550163612989f467d9ef009d7455",
+      "samples": [
+        {
+          "surface": "Prow face",
+          "x": 870,
+          "y": 887,
+          "rgb": [
+            0,
+            93,
+            28
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 93,
+          "y": 697,
+          "rgb": [
+            255,
+            146,
+            9
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye slit 1",
+          "x": 62,
+          "y": 187,
+          "rgb": [
+            0,
+            76,
+            11
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Dorsal vent",
+          "x": 289,
+          "y": 459,
+          "rgb": [
+            21,
+            95,
+            9
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "emissive": {
+      "sha256": "320e6ee53011e6faeca86a17d496f4b5523c76035c56fe51c1e35aaca8856c51",
+      "samples": [
+        {
+          "surface": "Prow face",
+          "x": 870,
+          "y": 887,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 93,
+          "y": 697,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye slit 1",
+          "x": 62,
+          "y": 187,
+          "rgb": [
+            255,
+            161,
+            43
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Dorsal vent",
+          "x": 289,
+          "y": 459,
+          "rgb": [
+            255,
+            123,
+            24
+          ],
+          "tolerance": 16
+        }
+      ]
+    }
+  },
+  "lod0": {
+    "triangles": 8720,
+    "extent_XYZ_m": [
+      0.46000000834465027,
+      0.5199999809265137,
+      0.47999998927116394
+    ],
+    "support_z_m": 0.0
+  },
+  "lod1": {
+    "triangles": 3352,
+    "extent_XYZ_m": [
+      0.46000000834465027,
+      0.5190337300300598,
+      0.478365957736969
+    ],
+    "support_z_m": 0.0
+  }
+}

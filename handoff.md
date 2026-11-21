@@ -42,7 +42,7 @@
   - `P3-T5c` complete (`01a1fb3c897177268bcaedf2577ed3d4`). All three [Glacier](docs/art-review-index.md#glacier-cryo-arc) and [Valkyrie](docs/art-review-index.md#valkyrie-rail-sniper) tiers are staged with editable high and low sources, repeat-matched GLBs and maps, and views on both mounts. Re-import verified the neutral muzzle and articulated yaw, pitch and recoil. Their largest assemblies measure Glacier 5,140/2,468 and Valkyrie 4,068/2,484 triangles. Valkyrie T3 retains a 46.64 mm minimum open rail gap.
   - `P3-T5` complete (`01a1fadb16977224a3f5072a8ba38175`). All 48 combinations of four heads, three tiers, two LODs and two mounts pass the assembly budget. The largest uses 6,452/2,500 triangles and two materials. The full model gate checks 30 GLBs and 81 KTX2 textures, including the shared material library. Final turret approval remains at `P3-T7`.
   - `P3-T6a` complete (`01a1fb3c8b1071cf8430eb90a84fa8ba`). [Skitter Crawler](docs/art-review-index.md#skitter-crawler) is staged at 4,340/1,836 tris and 23 bones. [Wasp Skimmer](docs/art-review-index.md#wasp-skimmer) is staged at 5,976/2,116 tris and nine bones. Both use one material. Both LODs passed re-import for all five named clips and the contact, articulation and root-motion checks. The art index links their matched views, motion poses, turntables, and source and export hashes.
-  - `P3-T6b` (`01a1fb3c8def7766a0bd37d25c39874d`): Rigged Carapace Brute (`≤9k/28b`) & Rift Disruptor (`≤6.5k/24b`).
+  - `P3-T6b` (`01a1fb3c8def7766a0bd37d25c39874d`): [Carapace Brute](docs/art-review-index.md#carapace-brute) is staged at 8,720/3,352 tris and 24 bones. Both LODs passed re-import for all five clips, supported stomp and brace poses, and stable foot placement under the braced armor. Finish Rift Disruptor (`≤6.5k/24b`) before closing the card.
   - `P3-T6c` (`01a1fb3c91067130bdb8af122f51b91a`): Rigged Wave 12 Boss Apex Broodlord (`≤28k/48b`, 2048 px KTX2 + Phase-2 crack emissive mask).
   - `P3-T6` (`01a1fadb18be76c79209166e054aeb93`): Invader family rollup (closes once `P3-T6a/b/c` pass).
 - **Wave 4 (Owner Checkpoint #2 before P4 promotion):**
@@ -105,5 +105,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Continue serial Blender authoring.** The Core, Rift frame, entire turret kit, Skitter Crawler and Wasp Skimmer are staged. Author Carapace Brute and Rift Disruptor for `P3-T6b`, followed by Apex Broodlord for `P3-T6c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
+1. **Continue serial Blender authoring.** The Core, Rift frame, entire turret kit, Skitter Crawler, Wasp Skimmer and Carapace Brute are staged. Finish Rift Disruptor for `P3-T6b`, followed by Apex Broodlord for `P3-T6c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
 2. **Collect owner feedback** from the [public test build](https://rift-bastion.pardev.net/). Asset promotion stays gated by Owner Checkpoint 2.

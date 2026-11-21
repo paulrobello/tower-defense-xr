@@ -1,0 +1,487 @@
+{
+  "lod0": {
+    "sha256": "bca48e122bda16e010cbe301450265ec8e362978b27a6f19d2a4ca9a00e62daa",
+    "triangles": 8720,
+    "joints": [
+      "root",
+      "thorax",
+      "femur_fore.L",
+      "tibia_fore.L",
+      "claw_fore.L",
+      "femur_fore.R",
+      "tibia_fore.R",
+      "claw_fore.R",
+      "femur_hind.L",
+      "tibia_hind.L",
+      "claw_hind.L",
+      "femur_hind.R",
+      "tibia_hind.R",
+      "claw_hind.R",
+      "femur_mid.L",
+      "tibia_mid.L",
+      "claw_mid.L",
+      "femur_mid.R",
+      "tibia_mid.R",
+      "claw_mid.R",
+      "head",
+      "mandible.L",
+      "mandible.R",
+      "shield"
+    ],
+    "inverse_bind_max_matrix_error": 2.355555120125974e-07,
+    "head_forward_of_thorax_gltf_z_m": 0.16528550594197636,
+    "influences": [
+      1,
+      1
+    ],
+    "positive_area_uv_or_coplanar_pairs": 0,
+    "mean_texels_per_meter": 536.941997995189,
+    "neutral_xyz_m": [
+      0.46000003814697266,
+      0.5199999809265137,
+      0.48000001907348633
+    ],
+    "minimum_z_m": -5.483700604713704e-08,
+    "connected_anatomical_parts": 89,
+    "clips": {
+      "stomp_walk": {
+        "samples": 71,
+        "mesh_joint_and_leg_clearance_samples": 5,
+        "max_vertex_travel_m": 0.03897285833954811,
+        "first_last_vertex_error_m": 4.7706993910878737e-08,
+        "start_rest_error_m": 0.0193650983273983,
+        "end_rest_error_m": 0.0193650983273983,
+        "root_matrix_drift": 0,
+        "minimum_simultaneous_contacts": 3,
+        "maximum_height_m": 0.47999995946884155,
+        "minimum_surface_distance_m": -5.6485782806703355e-06,
+        "head_under_shield_minimum_clearance_m": 0.014537408947944641,
+        "maximum_head_subframe_travel_m": 0.0011241368483752012,
+        "actual_wall_root_skin_max_error_m": 1.3858881024821308e-07,
+        "wall_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "wall_contact_residual_m": 0,
+        "wall_fixture_matrix": [
+          [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ]
+        ],
+        "world_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "foot_excursions_m": {
+          "claw_fore.L": [
+            -4.731070930574788e-06,
+            0.026393936946988106
+          ],
+          "claw_mid.L": [
+            -5.193503056943882e-06,
+            0.026391526684165
+          ],
+          "claw_hind.L": [
+            -5.6348203543166164e-06,
+            0.026425734162330627
+          ],
+          "claw_fore.R": [
+            -4.728623935079668e-06,
+            0.026393964886665344
+          ],
+          "claw_mid.R": [
+            -5.206695277593099e-06,
+            0.02639150060713291
+          ],
+          "claw_hind.R": [
+            -5.6485782806703355e-06,
+            0.026425745338201523
+          ]
+        }
+      },
+      "armor_brace": {
+        "samples": 65,
+        "mesh_joint_and_leg_clearance_samples": 5,
+        "max_vertex_travel_m": 0.08987484127283096,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 1.5680970477660594e-07,
+        "end_rest_error_m": 1.5680970477660594e-07,
+        "root_matrix_drift": 0,
+        "minimum_simultaneous_contacts": 6,
+        "maximum_height_m": 0.47999995946884155,
+        "minimum_surface_distance_m": -1.0169505770818432e-07,
+        "head_under_shield_minimum_clearance_m": 0.01454608142375946,
+        "maximum_head_subframe_travel_m": 0.00428235437721014,
+        "actual_wall_root_skin_max_error_m": 1.320246245463889e-07,
+        "wall_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "wall_contact_residual_m": 0,
+        "maximum_pad_slip_m": 1.8375631043454632e-05,
+        "leading_shield_drop_m": 0.08174383640289307
+      },
+      "attack": {
+        "samples": 45,
+        "mesh_joint_and_leg_clearance_samples": 5,
+        "max_vertex_travel_m": 0.06126321852207184,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 1.5680970477660594e-07,
+        "end_rest_error_m": 1.5680970477660594e-07,
+        "root_matrix_drift": 0,
+        "minimum_simultaneous_contacts": 4,
+        "maximum_height_m": 0.47999995946884155,
+        "minimum_surface_distance_m": -1.6117726772790775e-05,
+        "head_under_shield_minimum_clearance_m": 0.01454608142375946,
+        "maximum_head_subframe_travel_m": 0.00882983859628439,
+        "actual_wall_root_skin_max_error_m": 1.463806830673553e-07,
+        "wall_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "wall_contact_residual_m": 0
+      },
+      "hit": {
+        "samples": 29,
+        "mesh_joint_and_leg_clearance_samples": 5,
+        "max_vertex_travel_m": 0.042002491652965546,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 1.5680970477660594e-07,
+        "end_rest_error_m": 1.5680970477660594e-07,
+        "root_matrix_drift": 0,
+        "minimum_simultaneous_contacts": 6,
+        "maximum_height_m": 0.488098680973053,
+        "minimum_surface_distance_m": -2.2171969249029644e-05,
+        "head_under_shield_minimum_clearance_m": 0.01454608142375946,
+        "maximum_head_subframe_travel_m": 0.004141408018767834,
+        "actual_wall_root_skin_max_error_m": 1.463806830673553e-07,
+        "wall_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "wall_contact_residual_m": 0
+      },
+      "death": {
+        "samples": 69,
+        "mesh_joint_and_leg_clearance_samples": 5,
+        "max_vertex_travel_m": 0.1326681524515152,
+        "first_last_vertex_error_m": 0.1326681226491928,
+        "start_rest_error_m": 1.5680970477660594e-07,
+        "end_rest_error_m": 0.13266810774803162,
+        "root_matrix_drift": 0,
+        "minimum_simultaneous_contacts": 6,
+        "maximum_height_m": 0.47999995946884155,
+        "minimum_surface_distance_m": -2.52617383011966e-06,
+        "head_under_shield_minimum_clearance_m": 0.01454608142375946,
+        "maximum_head_subframe_travel_m": 0.0037572479341179132,
+        "actual_wall_root_skin_max_error_m": 1.3758380198940178e-07,
+        "wall_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "wall_contact_residual_m": 0,
+        "collapsed_hold_drift_m": 1.0758059687532295e-07
+      }
+    }
+  },
+  "lod1": {
+    "sha256": "59ea5bdd425e57c93f59ade894d4ee54f8f86be5bc6b0969a80671fea9b5b546",
+    "triangles": 3352,
+    "joints": [
+      "root",
+      "thorax",
+      "femur_fore.L",
+      "tibia_fore.L",
+      "claw_fore.L",
+      "femur_fore.R",
+      "tibia_fore.R",
+      "claw_fore.R",
+      "femur_hind.L",
+      "tibia_hind.L",
+      "claw_hind.L",
+      "femur_hind.R",
+      "tibia_hind.R",
+      "claw_hind.R",
+      "femur_mid.L",
+      "tibia_mid.L",
+      "claw_mid.L",
+      "femur_mid.R",
+      "tibia_mid.R",
+      "claw_mid.R",
+      "head",
+      "mandible.L",
+      "mandible.R",
+      "shield"
+    ],
+    "inverse_bind_max_matrix_error": 2.355555120125974e-07,
+    "head_forward_of_thorax_gltf_z_m": 0.16528550594197636,
+    "influences": [
+      1,
+      1
+    ],
+    "positive_area_uv_or_coplanar_pairs": 0,
+    "mean_texels_per_meter": 526.4977572584453,
+    "neutral_xyz_m": [
+      0.46000003814697266,
+      0.519033670425415,
+      0.4783659875392914
+    ],
+    "minimum_z_m": -5.483700604713704e-08,
+    "connected_anatomical_parts": 89,
+    "clips": {
+      "stomp_walk": {
+        "samples": 71,
+        "mesh_joint_and_leg_clearance_samples": 5,
+        "max_vertex_travel_m": 0.03876986727118492,
+        "first_last_vertex_error_m": 4.48970887134692e-08,
+        "start_rest_error_m": 0.0193650983273983,
+        "end_rest_error_m": 0.0193650983273983,
+        "root_matrix_drift": 0,
+        "minimum_simultaneous_contacts": 3,
+        "maximum_height_m": 0.47837236523628235,
+        "minimum_surface_distance_m": -5.645715646096505e-06,
+        "head_under_shield_minimum_clearance_m": 0.016387253999710083,
+        "maximum_head_subframe_travel_m": 0.001122131827287376,
+        "actual_wall_root_skin_max_error_m": 1.2489448945403256e-07,
+        "wall_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "wall_contact_residual_m": 0,
+        "wall_fixture_matrix": [
+          [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ]
+        ],
+        "world_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "foot_excursions_m": {
+          "claw_fore.L": [
+            -4.73407317258534e-06,
+            0.026393936946988106
+          ],
+          "claw_mid.L": [
+            -5.18770002599922e-06,
+            0.026391526684165
+          ],
+          "claw_hind.L": [
+            -5.6319840950891376e-06,
+            0.026425734162330627
+          ],
+          "claw_fore.R": [
+            -4.731602984975325e-06,
+            0.026393964886665344
+          ],
+          "claw_mid.R": [
+            -5.2014688662893604e-06,
+            0.02639150060713291
+          ],
+          "claw_hind.R": [
+            -5.645715646096505e-06,
+            0.026425745338201523
+          ]
+        }
+      },
+      "armor_brace": {
+        "samples": 65,
+        "mesh_joint_and_leg_clearance_samples": 5,
+        "max_vertex_travel_m": 0.0899156928062439,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 1.5668378239297454e-07,
+        "end_rest_error_m": 1.5668378239297454e-07,
+        "root_matrix_drift": 0,
+        "minimum_simultaneous_contacts": 6,
+        "maximum_height_m": 0.4783659279346466,
+        "minimum_surface_distance_m": -1.0169505770818432e-07,
+        "head_under_shield_minimum_clearance_m": 0.016387268900871277,
+        "maximum_head_subframe_travel_m": 0.004270210396498442,
+        "actual_wall_root_skin_max_error_m": 1.248944999017061e-07,
+        "wall_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "wall_contact_residual_m": 0,
+        "maximum_pad_slip_m": 1.831444023991935e-05,
+        "leading_shield_drop_m": 0.08174383640289307
+      },
+      "attack": {
+        "samples": 45,
+        "mesh_joint_and_leg_clearance_samples": 5,
+        "max_vertex_travel_m": 0.06122531741857529,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 1.5668378239297454e-07,
+        "end_rest_error_m": 1.5668378239297454e-07,
+        "root_matrix_drift": 0,
+        "minimum_simultaneous_contacts": 4,
+        "maximum_height_m": 0.4783659279346466,
+        "minimum_surface_distance_m": -1.611582592886407e-05,
+        "head_under_shield_minimum_clearance_m": 0.016387268900871277,
+        "maximum_head_subframe_travel_m": 0.008757934905588627,
+        "actual_wall_root_skin_max_error_m": 1.399837004248495e-07,
+        "wall_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "wall_contact_residual_m": 0
+      },
+      "hit": {
+        "samples": 29,
+        "mesh_joint_and_leg_clearance_samples": 5,
+        "max_vertex_travel_m": 0.040469955652952194,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 1.5668378239297454e-07,
+        "end_rest_error_m": 1.5668378239297454e-07,
+        "root_matrix_drift": 0,
+        "minimum_simultaneous_contacts": 6,
+        "maximum_height_m": 0.4883725643157959,
+        "minimum_surface_distance_m": -2.2171969249029644e-05,
+        "head_under_shield_minimum_clearance_m": 0.016387268900871277,
+        "maximum_head_subframe_travel_m": 0.004051350988447666,
+        "actual_wall_root_skin_max_error_m": 1.369772576604056e-07,
+        "wall_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "wall_contact_residual_m": 0
+      },
+      "death": {
+        "samples": 69,
+        "mesh_joint_and_leg_clearance_samples": 5,
+        "max_vertex_travel_m": 0.131443589925766,
+        "first_last_vertex_error_m": 0.1314435601234436,
+        "start_rest_error_m": 1.5668378239297454e-07,
+        "end_rest_error_m": 0.1314435452222824,
+        "root_matrix_drift": 0,
+        "minimum_simultaneous_contacts": 6,
+        "maximum_height_m": 0.4783659279346466,
+        "minimum_surface_distance_m": -2.5252988962165546e-06,
+        "head_under_shield_minimum_clearance_m": 0.016387268900871277,
+        "maximum_head_subframe_travel_m": 0.0037224791012704372,
+        "actual_wall_root_skin_max_error_m": 1.295978113025349e-07,
+        "wall_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "wall_contact_residual_m": 0,
+        "collapsed_hold_drift_m": 1.0751836043709773e-07
+      }
+    }
+  },
+  "atlas": {
+    "textures": {
+      "basecolor": {
+        "bytes": 616803,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 1.483,
+        "decoded_alpha_range": [
+          255,
+          255
+        ]
+      },
+      "normal": {
+        "bytes": 905292,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 1.107,
+        "decoded_unit_length_range": [
+          0.934182,
+          1.060616
+        ],
+        "decoded_alpha_range": [
+          255,
+          255
+        ]
+      },
+      "orm": {
+        "bytes": 863940,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 1.777,
+        "decoded_alpha_range": [
+          255,
+          255
+        ]
+      },
+      "emissive": {
+        "bytes": 25371,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 0.183,
+        "decoded_alpha_range": [
+          255,
+          255
+        ]
+      }
+    },
+    "file_bytes": 6635664,
+    "primitives": 1,
+    "gltf_vertices": 3082,
+    "ktx2_bytes": 2411406,
+    "uastc_bytes_before_zstd": 5592512
+  },
+  "sources": {
+    "high.blend": {
+      "file_sha256": "1b20b9e24ce1046a7b1d0b7e89c51e2fb6ffbd8ae34b672b86bc5ea5e3fd806d",
+      "logical_geometry_hierarchy_skin_animation_sha256": "d4ee1881e9474bae34edb1e44c1dc881c54245862144671057bb89adb4e1f42b",
+      "skeleton_and_groups_sha256": "d9eb0294ad6b51647bf02788906afa770f5d96d28dc0b64206af46a90cc651d9",
+      "clips_sha256": {
+        "armor_brace": "925fce57e7e77c4444d881728f0a0fe6f66c00750b8c27cf34846aa0fe86f0ab",
+        "attack": "879c20c40a982e492d87503c5c19d5d81adf08181be7c0d2b2798f1b6c7d0390",
+        "death": "33e67633222a5af4d9ed8183647f2748928018d1f475f22858ef81560b1e4108",
+        "hit": "4b4208b280037169143861ac4ebc017e63007efe6ddef7bafa31a1d5b3e7634e",
+        "stomp_walk": "e3105ce822416dbba61335ded0c2b910bdf5ebefa296c34998e4bb57de90b9a7"
+      }
+    },
+    "low.blend": {
+      "file_sha256": "6154933967b8ffd4259da4a6da655cf3a2255bbdfeff4036b959555650370d60",
+      "logical_geometry_hierarchy_skin_animation_sha256": "95e309e06bbf6654b50b1fea07bb3385ed01fdb5dbac2f69a1c27912e98605bf",
+      "skeleton_and_groups_sha256": "d9eb0294ad6b51647bf02788906afa770f5d96d28dc0b64206af46a90cc651d9",
+      "clips_sha256": {
+        "armor_brace": "925fce57e7e77c4444d881728f0a0fe6f66c00750b8c27cf34846aa0fe86f0ab",
+        "attack": "879c20c40a982e492d87503c5c19d5d81adf08181be7c0d2b2798f1b6c7d0390",
+        "death": "33e67633222a5af4d9ed8183647f2748928018d1f475f22858ef81560b1e4108",
+        "hit": "4b4208b280037169143861ac4ebc017e63007efe6ddef7bafa31a1d5b3e7634e",
+        "stomp_walk": "e3105ce822416dbba61335ded0c2b910bdf5ebefa296c34998e4bb57de90b9a7"
+      }
+    }
+  }
+}
