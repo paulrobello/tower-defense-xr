@@ -1,4 +1,4 @@
-.PHONY: install prepare-assets build iwer-build test lint fmt typecheck checkall checkall-ci pre-commit dev dev-start dev-stop dev-restart preview xr-emu quest-perf
+.PHONY: install prepare-assets build iwer-build test lint fmt typecheck checkall checkall-ci pre-commit dev dev-start dev-stop dev-restart preview xr-emu quest-perf model-check
 
 install:
 	bun install --frozen-lockfile
@@ -51,3 +51,7 @@ xr-emu: iwer-build
 
 quest-perf:
 	bun scripts/perf-quest.ts
+
+model-check:
+	PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -p test_model_check.py
+	PYTHONDONTWRITEBYTECODE=1 python3 scripts/validate_glbs.py $(MODEL_CHECK_ARGS)

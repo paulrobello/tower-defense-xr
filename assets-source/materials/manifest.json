@@ -1,0 +1,800 @@
+{
+  "version": 1,
+  "models": [],
+  "textures": [
+    {
+      "file": "brushed-titanium/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "a837973e309a4ec398d37c7ed6d3edf6eb5310da7775768369ee66d64758d519",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            183,
+            188,
+            192
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            188,
+            193,
+            197
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            183,
+            188,
+            193
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "brushed-titanium/normal.ktx2",
+      "role": "normal",
+      "sha256": "1f034b6a84dfa2409d37c52a5983fb8531b65abc773543156a3e4ef45999a155",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 0,
+          "y": 255,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 4
+        }
+      ]
+    },
+    {
+      "file": "brushed-titanium/orm.ktx2",
+      "role": "orm",
+      "sha256": "1bffcf6ae923004829bfed445e78f8f8a63152074b7e7d4aad150abb40a815f7",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            251,
+            87,
+            241
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            252,
+            92,
+            242
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            255,
+            74,
+            247
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 106,
+          "y": 255,
+          "rgb": [
+            251,
+            98,
+            244
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 0,
+          "y": 4,
+          "rgb": [
+            252,
+            103,
+            245
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "tactical-ceramic/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "da43457469d4fdb5cf93bdcdf512f27b4f9391e8a994d957414b26b60031d9e6",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            60,
+            69,
+            80
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            60,
+            68,
+            79
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            57,
+            65,
+            76
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "tactical-ceramic/normal.ktx2",
+      "role": "normal",
+      "sha256": "7210660c6db186a363f50527f210ea64a103a7c51067b8fe8843266a54426fc7",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            129,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            129,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            129,
+            129,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 3,
+          "y": 255,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 4
+        }
+      ]
+    },
+    {
+      "file": "tactical-ceramic/orm.ktx2",
+      "role": "orm",
+      "sha256": "1a6c5ee5643dbf1fad342bc4a3c582cdf8092854afe6fe19fe7eaae377a384da",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            255,
+            158,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            255,
+            156,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            252,
+            163,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 0,
+          "y": 255,
+          "rgb": [
+            242,
+            186,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 208,
+          "y": 53,
+          "rgb": [
+            242,
+            190,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "dark-gunmetal/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "fbacf925d520d66d31b2dfa1ddcd2510e0ae45e23211a4fc7ea8d8b32da1654c",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            74,
+            81,
+            90
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            69,
+            76,
+            85
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            70,
+            77,
+            86
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "dark-gunmetal/normal.ktx2",
+      "role": "normal",
+      "sha256": "3c6e68cbb4249cede2bd02ea221a1f36cac7901f4d6bbe8681f7b03e0505fc7a",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            129,
+            129,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 0,
+          "y": 255,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 4
+        }
+      ]
+    },
+    {
+      "file": "dark-gunmetal/orm.ktx2",
+      "role": "orm",
+      "sha256": "8f229674035023f024381ab197837117d567244d5ac8c031ff5fb33e6e25e72a",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            253,
+            95,
+            230
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            254,
+            102,
+            225
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            254,
+            103,
+            224
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 204,
+          "y": 255,
+          "rgb": [
+            250,
+            89,
+            233
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 202,
+          "y": 112,
+          "rgb": [
+            254,
+            109,
+            221
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "obsidian-chitin/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "eb3d0d4eb9cfefd726321e1ef45bf3a4113753b07969e2d1bfd3417bb33855ce",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            52,
+            44,
+            58
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            51,
+            43,
+            56
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            46,
+            39,
+            52
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "obsidian-chitin/normal.ktx2",
+      "role": "normal",
+      "sha256": "dad99b0bab2d53a73f1fe44830337431e8a1cb94e96f39dc5dec77a3a7dc5957",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            128,
+            126,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            127,
+            125,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 2,
+          "y": 255,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 4
+        }
+      ]
+    },
+    {
+      "file": "obsidian-chitin/orm.ktx2",
+      "role": "orm",
+      "sha256": "db8b2f2509a823200958fa8a7ab05717d0e089bf662f0bbbe09dfe814c60fd2f",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            253,
+            112,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            253,
+            110,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            253,
+            108,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 114,
+          "y": 209,
+          "rgb": [
+            245,
+            94,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 157,
+          "y": 172,
+          "rgb": [
+            253,
+            124,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "rift-obsidian/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "dc5de08b6300fea13d017a37a327e8c21f71407b4640ca88b276cca779ce6206",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            56,
+            42,
+            78
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            39,
+            29,
+            61
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            40,
+            29,
+            62
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "rift-obsidian/normal.ktx2",
+      "role": "normal",
+      "sha256": "c43441323dfd4e080c6acc525889ab329edac69b45893384859d9fd2cedc91df",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            129,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            132,
+            130,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            129,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 8,
+          "y": 255,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 4
+        }
+      ]
+    },
+    {
+      "file": "rift-obsidian/orm.ktx2",
+      "role": "orm",
+      "sha256": "e5da7e6b2f6cde01a0c8fc06ce65ed000aac00d7a2cdad51282013ab760ee749",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            253,
+            57,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            255,
+            40,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            255,
+            45,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 3,
+          "y": 255,
+          "rgb": [
+            235,
+            54,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 171,
+          "y": 182,
+          "rgb": [
+            236,
+            72,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "rift-obsidian/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "f78070505e2f951cbed3e2f0037a1af2354bb104c8347c232a1f9bbb67cd0fe1",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 4,
+          "y": 255,
+          "rgb": [
+            49,
+            153,
+            155
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 174,
+          "y": 163,
+          "rgb": [
+            108,
+            57,
+            176
+          ],
+          "tolerance": 12
+        }
+      ]
+    }
+  ]
+}

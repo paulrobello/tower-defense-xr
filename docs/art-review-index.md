@@ -45,3 +45,9 @@ uv run --no-project --python 3.13 --with pillow==12.3.0 python assets-source/ui/
 ```
 
 The independent P3-T7 score and Paul’s approval remain open. Physical Quest review and live overlay integration belong to the subsequent runtime phase.
+
+## Shared Bastion Rib materials
+
+![Five shared materials shown on curved coupons and 2×2 repeats under two light angles](../assets-source/materials/review/surfaces.jpg)
+
+The Blender 5.2.2 library contains brushed titanium, matte ceramic, dark gunmetal, obsidian chitin and rift obsidian. A fresh build produced the same 16 source PNGs and 16 KTX2 files. Blender export and re-import preserved all five materials and 16 texture bindings. The KTX2 set totals 465,162 bytes. See the [material review and authoring instructions](../assets-source/materials/README.md), [map inventory](../assets-source/materials/manifest.json) and [decoded texture measurements](../assets-source/materials/quality.json). Independent scoring and the owner's release approval remain open at P3-T7.

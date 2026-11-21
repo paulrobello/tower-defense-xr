@@ -1,0 +1,61 @@
+{
+  "project": "Rift Bastion, Phase 3 P3-T3",
+  "authored_with": {
+    "model": "GPT-6.2 Astra",
+    "reasoning_effort": "high",
+    "method": "Original periodic scalar fields and physically scaled gradients; no external image inputs",
+    "tools": [
+      "Blender 5.2.2 LTS",
+      "Blender-bundled NumPy 2.3.4",
+      "KTX-Software 4.4.2",
+      "ImageMagick 7"
+    ]
+  },
+  "art_direction": {
+    "file": "assets-source/concepts/boards/bastion-rib.png",
+    "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3",
+    "use": "Owner-approved visual reference. No source image pixels sampled."
+  },
+  "pipeline": {
+    "recipes": "blender/surface_fields.py",
+    "bake": "Cycles CPU, two threads, one sample. Analytic fields to scene-linear EMIT or tangent NORMAL on UV0, then RGB8 PNG.",
+    "encoding": "UASTC quality 2, role-specific linear/sRGB transfer, Zstandard level 18, generated mip chain, glTF top-left origin.",
+    "review": "EEVEE, 12 temporal samples; neutral studio, orthographic coupon and two one-to-one 2 \u00d7 2 repeat views.",
+    "determinism": "Identical PNGs, KTX2s, map and manifest JSONs across fresh builds. Editable blend verified by reopening and comparing exported material bindings.",
+    "iterations": [
+      "First bake identified chitin roughness below the art-bible minimum; adjusted the roughness field and rechecked all texels.",
+      "First studio sheet exposed large polished spots on gunmetal and excessive near-axis highlights. Reduced finish contrast, changed the chitin growth warp, and moved the softbox off axis for the final comparisons."
+    ]
+  },
+  "rights": {
+    "source": "Original project-authored procedural designs. No third-party texture content or paid generation.",
+    "distribution_status": "Staged for project review."
+  },
+  "approval": {
+    "reference": "Bastion Rib concept package approved November 20, 2026",
+    "material_owner_review": "pending P3-T7",
+    "runtime_acceptance": "pending P4/Quest"
+  },
+  "source_sha256": {
+    "blender/build_materials.py": "fe5cdb5cf12c11ee931e685def2423812d1d5b64742d188ea669cffbd42772b7",
+    "blender/materials.py": "fb2219a20eb700a15b76bdcfb7d9be5c7ceb4bf199f7e31204852c5fa6681eb3",
+    "blender/package_materials.py": "6a163419d3d8f29cf79564b52a591d01a6daf43dcdbc654fead012e9c686ce39",
+    "blender/review_materials.py": "ab7558febaef274294546e7e34a25ebfa35aaa7467f95f9d5887e402e768e23d",
+    "blender/surface_fields.py": "a2408130a5f39b9dfd625fa388b585b9ee239ed3bbd02bc2b89278f7eca5651e",
+    "blender/verify_materials.py": "48a4791049d0ad25d1fd6f4cabe53941bdc79ef5a880c1031376af4423cbcaec"
+  },
+  "staged_sha256": {
+    "bastion-materials.blend": "1503f34c2d831049200163d4cc947584ec175043a430df809743dc004c00fb9e",
+    "manifest.json": "d8ec97acef29b37390d7959035022b9eb0fb07b1131ee8bb8300ed424431fe30",
+    "maps.json": "2805aa33700e60b0bc01067bdb1575f91cd7dd2fee78325c4a010e9def7fe3c3",
+    "quality.json": "93e4454c8f06e446b99a1146814d1c05d2011bb00c81f6d3fca975c90a767b3b"
+  },
+  "review_sha256": {
+    "review/brushed-titanium.webp": "f8d3aefa4c0095c758c8ee864a0423dbc393eac4aa2bd704ffd76b9ad84cc114",
+    "review/dark-gunmetal.webp": "bc6f2f58b04dd7cad94703ddb30076b806e7bcd3803e75a2c8566176e7ec1cf2",
+    "review/obsidian-chitin.webp": "801b9e1f7ad6195b7a79b8ae7d1ca372de6d2e55dd9c00622d564b4707e23c55",
+    "review/rift-obsidian.webp": "4620888e65815291ed799f81197fff0179c783094634e317d036b4cd9f359698",
+    "review/surfaces.jpg": "25f9bbb8793a5874f4f6699189cf522dbc97b66fedd9e5f918ac9ec0ed77cc4a",
+    "review/tactical-ceramic.webp": "3ba1f8482f93ed6802515e81a76f1f1cc66f6a670a3e7f03c7e61a9186a796b6"
+  }
+}

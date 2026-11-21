@@ -9,7 +9,7 @@
 - **Updated:** November 20, 2026 (Pacific time)
 - **Repo:** `/Users/probello/Repos/tower-defense-xr`, branch `main`. The existing local formatting edit in the Phase 4 plan is separate from this handoff.
 - **Unpushed local commits:** The project history is local, with no Git remote configured. **Do not push without Paul's explicit approval.**
-- **Completed work (20 kanban cards `done`):**
+- **Completed work (21 kanban cards `done`):**
   - **Phase 0 (local complete):** `P0-T1`–`P0-T5` closed. `make checkall`, `make checkall-ci` (Gitleaks clean), `make pre-commit`, `make xr-emu` (14/14 on Apple M4 Max Metal GPU), and `bun scripts/check-build-upgrade.ts` (desktop auto-reload + XR HUD `Update: Reload`) all pass on `main`.
   - **Phase 1 (100% complete):** `P1-T1`–`P1-T6` closed. `bun scripts/xr-emu/walk-p1.mjs` passes **19/19** checks (seated `1.2 m` `front-180` + standing `1.65 m` `full-360` calibration, floor/table/wall surface-clamp + thumbstick hover-pod `0.8–5.0 m`, `TOO_CLOSE` & `CAP 14/14` SDF labels, `auto-depth → room-mesh → off` cutouts).
   - **Phase 2 (100% complete):** `P2-T1`–`P2-T6` closed. **218/218 Vitest tests** pass; `bun scripts/check-desktop-campaign.ts` passes **12/12** checks (full 12-wave + Wave 12 Apex Broodlord Boss Phase 2 → Victory `3/3` stars → IndexedDB reload + JSON backup); `bun scripts/xr-emu/walk-p2.mjs` passes **8/8** checks (`150 ≤ 200` draws, `12,080` tris, zero console errors).
@@ -27,7 +27,7 @@
 
 ---
 
-## Remaining Work (Kanban Project: `tower-defense-xr`, 21 Open Cards)
+## Remaining Work (Kanban Project: `tower-defense-xr`, 20 Open Cards)
 
 ### Blocked (1 card)
 - **`P0-T6`** (`01a1fadae7b771b882e38e61f0cdd161`, `blocked`): `.github/workflows/ci.yml` and `docs/deploy-checklist.md` are merged on `main` (`75b5bcf`). Waiting on Paul's explicit approval to push `main`, create the GitHub repo, create the Cloudflare DNS-only CNAME `rift-bastion.pardev.net → paulrobello.github.io`, commit `public/CNAME` *after* DNS resolves, call `PUT /repos/paulrobello/tower-defense-xr/pages`, and verify live HTTPS render.
@@ -35,9 +35,9 @@
 ### Next Up — Phase 3: Art Direction & Blender AAA Assets (12 cards, `plans/phase-3-art-direction-and-blender-assets.md`)
 - **Wave 1 complete.**
   - `P3-T1` (`01a1fadb0b8b7467b36c14f730c1d52d`): Paul approved **Bastion Rib**, the [art bible](docs/art-bible.md), and all eleven concept sheets in chat on November 20, 2026. This clears Owner Checkpoint 1. All 20 original images decoded and matched their [recorded hashes](assets-source/concepts/provenance.json). The turret tier and muzzle, invader, mount, Core and Rift dimensions matched the blockouts.
-- **Wave 2 in progress.**
+- **Wave 2 complete.**
   - `P3-T2` complete (`01a1fadb0d97705ab0b67aaed9726f4d`). [Art review index](docs/art-review-index.md) includes 18 tactical RGBA icons covering all nine radial actions, a validated 768 × 384 atlas, and separately composed desktop and Quest key art. All 22 candidates reproduced byte for byte. The provider ledger confirmed 15 credits. Production promotion still awaits the P3-T7 batch approval.
-  - `P3-T3` (`01a1fadb108874ef8dd9dda60e64c92f`): Blender 5.2.2 shared PBR material library (`blender/materials.py`), KTX2 encoder wrapper (`~/.local/opt/ktx-software-4.4.2/bin/ktx`), and `scripts/validate_glbs.py` + `make model-check`. *(GPT-6.2 Sol for the validator and Astra for PBR materials)*
+  - `P3-T3` complete (`01a1fadb108874ef8dd9dda60e64c92f`). The [material library](assets-source/materials/README.md) contains five finishes, an editable Blender 5.2.2 library and 16 portable maps in PNG and KTX2. A second bake matched all 32 map hashes. The [model validator](scripts/assets/model-check.md) checks texture roles, colors, decoded pixels, geometry, overlaps, skin structure, sockets, LODs and budgets. `make model-check` verified the staged textures and seven positive and negative tests. Blender export and re-import verified texture bindings. Measured gameplay performance and final owner approval remain downstream.
 - **Wave 3 (serial Blender workers per `blender-mcp.md` after `P3-T3`, using GPT-6.2 Astra):**
   - `P3-T4` (`01a1fadb12f5733a8eccefeb99e1f8b2`): Core Bastion (`≤14k tris`, 2048 px KTX2) & Dimensional Rift Portal Frame (`≤4.5k tris`, 1024 px KTX2).
   - `P3-T5a` (`01a1fb3c841c708784a64a42cd4d0dcf`): Shared Surface Clamp Base (`0.16 m` radius) & Repulsor Hover-Ring Pod.
@@ -61,7 +61,7 @@
   - `P4-T1` (`01a1fadb1b4d7398ada36dbe2c6c5c32`): Promote KTX2 GLBs (`public/assets/manifest.json`), `createImageBitmap` off-thread streaming, `compileAsync` load veil.
   - `P4-T2` (`01a1fadb1e057789a2cd2aeff05ad76b`): Procedural PMREM IBL, dynamic hero lighting, shadow tuning, and Rift Portal depth-parallax shader. *(GPT-6.2 Astra)*
   - `P4-T3` (`01a1fadb1fbb775e8869325f0aa84716`): GPU-instanced combat VFX & zero-GC particle pools (`≤2,500` active, `≤12` extra draws). *(GPT-6.2 Astra)*
-  - `P4-T6` (`01a1fb37b41e73dfa3f531303c243df5`): Tactical Sci-Fi re-skin of `@par/xr-workspace` Build & Turret Command radial menus + Higgsfield icon badges. *(GPT-6.2 Astra, unblocked as soon as `P3-T2` closes)*
+  - `P4-T6` (`01a1fb37b41e73dfa3f531303c243df5`): Parallel private candidate in `codex/rift-radial-theme`. The work uses the staged Higgsfield atlas for the Build and Turret Command wheel and desktop controls. Production asset promotion depends on P3-T7 and P4-T1.
   - `P4-T5` (`01a1fadb25b776d480b53b7d6268f972`): Master Paul's owner-generated Suno WAVs (from `suno-music-prompt.md`) into Opus (`+bitexact`) + MP3 (`Lavc` intact) and wire spatial Web Audio `PannerNode` engine.
 - **Phase 5 (`plans/phase-5-quest3-tuning-and-release.md`):**
   - `P5-T1` (`01a1fadb27d0716e842dcc65551536b4`): `?stress` Wave 12 worst-case suite (14× T3 turrets, 4 portals, 25 enemies + Boss Phase 2) on desktop + IWER XR.
@@ -108,6 +108,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Finish the shared asset tooling.** `P3-T3` produces the Blender shared PBR library, KTX2 encoder, GLB validator and `make model-check`. UI art staging is complete.
-2. **Start the asset queues.** `P3-T3` unblocks the serial Blender queue (`P3-T4` → `P3-T5a/b/c` → `P3-T6a/b/c` → `P3-T7` audit and Owner Checkpoint 2). `P3-T2` unblocks the radial re-skin (`P4-T6`) while the Blender work continues. Owner Checkpoint 2 gates production asset promotion.
-3. **Confirm with Paul** when he wants to push `main` and execute `docs/deploy-checklist.md` (`P0-T6`) to bring `https://rift-bastion.pardev.net/` live.
+1. **Continue serial Blender authoring.** The shared tooling is ready for `P3-T4`, the Core Bastion and Rift frame. Then work through `P3-T5a/b/c`, `P3-T6a/b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
+2. **Confirm with Paul** when he wants to push `main` and execute `docs/deploy-checklist.md` (`P0-T6`) to bring `https://rift-bastion.pardev.net/` live.
