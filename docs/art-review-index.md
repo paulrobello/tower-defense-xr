@@ -1,5 +1,7 @@
 # Rift Bastion art review
 
+See the [initial independent audit](#initial-independent-audit) for the measured budgets, scores and revision findings.
+
 ## Tactical icons and launch art
 
 **P3-T7 owner sign-off is pending.** This set applies the approved Bastion Rib direction to the Build wheel, Turret Command wheel, mission status, and two launch surfaces. The previews below show the staged files. The game still uses its existing UI until the separately approved integration.
@@ -165,3 +167,94 @@ The Wave 12 boss has a swept split crest, overlapping obsidian armor, raised cla
 Both re-imported LODs play `boss_march`, `spawn_adds`, `emp_roar`, `phase2_shift`, `hit` and `death`. The march alternates supporting diagonal pairs. Summon, roar, phase shift and hit recover to rest, and death holds the collapsed pose. The distal crest halves maintain at least 43.5 mm of separation through the sampled movement. The tested interrupted roar-to-hit blend dips 0.62 mm below the support plane. Check that transition in the live mixer in Phase 4.
 
 [Sources, hashes and re-import checks](../assets-source/models/apex-broodlord/README.md) · [Matched geometry views](../assets-source/models/apex-broodlord/review/comparison.jpg) · [Motion poses](../assets-source/models/apex-broodlord/review/motion.jpg) · [Six-clip reel](../assets-source/models/apex-broodlord/review/motion.mp4) · [Turntable](../assets-source/models/apex-broodlord/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.
+
+## Initial independent audit
+
+Three reviewers inspected the staged artwork at `ab44c84` against the approved Bastion Rib references. They scored each model for concept and silhouette out of 35, surface craft out of 25, high/low visual consistency out of 25, and readability or motion out of 15. Material reviewers used the same weights for finish, craft, repeats and inspection. The 2D rubric weights purpose at 35, craft at 30, readability or composition at 25, and variant usability at 10.
+
+**35 of 46 passed the 80/100 threshold on the initial candidate.** The eleven findings below must be resolved on revised files and scored independently before the owner checkpoint. These scores describe the frozen revision above.
+
+The initial batch fingerprint is `ab4f4a089e176871a8379387e251673ebd7cc69558db50835429d7b382b2a371`. It includes 796 Git-tracked files under `assets-source/concepts`, `assets-source/materials`, `assets-source/models` and `assets-source/ui`. To reproduce it at that revision, sort the relative path bytes, hash each file, and hash the resulting byte stream with one line per file in the form `<SHA-256><two spaces><relative path><newline>`.
+
+I rechecked 1,730 model source and output hash entries and 27 UI inventory entries. The concept verifier decoded six boards, eleven sheets and three archived attempts with matching hashes. The deterministic UI build reproduced 22 candidates. The pinned Linux gate passed 40 GLBs, 102 KTX2 textures and 218 project tests.
+
+### Model budgets and visual scores
+
+Numbers come from the exported GLB accessors and staged KTX2 mip headers. Materials and bones are the maximum per LOD for each package. KTX2 size counts shared texture files once per model. The RGBA8 mip estimate gives the uncompressed capacity for these maps. Live Quest texture formats, residency and frame timing are measured in Phase 5.
+
+| Model and provenance | Triangles LOD0 / LOD1 | Bones | Materials | Maps | KTX2 / RGBA8 mip MiB | Visual |
+| --- | ---: | ---: | ---: | --- | ---: | ---: |
+| [Core Bastion](../assets-source/models/core-bastion/provenance.json) | 6,826 / — | 0 | 3 | 4 × 2048 px | 4.35 / 85.33 | **78** |
+| [Dimensional Rift Portal](../assets-source/models/rift-portal/provenance.json) | 4,056 / — | 0 | 2 | 5 × 1024 px | 1.76 / 26.67 | 89 |
+| [Surface Clamp Base](../assets-source/models/surface-clamp/provenance.json) | 2,428 / 1,148 | 0 | 1 | 4 × 1024 px | 1.70 / 21.33 | 88 |
+| [Repulsor Hover-Ring Pod](../assets-source/models/hover-pod/provenance.json) | 2,364 / 1,148 | 0 | 1 | 4 × 1024 px | 1.54 / 21.33 | **78** |
+| [M44 Autocannon T1](../assets-source/models/m44-autocannon-t1/provenance.json) | 2,180 / 788 | 0 | 1 | 4 × 1024 px | 1.68 / 21.33 | 83 |
+| [M44 Autocannon T2](../assets-source/models/m44-autocannon-t2/provenance.json) | 2,816 / 944 | 0 | 1 | 4 × 1024 px | 1.71 / 21.33 | 82 |
+| [M44 Autocannon T3](../assets-source/models/m44-autocannon-t3/provenance.json) | 3,608 / 1,304 | 0 | 1 | 4 × 1024 px | 1.99 / 21.33 | 81 |
+| [Helios Plasma Mortar T1](../assets-source/models/helios-plasma-mortar-t1/provenance.json) | 2,380 / 876 | 0 | 1 | 4 × 1024 px | 1.84 / 21.33 | **76** |
+| [Helios Plasma Mortar T2](../assets-source/models/helios-plasma-mortar-t2/provenance.json) | 3,720 / 1,256 | 0 | 1 | 4 × 1024 px | 2.00 / 21.33 | 80 |
+| [Helios Plasma Mortar T3](../assets-source/models/helios-plasma-mortar-t3/provenance.json) | 4,024 / 1,352 | 0 | 1 | 4 × 1024 px | 2.02 / 21.33 | 82 |
+| [Glacier Cryo-Arc T1](../assets-source/models/glacier-cryo-arc-t1/provenance.json) | 2,604 / 1,276 | 0 | 1 | 4 × 1024 px | 1.90 / 21.33 | 83 |
+| [Glacier Cryo-Arc T2](../assets-source/models/glacier-cryo-arc-t2/provenance.json) | 1,640 / 936 | 0 | 1 | 4 × 1024 px | 1.77 / 21.33 | **75** |
+| [Glacier Cryo-Arc T3](../assets-source/models/glacier-cryo-arc-t3/provenance.json) | 2,712 / 1,320 | 0 | 1 | 4 × 1024 px | 1.80 / 21.33 | 84 |
+| [Valkyrie Rail Sniper T1](../assets-source/models/valkyrie-rail-sniper-t1/provenance.json) | 1,164 / 900 | 0 | 1 | 4 × 1024 px | 1.74 / 21.33 | 82 |
+| [Valkyrie Rail Sniper T2](../assets-source/models/valkyrie-rail-sniper-t2/provenance.json) | 1,444 / 1,180 | 0 | 1 | 4 × 1024 px | 1.80 / 21.33 | 85 |
+| [Valkyrie Rail Sniper T3](../assets-source/models/valkyrie-rail-sniper-t3/provenance.json) | 1,640 / 1,336 | 0 | 1 | 4 × 1024 px | 1.79 / 21.33 | 83 |
+| [Skitter Crawler](../assets-source/models/skitter-crawler/provenance.json) | 4,340 / 1,836 | 23 | 1 | 4 × 1024 px | 2.29 / 21.33 | **77** |
+| [Wasp Skimmer](../assets-source/models/wasp-skimmer/provenance.json) | 5,976 / 2,116 | 9 | 1 | 4 × 1024 px | 2.30 / 21.33 | **77** |
+| [Carapace Brute](../assets-source/models/carapace-brute/provenance.json) | 8,720 / 3,352 | 24 | 1 | 4 × 1024 px | 2.30 / 21.33 | **79** |
+| [Rift Disruptor](../assets-source/models/rift-disruptor/provenance.json) | 4,152 / 2,424 | 3 | 1 | 4 × 1024 px | 1.74 / 21.33 | 86 |
+| [Apex Broodlord](../assets-source/models/apex-broodlord/provenance.json) | 23,480 / 7,840 | 28 | 1 | 5 × 2048 px | 7.19 / 106.67 | **75** |
+
+### Materials and visual scores
+
+| Finish and repeat proof | Maps | KTX2 / RGBA8 mip MiB | Visual |
+| --- | --- | ---: | ---: |
+| [Brushed titanium](../assets-source/materials/review/brushed-titanium.webp) | 3 × 256 px | 0.08 / 1.00 | 91 |
+| [Tactical ceramic](../assets-source/materials/review/tactical-ceramic.webp) | 3 × 256 px | 0.10 / 1.00 | 87 |
+| [Dark gunmetal](../assets-source/materials/review/dark-gunmetal.webp) | 3 × 256 px | 0.09 / 1.00 | 88 |
+| [Obsidian chitin](../assets-source/materials/review/obsidian-chitin.webp) | 3 × 256 px | 0.08 / 1.00 | 82 |
+| [Rift obsidian](../assets-source/materials/review/rift-obsidian.webp) | 4 × 256 px | 0.10 / 1.33 | **78** |
+
+### Tactical badges and launch artwork scores
+
+The 18 badges are 128 × 128 RGBA proof files in a 768 × 384 atlas. Reviewers compared the actual 24 px composites on both fields. The launch artwork was reviewed with its title-safe overlay.
+
+| Asset | Visual |
+| --- | ---: |
+| [Build M44](../assets-source/ui/candidates/icons/build-autocannon.png) | 83 |
+| [Build Helios](../assets-source/ui/candidates/icons/build-plasma-mortar.png) | 93 |
+| [Build Glacier](../assets-source/ui/candidates/icons/build-cryo-arc.png) | 91 |
+| [Build Valkyrie](../assets-source/ui/candidates/icons/build-rail-sniper.png) | **73** |
+| [Launch wave](../assets-source/ui/candidates/icons/wave-launch.png) | 92 |
+| [Wave warning](../assets-source/ui/candidates/icons/wave-warning.png) | 97 |
+| [Tier 1](../assets-source/ui/candidates/icons/tier-1.png) | 92 |
+| [Tier 2](../assets-source/ui/candidates/icons/tier-2.png) | 90 |
+| [Tier 3](../assets-source/ui/candidates/icons/tier-3.png) | 87 |
+| [Relocate](../assets-source/ui/candidates/icons/relocate.png) | 89 |
+| [Sell](../assets-source/ui/candidates/icons/sell.png) | 89 |
+| [EMP disrupted](../assets-source/ui/candidates/icons/emp-disrupted.png) | 86 |
+| [Target first](../assets-source/ui/candidates/icons/target-first.png) | **77** |
+| [Target strongest](../assets-source/ui/candidates/icons/target-strongest.png) | 88 |
+| [Target closest](../assets-source/ui/candidates/icons/target-closest.png) | 96 |
+| [Target air](../assets-source/ui/candidates/icons/target-air.png) | 89 |
+| [Earned star](../assets-source/ui/candidates/icons/star-earned.png) | 97 |
+| [Empty star](../assets-source/ui/candidates/icons/star-empty.png) | 91 |
+| [Desktop launch art, 1920 × 1080](../assets-source/ui/candidates/desktop-title.jpg) | 95 |
+| [Quest launch art, 1024 × 1024](../assets-source/ui/candidates/quest-title.jpg) | 86 |
+
+### Findings requiring revision
+
+| Finding | Asset | Initial score | Observed issue and revision |
+| --- | --- | ---: | --- |
+| F1 | Valkyrie icon | 73 | The long dark silhouette collapses into a bar at 24 px. Thicken the silhouette and cobalt bands and open the rail slot. |
+| F2 | First-target icon | 77 | The tiny finish marker leaves a dominant arrow that competes with Launch Wave. Use a separated, stronger finish post with a shorter arrow. |
+| F3 | Rift obsidian | 78 | One bright cyan junction repeats on a visible square grid under both light angles. Vary the spacing and brightness of the inclusions. |
+| F4 | Core Bastion | 78 | The light, straight-sided pedestal loses the reference's recessed lower body. Taper the underside, darken the ceramic and retain brighter ribs. |
+| F5 | Hover Pod | 78 | The low underside reads as stacked angular bands with alternating bright faces. Smooth its shading and preserve more continuity in its largest rings. |
+| F6 | Helios T1 | 76 | The low chamber reads as a flat peach disk and the shell shows triangular highlights. Restore the recessed center and smooth the broad shell. |
+| F7 | Glacier T2 | 75 | The mounted fork reads as two short capped posts. Lengthen the projecting blades and extend cyan along the facing channels. |
+| F8 | Skitter Crawler | 77 | Uniform rounded plates and exposed knee balls simplify the anatomy. Vary the overlapping scutes, cover the limb joints and preserve taper at LOD1. |
+| F9 | Wasp Skimmer | 77 | Thin pointed wings, exposed spars and a stray teal LOD1 patch weaken the silhouette. Broaden the wing panels, restore the layered nose and fix dorsal color bleed. |
+| F10 | Carapace Brute | 79 | The shield is one rounded face, the vent is a small cap and the pads read as buttons. Restore stepped shield planes, expose more vent and broaden the armored shins and pads. |
+| F11 | Apex Broodlord | 75 | The frontal crest reads as separate upright paddles above round eyes. Broaden the crest root, add an angular brow and hooked jaws, and overlap the abdominal armor while retaining the split tips. |
