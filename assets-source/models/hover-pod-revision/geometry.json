@@ -1,0 +1,281 @@
+{
+  "high": {
+    "triangles": 20988,
+    "source_vertices": 10496
+  },
+  "continuous_profile_charts": 4,
+  "planar_cap_charts": 4,
+  "combined_receivers": {
+    "triangles": 3560,
+    "source_vertices": 1784,
+    "uv_texels_per_m": {
+      "RB.dark-gunmetal": 1759.5,
+      "RB.brushed-titanium": 1536.4,
+      "Core carbon inserts": 1418.0,
+      "light-cyan": 1647.0,
+      "RB.tactical-ceramic": 1602.1
+    },
+    "uv_area_fraction": 0.910016
+  },
+  "receiver_sha256": "13ca2e644379a581e63991a8188570acf9c796727cdf7e1fc4b8746ab6c147cf",
+  "bake": {
+    "matched_receiver_replacements": {
+      "pixels": 263410,
+      "max_angle_deg": 12
+    },
+    "normal_lower_hemisphere_pixels": 0,
+    "normal": {
+      "sha256": "8caa23bcd600b82c3d37ca247e15d545592b6489fdd1aa4f74761c5dee51fe89",
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 296,
+          "y": 347,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 296,
+          "y": 318,
+          "rgb": [
+            130,
+            129,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 964,
+          "y": 169,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 296,
+          "y": 376,
+          "rgb": [
+            123,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 243,
+          "y": 86,
+          "rgb": [
+            128,
+            153,
+            253
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    "basecolor": {
+      "sha256": "68b9add113a661e8099c809a74bc12c6d969d6637bf16decc975291469d44f81",
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 296,
+          "y": 347,
+          "rgb": [
+            185,
+            190,
+            194
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 296,
+          "y": 318,
+          "rgb": [
+            33,
+            37,
+            48
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 964,
+          "y": 169,
+          "rgb": [
+            87,
+            94,
+            103
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 296,
+          "y": 376,
+          "rgb": [
+            45,
+            226,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 243,
+          "y": 86,
+          "rgb": [
+            61,
+            70,
+            81
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    "orm": {
+      "sha256": "3972494f68b039c87b22765fc9423f921d25eadbccaec0bc7435dc17b2314b6f",
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 296,
+          "y": 347,
+          "rgb": [
+            255,
+            76,
+            245
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 296,
+          "y": 318,
+          "rgb": [
+            255,
+            174,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 964,
+          "y": 169,
+          "rgb": [
+            254,
+            92,
+            238
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 296,
+          "y": 376,
+          "rgb": [
+            255,
+            71,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 243,
+          "y": 86,
+          "rgb": [
+            255,
+            160,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    "emissive": {
+      "sha256": "323f0f08f062d08799ef3a12584baa8fbfaf5598ff3e7291a7a71e966d202d52",
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 296,
+          "y": 347,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 296,
+          "y": 318,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 964,
+          "y": 169,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 296,
+          "y": 376,
+          "rgb": [
+            45,
+            226,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 243,
+          "y": 86,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    "contact_AO": {
+      "ray_length_m": 0.026,
+      "samples": 12,
+      "mean_of_occupied": 0.9406187534332275
+    },
+    "empty_projection_replacements": 9965,
+    "cross_finish_ray_replacements": 254468
+  },
+  "lod1": {
+    "triangles": 1132
+  },
+  "lod0": {
+    "triangles": 2428
+  }
+}

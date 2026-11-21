@@ -76,9 +76,11 @@ The mount has four separate shoes, a 55 mm deck and a 0.15881 m measured radius 
 
 ## Repulsor Hover-Ring Pod
 
-![Repulsor Hover-Ring source and imported LODs from matched angles](../assets-source/models/hover-pod/review/comparison.jpg)
+![Revised Repulsor Hover-Ring source and imported LODs from matched angles](../assets-source/models/hover-pod-revision/review/comparison.jpg)
 
-The legless pod measures 0.156 m outer radius, 0.145 m emitter radius and 0.070 m height. Its 2,364-triangle LOD0 and 1,148-triangle LOD1 share the origin socket, one material and four 1024 px maps. Both GLBs passed re-import for clearance, shell intersections and the ceramic shoulder's decoded material response. [Hover pod sources, hashes and re-import checks](../assets-source/models/hover-pod/README.md)
+The revised legless pod preserves its 0.156 m outer radius, 0.145 m emitter radius and 0.070 m height. Its 2,428-triangle LOD0 and 1,132-triangle LOD1 share the identity socket, one material and four 1024 px maps. The curved bowl uses more radial stations and retains its sharp finish boundaries. Both GLBs passed re-import for clearance, shell intersections and the ceramic shoulder's decoded finish. The original mount remains with the turret-head provenance. [Active pod sources, hashes and re-import checks](../assets-source/models/hover-pod-revision/README.md)
+
+The active mount passed all 24 exported head combinations through the family verifiers. The minimum conservative posed clearance was 1.29 mm. Helios T3 was the largest paired assembly at 6,452 / 2,484 triangles on the revised pod. [Exact compatibility records](../assets-source/models/hover-pod-revision/head-compatibility.json)
 
 ## M44 Autocannon
 
@@ -263,7 +265,7 @@ The 18 badges are 128 × 128 RGBA proof files in a 768 × 384 atlas. Reviewers c
 
 ## Passed revisions
 
-Thirty-nine of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following four revised assets account for those results. The remaining findings are F5–F11.
+Forty of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following five revised assets account for those results. The remaining findings are F6–F11.
 
 | Finding | Asset | Initial → revised | Exact proof and result |
 | --- | --- | ---: | --- |
@@ -271,5 +273,6 @@ Thirty-nine of 46 assets have independent visual scores of at least 80. The thir
 | F2 | First-target icon | 77 → 87 | [Native 24 px comparison](../assets-source/ui/review/badge-revision.png) and [revised icon](../assets-source/ui/candidates/icons/target-first.png). The chevron and cyan finish post stay separate beside Launch Wave. The final target PNG SHA-256 begins `b4330bd1a0f5`. |
 | F3 | Rift obsidian | 78 → 86 | [Revised coupon and 2×2 repeats](../assets-source/materials/rift-obsidian-revision/review/rift-obsidian.webp) and [revision provenance](../assets-source/materials/rift-obsidian-revision/provenance.json). The irregular cyan inclusions remove the bright grid in both matched light angles. The reviewer still observed subtle dark repetition under raking light. |
 | F4 | Core Bastion | 78 → 86 | [Matched revision views](../assets-source/models/core-bastion/review/revision-comparison.jpg). The dark belly tapers below the waist, and all four attached feet support the recessed base. The pointed feet and broad pale crown remain more prominent than in the concept. The exact revised GLB SHA-256 is `564ee6bc93f7fafcc12129acb95081208a1db7c51c7f9035a017bef8a99e7c05`. |
+| F5 | Hover Pod | 78 → 81 | [Matched underside revision](../assets-source/models/hover-pod-revision/review/underside-comparison.jpg). The bowl carries a continuous highlight and the cyan optic remains round at LOD1. The outer rim remains angular and the imported top cap has less detail. The reviewed LOD0 and LOD1 GLB hashes begin `db15e31bd646` and `c6c39de56241`. |
 
 The exact badge proof SHA-256 is `608eea9914f08dc20961df864f55e6ae8d59e4fdd015a4dd0fe7fba348310911`. The exact revised obsidian proof SHA-256 is `5ddcceed74d963da9662c547d41dfcf7a50b9300f7a5f24af0476dc8c89b7f44`.

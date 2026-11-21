@@ -1174,49 +1174,49 @@
       ]
     },
     {
-      "file": "hover-pod/basecolor.ktx2",
+      "file": "hover-pod-revision/basecolor.ktx2",
       "role": "basecolor",
-      "sha256": "f06e2d09cf015a0c38476bd7c1634048bf47c8c0c116d41b5cc61d2dc93226a3",
+      "sha256": "78ec58dabf05bc8ec690bfdd66a42fc48de43ee528ffe0cece3e1c13a5ac743a",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "RB.brushed-titanium",
-          "x": 327,
-          "y": 156,
+          "x": 296,
+          "y": 347,
           "rgb": [
-            183,
-            188,
-            192
+            185,
+            190,
+            194
           ],
           "tolerance": 12
         },
         {
           "surface": "Core carbon inserts",
-          "x": 92,
+          "x": 296,
           "y": 318,
           "rgb": [
-            30,
             33,
-            44
+            37,
+            48
           ],
           "tolerance": 12
         },
         {
           "surface": "RB.dark-gunmetal",
-          "x": 956,
-          "y": 175,
+          "x": 964,
+          "y": 169,
           "rgb": [
-            90,
-            98,
-            107
+            87,
+            94,
+            103
           ],
           "tolerance": 12
         },
         {
           "surface": "light-cyan",
-          "x": 92,
-          "y": 383,
+          "x": 296,
+          "y": 376,
           "rgb": [
             45,
             226,
@@ -1226,10 +1226,10 @@
         },
         {
           "surface": "RB.tactical-ceramic",
-          "x": 327,
-          "y": 17,
+          "x": 243,
+          "y": 86,
           "rgb": [
-            62,
+            61,
             70,
             81
           ],
@@ -1238,18 +1238,18 @@
       ]
     },
     {
-      "file": "hover-pod/normal.ktx2",
+      "file": "hover-pod-revision/normal.ktx2",
       "role": "normal",
-      "sha256": "b0d2291fa82b8762c57cde91f67b9591637ed3c710fcd4145d9886b4fc3e14e9",
+      "sha256": "4854f7702b7022c6e11767999e35bb4f6da732024ec652bc6dca2e4cb2aa6f73",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "RB.brushed-titanium",
-          "x": 327,
-          "y": 156,
+          "x": 296,
+          "y": 347,
           "rgb": [
-            127,
+            128,
             128,
             255
           ],
@@ -1257,96 +1257,96 @@
         },
         {
           "surface": "Core carbon inserts",
-          "x": 92,
+          "x": 296,
           "y": 318,
           "rgb": [
-            128,
-            128,
+            130,
+            129,
             255
           ],
           "tolerance": 12
         },
         {
           "surface": "RB.dark-gunmetal",
-          "x": 956,
-          "y": 175,
+          "x": 964,
+          "y": 169,
           "rgb": [
-            127,
             128,
+            127,
             255
           ],
           "tolerance": 12
         },
         {
           "surface": "light-cyan",
-          "x": 92,
-          "y": 383,
+          "x": 296,
+          "y": 376,
           "rgb": [
-            115,
-            126,
-            254
+            123,
+            128,
+            255
           ],
           "tolerance": 12
         },
         {
           "surface": "RB.tactical-ceramic",
-          "x": 327,
-          "y": 17,
+          "x": 243,
+          "y": 86,
           "rgb": [
-            124,
-            112,
-            254
+            128,
+            153,
+            253
           ],
           "tolerance": 12
         }
       ]
     },
     {
-      "file": "hover-pod/orm.ktx2",
+      "file": "hover-pod-revision/orm.ktx2",
       "role": "orm",
-      "sha256": "a06644847691b580648e6fecfdafc999c192347e1dfad77bc876bc4a8996ada4",
+      "sha256": "1790030d913766ebd1881f0fcfc0a512f1c720ff76b09bd0c7815ac102d8fb6b",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "RB.brushed-titanium",
-          "x": 327,
-          "y": 156,
+          "x": 296,
+          "y": 347,
           "rgb": [
             255,
-            74,
-            248
+            76,
+            245
           ],
           "tolerance": 12
         },
         {
           "surface": "Core carbon inserts",
-          "x": 92,
+          "x": 296,
           "y": 318,
           "rgb": [
             255,
-            165,
+            174,
             0
           ],
           "tolerance": 12
         },
         {
           "surface": "RB.dark-gunmetal",
-          "x": 956,
-          "y": 175,
+          "x": 964,
+          "y": 169,
           "rgb": [
             254,
-            94,
+            92,
             238
           ],
           "tolerance": 12
         },
         {
           "surface": "light-cyan",
-          "x": 92,
-          "y": 383,
+          "x": 296,
+          "y": 376,
           "rgb": [
-            234,
+            255,
             71,
             0
           ],
@@ -1354,11 +1354,11 @@
         },
         {
           "surface": "RB.tactical-ceramic",
-          "x": 327,
-          "y": 17,
+          "x": 243,
+          "y": 86,
           "rgb": [
-            250,
-            166,
+            255,
+            160,
             0
           ],
           "tolerance": 12
@@ -1366,16 +1366,16 @@
       ]
     },
     {
-      "file": "hover-pod/emissive.ktx2",
+      "file": "hover-pod-revision/emissive.ktx2",
       "role": "emissive",
-      "sha256": "4c6257bd6db2b6b33df6dcda1affedb9f29a097e8c7c653c127f8ccb9adb0be6",
+      "sha256": "131eed81c596901c174b2d8230ec6a6ff60875a351660a42bda45267abb7d131",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "RB.brushed-titanium",
-          "x": 327,
-          "y": 156,
+          "x": 296,
+          "y": 347,
           "rgb": [
             0,
             0,
@@ -1385,7 +1385,7 @@
         },
         {
           "surface": "Core carbon inserts",
-          "x": 92,
+          "x": 296,
           "y": 318,
           "rgb": [
             0,
@@ -1396,8 +1396,8 @@
         },
         {
           "surface": "RB.dark-gunmetal",
-          "x": 956,
-          "y": 175,
+          "x": 964,
+          "y": 169,
           "rgb": [
             0,
             0,
@@ -1407,8 +1407,8 @@
         },
         {
           "surface": "light-cyan",
-          "x": 92,
-          "y": 383,
+          "x": 296,
+          "y": 376,
           "rgb": [
             45,
             226,
@@ -1418,8 +1418,8 @@
         },
         {
           "surface": "RB.tactical-ceramic",
-          "x": 327,
-          "y": 17,
+          "x": 243,
+          "y": 86,
           "rgb": [
             0,
             0,
@@ -6127,10 +6127,10 @@
     {
       "id": "hover-pod",
       "lod": 0,
-      "file": "hover-pod/hover-pod-lod0.glb",
-      "sha256": "d013afe0e2ec5627428db1b683adee6d6a0a47cf2906c5d55ba6a2c151dd2a49",
+      "file": "hover-pod-revision/hover-pod-lod0.glb",
+      "sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
       "limits": {
-        "triangles": 6500,
+        "triangles": 2476,
         "materials": 1,
         "bones": 0,
         "sockets": 1,
@@ -6148,34 +6148,22 @@
         }
       },
       "animations": [],
-      "planar_primitives": [
-        {
-          "node": "turret-hover-repulsor-core",
-          "primitive": 0,
-          "max_degrees": 1
-        },
-        {
-          "node": "turret-hover-repulsor-ring",
-          "primitive": 0,
-          "max_degrees": 1
-        }
-      ],
       "material_textures": {
         "Hover Pod satin armor": {
-          "basecolor": "hover-pod/basecolor.ktx2",
-          "normal": "hover-pod/normal.ktx2",
-          "orm": "hover-pod/orm.ktx2",
-          "emissive": "hover-pod/emissive.ktx2"
+          "basecolor": "hover-pod-revision/basecolor.ktx2",
+          "normal": "hover-pod-revision/normal.ktx2",
+          "orm": "hover-pod-revision/orm.ktx2",
+          "emissive": "hover-pod-revision/emissive.ktx2"
         }
       }
     },
     {
       "id": "hover-pod",
       "lod": 1,
-      "file": "hover-pod/hover-pod-lod1.glb",
-      "sha256": "469079788569d5940f6b3deb04c70044ad913a947430fde6425249637d93df96",
+      "file": "hover-pod-revision/hover-pod-lod1.glb",
+      "sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
       "limits": {
-        "triangles": 2500,
+        "triangles": 1148,
         "materials": 1,
         "bones": 0,
         "sockets": 1,
@@ -6193,24 +6181,12 @@
         }
       },
       "animations": [],
-      "planar_primitives": [
-        {
-          "node": "turret-hover-repulsor-core",
-          "primitive": 0,
-          "max_degrees": 1
-        },
-        {
-          "node": "turret-hover-repulsor-ring",
-          "primitive": 0,
-          "max_degrees": 1
-        }
-      ],
       "material_textures": {
         "Hover Pod satin armor": {
-          "basecolor": "hover-pod/basecolor.ktx2",
-          "normal": "hover-pod/normal.ktx2",
-          "orm": "hover-pod/orm.ktx2",
-          "emissive": "hover-pod/emissive.ktx2"
+          "basecolor": "hover-pod-revision/basecolor.ktx2",
+          "normal": "hover-pod-revision/normal.ktx2",
+          "orm": "hover-pod-revision/orm.ktx2",
+          "emissive": "hover-pod-revision/emissive.ktx2"
         }
       }
     },

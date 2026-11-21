@@ -1,0 +1,454 @@
+{
+  "m44-autocannon-t1": {
+    "lod0": {
+      "head_sha256": "c237b598548f8beef31bab35212729db84dfabeedf69b53a8939b83235528f21",
+      "archived_receipt_sha256": "445bdebd1cbf7e34b6930c7ff92c1c004fd4a228c09997edb1b926d0602164ac",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 4608,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.02751726, 0.00887358, 0.05000001
+      ]
+    },
+    "lod1": {
+      "head_sha256": "5e4fd730ffddcedbaa8748f4e65a8585ec67fbb115962839244ab318af8cab21",
+      "archived_receipt_sha256": "445bdebd1cbf7e34b6930c7ff92c1c004fd4a228c09997edb1b926d0602164ac",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 1920,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.02751726, 0.00948608, 0.05000001
+      ]
+    }
+  },
+  "m44-autocannon-t2": {
+    "lod0": {
+      "head_sha256": "4b3fe2078bf8e4e07a28dd4d4f046d366bd515b09c2e18814348ac0a1332c45e",
+      "archived_receipt_sha256": "b3e625cbbc2fcddf55b14d57b6838a4a1b97c4f1f252b4d1c21a4c71ac1f5de0",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 5244,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [0.03531533, 0.01145762, 0.06]
+    },
+    "lod1": {
+      "head_sha256": "27da99de1ab9a74deadee565d048135ad1c309e89470c95f8bb20845d7fe4daa",
+      "archived_receipt_sha256": "b3e625cbbc2fcddf55b14d57b6838a4a1b97c4f1f252b4d1c21a4c71ac1f5de0",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 2076,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [0.03531533, 0.0117957, 0.06]
+    }
+  },
+  "m44-autocannon-t3": {
+    "lod0": {
+      "head_sha256": "48c31be1777178917d4c65d074a0674d7b264401d4eac98b1c4730931eb6389f",
+      "archived_receipt_sha256": "61c06f36b90d67cb7e8786232b501d6b08fb2f9e90b36bb4917d3f6c86076bc3",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 6036,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.03876531, 0.02314973, 0.06500006
+      ]
+    },
+    "lod1": {
+      "head_sha256": "705983665964b83a88c1b5823e4ca3b682af231a67ace807975f3ee99797c6fc",
+      "archived_receipt_sha256": "61c06f36b90d67cb7e8786232b501d6b08fb2f9e90b36bb4917d3f6c86076bc3",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 2436,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.03876531, 0.01273757, 0.06500006
+      ]
+    }
+  },
+  "helios-plasma-mortar-t1": {
+    "lod0": {
+      "head_sha256": "43ae973b67218f1bbf5e0c5f26d1ea8c30411d3657b2628b48371210d00fd079",
+      "archived_receipt_sha256": "742453b0e90cbf7db2ec093401809d9fd29f16a3fa76b1b713ded79509edf83c",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 4808,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.03999999910593033
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.02431637, 0.02763212, 0.04000002, 0.04000002
+      ]
+    },
+    "lod1": {
+      "head_sha256": "180d1713b4cb8d3da33792db84d47e58acdec7272f579c954667e898d339d27a",
+      "archived_receipt_sha256": "742453b0e90cbf7db2ec093401809d9fd29f16a3fa76b1b713ded79509edf83c",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 2008,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.03999999910593033
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.0252344, 0.02763212, 0.04000002, 0.04000002
+      ]
+    }
+  },
+  "helios-plasma-mortar-t2": {
+    "lod0": {
+      "head_sha256": "8097ca2e710a313f8c3fc9d57a5e0b1e25aa16edfd6bf567c5ee69b1cd2875fb",
+      "archived_receipt_sha256": "6951bf5242e4d0e5addb24f8daa20d0c93dd996b89ca41618f27a791241bc142",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 6148,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.04500000178813934
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.02785099, 0.03147149, 0.04500002, 0.04500002
+      ]
+    },
+    "lod1": {
+      "head_sha256": "7a9e226efa37112f588b0f5f489034d9b4b63ba2035177f07af7dc3ce3d1feba",
+      "archived_receipt_sha256": "6951bf5242e4d0e5addb24f8daa20d0c93dd996b89ca41618f27a791241bc142",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 2388,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.04500000178813934
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.02888823, 0.03147149, 0.04500002, 0.04500002
+      ]
+    }
+  },
+  "helios-plasma-mortar-t3": {
+    "lod0": {
+      "head_sha256": "d1da2bea7abcb9f0e6d7d5fa7e5f66410204eaae5464dca1bd5474c7d9230151",
+      "archived_receipt_sha256": "b30037db7bffa11409eae08efc64b41198c157ee5b197e14c2460ca28325899b",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 6452,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.04999999701976776
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.03012151, 0.03454012, 0.05000001, 0.05000001
+      ]
+    },
+    "lod1": {
+      "head_sha256": "59d5148f10904f5e5874a03b74d8ff56b1968f671c8ee2122d554d17a7258309",
+      "archived_receipt_sha256": "b30037db7bffa11409eae08efc64b41198c157ee5b197e14c2460ca28325899b",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 2484,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.04999999701976776
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.03154302, 0.03454012, 0.05000001, 0.05000001
+      ]
+    }
+  },
+  "glacier-cryo-arc-t1": {
+    "lod0": {
+      "head_sha256": "24fc3d2d54cce1b68cab5225410ad812830ad9c481d068feea3f6251fd2094e5",
+      "archived_receipt_sha256": "a5ce6579d865a0249a17b707e10d116c3959ec88826998268420469ac07632bc",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 5032,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.030000068247318268,
+        "posed_moving_clearances_m": [
+          0.02926008403301239, 0.03254912048578262, 0.030000068247318268
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.02925998, 0.03254902, 0.02999997, 0.02999997
+      ]
+    },
+    "lod1": {
+      "head_sha256": "5af5705104840914939987c6ba95de0e591b0e5fabb8335c0a03cc1fa975d9e3",
+      "archived_receipt_sha256": "a5ce6579d865a0249a17b707e10d116c3959ec88826998268420469ac07632bc",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 2408,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.030000068247318268,
+        "posed_moving_clearances_m": [
+          0.02926008403301239, 0.03254912048578262, 0.030000068247318268
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.02925998, 0.03254902, 0.02999997, 0.02999997
+      ]
+    }
+  },
+  "glacier-cryo-arc-t2": {
+    "lod0": {
+      "head_sha256": "d87caa88f3d725c95260f92cb2fc2a99a71afe421017627db060e5756e0240ed",
+      "archived_receipt_sha256": "81fdf39b46759824a009f76486b3662918ac3dc2e485d5e07fa30959e14b0f51",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 4068,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.030000068247318268,
+        "posed_moving_clearances_m": [
+          0.029508091509342194, 0.03315337747335434, 0.030000068247318268
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.02950805, 0.03315336, 0.03000009, 0.03000009
+      ]
+    },
+    "lod1": {
+      "head_sha256": "d11001f3812f529f4242c384f699b2dfad30fdb4f96dd37c28d075f7663c1d09",
+      "archived_receipt_sha256": "81fdf39b46759824a009f76486b3662918ac3dc2e485d5e07fa30959e14b0f51",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 2068,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.030000120401382446,
+        "posed_moving_clearances_m": [
+          0.029508084058761597, 0.03315337747335434, 0.030000120401382446
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.02950805, 0.03315336, 0.03000009, 0.03000009
+      ]
+    }
+  },
+  "glacier-cryo-arc-t3": {
+    "lod0": {
+      "head_sha256": "c049268de20d996143558d19a5d64e1c084369d2b74475ba6bcb0b47433e7c89",
+      "archived_receipt_sha256": "c6dfe61a50fd269b89155bd47f34aeaf8788497108a00d23c0047eeed451a9e1",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 5140,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.03000011295080185,
+        "posed_moving_clearances_m": [
+          0.029756076633930206, 0.03375755250453949, 0.03000011295080185
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.02975607, 0.03375751, 0.03000003, 0.03000003
+      ]
+    },
+    "lod1": {
+      "head_sha256": "976bfe5e4b8b07112be6dc926531fe0f5f2d2ff0d647b76f843ac2272a4f1964",
+      "archived_receipt_sha256": "c6dfe61a50fd269b89155bd47f34aeaf8788497108a00d23c0047eeed451a9e1",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 2452,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.03000011295080185,
+        "posed_moving_clearances_m": [
+          0.029756076633930206, 0.03375755995512009, 0.03000011295080185
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.02975607, 0.03375751, 0.03000003, 0.03000003
+      ]
+    }
+  },
+  "valkyrie-rail-sniper-t1": {
+    "lod0": {
+      "head_sha256": "a2bc5110f7e7a28e9685a8bb8e2533dfefe3d34a208561fe930ec1d8e45803d7",
+      "archived_receipt_sha256": "6dc724b773181dc9f9e5995a803b10bceb42ae57d5885db20cc0c0cee40f5d64",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 3592,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.060000114142894745,
+        "posed_moving_clearances_m": [
+          0.03729994595050812, 0.0012926235795021057, 0.016077205538749695, 0.060000114142894745
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.03729993, 0.00129253, 0.01607716, 0.06, 0.06
+      ]
+    },
+    "lod1": {
+      "head_sha256": "24469fd3d740aea81d548b88f1973e70afa7d218b43ca3532d023ce4897f9631",
+      "archived_receipt_sha256": "6dc724b773181dc9f9e5995a803b10bceb42ae57d5885db20cc0c0cee40f5d64",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 2032,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.060000114142894745,
+        "posed_moving_clearances_m": [
+          0.03729994595050812, 0.001292593777179718, 0.016077205538749695, 0.060000114142894745
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.03729993, 0.00129253, 0.01607716, 0.06, 0.06
+      ]
+    }
+  },
+  "valkyrie-rail-sniper-t2": {
+    "lod0": {
+      "head_sha256": "648513ec018d7a9413ec015a213307720d07c30cc2ba2f8de23811ebc7ee5244",
+      "archived_receipt_sha256": "f20a930eb9c13050cf40f05cb9d8f6357d8042781f21a21de5512f8acc2d21b8",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 3872,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.07000019401311874,
+        "posed_moving_clearances_m": [
+          0.04438908398151398, 0.03462999359929694, 0.03972686442713272, 0.07000019401311874
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.04438901, 0.03462997, 0.03972683, 0.07000005, 0.07000005
+      ]
+    },
+    "lod1": {
+      "head_sha256": "e5a0707a01dcc48397ce71814a7b63043e8f1907162938534143db184554938d",
+      "archived_receipt_sha256": "f20a930eb9c13050cf40f05cb9d8f6357d8042781f21a21de5512f8acc2d21b8",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 2312,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.07000019401311874,
+        "posed_moving_clearances_m": [
+          0.04438908398151398, 0.03559504449367523, 0.03884808498561065, 0.07000019401311874
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.04438901, 0.03559494, 0.03884803, 0.07000005, 0.07000005
+      ]
+    }
+  },
+  "valkyrie-rail-sniper-t3": {
+    "lod0": {
+      "head_sha256": "95deafbe4b734b766fc80713cbaff3cdc9c13002957416a873648de3165882fc",
+      "archived_receipt_sha256": "d4248ece96f845e2ff8f9b14b33c09ad6ad0360bda9e12aa875e6f96d3364802",
+      "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "combined_triangles": 4068,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.080000139772892,
+        "posed_moving_clearances_m": [
+          0.05147813260555267, 0.04500658217561969, 0.005152031779289246, 0.080000139772892
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.05147797, 0.04500648, 0.00515193, 0.08000004, 0.08000004
+      ]
+    },
+    "lod1": {
+      "head_sha256": "a29cd13200c44f45db35a50321cd18cafad01d58aceee78ae9991da95474614e",
+      "archived_receipt_sha256": "d4248ece96f845e2ff8f9b14b33c09ad6ad0360bda9e12aa875e6f96d3364802",
+      "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "combined_triangles": 2468,
+      "native_facing_optics_and_controls_passed": true,
+      "pose_table_matches_original_receipt": true,
+      "native_mount_checks": {
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.080000139772892,
+        "posed_moving_clearances_m": [
+          0.05147813260555267, 0.04338987799065985, 0.005152031779289246, 0.080000139772892
+        ]
+      },
+      "posed_moving_clearance_lower_bounds_m_including_neutral": [
+        0.05147797, 0.0433898, 0.00515193, 0.08000004, 0.08000004
+      ]
+    }
+  }
+}

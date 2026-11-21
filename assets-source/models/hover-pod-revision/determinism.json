@@ -1,0 +1,34 @@
+{
+  "platform": "Linux x86_64, Blender 5.2.2 Cycles CPU, 3 threads, KTX-Software 4.4.2",
+  "independent_portable_output_hashes": {
+    "basecolor.ktx2": "78ec58dabf05bc8ec690bfdd66a42fc48de43ee528ffe0cece3e1c13a5ac743a",
+    "basecolor.png": "68b9add113a661e8099c809a74bc12c6d969d6637bf16decc975291469d44f81",
+    "emissive.ktx2": "131eed81c596901c174b2d8230ec6a6ff60875a351660a42bda45267abb7d131",
+    "emissive.png": "323f0f08f062d08799ef3a12584baa8fbfaf5598ff3e7291a7a71e966d202d52",
+    "geometry.json": "8b663cb1cc855b5c008f5c1dd26c654532f7cdca8d602e26db7711ffaad84209",
+    "hover-pod-lod0.glb": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+    "hover-pod-lod1.glb": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+    "normal.ktx2": "4854f7702b7022c6e11767999e35bb4f6da732024ec652bc6dca2e4cb2aa6f73",
+    "normal.png": "8caa23bcd600b82c3d37ca247e15d545592b6489fdd1aa4f74761c5dee51fe89",
+    "orm.ktx2": "1790030d913766ebd1881f0fcfc0a512f1c720ff76b09bd0c7815ac102d8fb6b",
+    "orm.png": "3972494f68b039c87b22765fc9423f921d25eadbccaec0bc7435dc17b2314b6f"
+  },
+  "editable_sources": {
+    "high": {
+      "sha256": "76514b63bd0b3e20c499b5347e4ddc41a5e0483cec50587993cee10df30b3e1a",
+      "triangles": 20988,
+      "embedded_source_images": 9,
+      "geometry_uv_hierarchy_material_slots_sha256": "82dacfc252440e7f9cea910474c47556e623df5ec23d43e381343fab1c5f1b75",
+      "geometry_slots_uv_hierarchy_corner_normals_packed_textures_sha256": "028b07a973d9c298f74d227acb84feb9a02cee265182597566e6e55e0e26ec50",
+      "repeat_archive_sha256": "7f244691a1a4a3c5dc636cee7ee6b6444cd44ee19cc5712d1d1d75932b46cecf"
+    },
+    "low": {
+      "sha256": "af7ae14b221b4b715bf1d98b489486a0f1cf2400f7860e316824fc6d76a5c68e",
+      "triangles": 2428,
+      "embedded_source_images": 4,
+      "geometry_uv_hierarchy_material_slots_sha256": "54e8a5ee98ca1c0b9bb96a6cb7f017ea0967657cf5b8f4d3a48e227b80497901",
+      "geometry_slots_uv_hierarchy_corner_normals_packed_textures_sha256": "3888e00594e8852bd717cb9d33bac92e404a67f92cb3a885aed3d72ba277cf56",
+      "repeat_archive_sha256": "d37fe99e65a512dbe05e8e82feca7400eae7d03bf54cd95a8084d6a83c2f95b9"
+    }
+  }
+}

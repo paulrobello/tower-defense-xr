@@ -1,0 +1,200 @@
+{
+  "high": {
+    "triangles": 20988,
+    "positive_area_coplanar_pairs": 0,
+    "nonadjacent_triangle_intersections": 0
+  },
+  "lod0": {
+    "triangles": 2428,
+    "positive_area_coplanar_pairs": 0,
+    "nonadjacent_triangle_intersections": 0,
+    "glb_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+    "radius_m": 0.156,
+    "bottom_m": 0.0,
+    "height_m": 0.07,
+    "emitter_radius_m": 0.145,
+    "radial_air_gap_m": 0.018,
+    "decoded_cyan_area_fraction": {
+      "underside": 0.8494,
+      "outer_face": 0.8496
+    },
+    "poses": {
+      "0.8": {
+        "yaw_degrees": 0.0,
+        "world_forward_blender": [
+          0.0,
+          -1.0,
+          0.0
+        ]
+      },
+      "2.3": {
+        "yaw_degrees": 37.2423,
+        "world_forward_blender": [
+          0.605186402797699,
+          -0.7960838079452515,
+          0.0
+        ]
+      },
+      "5": {
+        "yaw_degrees": -69.3279,
+        "world_forward_blender": [
+          -0.9356160163879395,
+          -0.3530193567276001,
+          0.0
+        ]
+      }
+    },
+    "ceramic_shoulder_metallic_u8": {
+      "interior_samples": 256,
+      "min": 0,
+      "max": 0
+    },
+    "unlit_albedo": {
+      "interior_samples": 9712,
+      "minimum_peak_rgb8": 36,
+      "black_samples": 0
+    },
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 409583,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.398
+        },
+        "normal": {
+          "bytes": 426615,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.806,
+          "decoded_unit_length_range": [
+            0.975352,
+            1.028281
+          ]
+        },
+        "orm": {
+          "bytes": 709712,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.592
+        },
+        "emissive": {
+          "bytes": 10208,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.084
+        }
+      },
+      "file_bytes": 3699748,
+      "primitives": 2,
+      "gltf_vertices": 3733,
+      "ktx2_bytes": 1556118,
+      "uastc_bytes_before_zstd": 5592512
+    },
+    "normal_checks": {
+      "authored_planar_triangles": 972,
+      "horizontal_planar_triangles": 284,
+      "worst_planar_normal_degrees": 0.0,
+      "underside_titanium_corner_samples": 384,
+      "worst_normal_azimuth_error_degrees": 0.0,
+      "bearing_radial_stations": 32
+    }
+  },
+  "lod1": {
+    "triangles": 1132,
+    "positive_area_coplanar_pairs": 0,
+    "nonadjacent_triangle_intersections": 0,
+    "glb_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+    "radius_m": 0.156,
+    "bottom_m": 0.0,
+    "height_m": 0.07,
+    "emitter_radius_m": 0.145,
+    "radial_air_gap_m": 0.0179999,
+    "decoded_cyan_area_fraction": {
+      "underside": 0.8488,
+      "outer_face": 0.8492
+    },
+    "poses": {
+      "0.8": {
+        "yaw_degrees": 0.0,
+        "world_forward_blender": [
+          0.0,
+          -1.0,
+          0.0
+        ]
+      },
+      "2.3": {
+        "yaw_degrees": 37.2423,
+        "world_forward_blender": [
+          0.605186402797699,
+          -0.7960838079452515,
+          0.0
+        ]
+      },
+      "5": {
+        "yaw_degrees": -69.3279,
+        "world_forward_blender": [
+          -0.9356160163879395,
+          -0.3530193567276001,
+          0.0
+        ]
+      }
+    },
+    "ceramic_shoulder_metallic_u8": {
+      "interior_samples": 160,
+      "min": 0,
+      "max": 0
+    },
+    "unlit_albedo": {
+      "interior_samples": 4528,
+      "minimum_peak_rgb8": 34,
+      "black_samples": 0
+    },
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 409583,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.398
+        },
+        "normal": {
+          "bytes": 426615,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.806,
+          "decoded_unit_length_range": [
+            0.975352,
+            1.028281
+          ]
+        },
+        "orm": {
+          "bytes": 709712,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.592
+        },
+        "emissive": {
+          "bytes": 10208,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.084
+        }
+      },
+      "file_bytes": 3586352,
+      "primitives": 2,
+      "gltf_vertices": 1533,
+      "ktx2_bytes": 1556118,
+      "uastc_bytes_before_zstd": 5592512
+    },
+    "normal_checks": {
+      "authored_planar_triangles": 356,
+      "horizontal_planar_triangles": 132,
+      "worst_planar_normal_degrees": 0.0,
+      "underside_titanium_corner_samples": 240,
+      "worst_normal_azimuth_error_degrees": 0.0,
+      "bearing_radial_stations": 20
+    }
+  },
+  "combined_uv0_positive_area_overlaps": 0
+}
