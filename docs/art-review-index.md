@@ -69,3 +69,9 @@ The staged frame is 4,056 triangles and uses five 1024 px maps. The 0.95 × 1.35
 ![Matched Surface Clamp Base source and imported LOD0 views](../assets-source/models/surface-clamp/review/comparison.jpg)
 
 The mount has four separate shoes, a 55 mm deck and a 0.15881 m measured radius within the 0.16 m footprint. Both its 2,428-triangle LOD0 and 1,148-triangle LOD1 retain the origin socket, share four 1024 px maps, and preserve contact on all four soles in floor, table and wall fixtures. [Clamp sources, hashes and re-import checks](../assets-source/models/surface-clamp/README.md)
+
+## Repulsor Hover-Ring Pod
+
+![Repulsor Hover-Ring source and imported LODs from matched angles](../assets-source/models/hover-pod/review/comparison.jpg)
+
+The legless pod measures 0.156 m outer radius, 0.145 m emitter radius and 0.070 m height. Its 2,364-triangle LOD0 and 1,148-triangle LOD1 share the origin socket, one material and four 1024 px maps. Both GLBs passed re-import for clearance, shell intersections and the ceramic shoulder's decoded material response. [Hover pod sources, hashes and re-import checks](../assets-source/models/hover-pod/README.md)

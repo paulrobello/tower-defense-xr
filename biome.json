@@ -15,7 +15,7 @@
         "assets-source/models/manifest.json",
         "assets-source/models/*/geometry.json",
         "assets-source/models/*/reimport.json",
-        "assets-source/models/*/review/*-cameras.json"
+        "assets-source/models/*/review/*cameras.json"
       ],
       "formatter": { "enabled": false }
     }
