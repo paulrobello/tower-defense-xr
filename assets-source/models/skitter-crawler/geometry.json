@@ -1,0 +1,228 @@
+{
+  "high": {
+    "triangles": 60720,
+    "extent_XYZ_m": [
+      0.2600365877151489,
+      0.3400000035762787,
+      0.18097469210624695
+    ],
+    "support_z_m": 0.0
+  },
+  "bake": {
+    "normal_correspondence_texels": 747850,
+    "normal": {
+      "sha256": "fde2385e38901f21da40e322628814b0e947e35b8e2abc33c19d881a58546afb",
+      "samples": [
+        {
+          "surface": "Scute 3 1",
+          "x": 112,
+          "y": 691,
+          "rgb": [
+            174,
+            115,
+            245
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 70,
+          "y": 547,
+          "rgb": [
+            135,
+            123,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lateral ocellus 1",
+          "x": 198,
+          "y": 208,
+          "rgb": [
+            136,
+            132,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Photophore 3",
+          "x": 966,
+          "y": 547,
+          "rgb": [
+            131,
+            123,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "basecolor": {
+      "sha256": "0b4f7b6557557233be30edc8ffdc418fe11ddc53cb63c82b90dc03a1489dc778",
+      "samples": [
+        {
+          "surface": "Scute 3 1",
+          "x": 112,
+          "y": 691,
+          "rgb": [
+            57,
+            57,
+            63
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 70,
+          "y": 547,
+          "rgb": [
+            43,
+            36,
+            42
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lateral ocellus 1",
+          "x": 198,
+          "y": 208,
+          "rgb": [
+            194,
+            136,
+            244
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Photophore 3",
+          "x": 966,
+          "y": 547,
+          "rgb": [
+            133,
+            71,
+            174
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "orm": {
+      "sha256": "4e7ce07ce44deaca3eaa4bb476560e6a9caf017b67ebed329cd69c67da1de500",
+      "samples": [
+        {
+          "surface": "Scute 3 1",
+          "x": 112,
+          "y": 691,
+          "rgb": [
+            21,
+            99,
+            20
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 70,
+          "y": 547,
+          "rgb": [
+            234,
+            141,
+            6
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lateral ocellus 1",
+          "x": 198,
+          "y": 208,
+          "rgb": [
+            0,
+            67,
+            14
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Photophore 3",
+          "x": 966,
+          "y": 547,
+          "rgb": [
+            85,
+            76,
+            9
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "emissive": {
+      "sha256": "cb50309e19708f60a1dd5f93fd5fdb6c16759f513673ab64af15bf4b09f1c02a",
+      "samples": [
+        {
+          "surface": "Scute 3 1",
+          "x": 112,
+          "y": 691,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 70,
+          "y": 547,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lateral ocellus 1",
+          "x": 198,
+          "y": 208,
+          "rgb": [
+            194,
+            136,
+            244
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Photophore 3",
+          "x": 966,
+          "y": 547,
+          "rgb": [
+            133,
+            71,
+            174
+          ],
+          "tolerance": 16
+        }
+      ]
+    }
+  },
+  "lod0": {
+    "triangles": 4340,
+    "extent_XYZ_m": [
+      0.25999999046325684,
+      0.3400000035762787,
+      0.18000000715255737
+    ],
+    "support_z_m": 0.0
+  },
+  "lod1": {
+    "triangles": 1836,
+    "extent_XYZ_m": [
+      0.259950190782547,
+      0.3400000035762787,
+      0.17848889529705048
+    ],
+    "support_z_m": 0.0
+  }
+}

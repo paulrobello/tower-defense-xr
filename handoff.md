@@ -41,7 +41,7 @@
   - `P3-T5b` complete (`01a1fb3c87547701ac5685baf143b252`). All three [M44](docs/art-review-index.md#m44-autocannon) and [Helios](docs/art-review-index.md#helios-plasma-mortar) tiers are staged, with editable high/low sources, two GLB LODs per tier and matching view sets. Re-import verified both mounts and the tier transforms. Their largest assemblies measure M44 6,036/2,452 and Helios 6,452/2,500 triangles. The visual approval gate is P3-T7.
   - `P3-T5c` complete (`01a1fb3c897177268bcaedf2577ed3d4`). All three [Glacier](docs/art-review-index.md#glacier-cryo-arc) and [Valkyrie](docs/art-review-index.md#valkyrie-rail-sniper) tiers are staged with editable high and low sources, repeat-matched GLBs and maps, and views on both mounts. Re-import verified the neutral muzzle and articulated yaw, pitch and recoil. Their largest assemblies measure Glacier 5,140/2,468 and Valkyrie 4,068/2,484 triangles. Valkyrie T3 retains a 46.64 mm minimum open rail gap.
   - `P3-T5` complete (`01a1fadb16977224a3f5072a8ba38175`). All 48 combinations of four heads, three tiers, two LODs and two mounts pass the assembly budget. The largest uses 6,452/2,500 triangles and two materials. The full model gate checks 30 GLBs and 81 KTX2 textures, including the shared material library. Final turret approval remains at `P3-T7`.
-  - `P3-T6a` (`01a1fb3c8b1071cf8430eb90a84fa8ba`): Rigged Skitter Crawler (`≤4.5k/24b`) & Wasp Skimmer (`≤6.5k/24b`).
+  - `P3-T6a` (`01a1fb3c8b1071cf8430eb90a84fa8ba`): [Skitter Crawler](docs/art-review-index.md#skitter-crawler) is staged at 4,340/1,836 tris and 23 bones. Both LODs passed re-import for all five clips and the floor and wall contact checks. Finish Wasp Skimmer (`≤6.5k/24b`) before closing the card.
   - `P3-T6b` (`01a1fb3c8def7766a0bd37d25c39874d`): Rigged Carapace Brute (`≤9k/28b`) & Rift Disruptor (`≤6.5k/24b`).
   - `P3-T6c` (`01a1fb3c91067130bdb8af122f51b91a`): Rigged Wave 12 Boss Apex Broodlord (`≤28k/48b`, 2048 px KTX2 + Phase-2 crack emissive mask).
   - `P3-T6` (`01a1fadb18be76c79209166e054aeb93`): Invader family rollup (closes once `P3-T6a/b/c` pass).
@@ -105,5 +105,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Continue serial Blender authoring.** The Core, Rift frame and the entire turret kit are staged. Author Skitter Crawler first, then Wasp Skimmer for `P3-T6a`. Continue through `P3-T6b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
+1. **Continue serial Blender authoring.** The Core, Rift frame, entire turret kit and Skitter Crawler are staged. Finish Wasp Skimmer for `P3-T6a`, then continue through `P3-T6b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
 2. **Collect owner feedback** from the [public test build](https://rift-bastion.pardev.net/). Asset promotion stays gated by Owner Checkpoint 2.

@@ -4764,6 +4764,218 @@
           "tolerance": 12
         }
       ]
+    },
+    {
+      "file": "skitter-crawler/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "ba423374f495de0d78bbc23243f1514cfc855bd87819b6b45dd66c00189a5eab",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Scute 3 1",
+          "x": 112,
+          "y": 691,
+          "rgb": [
+            57,
+            57,
+            63
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 70,
+          "y": 547,
+          "rgb": [
+            43,
+            36,
+            42
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lateral ocellus 1",
+          "x": 198,
+          "y": 208,
+          "rgb": [
+            194,
+            136,
+            244
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Photophore 3",
+          "x": 966,
+          "y": 547,
+          "rgb": [
+            133,
+            71,
+            174
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "skitter-crawler/normal.ktx2",
+      "role": "normal",
+      "sha256": "8ec24a72700c92eb555c435b4665ce95c6a6e6f834a218517fec78de5f6c5099",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Scute 3 1",
+          "x": 112,
+          "y": 691,
+          "rgb": [
+            174,
+            115,
+            245
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 70,
+          "y": 547,
+          "rgb": [
+            135,
+            123,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lateral ocellus 1",
+          "x": 198,
+          "y": 208,
+          "rgb": [
+            136,
+            132,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Photophore 3",
+          "x": 966,
+          "y": 547,
+          "rgb": [
+            131,
+            123,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "skitter-crawler/orm.ktx2",
+      "role": "orm",
+      "sha256": "61dad20a5b42033c80c92058128dcb726b56f31a10af56c0c116ef02bdac7e07",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Scute 3 1",
+          "x": 112,
+          "y": 691,
+          "rgb": [
+            21,
+            99,
+            20
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 70,
+          "y": 547,
+          "rgb": [
+            234,
+            141,
+            6
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lateral ocellus 1",
+          "x": 198,
+          "y": 208,
+          "rgb": [
+            0,
+            67,
+            14
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Photophore 3",
+          "x": 966,
+          "y": 547,
+          "rgb": [
+            85,
+            76,
+            9
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "skitter-crawler/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "05832c0c42319587ed3d2a692e26b2398eb56aa9eca67c755e71469dfd04b2ef",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Scute 3 1",
+          "x": 112,
+          "y": 691,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 70,
+          "y": 547,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lateral ocellus 1",
+          "x": 198,
+          "y": 208,
+          "rgb": [
+            194,
+            136,
+            244
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Photophore 3",
+          "x": 966,
+          "y": 547,
+          "rgb": [
+            133,
+            71,
+            174
+          ],
+          "tolerance": 16
+        }
+      ]
     }
   ],
   "models": [
@@ -6286,6 +6498,66 @@
           "normal": "valkyrie-rail-sniper-t3/normal.ktx2",
           "orm": "valkyrie-rail-sniper-t3/orm.ktx2",
           "emissive": "valkyrie-rail-sniper-t3/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "skitter-crawler",
+      "lod": 0,
+      "file": "skitter-crawler/skitter-crawler-lod0.glb",
+      "sha256": "638360d041e6f35f60bdfdad505872301695f4d7f2038e37346800a6549b79e9",
+      "limits": {
+        "triangles": 4500,
+        "materials": 1,
+        "bones": 24,
+        "sockets": 0,
+        "texture_size": 1024
+      },
+      "sockets": {},
+      "animations": [
+        "crawl_floor",
+        "climb_wall",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Skitter obsidian cuticle": {
+          "basecolor": "skitter-crawler/basecolor.ktx2",
+          "normal": "skitter-crawler/normal.ktx2",
+          "orm": "skitter-crawler/orm.ktx2",
+          "emissive": "skitter-crawler/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "skitter-crawler",
+      "lod": 1,
+      "file": "skitter-crawler/skitter-crawler-lod1.glb",
+      "sha256": "de68b1b8e40d39b50a8968981900af0a5a08ae96a144285646a41d844c1797a5",
+      "limits": {
+        "triangles": 2000,
+        "materials": 1,
+        "bones": 24,
+        "sockets": 0,
+        "texture_size": 1024
+      },
+      "sockets": {},
+      "animations": [
+        "crawl_floor",
+        "climb_wall",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Skitter obsidian cuticle": {
+          "basecolor": "skitter-crawler/basecolor.ktx2",
+          "normal": "skitter-crawler/normal.ktx2",
+          "orm": "skitter-crawler/orm.ktx2",
+          "emissive": "skitter-crawler/emissive.ktx2"
         }
       }
     }

@@ -1,0 +1,156 @@
+{
+  "piece": "skitter-crawler",
+  "stage": "P3-T6a staged animated character",
+  "authoring_date": "2026-11-21",
+  "authoring": {
+    "model": "GPT-6.2 Astra",
+    "reasoning_effort": "high",
+    "tools": ["Blender 5.2.2 LTS, d13f752e3b9c", "KTX-Software 4.4.2"],
+    "source": "Original parameterized cuticle anatomy, deformation skeleton, FK clips, procedural surface finish and review fixtures."
+  },
+  "reference": {
+    "approved_direction": "Bastion Rib",
+    "concept_approved": "2026-11-20",
+    "path": "assets-source/concepts/sheets/skitter-crawler.png",
+    "sha256": "186a05b3d423b2fa0fea5a2ace3c81e70198c758d34ee40201037608431e7edd",
+    "rights_inventory": "assets-source/concepts/provenance.json"
+  },
+  "rights": {
+    "geometry_animation_textures": "Original project-authored procedural geometry, rig, motions and texture fields. No third-party mesh, motion capture or texture data.",
+    "license": "MIT (package.json)"
+  },
+  "frame": {
+    "root": "Skitter",
+    "root_at_support_m": [0, 0, 0],
+    "axes": "Blender +Z up / -Y forward; glTF +Y up / +Z forward",
+    "runtime_owner": "travel, facing, surface basis, health bar and collision",
+    "collision_radius_m": 0.14,
+    "health_bar_above_support_m": 0.28,
+    "target_lod_switch_m": 6
+  },
+  "production": {
+    "authoring_budget": {
+      "max_lod0_triangles": 4500,
+      "max_joints": 24,
+      "max_materials": 2,
+      "max_texture_edge_px": 1024
+    },
+    "measured_lod0_triangles": 4340,
+    "measured_lod1_triangles": 1836,
+    "joints_per_lod": 23,
+    "draw_primitives_per_lod": 1,
+    "materials_per_lod": 1,
+    "weighting": "Intentional one-influence rigid chitin plating and limb cuticle with articulated overlapping joint capsules.",
+    "frame_rate_fps": 30,
+    "loop_clips": ["crawl_floor", "climb_wall"],
+    "one_shots": ["attack", "hit", "death"],
+    "atlas": "1024 px Cycles CPU rest-pose material and assembled 12-ray local AO bake, Mikk tangent-frame correspondence for normal detail, eleven-level top-left UASTC2 KTX2 maps. Retains sRGB base color/emissive and linear normal/ORM.",
+    "review": "EEVEE Metal. Matched lighting and cameras for high source and each decoded portable GLB. 24 rendered orbit frames; three key poses for each clip. Environment and camera fixtures are review-only."
+  },
+  "failed_attempts_and_corrections": [
+    "LOD0 receiver initially had 7,760 triangles. Reduced per-surface tessellation before baking.",
+    "Initial Linux package reimported successfully, but exhaustive base-mip KTX decoding found RGB (130,82,230) at (738,89), length 0.879787 against the existing 0.88 minimum. Its source PNG texel measured 0.997798. Limited steep high-to-low normal corrections to 24 degrees, kept the UASTC encoding profile, then rebaked and repeated. Final decoded range 0.953022\u20131.052698. Matching unchanged role bytes from the first two independent runs were reused after checking the corresponding clean rebuilt PNG hashes. Each corrected normal was independently encoded.",
+    "The first headless Metal attempt queried the backend before GPU initialization. Explicit initialization fixed the query. The first completed studio render washed the dark shell gray. Reduced bounce and key exposure, increased review samples, and opened the camera angle for the far-side feet."
+  ],
+  "clean_repeat": {
+    "platform": "Linux x86_64; Blender 5.2.2 and KTX 4.4.2, maximum three aggregate CPU threads",
+    "products_match_sha256": {
+      "basecolor.ktx2": "ba423374f495de0d78bbc23243f1514cfc855bd87819b6b45dd66c00189a5eab",
+      "basecolor.png": "0b4f7b6557557233be30edc8ffdc418fe11ddc53cb63c82b90dc03a1489dc778",
+      "emissive.ktx2": "05832c0c42319587ed3d2a692e26b2398eb56aa9eca67c755e71469dfd04b2ef",
+      "emissive.png": "cb50309e19708f60a1dd5f93fd5fdb6c16759f513673ab64af15bf4b09f1c02a",
+      "geometry.json": "6ee9318f3bab745e5b78995c95290f76a71b53e4f43f847c3197150179ca6f0e",
+      "normal.ktx2": "8ec24a72700c92eb555c435b4665ce95c6a6e6f834a218517fec78de5f6c5099",
+      "normal.png": "fde2385e38901f21da40e322628814b0e947e35b8e2abc33c19d881a58546afb",
+      "orm.ktx2": "61dad20a5b42033c80c92058128dcb726b56f31a10af56c0c116ef02bdac7e07",
+      "orm.png": "4e7ce07ce44deaca3eaa4bb476560e6a9caf017b67ebed329cd69c67da1de500",
+      "skitter-crawler-lod0.glb": "638360d041e6f35f60bdfdad505872301695f4d7f2038e37346800a6549b79e9",
+      "skitter-crawler-lod1.glb": "de68b1b8e40d39b50a8968981900af0a5a08ae96a144285646a41d844c1797a5"
+    },
+    "stage_a_editable": {
+      "high.blend": {
+        "file_sha256": "63b42883239f6e6e434def388d2fe4a53de374b8bfccb261536e45222a7f9651",
+        "logical_geometry_hierarchy_skin_animation_sha256": "8ac2cccfadc85842ce9b934d6341758f33090d7c252f99750fc35374b7838b55"
+      },
+      "low.blend": {
+        "file_sha256": "cf5d16c3b22d7edbf831de3c7647dc8ab4f01c39f6fe9d3e92531fb25a3ae3a7",
+        "logical_geometry_hierarchy_skin_animation_sha256": "193e0846e07f71b13d7999ae724fae773fc2f22bc67fb0a70c14e1aa95c1b559"
+      }
+    },
+    "stage_b_editable": {
+      "high.blend": {
+        "file_sha256": "51ff9d5090ce787e24cfd2f5977d4b35c57f700ecf3bc36a2fac04f11c607f45",
+        "logical_geometry_hierarchy_skin_animation_sha256": "8ac2cccfadc85842ce9b934d6341758f33090d7c252f99750fc35374b7838b55"
+      },
+      "low.blend": {
+        "file_sha256": "dfad29b13d01c15dad0f083077cbb581a24ee72b566df993d2d434f71aac5088",
+        "logical_geometry_hierarchy_skin_animation_sha256": "193e0846e07f71b13d7999ae724fae773fc2f22bc67fb0a70c14e1aa95c1b559"
+      }
+    },
+    "comparison": "Both GLBs, all source/portable maps and geometry.json match byte-for-byte. The editable files are compared by their logical scene hash because Blender serializes session-dependent data."
+  },
+  "checks": {
+    "candidate_verifier": "blender/verify_skitter.py",
+    "checked_both_lods": true,
+    "logical_sources_verified": true,
+    "reimport": "reimport.json",
+    "quantitative_notes": "Each clip sampled at half imported-frame intervals including endpoints. Mesh joint contact and independent leg separation checked on five evaluated poses per clip per LOD. All six claws reach the surface and alternate through each in-place loop."
+  },
+  "acceptance": {
+    "creative_owner": "pending complete asset batch review at P3-T7",
+    "runtime": "staged only, P4 promotion pending",
+    "independent_visual_score": "tracked by the phase review owner"
+  },
+  "source_sha256": {
+    "blender/build_materials.py": "fe5cdb5cf12c11ee931e685def2423812d1d5b64742d188ea669cffbd42772b7",
+    "blender/core_bastion.py": "26bd7b5a221c5f4fc7d17c58f53feeb57290e3e36d66e7b895ac56fea41a1a19",
+    "blender/package_core_bastion.py": "de2f82079aadef748e3ecdea5f65b3358e6bd3e1c5c2e2b6503f850c41d52d64",
+    "blender/package_skitter.py": "ad544a8a8a675a307735dd4f924f2d9b0fe3a1973bf5e10fb45e980e42a56f19",
+    "blender/package_surface_clamp.py": "899980dc7ef0196aca30beb612e9062fa8d19f14f7e3a965901d87b6a3a68e59",
+    "blender/review_core_bastion.py": "98d142618897bef956bc7aa7049a29a6827a403b1b96e4e573138cab9f3f87fe",
+    "blender/review_materials.py": "ab7558febaef274294546e7e34a25ebfa35aaa7467f95f9d5887e402e768e23d",
+    "blender/review_skitter.py": "74458aba08fe2c3d7c411b78c1043c8fc6405bfb8d43225dbabdfd02c9277725",
+    "blender/review_surface_clamp.py": "abb3401b4cc859f9e429cb25ebf5dd59fcd0e73fbb95572f5b30e089441928bb",
+    "blender/skitter_bake.py": "72105c7d0b0e0e1ed3067cd13c7af445f15179ee0bd3f75906ca3585c76ca1e9",
+    "blender/skitter_crawler.py": "b58c1798384f31aa080180c9a25141340851dcf5f39eea03f8be496fdeecb8a2",
+    "blender/skitter_rig.py": "81de625dc85fb9b8a5f538bdf68a62753d8024547602af9f3d3bf83ea1208c97",
+    "blender/skitter_shape.py": "88eecd38654845d5fc536555a01752b3f42312c78f9d3eed329571fa37a294db",
+    "blender/verify_core_bastion.py": "eee345536ef0c8f5f7ead150f48073f3bb4b3dec0546048359036b97edf5e1ab",
+    "blender/verify_skitter.py": "c6f27e424c1e03c764b44705ffdb1057653ee0e9931bfe0c434b8ac873f0fba5",
+    "scripts/assets/encode_ktx2.py": "ef7c2b27f936bab9cc0f02f27492cea4fd7c151045923f0308504c4867873515",
+    "scripts/assets/ktx2.py": "ad0fe05d66f62b1bb51f93997c35982ea9df2a5072c9f30d0bef9cb948321966",
+    "scripts/validate_glbs.py": "b1cce7201143a05202dd35ecc61827807991f228f18ac7249169ea3da2eb87c1"
+  },
+  "files": {
+    "README.md": "a8850a6c3e1141cfdac289a4b1b0e8ae85aae4528f7df67ca12571fdd78e8d0f",
+    "basecolor.ktx2": "ba423374f495de0d78bbc23243f1514cfc855bd87819b6b45dd66c00189a5eab",
+    "basecolor.png": "0b4f7b6557557233be30edc8ffdc418fe11ddc53cb63c82b90dc03a1489dc778",
+    "emissive.ktx2": "05832c0c42319587ed3d2a692e26b2398eb56aa9eca67c755e71469dfd04b2ef",
+    "emissive.png": "cb50309e19708f60a1dd5f93fd5fdb6c16759f513673ab64af15bf4b09f1c02a",
+    "geometry.json": "6ee9318f3bab745e5b78995c95290f76a71b53e4f43f847c3197150179ca6f0e",
+    "high.blend": "63b42883239f6e6e434def388d2fe4a53de374b8bfccb261536e45222a7f9651",
+    "low.blend": "cf5d16c3b22d7edbf831de3c7647dc8ab4f01c39f6fe9d3e92531fb25a3ae3a7",
+    "normal.ktx2": "8ec24a72700c92eb555c435b4665ce95c6a6e6f834a218517fec78de5f6c5099",
+    "normal.png": "fde2385e38901f21da40e322628814b0e947e35b8e2abc33c19d881a58546afb",
+    "orm.ktx2": "61dad20a5b42033c80c92058128dcb726b56f31a10af56c0c116ef02bdac7e07",
+    "orm.png": "4e7ce07ce44deaca3eaa4bb476560e6a9caf017b67ebed329cd69c67da1de500",
+    "reimport.json": "4b0679977aa3a1d76bc6e2408507181e92ddaebba235750a7432a7d7c7ec7dae",
+    "review/cameras.json": "40a033e3be5ca2117bf932d970d502891e9de099e5a6394ff9e76eb4688d6615",
+    "review/climb_wall.png": "5d2f31bd1ad0e240294708fa8bd3d5b8dacbc5286dab861ce254731a4557d1f5",
+    "review/comparison.jpg": "1d9b2621de5a8c00c33ec2809bfe12542d899f111fbfba1f25ca0bdf9a64dacb",
+    "review/crawl_floor.png": "f25bc09ddd1d70e61742f2057f06fbc4fb5de2cc0a60520162b3ea5ec1b34eea",
+    "review/high-flank.png": "3ac4151cf23ad3e5ffee599d2027c5244c1f33cc99c8eec855ac3ff565a3f6d7",
+    "review/high-oblique.png": "f883888f04576e1e52a87d3b2740bb947ae13ea813ad67fa008009292212c4c3",
+    "review/high-top.png": "3b2a5dbcce6a4197f640019924bcf7637306fdae596468de2d7c050df99fffcf",
+    "review/lod0-flank.png": "f48675acb055e6b20b5bcecf2e521b23c48adccadf4482de8d41532471e627a8",
+    "review/lod0-oblique.png": "0b9f407f59d2823a8d1c21981e7fdf1013388e540adca7b5d3f454fff04be207",
+    "review/lod0-top.png": "f3a55793b66722711379972693cf38266414798882af1d1baa39829acabdccb5",
+    "review/lod1-flank.png": "c1b582b78b413b0f78db6998db36d1a31b22a32aa41e8711ba700b0319de8225",
+    "review/lod1-oblique.png": "06fb39627dde3897635a3b9fc0147c280d5d6abd12f3c1ade7c96a00ff733976",
+    "review/lod1-top.png": "5cbed28e98a05dce375e0d659c14b4620340583bc07c03e8f5d63ebaa7994f79",
+    "review/motion.jpg": "4b35da00c5aa127e59bb7c1ead5e677d96d8f6e9b9ba19a53c114076428649c2",
+    "review/turntable.mp4": "24b91a3f3a262b5ff51ba4cfea7902b96e7903bb613da20b1566191b2ec240e9",
+    "skitter-crawler-lod0.glb": "638360d041e6f35f60bdfdad505872301695f4d7f2038e37346800a6549b79e9",
+    "skitter-crawler-lod1.glb": "de68b1b8e40d39b50a8968981900af0a5a08ae96a144285646a41d844c1797a5"
+  }
+}
