@@ -1,12 +1,12 @@
 {
   "piece": "core-bastion",
-  "stage": "P3-T4 source candidate",
+  "stage": "P3-T7 F4 revised source candidate",
   "authored_with": {
     "authoring_model": "GPT-6.2 Astra",
     "reasoning_effort": "high",
     "authoring_tool": "Blender 5.2.2 LTS",
     "build_id": "d13f752e3b9c",
-    "source": "Original project-owned procedural mesh, crystal shader and markings. Shared project surface modules provide the metal and ceramic microfinish."
+    "source": "Original project-owned geometry and finishes. The revision retains the original crystal, containment collar, emitter and their axes. The project material library supplies brushed titanium and dark gunmetal."
   },
   "reference": {
     "decision": "Bastion Rib and Core concept sheet approved by Paul on November 20, 2026.",
@@ -24,19 +24,17 @@
     "source": "Linux x86-64 Blender 5.2.2 LTS. Source blend archives embed their images. Original high library images also resolve from the model folder.",
     "bake": "Cycles CPU, final triangulated receiver, 2048x2048, isolated matched parts, selected-to-active tangent NORMAL and unlit EMIT. Assembled contact AO uses 12 rays and a 26 mm range. Independent receiver material corrects adjacent-face projections over 12 degrees.",
     "maps": "KTX-Software 4.4.2, glTF-compatible UASTC and Zstandard, all 12 mip levels. Four map payloads and four matching PNG fallbacks embedded.",
-    "validation": "make model-check with RIFT_MODEL_CHECK_KTX explicitly set. Seven tests passed. Core and shared-library manifests passed decoded RGBA8, normal basis, finite UV area, exact role binding, planar normal and coplanar overlap checks.",
+    "validation": "Both independently packaged Linux candidates passed the scoped GLB and decoded RGBA8 validator, including the positive-area overlap and planar normal checks. Blender reimport sampled the eight-second sweep and crystal motion. Exact imported pedestal triangles match the closed support and calibrated foot geometry. Decoded level-zero probes establish dielectric graphite and composite fields and metallic ribs. Reimport reports matched across clean builds.",
     "views": "Blender 5.2.2 EEVEE on Apple Silicon, 24 samples, 768x768 fixed paired front/isometric/detail/underside. Low views use actual re-imported GLB and the decoded KTX2 level zero. Motion uses 12 overhead samples at 384x384.",
-    "determinism": "Two Linux source runs matched all four uncompressed bakes, geometry measurements, source glTF JSON and binary. A clean re-encode and repack matched all four KTX2s, registered manifest and GLB byte-for-byte. Blender archive hashes identify the retained editable files."
+    "determinism": "Two fresh Linux x86-64 Blender 5.2.2 Cycles CPU bakes and KTX-Software 4.4.2 encodes produced byte-identical PNGs, KTX2 maps, GLB, staged glTF JSON and binary, geometry report and Core-only manifest. Logical high and low scene hashes matched across the two editable pairs. Binary archive hashes below identify the retained first set."
   },
   "corrections": [
-    "Visual review tightened the prism, darkened the side cassettes and restored the paired shoulder ribs and recessed service cover seen in the design.",
-    "The initial compressed normal contained eight sub-threshold vector lengths. The corrected receiver-aware bake replaced the steep cross-seam projections before compression.",
-    "Sampled Blender re-import exposed uneven cubic quaternion interpolation. The final editable source uses a linear axial turn and exports sampled rotation. The imported half-second position measures 22.5 degrees and the eight-second turn returns to neutral."
+    "The F4 review scored the initial Core 78/100 and identified its straight pedestal, bright panel fields and continuous flared foot. The revision uses inward-sloping lower planes, a recessed service belly, four closed contact pads, graphite shoulder faces and carbon cassette inserts. Paired titanium ribs carry the main vertical highlights."
   ],
   "approval": {
-    "independent_visual_score": "pending P3-T7",
-    "owner_approval": "pending P3-T7",
-    "runtime_Quest_acceptance": "pending P4 integration"
+    "independent_visual_score": "86/100 for the revised 564ee6bc93f7fafcc12129acb95081208a1db7c51c7f9035a017bef8a99e7c05 GLB, as reported by the independent P3-T7 reviewer.",
+    "owner_approval": "Pending combined P3-T7 owner review.",
+    "runtime_Quest_acceptance": "Pending P4 integration."
   },
   "source_sha256": {
     "assets-source/concepts/sheets/core-bastion.png": "861dbc29c44a0cb64ce805da180421fe17001aa39e6f2b45135a7e3b4f42e810",
@@ -57,41 +55,62 @@
     "scripts/assets/encode_ktx2.py": "ef7c2b27f936bab9cc0f02f27492cea4fd7c151045923f0308504c4867873515",
     "scripts/assets/ktx2.py": "ad0fe05d66f62b1bb51f93997c35982ea9df2a5072c9f30d0bef9cb948321966",
     "scripts/validate_glbs.py": "b1cce7201143a05202dd35ecc61827807991f228f18ac7249169ea3da2eb87c1",
-    "assets-source/materials/tactical-ceramic/basecolor.png": "14fba97e959f328309097b96298cec48c65932e9e3357bfa8d78dd02004f7b1c",
-    "assets-source/materials/tactical-ceramic/normal.png": "3ed93b63194ecde2df1c940d40fc07cb88dc3d36ab10b24265a2f5b3454e03c6",
-    "assets-source/materials/tactical-ceramic/orm.png": "5a7e18574c708db4dba3962117b01e3fae9570d064bbac5765c2d7839d519a28",
     "assets-source/materials/brushed-titanium/basecolor.png": "19eaedc960fc07aca5d98fc2aaa89c5211351cf073ee67b9518a218b33e3ef99",
     "assets-source/materials/brushed-titanium/normal.png": "5b808a08835d0fca0e72815417453cd87ff78ca9983fe634cf2844ca3931e522",
     "assets-source/materials/brushed-titanium/orm.png": "90ab1c85a15a3f0c7d25d76098e8171d1adf831681f3b8c5e0b90e84a58f8aa5",
     "assets-source/materials/dark-gunmetal/basecolor.png": "92cb3ff133b082c0ec383bc0ec67f15974c54addd35e02dc3b1d36c819761679",
     "assets-source/materials/dark-gunmetal/normal.png": "ceb1d0e98151718faf727b717efdd2e8b68431ba076118d06cc57873c14cd8ce",
-    "assets-source/materials/dark-gunmetal/orm.png": "0772a2c5da6f0d6c81b4852506defcb7053f0e8660ad44d5401c33265cb9681e"
+    "assets-source/materials/dark-gunmetal/orm.png": "0772a2c5da6f0d6c81b4852506defcb7053f0e8660ad44d5401c33265cb9681e",
+    "blender/core_bastion_revision.py": "5b9301fad2086819df6e8d4ff236ec78ebe6ce73179c565c0237838a0f16a4d4",
+    "blender/verify_core_bastion_revision.py": "169295e000d5158e24da91f1b2017ae2de59912db06724f36784fa9b45c3b885",
+    "blender/surface_fields.py": "a2408130a5f39b9dfd625fa388b585b9ee239ed3bbd02bc2b89278f7eca5651e"
   },
   "asset_sha256": {
-    "basecolor.ktx2": "986882ce91a8d6187c2f818fab98477fccd6ab028523006afd73e397075fdf50",
-    "basecolor.png": "eaf2bae58f7d8b24b23794eaf4e07b3fca44f09af431f74d90647339e0116a78",
-    "core-bastion.glb": "d04f631ffcaea4518fef480bf68d7a4c6c05fe578364abb575bbc9eb51e25301",
-    "emissive.ktx2": "b6c5e9c4fd744bd74f230187661abde988b06c4eaf3cfa510d8439ab1424734c",
-    "emissive.png": "676b55c8041e153bbaeba18dcf34226c2dc6dbbdbd7f969f11ae5ceb1452080c",
-    "geometry.json": "556000b5f097a20f0ebf29b3e5b6ef334b62b33edd730647a37db7453fb7dc16",
-    "high.blend": "569c47582336385d035e5712f3fd5c397db0a6ff2572fbbd099fadc5ad56b133",
-    "low.blend": "86174deabc93a1ced3589228d725ab45170139a71e7c26da374cdb74ad7a6634",
-    "normal.ktx2": "18298091649f6a7ebbaa9b8b14a1606c6f32ac4f15f3591d02d97897589b1e19",
-    "normal.png": "bf68fd53f9bd96fba958b987b8c9d2efb1c8c60603697e2d5124f86695cd53a3",
-    "orm.ktx2": "101c68f2e27fa51af24f8155f5d64d0a2c4c96b6b330d0c6bf60b09e9931555e",
-    "orm.png": "6195684153a97a0a2da02d6b86ca98dda240213c83b545c6b7c743fb6ee5d7d6",
-    "reimport.json": "ed1715bf58dfb809aef31c80bc39c8ba5afca6ed1742ba496de14841bfde1eaa"
+    "basecolor.ktx2": "8fe5c6cc546d1cc2a017b8c266ff060f4b46a9c40eb7a09e7d171ddbe84e7b96",
+    "basecolor.png": "3b2a2d7b41f872a6f3c6cad3520fdd0f4bffc23f8f5fd393bcb1681fba4b067b",
+    "core-bastion.glb": "564ee6bc93f7fafcc12129acb95081208a1db7c51c7f9035a017bef8a99e7c05",
+    "emissive.ktx2": "8170696592a8066eb0d79d5045d9a0ae868809bc5ebe75ca27520d0d426c3503",
+    "emissive.png": "4da93cdcb34ca4907cf9e79a3ec8883aedd099172f14e87d68cc1679896dde4b",
+    "geometry.json": "1d5956a6dc956671945ddc1982aa699cc532f1571ed106779017133aea8d66a7",
+    "high.blend": "f3e2991620b02b4cf112207eb637a814fe5883d62ebfd23a20981f76572b8b09",
+    "low.blend": "c29e169d7dc3ac4da4fa071431d5410b7dbd20866021a9d790893cf15f5975ae",
+    "normal.ktx2": "bfb4c6d51b12a83ae0caf45550d9f333d091f32fc129d8597ce01c2d95d3a7ff",
+    "normal.png": "45054ba896bfcb7fe025bd18f9c99583048f418e7aace116ff6f6fca7bdf640b",
+    "orm.ktx2": "8cacaab1d1769804c1d01f61b1384cad01afd9f89d0a08c1909bdcbcb4c419d6",
+    "orm.png": "095bd84af04695a898f3bb1bd0ad3f0299bec7f47c3fa4444565b71b1b7c96fe",
+    "reimport.json": "e3dbfa837e16e620c910b148562a38f9dcab55e3d63ea0ef91f7ed74ad39ac0d"
   },
   "review_sha256": {
-    "review/comparison.jpg": "51a51cc764f3387f45d26a22d9b36afe1d119cea6975a0fe7638063eafe01166",
-    "review/emitter-motion.webp": "64f372a01b3ddeae216d73a19dfcd8f64fc682b15635723eb78f39063aa19431",
-    "review/high-detail.png": "d045bad65b485f136a690f5516c0a861e9926d229cca983fcd2fb556b1b98da1",
-    "review/high-front.png": "2b3eb71d5166ac460300be7b56b9d2120127ede30ab965b1580d72581713c6f0",
-    "review/high-isometric.png": "6d6651996bc25f7fd75023739d6401da10e79b879aedd34e494fc755e12fbd58",
-    "review/high-underside.png": "37644ef98020df101347638543cc566fbb960ceefefbd6c3b5590936b844ee00",
-    "review/low-detail.png": "5ede09cba86b304c51c0d1d2bddc0345f5a6cc5a254e2597de0891cdbc2ff265",
-    "review/low-front.png": "6a165a89810e0f44fb3ddd20074088ed04ac05d4ca188eca454771e86a7ee918",
-    "review/low-isometric.png": "807d6589ef93dacaaf0d0bb347bbfb862f20d11fd75dd0c633ed784b4ade80bd",
-    "review/low-underside.png": "3de18f6cbe661c8d69ce08e5a620d613722be27105f1f882ed06e68cb68abe28"
+    "review/comparison.jpg": "1d51ae615b20515c38d981e5b7c2315f27cdbd378a4f2dc788cc86c21a555e59",
+    "review/emitter-motion.webp": "ef5b682cc2a8798f2d8ae18071afb820bc2f342cccba91d3afbe0dbac395a004",
+    "review/high-detail.png": "1dd7e67e120c8fcc52b2849ee912d870d6dcee2686f0a13359564e99cc5cabe9",
+    "review/high-front.png": "c26b70202cdb6f6b480d67a404179f37667d554e79fdbd1e60d6adfe4b9246d7",
+    "review/high-isometric.png": "7111800c54ee031e92d852e789bcaea1519db9ee947a42130976b7e5cddd653f",
+    "review/high-underside.png": "466d97743abeb03c9eeb346d6625a3df529143500ad289099147e23416a4cc66",
+    "review/low-detail.png": "b603883857b5aa1bcfe1a306041407a5eebc6789775c0a36d3b2328d568dfede",
+    "review/low-front.png": "ad7e4b304be95609386412d7c5e2782bcd2ce39e62f8f878424624c02439c03d",
+    "review/low-isometric.png": "2f8bb0823e3c734eb550c8d62728799756687301b07c6f797fd34fd865fb008c",
+    "review/low-underside.png": "95b33b8b153944c6dfb21215811c8b8e48b441873f5cb5d16e1861b0d8d342b1",
+    "review/revision-comparison.jpg": "54f395e926869570952f345a981d038bb17f8922d38d679f0e0afb666335cb7d"
+  },
+  "previous_candidate": {
+    "commit": "ab44c845e3a29df70a801845c0b5899fe9bbb7f4",
+    "glb_sha256": "d04f631ffcaea4518fef480bf68d7a4c6c05fe578364abb575bbc9eb51e25301",
+    "independent_visual_score": 78,
+    "comparison_source_sha256": {
+      "review/low-detail.png": "5ede09cba86b304c51c0d1d2bddc0345f5a6cc5a254e2597de0891cdbc2ff265",
+      "review/low-front.png": "6a165a89810e0f44fb3ddd20074088ed04ac05d4ca188eca454771e86a7ee918",
+      "review/low-isometric.png": "807d6589ef93dacaaf0d0bb347bbfb862f20d11fd75dd0c633ed784b4ade80bd",
+      "review/low-underside.png": "3de18f6cbe661c8d69ce08e5a620d613722be27105f1f882ed06e68cb68abe28"
+    }
+  },
+  "clean_build_evidence": {
+    "staged_gltf_json_sha256": "a513ae39c141851c5241bdb107870ded6b1edf338a8407e670bed04b3d717f1d",
+    "staged_gltf_geometry_sha256": "515a22700130aeb25e23c3a93eb80efcea5ed934ad6bfc690d57841a391ea26d",
+    "core_only_manifest_sha256": "60055cf8fd12fbc1ad5d6838d2596fb5256f6101f0b772b4b6c05fb9216c7423",
+    "logical_editable_scene_sha256": {
+      "high": "ee477a4c66031ec1599d94bb01a0892bcc872e61e25eb32c4adc38eacadaf62b",
+      "low": "f96bb65dcb30539ab62f7a8ae4205591031d2fce346190e1ee397a75d964671e"
+    }
   }
 }

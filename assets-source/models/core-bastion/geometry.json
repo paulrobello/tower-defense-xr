@@ -1,65 +1,77 @@
 {
   "high": {
-    "triangles": 13554,
-    "source_vertices": 7166,
-    "parts": 83
+    "triangles": 13586,
+    "source_vertices": 7190,
+    "parts": 87
   },
   "low": {
-    "triangles": 6826,
-    "source_vertices": 3802,
+    "triangles": 6858,
+    "source_vertices": 3826,
     "uv_texels_per_m": {
-      "RB.dark-gunmetal": 538.6,
-      "RB.brushed-titanium": 538.0,
-      "Core carbon inserts": 535.5,
-      "RB.tactical-ceramic": 539.8,
-      "light-cyan": 536.2,
-      "light-violet": 525.0,
-      "gem-1": 533.4,
-      "gem-0": 535.8,
-      "gem-2": 530.4,
-      "gem-3": 532.1,
-      "gem-4": 531.2,
-      "gem-5": 529.6,
-      "gem-6": 528.8
+      "Core underbody composite": 539.1,
+      "RB.dark-gunmetal": 531.5,
+      "Core graphite ceramic": 538.9,
+      "RB.brushed-titanium": 536.0,
+      "Core carbon cassette": 541.1,
+      "light-cyan": 530.3,
+      "light-violet": 543.8,
+      "gem-1": 545.4,
+      "gem-0": 540.2,
+      "gem-2": 532.5,
+      "gem-3": 543.4,
+      "gem-4": 541.2,
+      "gem-5": 546.8,
+      "gem-6": 540.8
     },
-    "uv_area_fraction": 0.178546
+    "uv_area_fraction": 0.155861
   },
-  "receiver_sha256": "1e26c7623ff4564b94a325cdbb004f368e60b34b97033ffcce41ef69a971e2ac",
+  "receiver_sha256": "8d6735f579e31e82a183ab34883629f1e402b0c1d87a85700246d2a00bc78ff0",
   "bake": {
     "matched_receiver_replacements": {
-      "pixels": 12963,
+      "pixels": 13868,
       "max_angle_deg": 12
     },
     "normal_lower_hemisphere_pixels": 0,
     "normal": {
-      "sha256": "bf68fd53f9bd96fba958b987b8c9d2efb1c8c60603697e2d5124f86695cd53a3",
+      "sha256": "45054ba896bfcb7fe025bd18f9c99583048f418e7aace116ff6f6fca7bdf640b",
       "samples": [
         {
+          "surface": "Core carbon cassette",
+          "x": 532,
+          "y": 1222,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core graphite ceramic",
+          "x": 851,
+          "y": 1206,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core underbody composite",
+          "x": 49,
+          "y": 1377,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
           "surface": "RB.brushed-titanium",
-          "x": 737,
-          "y": 1644,
-          "rgb": [
-            128,
-            128,
-            255
-          ],
-          "tolerance": 12
-        },
-        {
-          "surface": "Core carbon inserts",
-          "x": 291,
-          "y": 1229,
-          "rgb": [
-            129,
-            128,
-            255
-          ],
-          "tolerance": 12
-        },
-        {
-          "surface": "RB.dark-gunmetal",
-          "x": 60,
-          "y": 1266,
+          "x": 118,
+          "y": 1819,
           "rgb": [
             128,
             127,
@@ -68,9 +80,20 @@
           "tolerance": 12
         },
         {
+          "surface": "RB.dark-gunmetal",
+          "x": 23,
+          "y": 1922,
+          "rgb": [
+            127,
+            125,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
           "surface": "gem-0",
-          "x": 499,
-          "y": 872,
+          "x": 469,
+          "y": 692,
           "rgb": [
             128,
             128,
@@ -80,8 +103,8 @@
         },
         {
           "surface": "gem-1",
-          "x": 922,
-          "y": 594,
+          "x": 187,
+          "y": 692,
           "rgb": [
             128,
             128,
@@ -91,8 +114,8 @@
         },
         {
           "surface": "gem-2",
-          "x": 434,
-          "y": 598,
+          "x": 921,
+          "y": 691,
           "rgb": [
             128,
             128,
@@ -102,8 +125,8 @@
         },
         {
           "surface": "gem-3",
-          "x": 427,
-          "y": 857,
+          "x": 407,
+          "y": 693,
           "rgb": [
             128,
             128,
@@ -113,8 +136,8 @@
         },
         {
           "surface": "gem-4",
-          "x": 525,
-          "y": 860,
+          "x": 673,
+          "y": 698,
           "rgb": [
             128,
             128,
@@ -124,8 +147,8 @@
         },
         {
           "surface": "gem-5",
-          "x": 1039,
-          "y": 1783,
+          "x": 26,
+          "y": 694,
           "rgb": [
             128,
             128,
@@ -135,8 +158,8 @@
         },
         {
           "surface": "gem-6",
-          "x": 402,
-          "y": 870,
+          "x": 347,
+          "y": 691,
           "rgb": [
             128,
             128,
@@ -146,8 +169,8 @@
         },
         {
           "surface": "light-cyan",
-          "x": 1960,
-          "y": 1370,
+          "x": 1956,
+          "y": 1206,
           "rgb": [
             128,
             128,
@@ -157,22 +180,11 @@
         },
         {
           "surface": "light-violet",
-          "x": 1873,
-          "y": 678,
+          "x": 1838,
+          "y": 362,
           "rgb": [
             128,
-            128,
-            255
-          ],
-          "tolerance": 12
-        },
-        {
-          "surface": "RB.tactical-ceramic",
-          "x": 1169,
-          "y": 1333,
-          "rgb": [
-            127,
-            133,
+            124,
             255
           ],
           "tolerance": 12
@@ -180,45 +192,67 @@
       ]
     },
     "basecolor": {
-      "sha256": "eaf2bae58f7d8b24b23794eaf4e07b3fca44f09af431f74d90647339e0116a78",
+      "sha256": "3b2a2d7b41f872a6f3c6cad3520fdd0f4bffc23f8f5fd393bcb1681fba4b067b",
       "samples": [
         {
-          "surface": "RB.brushed-titanium",
-          "x": 737,
-          "y": 1644,
+          "surface": "Core carbon cassette",
+          "x": 532,
+          "y": 1222,
           "rgb": [
-            194,
-            198,
-            201
+            32,
+            36,
+            44
           ],
           "tolerance": 12
         },
         {
-          "surface": "Core carbon inserts",
-          "x": 291,
-          "y": 1229,
+          "surface": "Core graphite ceramic",
+          "x": 851,
+          "y": 1206,
           "rgb": [
-            30,
-            34,
-            45
+            57,
+            67,
+            82
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core underbody composite",
+          "x": 49,
+          "y": 1377,
+          "rgb": [
+            23,
+            28,
+            35
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 118,
+          "y": 1819,
+          "rgb": [
+            182,
+            187,
+            192
           ],
           "tolerance": 12
         },
         {
           "surface": "RB.dark-gunmetal",
-          "x": 60,
-          "y": 1266,
+          "x": 23,
+          "y": 1922,
           "rgb": [
-            88,
-            95,
-            104
+            66,
+            73,
+            82
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-0",
-          "x": 499,
-          "y": 872,
+          "x": 469,
+          "y": 692,
           "rgb": [
             86,
             43,
@@ -228,74 +262,74 @@
         },
         {
           "surface": "gem-1",
-          "x": 922,
-          "y": 594,
+          "x": 187,
+          "y": 692,
           "rgb": [
-            19,
-            144,
-            164
+            20,
+            145,
+            165
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-2",
-          "x": 434,
-          "y": 598,
+          "x": 921,
+          "y": 691,
           "rgb": [
-            115,
-            67,
-            162
+            119,
+            70,
+            166
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-3",
-          "x": 427,
-          "y": 857,
+          "x": 407,
+          "y": 693,
           "rgb": [
-            25,
-            102,
-            130
+            24,
+            100,
+            128
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-4",
-          "x": 525,
-          "y": 860,
+          "x": 673,
+          "y": 698,
           "rgb": [
-            76,
-            22,
-            125
+            78,
+            23,
+            126
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-5",
-          "x": 1039,
-          "y": 1783,
+          "x": 26,
+          "y": 694,
           "rgb": [
             37,
             93,
-            129
+            128
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-6",
-          "x": 402,
-          "y": 870,
+          "x": 347,
+          "y": 691,
           "rgb": [
             57,
             25,
-            95
+            96
           ],
           "tolerance": 12
         },
         {
           "surface": "light-cyan",
-          "x": 1960,
-          "y": 1370,
+          "x": 1956,
+          "y": 1206,
           "rgb": [
             45,
             226,
@@ -305,68 +339,79 @@
         },
         {
           "surface": "light-violet",
-          "x": 1873,
-          "y": 678,
+          "x": 1838,
+          "y": 362,
           "rgb": [
             139,
             92,
             246
           ],
           "tolerance": 12
-        },
-        {
-          "surface": "RB.tactical-ceramic",
-          "x": 1169,
-          "y": 1333,
-          "rgb": [
-            59,
-            68,
-            79
-          ],
-          "tolerance": 12
         }
       ]
     },
     "orm": {
-      "sha256": "6195684153a97a0a2da02d6b86ca98dda240213c83b545c6b7c743fb6ee5d7d6",
+      "sha256": "095bd84af04695a898f3bb1bd0ad3f0299bec7f47c3fa4444565b71b1b7c96fe",
       "samples": [
         {
-          "surface": "RB.brushed-titanium",
-          "x": 737,
-          "y": 1644,
+          "surface": "Core carbon cassette",
+          "x": 532,
+          "y": 1222,
           "rgb": [
-            0,
-            88,
-            246
+            255,
+            138,
+            9
           ],
           "tolerance": 12
         },
         {
-          "surface": "Core carbon inserts",
-          "x": 291,
-          "y": 1229,
+          "surface": "Core graphite ceramic",
+          "x": 851,
+          "y": 1206,
           "rgb": [
-            255,
-            164,
-            0
+            0,
+            156,
+            6
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core underbody composite",
+          "x": 49,
+          "y": 1377,
+          "rgb": [
+            0,
+            143,
+            10
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 118,
+          "y": 1819,
+          "rgb": [
+            64,
+            73,
+            245
           ],
           "tolerance": 12
         },
         {
           "surface": "RB.dark-gunmetal",
-          "x": 60,
-          "y": 1266,
+          "x": 23,
+          "y": 1922,
           "rgb": [
-            0,
-            93,
-            238
+            254,
+            104,
+            222
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-0",
-          "x": 499,
-          "y": 872,
+          "x": 469,
+          "y": 692,
           "rgb": [
             255,
             46,
@@ -376,8 +421,8 @@
         },
         {
           "surface": "gem-1",
-          "x": 922,
-          "y": 594,
+          "x": 187,
+          "y": 692,
           "rgb": [
             255,
             46,
@@ -387,8 +432,8 @@
         },
         {
           "surface": "gem-2",
-          "x": 434,
-          "y": 598,
+          "x": 921,
+          "y": 691,
           "rgb": [
             255,
             46,
@@ -398,8 +443,8 @@
         },
         {
           "surface": "gem-3",
-          "x": 427,
-          "y": 857,
+          "x": 407,
+          "y": 693,
           "rgb": [
             255,
             46,
@@ -409,8 +454,8 @@
         },
         {
           "surface": "gem-4",
-          "x": 525,
-          "y": 860,
+          "x": 673,
+          "y": 698,
           "rgb": [
             255,
             46,
@@ -420,8 +465,8 @@
         },
         {
           "surface": "gem-5",
-          "x": 1039,
-          "y": 1783,
+          "x": 26,
+          "y": 694,
           "rgb": [
             255,
             46,
@@ -431,8 +476,8 @@
         },
         {
           "surface": "gem-6",
-          "x": 402,
-          "y": 870,
+          "x": 347,
+          "y": 691,
           "rgb": [
             255,
             46,
@@ -442,8 +487,8 @@
         },
         {
           "surface": "light-cyan",
-          "x": 1960,
-          "y": 1370,
+          "x": 1956,
+          "y": 1206,
           "rgb": [
             255,
             71,
@@ -453,22 +498,11 @@
         },
         {
           "surface": "light-violet",
-          "x": 1873,
-          "y": 678,
+          "x": 1838,
+          "y": 362,
           "rgb": [
             255,
             71,
-            0
-          ],
-          "tolerance": 12
-        },
-        {
-          "surface": "RB.tactical-ceramic",
-          "x": 1169,
-          "y": 1333,
-          "rgb": [
-            248,
-            169,
             0
           ],
           "tolerance": 12
@@ -476,12 +510,12 @@
       ]
     },
     "emissive": {
-      "sha256": "676b55c8041e153bbaeba18dcf34226c2dc6dbbdbd7f969f11ae5ceb1452080c",
+      "sha256": "4da93cdcb34ca4907cf9e79a3ec8883aedd099172f14e87d68cc1679896dde4b",
       "samples": [
         {
-          "surface": "RB.brushed-titanium",
-          "x": 737,
-          "y": 1644,
+          "surface": "Core carbon cassette",
+          "x": 532,
+          "y": 1222,
           "rgb": [
             0,
             0,
@@ -490,9 +524,31 @@
           "tolerance": 12
         },
         {
-          "surface": "Core carbon inserts",
-          "x": 291,
-          "y": 1229,
+          "surface": "Core graphite ceramic",
+          "x": 851,
+          "y": 1206,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core underbody composite",
+          "x": 49,
+          "y": 1377,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 118,
+          "y": 1819,
           "rgb": [
             0,
             0,
@@ -502,8 +558,8 @@
         },
         {
           "surface": "RB.dark-gunmetal",
-          "x": 60,
-          "y": 1266,
+          "x": 23,
+          "y": 1922,
           "rgb": [
             0,
             0,
@@ -513,8 +569,8 @@
         },
         {
           "surface": "gem-0",
-          "x": 499,
-          "y": 872,
+          "x": 469,
+          "y": 692,
           "rgb": [
             86,
             43,
@@ -524,74 +580,74 @@
         },
         {
           "surface": "gem-1",
-          "x": 922,
-          "y": 594,
+          "x": 187,
+          "y": 692,
           "rgb": [
-            19,
-            144,
-            164
+            20,
+            145,
+            165
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-2",
-          "x": 434,
-          "y": 598,
+          "x": 921,
+          "y": 691,
           "rgb": [
-            115,
-            67,
-            162
+            119,
+            70,
+            166
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-3",
-          "x": 427,
-          "y": 857,
+          "x": 407,
+          "y": 693,
           "rgb": [
-            25,
-            102,
-            130
+            24,
+            100,
+            128
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-4",
-          "x": 525,
-          "y": 860,
+          "x": 673,
+          "y": 698,
           "rgb": [
-            76,
-            22,
-            125
+            78,
+            23,
+            126
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-5",
-          "x": 1039,
-          "y": 1783,
+          "x": 26,
+          "y": 694,
           "rgb": [
             37,
             93,
-            129
+            128
           ],
           "tolerance": 12
         },
         {
           "surface": "gem-6",
-          "x": 402,
-          "y": 870,
+          "x": 347,
+          "y": 691,
           "rgb": [
             57,
             25,
-            95
+            96
           ],
           "tolerance": 12
         },
         {
           "surface": "light-cyan",
-          "x": 1960,
-          "y": 1370,
+          "x": 1956,
+          "y": 1206,
           "rgb": [
             45,
             226,
@@ -601,23 +657,12 @@
         },
         {
           "surface": "light-violet",
-          "x": 1873,
-          "y": 678,
+          "x": 1838,
+          "y": 362,
           "rgb": [
             139,
             92,
             246
-          ],
-          "tolerance": 12
-        },
-        {
-          "surface": "RB.tactical-ceramic",
-          "x": 1169,
-          "y": 1333,
-          "rgb": [
-            0,
-            0,
-            0
           ],
           "tolerance": 12
         }
@@ -626,7 +671,7 @@
     "contact_AO": {
       "ray_length_m": 0.026,
       "samples": 12,
-      "mean_of_occupied": 0.8509256839752197
+      "mean_of_occupied": 0.8512665629386902
     }
   }
 }

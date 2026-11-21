@@ -1,13 +1,13 @@
 {
-  "glb_sha256": "d04f631ffcaea4518fef480bf68d7a4c6c05fe578364abb575bbc9eb51e25301",
+  "glb_sha256": "564ee6bc93f7fafcc12129acb95081208a1db7c51c7f9035a017bef8a99e7c05",
   "blender": "5.2.2 LTS",
   "controls_blender_z_up": {
     "pedestal": {
-      "radial_min_m": 0.08100000002122307,
+      "radial_min_m": 0.057999999928525135,
       "radial_max_m": 0.3800000148188141,
       "bottom_m": 0.0,
       "top_m": 0.41600000858306885,
-      "triangles": 4178
+      "triangles": 4210
     },
     "containmentCollar": {
       "radial_min_m": 0.18049999004093778,
@@ -73,38 +73,219 @@
   "budgets": {
     "textures": {
       "basecolor": {
-        "bytes": 1510609,
+        "bytes": 1250900,
         "mip_levels": 12,
         "uastc_mip_bytes_before_zstd": 5592432,
-        "level0_rmse_rgb8": 0.937
+        "level0_rmse_rgb8": 0.715
       },
       "normal": {
-        "bytes": 940184,
+        "bytes": 693738,
         "mip_levels": 12,
         "uastc_mip_bytes_before_zstd": 5592432,
-        "level0_rmse_rgb8": 0.382,
+        "level0_rmse_rgb8": 0.24,
         "decoded_unit_length_range": [
-          0.976486,
-          1.02174
+          0.984329,
+          1.020173
         ]
       },
       "orm": {
-        "bytes": 1962473,
+        "bytes": 1700988,
         "mip_levels": 12,
         "uastc_mip_bytes_before_zstd": 5592432,
-        "level0_rmse_rgb8": 1.074
+        "level0_rmse_rgb8": 0.921
       },
       "emissive": {
-        "bytes": 147750,
+        "bytes": 165408,
         "mip_levels": 12,
         "uastc_mip_bytes_before_zstd": 5592432,
-        "level0_rmse_rgb8": 0.208
+        "level0_rmse_rgb8": 0.227
       }
     },
-    "file_bytes": 11029476,
+    "file_bytes": 8818368,
     "primitives": 4,
-    "gltf_vertices": 15034,
-    "ktx2_bytes": 4561016,
+    "gltf_vertices": 15188,
+    "ktx2_bytes": 3811034,
     "uastc_bytes_before_zstd": 22369728
+  },
+  "revision": {
+    "neutral_control_triangles_equal_to_original": {
+      "containmentCollar": 1760,
+      "energyCrystal": 56,
+      "shieldEmitterRing": 832
+    },
+    "source_support_components": {
+      "Octagonal landing shoe": {
+        "closed": true,
+        "floor_area_m2": 0,
+        "max_ground_radius_m": 0,
+        "shell_radii_by_height_m": {
+          "0.016": 0.209,
+          "0.061": 0.269,
+          "0.241": 0.367,
+          "0.4032": 0.3116
+        },
+        "exact_exported_triangles": 460
+      },
+      "Calibration contact pad 1": {
+        "closed": true,
+        "floor_area_m2": 0.004814,
+        "max_ground_radius_m": 0.38,
+        "exact_exported_triangles": 24
+      },
+      "Calibration contact pad 2": {
+        "closed": true,
+        "floor_area_m2": 0.004814,
+        "max_ground_radius_m": 0.38,
+        "exact_exported_triangles": 24
+      },
+      "Calibration contact pad 3": {
+        "closed": true,
+        "floor_area_m2": 0.004814,
+        "max_ground_radius_m": 0.38,
+        "exact_exported_triangles": 24
+      },
+      "Calibration contact pad 4": {
+        "closed": true,
+        "floor_area_m2": 0.004814,
+        "max_ground_radius_m": 0.38,
+        "exact_exported_triangles": 24
+      }
+    },
+    "decoded_glb_finish_probes": {
+      "Core underbody composite": {
+        "component": "Octagonal landing shoe",
+        "center_blender_m": [
+          -0.012708,
+          -0.097845,
+          0.027
+        ],
+        "texel_top_left": [
+          179,
+          1577
+        ],
+        "basecolor": [
+          23,
+          28,
+          35
+        ],
+        "normal": [
+          128,
+          128,
+          255
+        ],
+        "orm": [
+          255,
+          143,
+          10
+        ],
+        "emissive": [
+          0,
+          0,
+          0
+        ]
+      },
+      "RB.brushed-titanium": {
+        "component": "Paired shoulder spine 1",
+        "center_blender_m": [
+          -0.177392,
+          -0.287933,
+          0.189125
+        ],
+        "texel_top_left": [
+          1119,
+          1245
+        ],
+        "basecolor": [
+          191,
+          196,
+          200
+        ],
+        "normal": [
+          127,
+          128,
+          255
+        ],
+        "orm": [
+          233,
+          85,
+          241
+        ],
+        "emissive": [
+          0,
+          0,
+          0
+        ]
+      },
+      "Core carbon cassette": {
+        "component": "Recessed bay 1",
+        "center_blender_m": [
+          -0.022617,
+          -0.278342,
+          0.167152
+        ],
+        "texel_top_left": [
+          532,
+          1222
+        ],
+        "basecolor": [
+          32,
+          36,
+          44
+        ],
+        "normal": [
+          128,
+          128,
+          255
+        ],
+        "orm": [
+          255,
+          138,
+          9
+        ],
+        "emissive": [
+          0,
+          0,
+          0
+        ]
+      },
+      "Core graphite ceramic": {
+        "component": "Shoulder ceramic 1",
+        "center_blender_m": [
+          -0.036246,
+          -0.283449,
+          0.34164
+        ],
+        "texel_top_left": [
+          1038,
+          1970
+        ],
+        "basecolor": [
+          57,
+          67,
+          82
+        ],
+        "normal": [
+          128,
+          128,
+          255
+        ],
+        "orm": [
+          255,
+          156,
+          6
+        ],
+        "emissive": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "armatures": 0,
+    "animation_channels": 1,
+    "editables_logical_sha256": {
+      "high": "ee477a4c66031ec1599d94bb01a0892bcc872e61e25eb32c4adc38eacadaf62b",
+      "low": "f96bb65dcb30539ab62f7a8ae4205591031d2fce346190e1ee397a75d964671e"
+    }
   }
 }
