@@ -87,3 +87,15 @@ Each head keeps the M44 yaw, pitch, recoil and muzzle transforms, with independe
 | T3 rotary | 3,608 / 1,304 | [Source, proofs and hashes](../assets-source/models/m44-autocannon-t3/README.md) |
 
 The T3 assembly with the larger clamp is 6,036 / 2,452 triangles with two materials. Both clean builds matched all six GLBs and twelve maps byte for byte. The editable archives matched in geometry, UVs, hierarchy, transforms and packed images. Independent scoring and owner approval remain open at P3-T7.
+
+## Helios Plasma Mortar
+
+The staged heads use a single orange chamber at T1, a bridged pair at T2 and broad recessed siege emitters at T3. Re-import verifies the mount origin, neutral muzzle, yaw, pitch and recoil. The 42 EEVEE renders include matched high and low views and both mounts.
+
+| Tier | Head LOD0 / LOD1 triangles | Review |
+| --- | ---: | --- |
+| T1 single | 2,380 / 876 | [Source, proofs and hashes](../assets-source/models/helios-plasma-mortar-t1/README.md) |
+| T2 linked dual | 3,720 / 1,256 | [Source, proofs and hashes](../assets-source/models/helios-plasma-mortar-t2/README.md) |
+| T3 siege | 4,024 / 1,352 | [Source, proofs and hashes](../assets-source/models/helios-plasma-mortar-t3/README.md) |
+
+The T3 assembly with the larger clamp is 6,452 / 2,500 triangles and two materials. Each tier uses 1024 px portable maps and an editable high/low Blender pair. These are review candidates for P3-T7.

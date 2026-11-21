@@ -9,7 +9,7 @@
 - **Updated:** November 20, 2026 (Pacific time)
 - **Repo:** `/Users/probello/Repos/tower-defense-xr`, branch `main`. The existing local formatting edit in the Phase 4 plan is separate from this handoff.
 - **Public baseline:** [GitHub](https://github.com/paulrobello/tower-defense-xr) and [live test build](https://rift-bastion.pardev.net/). Paul approved the first verified testing release on November 20, 2026. The published commit is `dcb9dca` and the deployed build ID is `f7278d12e27a`. The local backup branch `codex/rift-pre-publication-history` retains the original history. Obtain approval for subsequent pushes.
-- **Completed work (24 kanban cards `done`):**
+- **Completed work (25 kanban cards `done`):**
   - **Phase 0 complete:** `P0-T1`–`P0-T6` closed. The local gates, 14/14 IWER smoke and build A→B Reload checks passed. [GitHub Actions](https://github.com/paulrobello/tower-defense-xr/actions/runs/44874742012) passed the pinned Linux gate and Pages deployment. The live manifest matched the verified build and Quest Browser rendered desktop calibration on its Adreno GPU. Immersive play and physical performance remain Phase 5 work.
   - **Phase 1 (100% complete):** `P1-T1`–`P1-T6` closed. `bun scripts/xr-emu/walk-p1.mjs` passes **19/19** checks (seated `1.2 m` `front-180` + standing `1.65 m` `full-360` calibration, floor/table/wall surface-clamp + thumbstick hover-pod `0.8–5.0 m`, `TOO_CLOSE` & `CAP 14/14` SDF labels, `auto-depth → room-mesh → off` cutouts).
   - **Phase 2 (100% complete):** `P2-T1`–`P2-T6` closed. **218/218 Vitest tests** pass; `bun scripts/check-desktop-campaign.ts` passes **12/12** checks (full 12-wave + Wave 12 Apex Broodlord Boss Phase 2 → Victory `3/3` stars → IndexedDB reload + JSON backup); `bun scripts/xr-emu/walk-p2.mjs` passes **8/8** checks (`150 ≤ 200` draws, `12,080` tris, zero console errors).
@@ -27,7 +27,7 @@
 
 ---
 
-## Remaining Work (Kanban Project: `tower-defense-xr`, 17 Open Cards)
+## Remaining Work (Kanban Project: `tower-defense-xr`, 16 Open Cards)
 
 ### Next Up — Phase 3: Art Direction & Blender AAA Assets (12 cards, `plans/phase-3-art-direction-and-blender-assets.md`)
 - **Wave 1 complete.**
@@ -38,7 +38,7 @@
 - **Wave 3 (serial Blender workers per `blender-mcp.md` after `P3-T3`, using GPT-6.2 Astra):**
   - `P3-T4` complete (`01a1fadb12f5733a8eccefeb99e1f8b2`). The [Core Bastion](assets-source/models/core-bastion/README.md) is 6,826 tris with four 2048 px maps and an eight-second emitter sweep. The [Rift frame](assets-source/models/rift-portal/README.md) is 4,056 tris with five 1024 px maps, a flush anchor and the exact 0.95 × 1.35 m shared aperture. Both packages passed model-check, Blender re-import, byte-identical rebuilds and matched EEVEE views. The [art review index](docs/art-review-index.md) carries the evidence for P3-T7.
   - `P3-T5a` complete (`01a1fb3c841c708784a64a42cd4d0dcf`). The [Surface Clamp Base](assets-source/models/surface-clamp/README.md) uses 2,428/1,148 triangles and preserves four-foot contact on floor, table and wall fixtures. The [Repulsor Hover-Ring Pod](assets-source/models/hover-pod/README.md) uses 2,364/1,148 triangles with a 0.145 m emitter radius. Both use the same origin socket, one material per LOD and four 1024 px maps per asset. Each pair of exports rebuilt byte for byte on the pinned Linux backend. The larger mount leaves 4,072 and 1,352 triangles for the turret head at the respective 6,500/2,500 assembly limits.
-  - `P3-T5b` (`01a1fb3c87547701ac5685baf143b252`): All three [M44 tiers](docs/art-review-index.md#m44-autocannon) are staged. The six GLBs and twelve maps reproduced byte for byte. Re-import verified both mounts and the exact yaw, pitch, recoil, muzzle and T3 rotary motion. T3 tops out at 6,036/2,452 assembled triangles. Finish Helios Plasma Mortar T1–T3 before closing this card.
+  - `P3-T5b` complete (`01a1fb3c87547701ac5685baf143b252`). All three [M44](docs/art-review-index.md#m44-autocannon) and [Helios](docs/art-review-index.md#helios-plasma-mortar) tiers are staged, with editable high/low sources, two GLB LODs per tier and matching view sets. Re-import verified both mounts and the tier transforms. Their largest assemblies measure M44 6,036/2,452 and Helios 6,452/2,500 triangles. The visual approval gate is P3-T7.
   - `P3-T5c` (`01a1fb3c897177268bcaedf2577ed3d4`): Glacier Cryo-Arc (T1–T3) & Valkyrie Rail Sniper (T1–T3).
   - `P3-T5` (`01a1fadb16977224a3f5072a8ba38175`): Turret family rollup (closes once `P3-T5a/b/c` pass).
   - `P3-T6a` (`01a1fb3c8b1071cf8430eb90a84fa8ba`): Rigged Skitter Crawler (`≤4.5k/24b`) & Wasp Skimmer (`≤6.5k/24b`).
@@ -59,7 +59,7 @@
   - `P4-T2` (`01a1fadb1e057789a2cd2aeff05ad76b`): Procedural PMREM IBL, dynamic hero lighting, shadow tuning, and Rift Portal depth-parallax shader. *(GPT-6.2 Astra)*
     - Align the room openings and depth bypass with the authored 0.95 × 1.35 m ellipse on the same anchor. The blockout currently passes a 0.675 m radius to the circular stencil in `src/mr/occlusion.ts`. Verify wall and ceiling views at oblique angles after the runtime swap.
   - `P4-T3` (`01a1fadb1fbb775e8869325f0aa84716`): GPU-instanced combat VFX & zero-GC particle pools (`≤2,500` active, `≤12` extra draws). *(GPT-6.2 Astra)*
-  - `P4-T6` (`01a1fb37b41e73dfa3f531303c243df5`): Private theme candidate committed at `304e811` on `codex/rift-radial-theme`. The IWER review passed 28 checks on Apple M4 Max Metal with staged atlas fixtures, zero console or request errors, and front and oblique XR captures. The desktop follow-up verified native Space activation and clear key-label spacing down to 320 px. Final `make checkall-ci` passed 222 tests. Keep the active sibling worktree for its ignored `output/xr-emu/radial-theme/` evidence. Production icon promotion and release remain gated by P3-T7 and P4-T1.
+  - `P4-T6` (`01a1fb37b41e73dfa3f531303c243df5`): Private theme candidate committed at `304e811` on `codex/rift-radial-theme`. The IWER review passed 28 checks on Apple M4 Max Metal with staged atlas fixtures, zero console or request errors, and front and oblique XR captures. The desktop follow-up verified native Space activation and clear key-label spacing down to 320 px. Final `make checkall-ci` passed 222 tests. Keep the active sibling worktree for its ignored `output/xr-emu/radial-theme/` evidence. Transplant the candidate commit onto the published history when P3-T7 and P4-T1 unblock promotion.
   - `P4-T5` (`01a1fadb25b776d480b53b7d6268f972`): Master Paul's owner-generated Suno WAVs (from `suno-music-prompt.md`) into Opus (`+bitexact`) + MP3 (`Lavc` intact) and wire spatial Web Audio `PannerNode` engine.
 - **Phase 5 (`plans/phase-5-quest3-tuning-and-release.md`):**
   - `P5-T1` (`01a1fadb27d0716e842dcc65551536b4`): `?stress` Wave 12 worst-case suite (14× T3 turrets, 4 portals, 25 enemies + Boss Phase 2) on desktop + IWER XR.
@@ -105,5 +105,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Continue serial Blender authoring.** The Core, Rift frame, both mounts and M44 are staged. Finish Helios in `P3-T5b`, then continue through `P3-T5c`, `P3-T6a/b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
+1. **Continue serial Blender authoring.** The Core, Rift frame, both mounts, M44 and Helios are staged. Start Glacier Cryo-Arc in `P3-T5c`, then Valkyrie Rail. Continue through `P3-T6a/b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
 2. **Collect owner feedback** from the [public test build](https://rift-bastion.pardev.net/). Asset promotion stays gated by Owner Checkpoint 2.

@@ -1,0 +1,29 @@
+{
+  "blender": "5.2.2 LTS (d13f752e3b9c)",
+  "ktx_software": "4.4.2",
+  "architecture": "Linux x86_64 CPU",
+  "blender_threads": 2,
+  "encode_threads": 1,
+  "independent_builds": 2,
+  "matching_sha256": {
+    "stage/geometry.json": "d04a4ac993a0ce6d1349aba52f16efe32babafc7a164adde1069ad42f89fe136",
+    "stage/basecolor.png": "02b765f947ccfaedd6fbae86b3e2420a771b208da1dc02a297dd09d1e0f416b8",
+    "stage/normal.png": "ffcc13cdcb2f07e71d57b776d5d9a6823f321e0764759277771db08696d4a381",
+    "stage/orm.png": "ac3e608c374a04d7e30933c91c1b2ed42d7d1702023dbe0b511e90e196327105",
+    "stage/emissive.png": "b6a251f346e9c609233bd2efb6ed0a967787b6242114d3b185967974389ed511",
+    "stage/lod0/source.bin": "e9a1a7aef15752ddbfcecbe521ae38753c9af24d9e674b405f810fb75199cfcb",
+    "stage/lod0/source.gltf": "9344afd95914b14b0cbbfd6e7b81f51e61f0a789507d22dd6cf474fc1d7fa2d0",
+    "stage/lod1/source.bin": "7714af6fa490f24f0b3e48e670a6901091b226e2e6b476f1afe893cc28e4bf2c",
+    "stage/lod1/source.gltf": "2bcb5f60b288ed2eac5bbff2ff222ea1b753add9b5277bf4ef99fa806aebb036",
+    "models/basecolor.ktx2": "0064da85dcd68e0e0587ceaf0553e4486ece1d4e0f810df121a772c6c3c3289e",
+    "models/normal.ktx2": "367b734e7949e1c3f27cb60e6f2cf6cbd18f0911d8d343aa4e31a4d7d721ac4f",
+    "models/orm.ktx2": "4f260d40c8d7aa6a79ac4d650c8aaf5addc1bac58c73f783d939bb91b27d41f2",
+    "models/emissive.ktx2": "11c9406b07943673f6c826d88d9a7787ba95998647eea2ac69608df0549df917",
+    "models/helios-plasma-mortar-t2-lod0.glb": "8097ca2e710a313f8c3fc9d57a5e0b1e25aa16edfd6bf567c5ee69b1cd2875fb",
+    "models/helios-plasma-mortar-t2-lod1.glb": "7a9e226efa37112f588b0f5f489034d9b4b63ba2035177f07af7dc3ce3d1feba"
+  },
+  "final_source_replay_sha256": {
+    "blender/helios_mortar.py": "1a45331d42aad613515856d52277de5b745ee1a0ea21acba4f04920ea572c069",
+    "blender/helios_shape.py": "312d2a2fc5239f1eb9a5ceb25c1f25140131280ee4bb980d62af720df620e01a"
+  }
+}

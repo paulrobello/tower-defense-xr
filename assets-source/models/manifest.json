@@ -2152,6 +2152,906 @@
           "tolerance": 12
         }
       ]
+    },
+    {
+      "file": "helios-plasma-mortar-t1/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "b0328420bbae8cba8a39088c1454b049c02900ee3055ec5a4b7007dd9893ce93",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 997,
+          "y": 33,
+          "rgb": [
+            244,
+            145,
+            64
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 139,
+          "y": 87,
+          "rgb": [
+            209,
+            65,
+            19
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 316,
+          "y": 484,
+          "rgb": [
+            198,
+            202,
+            204
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 664,
+          "y": 769,
+          "rgb": [
+            31,
+            35,
+            46
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 535,
+          "y": 835,
+          "rgb": [
+            82,
+            90,
+            99
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 316,
+          "y": 567,
+          "rgb": [
+            64,
+            73,
+            84
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "helios-plasma-mortar-t1/normal.ktx2",
+      "role": "normal",
+      "sha256": "e6a15fd8af708f0acf9be4112462d7d2e3a66827987ec8887d953a5cfbdea9ac",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 997,
+          "y": 33,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 139,
+          "y": 87,
+          "rgb": [
+            122,
+            130,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 316,
+          "y": 484,
+          "rgb": [
+            122,
+            149,
+            253
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 664,
+          "y": 769,
+          "rgb": [
+            125,
+            123,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 535,
+          "y": 835,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 316,
+          "y": 567,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "helios-plasma-mortar-t1/orm.ktx2",
+      "role": "orm",
+      "sha256": "5330e5d5e4e9ec3804a6b81b3c220af97793b75aac7ba72113c7a6b27c5e3c72",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 997,
+          "y": 33,
+          "rgb": [
+            234,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 139,
+          "y": 87,
+          "rgb": [
+            255,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 316,
+          "y": 484,
+          "rgb": [
+            254,
+            97,
+            243
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 664,
+          "y": 769,
+          "rgb": [
+            243,
+            186,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 535,
+          "y": 835,
+          "rgb": [
+            0,
+            99,
+            232
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 316,
+          "y": 567,
+          "rgb": [
+            255,
+            163,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "helios-plasma-mortar-t1/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "ee26784976298147b2c59f79a592ca155ced694ebfee4d78739f6f7c9fefed61",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 997,
+          "y": 33,
+          "rgb": [
+            255,
+            181,
+            74
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 139,
+          "y": 87,
+          "rgb": [
+            255,
+            87,
+            34
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 316,
+          "y": 484,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 664,
+          "y": 769,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 535,
+          "y": 835,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 316,
+          "y": 567,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "helios-plasma-mortar-t2/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "0064da85dcd68e0e0587ceaf0553e4486ece1d4e0f810df121a772c6c3c3289e",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 1000,
+          "y": 29,
+          "rgb": [
+            244,
+            145,
+            64
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 350,
+          "y": 290,
+          "rgb": [
+            209,
+            65,
+            19
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 288,
+          "y": 609,
+          "rgb": [
+            186,
+            191,
+            195
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 612,
+          "y": 684,
+          "rgb": [
+            31,
+            35,
+            45
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 559,
+          "y": 780,
+          "rgb": [
+            83,
+            90,
+            99
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 288,
+          "y": 744,
+          "rgb": [
+            56,
+            64,
+            75
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "helios-plasma-mortar-t2/normal.ktx2",
+      "role": "normal",
+      "sha256": "367b734e7949e1c3f27cb60e6f2cf6cbd18f0911d8d343aa4e31a4d7d721ac4f",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 1000,
+          "y": 29,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 350,
+          "y": 290,
+          "rgb": [
+            125,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 288,
+          "y": 609,
+          "rgb": [
+            127,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 612,
+          "y": 684,
+          "rgb": [
+            125,
+            123,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 559,
+          "y": 780,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 288,
+          "y": 744,
+          "rgb": [
+            108,
+            142,
+            253
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "helios-plasma-mortar-t2/orm.ktx2",
+      "role": "orm",
+      "sha256": "4f260d40c8d7aa6a79ac4d650c8aaf5addc1bac58c73f783d939bb91b27d41f2",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 1000,
+          "y": 29,
+          "rgb": [
+            234,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 350,
+          "y": 290,
+          "rgb": [
+            255,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 288,
+          "y": 609,
+          "rgb": [
+            255,
+            77,
+            247
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 612,
+          "y": 684,
+          "rgb": [
+            242,
+            186,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 559,
+          "y": 780,
+          "rgb": [
+            85,
+            97,
+            234
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 288,
+          "y": 744,
+          "rgb": [
+            234,
+            152,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "helios-plasma-mortar-t2/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "11c9406b07943673f6c826d88d9a7787ba95998647eea2ac69608df0549df917",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 1000,
+          "y": 29,
+          "rgb": [
+            255,
+            181,
+            74
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 350,
+          "y": 290,
+          "rgb": [
+            255,
+            87,
+            34
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 288,
+          "y": 609,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 612,
+          "y": 684,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 559,
+          "y": 780,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 288,
+          "y": 744,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "helios-plasma-mortar-t3/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "11ece31bb598aa1ef869f119304621573c8e228326f643c1eb783438f57e6d3d",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 997,
+          "y": 55,
+          "rgb": [
+            244,
+            145,
+            64
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 546,
+          "y": 854,
+          "rgb": [
+            209,
+            65,
+            19
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 270,
+          "y": 613,
+          "rgb": [
+            192,
+            196,
+            199
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 971,
+          "y": 678,
+          "rgb": [
+            28,
+            32,
+            42
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 674,
+          "y": 519,
+          "rgb": [
+            80,
+            87,
+            96
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 270,
+          "y": 747,
+          "rgb": [
+            56,
+            64,
+            75
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "helios-plasma-mortar-t3/normal.ktx2",
+      "role": "normal",
+      "sha256": "0290b022bae2cd6b088def1b652ee4f2958751e9ca762358bc2c9333b2741c5a",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 997,
+          "y": 55,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 546,
+          "y": 854,
+          "rgb": [
+            122,
+            125,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 270,
+          "y": 613,
+          "rgb": [
+            127,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 971,
+          "y": 678,
+          "rgb": [
+            126,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 674,
+          "y": 519,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 270,
+          "y": 747,
+          "rgb": [
+            107,
+            141,
+            253
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "helios-plasma-mortar-t3/orm.ktx2",
+      "role": "orm",
+      "sha256": "71379c872fecf08f6cdecb8d2e3d34a5c74f34e0d0dbc3aa81f1aa143e8bdbda",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 997,
+          "y": 55,
+          "rgb": [
+            255,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 546,
+          "y": 854,
+          "rgb": [
+            85,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 270,
+          "y": 613,
+          "rgb": [
+            255,
+            86,
+            246
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 971,
+          "y": 678,
+          "rgb": [
+            255,
+            169,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 674,
+          "y": 519,
+          "rgb": [
+            42,
+            94,
+            234
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 270,
+          "y": 747,
+          "rgb": [
+            255,
+            151,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "helios-plasma-mortar-t3/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "fd54eed2f7bc61a7a33bce2ece378d34f9dc823ac011eb0d97f95a07b3882fb6",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Helios incandescent heart",
+          "x": 997,
+          "y": 55,
+          "rgb": [
+            255,
+            181,
+            74
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Helios molten orange",
+          "x": 546,
+          "y": 854,
+          "rgb": [
+            255,
+            87,
+            34
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 270,
+          "y": 613,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 971,
+          "y": 678,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 674,
+          "y": 519,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 270,
+          "y": 747,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
     }
   ],
   "models": [
@@ -2774,6 +3674,306 @@
           "normal": "m44-autocannon-t3/normal.ktx2",
           "orm": "m44-autocannon-t3/orm.ktx2",
           "emissive": "m44-autocannon-t3/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "helios-plasma-mortar-t1",
+      "lod": 0,
+      "file": "helios-plasma-mortar-t1/helios-plasma-mortar-t1-lod0.glb",
+      "sha256": "43ae973b67218f1bbf5e0c5f26d1ea8c30411d3657b2628b48371210d00fd079",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.25,
+            0.16
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Helios T1 satin armor": {
+          "basecolor": "helios-plasma-mortar-t1/basecolor.ktx2",
+          "normal": "helios-plasma-mortar-t1/normal.ktx2",
+          "orm": "helios-plasma-mortar-t1/orm.ktx2",
+          "emissive": "helios-plasma-mortar-t1/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "helios-plasma-mortar-t1",
+      "lod": 1,
+      "file": "helios-plasma-mortar-t1/helios-plasma-mortar-t1-lod1.glb",
+      "sha256": "180d1713b4cb8d3da33792db84d47e58acdec7272f579c954667e898d339d27a",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.25,
+            0.16
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Helios T1 satin armor": {
+          "basecolor": "helios-plasma-mortar-t1/basecolor.ktx2",
+          "normal": "helios-plasma-mortar-t1/normal.ktx2",
+          "orm": "helios-plasma-mortar-t1/orm.ktx2",
+          "emissive": "helios-plasma-mortar-t1/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "helios-plasma-mortar-t2",
+      "lod": 0,
+      "file": "helios-plasma-mortar-t2/helios-plasma-mortar-t2-lod0.glb",
+      "sha256": "8097ca2e710a313f8c3fc9d57a5e0b1e25aa16edfd6bf567c5ee69b1cd2875fb",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.27,
+            0.18
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Helios T2 satin armor": {
+          "basecolor": "helios-plasma-mortar-t2/basecolor.ktx2",
+          "normal": "helios-plasma-mortar-t2/normal.ktx2",
+          "orm": "helios-plasma-mortar-t2/orm.ktx2",
+          "emissive": "helios-plasma-mortar-t2/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "helios-plasma-mortar-t2",
+      "lod": 1,
+      "file": "helios-plasma-mortar-t2/helios-plasma-mortar-t2-lod1.glb",
+      "sha256": "7a9e226efa37112f588b0f5f489034d9b4b63ba2035177f07af7dc3ce3d1feba",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.27,
+            0.18
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Helios T2 satin armor": {
+          "basecolor": "helios-plasma-mortar-t2/basecolor.ktx2",
+          "normal": "helios-plasma-mortar-t2/normal.ktx2",
+          "orm": "helios-plasma-mortar-t2/orm.ktx2",
+          "emissive": "helios-plasma-mortar-t2/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "helios-plasma-mortar-t3",
+      "lod": 0,
+      "file": "helios-plasma-mortar-t3/helios-plasma-mortar-t3-lod0.glb",
+      "sha256": "d1da2bea7abcb9f0e6d7d5fa7e5f66410204eaae5464dca1bd5474c7d9230151",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.29,
+            0.2
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Helios T3 satin armor": {
+          "basecolor": "helios-plasma-mortar-t3/basecolor.ktx2",
+          "normal": "helios-plasma-mortar-t3/normal.ktx2",
+          "orm": "helios-plasma-mortar-t3/orm.ktx2",
+          "emissive": "helios-plasma-mortar-t3/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "helios-plasma-mortar-t3",
+      "lod": 1,
+      "file": "helios-plasma-mortar-t3/helios-plasma-mortar-t3-lod1.glb",
+      "sha256": "59d5148f10904f5e5874a03b74d8ff56b1968f671c8ee2122d554d17a7258309",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.29,
+            0.2
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Helios T3 satin armor": {
+          "basecolor": "helios-plasma-mortar-t3/basecolor.ktx2",
+          "normal": "helios-plasma-mortar-t3/normal.ktx2",
+          "orm": "helios-plasma-mortar-t3/orm.ktx2",
+          "emissive": "helios-plasma-mortar-t3/emissive.ktx2"
         }
       }
     }
