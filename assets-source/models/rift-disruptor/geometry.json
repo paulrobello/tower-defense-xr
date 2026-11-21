@@ -1,0 +1,228 @@
+{
+  "high": {
+    "triangles": 6648,
+    "extent_XYZ_m": [
+      0.4399999976158142,
+      0.41999998688697815,
+      0.3199999928474426
+    ],
+    "support_z_m": 0.0
+  },
+  "bake": {
+    "normal_correspondence_texels": 799888,
+    "normal": {
+      "sha256": "c2e2bb1d5c393e554f6ba4afcc0edba8820403d983e27d9c8346fd75a283b4ad",
+      "samples": [
+        {
+          "surface": "upper shield",
+          "x": 81,
+          "y": 378,
+          "rgb": [
+            132,
+            120,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "side glass",
+          "x": 81,
+          "y": 624,
+          "rgb": [
+            128,
+            125,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "meridian",
+          "x": 175,
+          "y": 624,
+          "rgb": [
+            132,
+            126,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "field conductor",
+          "x": 204,
+          "y": 123,
+          "rgb": [
+            136,
+            134,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "basecolor": {
+      "sha256": "aa79b0cf5a766db6f38cf57c84e63438390a57dfcd85f8ac5b65b14529e347b1",
+      "samples": [
+        {
+          "surface": "upper shield",
+          "x": 81,
+          "y": 378,
+          "rgb": [
+            63,
+            41,
+            104
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "side glass",
+          "x": 81,
+          "y": 624,
+          "rgb": [
+            31,
+            25,
+            52
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "meridian",
+          "x": 175,
+          "y": 624,
+          "rgb": [
+            66,
+            206,
+            254
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "field conductor",
+          "x": 204,
+          "y": 123,
+          "rgb": [
+            141,
+            238,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "orm": {
+      "sha256": "002cd098f22a4d181c84deedbd614891c74861a27c775e0e2f3ea5e47c21518e",
+      "samples": [
+        {
+          "surface": "upper shield",
+          "x": 81,
+          "y": 378,
+          "rgb": [
+            255,
+            107,
+            23
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "side glass",
+          "x": 81,
+          "y": 624,
+          "rgb": [
+            255,
+            69,
+            20
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "meridian",
+          "x": 175,
+          "y": 624,
+          "rgb": [
+            255,
+            70,
+            10
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "field conductor",
+          "x": 204,
+          "y": 123,
+          "rgb": [
+            255,
+            75,
+            8
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "emissive": {
+      "sha256": "713bfcbc1e63734c4fcc3035a104a420bae1e003785e975070ef26156299296b",
+      "samples": [
+        {
+          "surface": "upper shield",
+          "x": 81,
+          "y": 378,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "side glass",
+          "x": 81,
+          "y": 624,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "meridian",
+          "x": 175,
+          "y": 624,
+          "rgb": [
+            66,
+            206,
+            254
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "field conductor",
+          "x": 204,
+          "y": 123,
+          "rgb": [
+            141,
+            238,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    }
+  },
+  "lod0": {
+    "triangles": 4152,
+    "extent_XYZ_m": [
+      0.4399999976158142,
+      0.41999998688697815,
+      0.3199999928474426
+    ],
+    "support_z_m": 0.0
+  },
+  "lod1": {
+    "triangles": 2424,
+    "extent_XYZ_m": [
+      0.4399999976158142,
+      0.41999998688697815,
+      0.3199999928474426
+    ],
+    "support_z_m": 0.0
+  }
+}

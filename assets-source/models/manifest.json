@@ -5400,6 +5400,218 @@
           "tolerance": 16
         }
       ]
+    },
+    {
+      "file": "rift-disruptor/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "76b1e7d1bf429a73dbfe021cc72bde6e4f40c762d14204f4b0a8d090fdeaa40a",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "upper shield",
+          "x": 81,
+          "y": 378,
+          "rgb": [
+            63,
+            41,
+            104
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "side glass",
+          "x": 81,
+          "y": 624,
+          "rgb": [
+            31,
+            25,
+            52
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "meridian",
+          "x": 175,
+          "y": 624,
+          "rgb": [
+            66,
+            206,
+            254
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "field conductor",
+          "x": 204,
+          "y": 123,
+          "rgb": [
+            141,
+            238,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "rift-disruptor/normal.ktx2",
+      "role": "normal",
+      "sha256": "b6a3da7bd0f51dbc6944f996908871dfe3733fe3f95159b47656c9722c9138fb",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "upper shield",
+          "x": 81,
+          "y": 378,
+          "rgb": [
+            132,
+            120,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "side glass",
+          "x": 81,
+          "y": 624,
+          "rgb": [
+            128,
+            125,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "meridian",
+          "x": 175,
+          "y": 624,
+          "rgb": [
+            132,
+            126,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "field conductor",
+          "x": 204,
+          "y": 123,
+          "rgb": [
+            136,
+            134,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "rift-disruptor/orm.ktx2",
+      "role": "orm",
+      "sha256": "d2551b7c873bf456491e5198234658ae13c23937a29bb7fc5495648ea5b4859e",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "upper shield",
+          "x": 81,
+          "y": 378,
+          "rgb": [
+            255,
+            107,
+            23
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "side glass",
+          "x": 81,
+          "y": 624,
+          "rgb": [
+            255,
+            69,
+            20
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "meridian",
+          "x": 175,
+          "y": 624,
+          "rgb": [
+            255,
+            70,
+            10
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "field conductor",
+          "x": 204,
+          "y": 123,
+          "rgb": [
+            255,
+            75,
+            8
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "rift-disruptor/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "7c737029f7c08aa432a63cf2553718684c2ce25812adb8facdda691beaf187b9",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "upper shield",
+          "x": 81,
+          "y": 378,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "side glass",
+          "x": 81,
+          "y": 624,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "meridian",
+          "x": 175,
+          "y": 624,
+          "rgb": [
+            66,
+            206,
+            254
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "field conductor",
+          "x": 204,
+          "y": 123,
+          "rgb": [
+            141,
+            238,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
     }
   ],
   "models": [
@@ -7102,6 +7314,64 @@
           "normal": "carapace-brute/normal.ktx2",
           "orm": "carapace-brute/orm.ktx2",
           "emissive": "carapace-brute/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "rift-disruptor",
+      "lod": 0,
+      "file": "rift-disruptor/rift-disruptor-lod0.glb",
+      "sha256": "6d91636624b1ae16928407fe93712ccee59bd137d0766d5baadd7c4ac101b54e",
+      "limits": {
+        "triangles": 6500,
+        "materials": 1,
+        "bones": 24,
+        "sockets": 0,
+        "texture_size": 1024
+      },
+      "sockets": {},
+      "animations": [
+        "hover_glide",
+        "emp_pulse",
+        "hit",
+        "death"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Disruptor field chitin": {
+          "basecolor": "rift-disruptor/basecolor.ktx2",
+          "normal": "rift-disruptor/normal.ktx2",
+          "orm": "rift-disruptor/orm.ktx2",
+          "emissive": "rift-disruptor/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "rift-disruptor",
+      "lod": 1,
+      "file": "rift-disruptor/rift-disruptor-lod1.glb",
+      "sha256": "ca230fa04761f7d2cb11bc1c9c1e887558611a0a2c3bcc0227bc66c3db0474ff",
+      "limits": {
+        "triangles": 2500,
+        "materials": 1,
+        "bones": 24,
+        "sockets": 0,
+        "texture_size": 1024
+      },
+      "sockets": {},
+      "animations": [
+        "hover_glide",
+        "emp_pulse",
+        "hit",
+        "death"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Disruptor field chitin": {
+          "basecolor": "rift-disruptor/basecolor.ktx2",
+          "normal": "rift-disruptor/normal.ktx2",
+          "orm": "rift-disruptor/orm.ktx2",
+          "emissive": "rift-disruptor/emissive.ktx2"
         }
       }
     }

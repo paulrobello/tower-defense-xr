@@ -147,3 +147,11 @@ The indigo dart uses four independent swept wings with teal insets and dark unde
 The broad slate shell carries a recessed orange vent, a swept frontal shield and six armored feet. LOD0 uses 8,720 triangles and matches the nominal 0.52 × 0.46 × 0.48 m envelope. LOD1 uses 3,352 triangles. Both share one material, four 1024 px maps and a 24-bone rig. Both GLB re-imports play all five required clips. The brace lowers the shield about 82 mm with all six pads supported and under 0.02 mm of measured pad travel. The stomp alternates groups of three feet. The attack and hit recover to rest, and death holds its collapsed pose.
 
 [Sources, hashes and re-import checks](../assets-source/models/carapace-brute/README.md) · [Motion poses](../assets-source/models/carapace-brute/review/motion.jpg) · [Five-clip reel](../assets-source/models/carapace-brute/review/motion.mp4) · [Turntable](../assets-source/models/carapace-brute/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.
+
+## Rift Disruptor
+
+![Matched high, LOD0 and LOD1 views of Disruptor's violet panels and detached cyan ring](../assets-source/models/rift-disruptor/review/comparison.jpg)
+
+The faceted violet hull and luminous equatorial ring are independently rigged. Both LODs preserve the 0.42 × 0.44 × 0.32 m neutral envelope and share one material, three bones and four portable 1024 px maps. LOD0 uses 4,152 triangles and LOD1 uses 2,424. At 320 sampled poses per imported LOD, the hull and ring stayed at least 6 mm apart. Hover completes a full turn, the pulse and hit recover to neutral, and death holds the lowered hull and tilted ring. The revised 184 × 184 polar UV charts preserve the smooth outline in the matched Metal review.
+
+[Sources, hashes and re-import checks](../assets-source/models/rift-disruptor/README.md) · [Polar well comparison](../assets-source/models/rift-disruptor/review/polar-well-comparison.jpg) · [Motion poses](../assets-source/models/rift-disruptor/review/motion.jpg) · [Four-clip reel](../assets-source/models/rift-disruptor/review/motion.mp4) · [Turntable](../assets-source/models/rift-disruptor/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.
