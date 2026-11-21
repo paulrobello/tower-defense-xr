@@ -33,7 +33,8 @@ export const TARGET_FRAME_RATE = 72;
 
 /** Depth-sensing preferences. Without this dictionary the UA must not grant `depth-sensing`. */
 export const DEFAULT_DEPTH_SENSING: XRDepthStateInit = {
-  usagePreference: ['gpu-optimized', 'cpu-optimized'],
+  // GPU negotiation also enables Three's whole-frame depth pass, outside app occlusion control.
+  usagePreference: ['cpu-optimized'],
   dataFormatPreference: ['luminance-alpha', 'float32'],
 };
 
@@ -222,7 +223,9 @@ export function createXrSessionManager(options: XrSessionManagerOptions): XrSess
       const base = baseSystem();
       if (!base) return Promise.reject(new Error(XR_UNAVAILABLE_MESSAGE));
       const optionalFeatures = init?.optionalFeatures
-        ? Array.from(new Set(init.optionalFeatures))
+        ? Array.from(new Set(init.optionalFeatures)).filter(
+            (feature) => feature !== 'depth-sensing' || depthSensing !== null,
+          )
         : undefined;
       const merged: XRSessionInit = {
         ...init,

@@ -193,7 +193,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
       foveation: initial.fixedFoveation,
     },
   });
-  shell.scene.add(xrHudRoot);
+  shell.xrOverlayScene.add(xrHudRoot);
 
   // Hide static bootstrap placeholder core crystal so BlockoutRenderer's Core Bastion owns the pedestal
   const placeholderCore = shell.room.getObjectByName('core-placeholder');
@@ -217,7 +217,9 @@ export function mountApp(container: HTMLElement): AppRuntime {
   xrHudRoot.add(perfHud.xrRoot);
 
   const domSettings = createDomSettingsPanel(settings, { container });
-  const xrSettings = createXrSettingsPanel(settings);
+  const xrSettings = createXrSettingsPanel(settings, {
+    onClose: () => bus.dispatch({ type: 'menu/close-settings' }, 'xr'),
+  });
   xrSettings.root.position.set(0, 0, 0);
   xrHudRoot.add(xrSettings.root);
 
@@ -313,7 +315,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
   placement.placedTurretsGroup.visible = false;
 
   const radialControls = createXrRadialControls({
-    scene: shell.scene,
+    scene: shell.xrOverlayScene,
     actionBus: bus,
     placement,
     getBuildState: () => {
@@ -327,6 +329,11 @@ export function mountApp(container: HTMLElement): AppRuntime {
       };
     },
     isBusy: () => xrSettings.visible || state.phase === 'calibrate',
+    getPanel: () => {
+      if (xrSettings.visible) return xrSettings;
+      if (missionOverlay.visible) return missionOverlayPanel;
+      return tacticalHudPanel;
+    },
   });
 
   const tacticalHud = createTacticalHud({
@@ -354,14 +361,20 @@ export function mountApp(container: HTMLElement): AppRuntime {
       mountMode: placement.mountMode,
     },
   });
-  shell.scene.add(tacticalHud.xrRoot);
+  shell.xrOverlayScene.add(tacticalHud.xrRoot);
+  const tacticalHudPanel = {
+    root: tacticalHud.xrRoot,
+    cellAt: tacticalHud.cellAt,
+    setHovered: tacticalHud.setHovered,
+    activate: tacticalHud.activate,
+  };
 
   const threatChevrons = createThreatChevrons({
     container,
     initialMode: 'desktop',
     initialVisible: true,
   });
-  shell.scene.add(threatChevrons.xrRoot);
+  shell.xrOverlayScene.add(threatChevrons.xrRoot);
 
   const missionOverlay = createMissionOverlay({
     persistStore: persist,
@@ -371,6 +384,12 @@ export function mountApp(container: HTMLElement): AppRuntime {
     initialMode: 'desktop',
   });
   xrHudRoot.add(missionOverlay.xrRoot);
+  const missionOverlayPanel = {
+    root: missionOverlay.xrRoot,
+    cellAt: missionOverlay.cellAt,
+    setHovered: missionOverlay.setHovered,
+    activate: missionOverlay.activate,
+  };
 
   const desktopControls = createDesktopControls({
     actionBus: bus,
@@ -390,7 +409,9 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
   const syncTacticalHud = (): void => {
     const simState = currentSim.getState();
-    const showHud = state.phase !== 'title' || shell.xr.presenting;
+    const showHud = shell.xr.presenting
+      ? !xrSettings.visible && !missionOverlay.visible
+      : state.phase !== 'title';
     tacticalHud.setVisible(showHud);
     tacticalHud.updateState({
       phase: state.phase,
@@ -491,7 +512,17 @@ export function mountApp(container: HTMLElement): AppRuntime {
         if (shell.xr.session) {
           roomModel.setSession(shell.xr.session);
           detachRadialSession?.();
-          detachRadialSession = radialControls.attachSession(shell.xr.session);
+          detachRadialSession = radialControls.attachSession(shell.xr.session, (event) => {
+            const reference = shell.xr.reference;
+            if (state.phase !== 'calibrate' || !reference || !event.inputSource.gamepad) return;
+            const pose = event.frame.getPose(event.inputSource.targetRaySpace, reference);
+            if (!pose) return;
+            const { position, orientation } = pose.transform;
+            const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(
+              new THREE.Quaternion(orientation.x, orientation.y, orientation.z, orientation.w),
+            );
+            calibration.moveCoreByRay(position, direction);
+          });
         }
 
         if (state.phase === 'title') {
@@ -560,12 +591,18 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
   const unsubBus = [
     bus.on('menu/open-settings', () => {
-      if (shell.xr.presenting) xrSettings.toggle();
-      else domSettings.toggle();
+      if (shell.xr.presenting) {
+        xrHudRoot.position.copy(tacticalHud.xrRoot.position);
+        xrHudRoot.position.y += 0.18;
+        xrHudRoot.quaternion.copy(tacticalHud.xrRoot.quaternion);
+        xrSettings.toggle();
+        syncTacticalHud();
+      } else domSettings.toggle();
     }),
     bus.on('menu/close-settings', () => {
       domSettings.hide();
       xrSettings.hide();
+      syncTacticalHud();
     }),
     bus.on('menu/play-desktop', () => {
       desktopPlaying = true;
@@ -743,19 +780,6 @@ export function mountApp(container: HTMLElement): AppRuntime {
         }
       }
 
-      const hasLivePlanes =
-        ((frame.detectedPlanes as Set<XRPlane> | undefined)?.size ?? 0) > 0 ||
-        ((frame.detectedMeshes as Set<XRMesh> | undefined)?.size ?? 0) > 0;
-      if (hasLivePlanes && roomModel.usingVirtualFallback) {
-        roomModel.deactivateVirtualFallback();
-      }
-      roomModel.updateFromFrame(frame, shell.xr.reference, { nowMs: timeMs });
-      occlusion.updateFromXrFrame(frame, shell.xr.reference);
-      occlusion.bindCamera(
-        activeCamera,
-        shell.renderer.xr.getCamera() as unknown as { cameras?: readonly THREE.Camera[] },
-      );
-
       radialControls.update(
         frame,
         shell.xr.reference,
@@ -763,11 +787,20 @@ export function mountApp(container: HTMLElement): AppRuntime {
         xrSettings.visible || missionOverlay.visible,
       );
 
-      if (
-        !radialControls.shouldSuppressWorldTrigger() &&
-        (state.phase === 'prep' || state.phase === 'wave' || state.phase === 'intermission')
-      ) {
-        placement.updateFromXrFrame(frame, shell.xr.reference, dt);
+      roomModel.updateFromFrame(frame, shell.xr.reference, { nowMs: timeMs, resumeLiveScan: true });
+      occlusion.updateFromXrFrame(frame, shell.xr.reference);
+      occlusion.bindCamera(
+        activeCamera,
+        shell.renderer.xr.getCamera() as unknown as { cameras?: readonly THREE.Camera[] },
+      );
+
+      if (state.phase === 'prep' || state.phase === 'wave' || state.phase === 'intermission') {
+        placement.updateFromXrFrame(
+          frame,
+          shell.xr.reference,
+          dt,
+          radialControls.shouldSuppressWorldTrigger,
+        );
       }
     }
 

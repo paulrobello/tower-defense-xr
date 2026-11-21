@@ -371,6 +371,7 @@ export interface DesktopShellOptions {
 export interface DesktopShell {
   readonly renderer: THREE.WebGLRenderer;
   readonly scene: THREE.Scene;
+  readonly xrOverlayScene: THREE.Scene;
   readonly camera: THREE.PerspectiveCamera;
   readonly controls: OrbitControls;
   readonly room: THREE.Group;
@@ -407,6 +408,7 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
   renderer.setClearColor(0x000000, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.info.autoReset = false;
   renderer.domElement.dataset.control = 'game-canvas';
   applyStyle(renderer.domElement, { display: 'block', width: '100%', height: '100%' });
   const position = getComputedStyle(container).position;
@@ -416,6 +418,7 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
   container.append(renderer.domElement);
 
   const scene = new THREE.Scene();
+  const xrOverlayScene = new THREE.Scene();
   const desktopBackground = new THREE.Color(PALETTE.background);
   scene.background = desktopBackground;
   const { room, core } = createTestRoom();
@@ -510,7 +513,17 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
     else if (controls.enabled) controls.update();
     core.rotation.y += delta * 0.6;
     for (const callback of [...frameCallbacks]) callback(delta, time, frame);
+    renderer.info.reset();
     renderer.render(scene, camera);
+    if (frame && xr.presenting) {
+      // Keep the world color and start the spatial UI pass with its own depth buffer.
+      renderer.autoClearColor = false;
+      try {
+        renderer.render(xrOverlayScene, camera);
+      } finally {
+        renderer.autoClearColor = true;
+      }
+    }
   });
 
   const onResize = (): void => resize();
@@ -522,6 +535,7 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
   return {
     renderer,
     scene,
+    xrOverlayScene,
     camera,
     controls,
     room,
@@ -549,6 +563,7 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
       overlay.dispose();
       controls.dispose();
       disposeObject(scene);
+      disposeObject(xrOverlayScene);
       renderer.dispose();
       renderer.domElement.remove();
     },

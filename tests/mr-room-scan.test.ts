@@ -308,6 +308,21 @@ describe('WebXR plane and mesh ingestion', () => {
     expect(wall?.normal.z).toBeCloseTo(1, 5);
     expect(wall?.bounds.min.x).toBeCloseTo(-2, 4);
     expect(wall?.bounds.max.x).toBeCloseTo(2, 4);
+
+    const next = model.updateFromFrame(frame, referenceSpace, { nowMs: 64 });
+    expect(next.surfaces).toBe(snap.surfaces);
+    expect(next.revision).toBe(snap.revision);
+
+    const interruptedFrame = Object.create(frame, {
+      detectedMeshes: {
+        get() {
+          throw new DOMException('Room data is temporarily unavailable', 'InvalidStateError');
+        },
+      },
+    }) as XRFrame;
+    const interrupted = model.updateFromFrame(interruptedFrame, referenceSpace, { nowMs: 78 });
+    expect(interrupted.status).toBe('ready');
+    expect(interrupted.surfaces).toBe(snap.surfaces);
   });
 });
 
