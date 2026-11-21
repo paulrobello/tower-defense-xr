@@ -9,7 +9,7 @@
 - **Updated:** November 20, 2026 (Pacific time)
 - **Repo:** `/Users/probello/Repos/tower-defense-xr`, branch `main`. The existing local formatting edit in the Phase 4 plan is separate from this handoff.
 - **Unpushed local commits:** The project history is local, with no Git remote configured. **Do not push without Paul's explicit approval.**
-- **Completed phases (17 kanban cards `done`):**
+- **Completed work (19 kanban cards `done`):**
   - **Phase 0 (local complete):** `P0-T1`–`P0-T5` closed. `make checkall`, `make checkall-ci` (Gitleaks clean), `make pre-commit`, `make xr-emu` (14/14 on Apple M4 Max Metal GPU), and `bun scripts/check-build-upgrade.ts` (desktop auto-reload + XR HUD `Update: Reload`) all pass on `main`.
   - **Phase 1 (100% complete):** `P1-T1`–`P1-T6` closed. `bun scripts/xr-emu/walk-p1.mjs` passes **19/19** checks (seated `1.2 m` `front-180` + standing `1.65 m` `full-360` calibration, floor/table/wall surface-clamp + thumbstick hover-pod `0.8–5.0 m`, `TOO_CLOSE` & `CAP 14/14` SDF labels, `auto-depth → room-mesh → off` cutouts).
   - **Phase 2 (100% complete):** `P2-T1`–`P2-T6` closed. **218/218 Vitest tests** pass; `bun scripts/check-desktop-campaign.ts` passes **12/12** checks (full 12-wave + Wave 12 Apex Broodlord Boss Phase 2 → Victory `3/3` stars → IndexedDB reload + JSON backup); `bun scripts/xr-emu/walk-p2.mjs` passes **8/8** checks (`150 ≤ 200` draws, `12,080` tris, zero console errors).
@@ -27,15 +27,15 @@
 
 ---
 
-## Unfinished Work (Kanban Project: `tower-defense-xr`, 24 Open Cards)
+## Remaining Work (Kanban Project: `tower-defense-xr`, 22 Open Cards)
 
 ### Blocked (1 card)
 - **`P0-T6`** (`01a1fadae7b771b882e38e61f0cdd161`, `blocked`): `.github/workflows/ci.yml` and `docs/deploy-checklist.md` are merged on `main` (`75b5bcf`). Waiting on Paul's explicit approval to push `main`, create the GitHub repo, create the Cloudflare DNS-only CNAME `rift-bastion.pardev.net → paulrobello.github.io`, commit `public/CNAME` *after* DNS resolves, call `PUT /repos/paulrobello/tower-defense-xr/pages`, and verify live HTTPS render.
 
 ### Next Up — Phase 3: Art Direction & Blender AAA Assets (12 cards, `plans/phase-3-art-direction-and-blender-assets.md`)
-- **Wave 1 (Owner Checkpoint #1 pending):**
-  - `P3-T1` (`01a1fadb0b8b7467b36c14f730c1d52d`): [Art bible](docs/art-bible.md) and all concept sheets are ready for review. **Bastion Rib** is the proposed style board. Six boards, eleven selected sheets, and three superseded attempts are archived with [provenance](assets-source/concepts/provenance.json). All 20 originals decoded and matched their SHA-256 values. The document was cross-checked against the 12 turret tiers and muzzle offsets, five enemy envelopes, two mounts, Core and Rift specifications. The provider ledger confirmed 40 credits. Paul must approve the package before P3 Wave 2 begins.
-- **Wave 2 (parallel after Paul approves `P3-T1`):**
+- **Wave 1 complete.**
+  - `P3-T1` (`01a1fadb0b8b7467b36c14f730c1d52d`): Paul approved **Bastion Rib**, the [art bible](docs/art-bible.md), and all eleven concept sheets in chat on November 20, 2026. This clears Owner Checkpoint 1. All 20 original images decoded and matched their [recorded hashes](assets-source/concepts/provenance.json). The turret tier and muzzle, invader, mount, Core and Rift dimensions matched the blockouts.
+- **Wave 2 in progress.**
   - `P3-T2` (`01a1fadb0d97705ab0b67aaed9726f4d`): Higgsfield ~18 RGBA tactical UI icons (`nano_banana_pro` + `image_background_remover`) + 2 title key art banners. *(GPT-6.2 Astra)*
   - `P3-T3` (`01a1fadb108874ef8dd9dda60e64c92f`): Blender 5.2.2 shared PBR material library (`blender/materials.py`), KTX2 encoder wrapper (`~/.local/opt/ktx-software-4.4.2/bin/ktx`), and `scripts/validate_glbs.py` + `make model-check`. *(GPT-6.2 Sol for the validator and Astra for PBR materials)*
 - **Wave 3 (serial Blender workers per `blender-mcp.md` after `P3-T3`, using GPT-6.2 Astra):**
@@ -51,10 +51,10 @@
 - **Wave 4 (Owner Checkpoint #2 before P4 promotion):**
   - `P3-T7` (`01a1fb3c93b976f4850cfb761acebef9`): Combined hash-bound audit (`docs/art-review-index.md`), independent `>=80/100` visual scores, and Paul's creative sign-off.
 
-### Independent Phase 4 audio review
+### Phase 4 sound effects approved
 
-- **`P4-T4`** (`01a1fadb229176818b2c3bc81999c4a6`): 28 ElevenLabs cues are ready for owner listening on [the private audition page](http://127.0.0.1:4273/audition.html). The original 29 takes, 28 lossless masters and 56 Opus/MP3 derivatives passed hash, codec, loudness, true-peak, silence, mono and loop checks. The four negative controls rejected clipping, silence, phase cancellation and a hash mismatch. The 7.74-second rift loop used the second take. ElevenLabs reconciled 538 included credits and zero overage.
-- The [audio review instructions](assets-source/audio/sfx/README.md) explain how to restart the preview. Desktop Chrome verified both mastered formats, original playback, stop/reset and the rift repeat. Quest 3 Browser loaded all 28 cues over USB and reported support for both formats. The preview was hidden during the automatic Quest playback attempt, so Quest speaker acceptance remains open for Paul. The isolated audio stays in the private, gitignored archive under `assets-source/audio/sfx/`. The normal game build and Pages bundle exclude it. Suno mastering and in-game mixing belong to `P4-T5`.
+- **`P4-T4` complete** (`01a1fadb229176818b2c3bc81999c4a6`). Paul approved all 28 cues in chat on November 20, 2026. The [audio review record](assets-source/audio/sfx/README.md) binds the approval to the catalog hash. The original 29 takes, 28 lossless masters and 56 Opus/MP3 derivatives passed hash, codec, loudness, true-peak, silence, mono and loop checks. The four negative controls rejected clipping, silence, phase cancellation and a hash mismatch. ElevenLabs reconciled 538 included credits and zero overage.
+- Desktop Chrome verified both formats, original playback, stop/reset and rift repeat. Quest 3 Browser loaded all cues over USB and reported support for both formats. Independent Quest playback was not observed because its tab was hidden. The isolated audio stays under the private, gitignored `assets-source/audio/sfx/` archive. Suno mastering and in-game mixing belong to `P4-T5`.
 
 ### Remaining Phase 4 & Phase 5 Cards (10 cards)
 - **Phase 4 (`plans/phase-4-aaa-rendering-fx-and-audio.md`):**
@@ -108,9 +108,6 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Finish the first review wave:**
-   - **`P3-T1`:** Paul reviews the [art bible](docs/art-bible.md), Bastion Rib board and eleven concept sheets for **Owner Checkpoint #1**.
-   - **`P4-T4`:** Paul listens to the [private audition](http://127.0.0.1:4273/audition.html) on Quest speakers and confirms the SFX takes.
-2. **After Paul approves `P3-T1`**, run **`P3-T2`** (Higgsfield UI icons & title key art) and **`P3-T3`** (Blender shared PBR library + KTX2 encoder + `scripts/validate_glbs.py` + `make model-check`) in parallel.
-3. **Once `P3-T2` lands**, **`P4-T6`** (Tactical Sci-Fi radial menu re-skin) unlocks in parallel with the serial Blender authoring queue (`P3-T4` → `P3-T5a/b/c` → `P3-T6a/b/c` → `P3-T7` batch audit & Owner Checkpoint #2).
-4. **Confirm with Paul** when he wants to push `main` and execute `docs/deploy-checklist.md` (`P0-T6`) to bring `https://rift-bastion.pardev.net/` live.
+1. **Complete the parallel wave.** `P3-T2` produces the Higgsfield UI icons and title key art. `P3-T3` produces the Blender shared PBR library, KTX2 encoder, GLB validator and `make model-check`.
+2. **Start the asset queues.** `P3-T3` unblocks the serial Blender queue (`P3-T4` → `P3-T5a/b/c` → `P3-T6a/b/c` → `P3-T7` audit and Owner Checkpoint 2). `P3-T2` unblocks the radial re-skin (`P4-T6`) while the Blender work continues. Owner Checkpoint 2 gates production asset promotion.
+3. **Confirm with Paul** when he wants to push `main` and execute `docs/deploy-checklist.md` (`P0-T6`) to bring `https://rift-bastion.pardev.net/` live.

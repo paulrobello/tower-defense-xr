@@ -1,6 +1,6 @@
 # Rift Bastion art bible
 
-**Owner checkpoint 1 · awaiting Paul’s review.** Review the selected board, material direction and eleven linked sheets as one package. Approval covers the art direction used for subsequent Blender work. The PNGs are immutable illustration sources. The numeric contracts below govern the eventual meshes and pivots.
+**Owner checkpoint 1 approved.** Paul approved the Bastion Rib direction, material targets and eleven linked sheets in chat on November 20, 2026. This approved reference package guides subsequent Blender work. The PNGs are immutable illustration sources. The numeric contracts below govern the meshes and pivots.
 
 ## Working direction
 

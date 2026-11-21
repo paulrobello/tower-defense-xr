@@ -9,7 +9,7 @@
 ## Verified Local Toolchain & Precedents
 
 - **Blender:** `/Applications/Blender.app/Contents/MacOS/Blender` (**5.2.2 LTS**, verified 2026-11-20); live community MCP on TCP `9876` via `python3 ~/.claude/guides/blender-bl.py`.
-- **KTX2 Encoder:** `~/.local/opt/ktx-software-4.4.2/bin/ktx` (**v4.4.2**, verified 2026-11-20; reference wrapper: `~/Repos/rogue-xr/scripts/assets/encode_materials_ktx2.py` — UASTC q2 + RDO + Zstd 18 + generated mips + `--convert-texcoord-origin bottom-left`; sRGB for `baseColor`/`emissive`, linear UNORM for `normal`/`ORM`, `--normalize` on tangent normals).
+- **KTX2 encoder:** `~/.local/opt/ktx-software-4.4.2/bin/ktx` (**v4.4.2**, verified 2026-11-20). Use UASTC q2, RDO, Zstd 18 and generated mips. glTF material maps use top-left orientation (`rd`). Encode `baseColor` and `emissive` as sRGB, `normal` and `ORM` as linear, and normalize tangent normals. [Khronos orientation and color rules](https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_texture_basisu#additional-requirements)
 - **Higgsfield CLI:** `/Users/probello/.nvm/versions/node/v24.18.0/bin/higgsfield` (reference provenance runner: `~/Repos/rogue-xr/scripts/assets/gen_style.ts`).
 - **Asset Validator Precedent:** `~/Repos/rogue-xr/scripts/assets/asset-check.py` (standalone stdlib Python gate verifying hashes, KTX2 headers, budgets, and provenance without requiring Blender).
 

@@ -1,8 +1,10 @@
 # Rift Bastion sound effects review
 
-This package stages the 28 sound effects from P4-T4 for private listening. The selected sources and
-masters are candidates awaiting Paul's approval. P4-T5 owns integration, the in-game mix, and the
-eight owner-supplied Suno WAVs.
+Paul approved the 28 sound effects from P4-T4 in chat on November 20, 2026. The approval applies to
+the selected takes and masters in the review catalog with SHA-256
+`e8ef8aea8a0b3840da3ef23d9967fb23c964e6255c120f3753b03f81a56718f6`. The catalog preserves
+the original generation-time state. P4-T5 owns integration, the in-game mix, and the eight
+owner-supplied Suno WAVs.
 
 ## Listen
 
