@@ -45,10 +45,10 @@ dig +short CNAME rift-bastion.pardev.net
 dig +short CNAME rift-bastion.pardev.net   # must show paulrobello.github.io.
 printf 'rift-bastion.pardev.net\n' > public/CNAME
 git add public/CNAME && git commit -m "feat(deploy): add CNAME for rift-bastion.pardev.net"
-git push origin main
 ```
 
 Committing it earlier makes Pages 301 the `github.io` URL and takes both addresses down. No Vite `base` change is needed.
+Push this commit after setting `PAGES_ENABLED` in the next step.
 
 ## 4. Register the custom domain and enable deploys
 
@@ -65,10 +65,11 @@ gh api -X PUT repos/paulrobello/tower-defense-xr/pages \
 
 # Let the deploy job run:
 gh variable set PAGES_ENABLED --body true --repo paulrobello/tower-defense-xr
+git push origin main
 ```
 
-Re-run the `main` workflow (`gh workflow run CI` or re-run the last run). Then enforce HTTPS once the certificate
-exists:
+The push triggers the deploy job after the gate. To retry from Actions, re-run that push's workflow.
+Enforce HTTPS after the certificate exists.
 
 ```bash
 gh api repos/paulrobello/tower-defense-xr/pages --jq '{cname, https_enforced, status}'
