@@ -75,3 +75,15 @@ The mount has four separate shoes, a 55 mm deck and a 0.15881 m measured radius 
 ![Repulsor Hover-Ring source and imported LODs from matched angles](../assets-source/models/hover-pod/review/comparison.jpg)
 
 The legless pod measures 0.156 m outer radius, 0.145 m emitter radius and 0.070 m height. Its 2,364-triangle LOD0 and 1,148-triangle LOD1 share the origin socket, one material and four 1024 px maps. Both GLBs passed re-import for clearance, shell intersections and the ceramic shoulder's decoded material response. [Hover pod sources, hashes and re-import checks](../assets-source/models/hover-pod/README.md)
+
+## M44 Autocannon
+
+Each head keeps the M44 yaw, pitch, recoil and muzzle transforms, with independent re-import evidence on both mounts. Tier 3 retains six recessed apertures and a separate rotary group. Matched views cover high, LOD0 and LOD1.
+
+| Tier | Head LOD0 / LOD1 triangles | Review |
+| --- | ---: | --- |
+| T1 single | 2,180 / 788 | [Source, proofs and hashes](../assets-source/models/m44-autocannon-t1/README.md) |
+| T2 linked twin | 2,816 / 944 | [Source, proofs and hashes](../assets-source/models/m44-autocannon-t2/README.md) |
+| T3 rotary | 3,608 / 1,304 | [Source, proofs and hashes](../assets-source/models/m44-autocannon-t3/README.md) |
+
+The T3 assembly with the larger clamp is 6,036 / 2,452 triangles with two materials. Both clean builds matched all six GLBs and twelve maps byte for byte. The editable archives matched in geometry, UVs, hierarchy, transforms and packed images. Independent scoring and owner approval remain open at P3-T7.

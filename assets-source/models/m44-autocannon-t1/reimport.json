@@ -1,0 +1,245 @@
+{
+  "editable_sources": {
+    "high": {
+      "sha256": "e5ed9b578265c6df20cc234b721f5b3fbb77518fd0cce93a7dd91ea12e3f46cb",
+      "triangles": 5268,
+      "embedded_source_images": 9,
+      "geometry_uv_hierarchy_material_slots_sha256": "3813ba6b4b6f2e41a1247763f5d6f5a5205faa8050ce5b39183b4a2352c91b62",
+      "repeat_archive_sha256": "7e7faaa9a15fd45b6f87c5312f761f742ce587dda701cb3a06223ba8b5b0888b"
+    },
+    "low": {
+      "sha256": "11fadf3dab859a8fe091eed8318c03341be92d6686e42ace27edc41d3c9559b5",
+      "triangles": 2180,
+      "embedded_source_images": 4,
+      "geometry_uv_hierarchy_material_slots_sha256": "364995f241fa711838744f47d85abc8dd39bb3e486814e7c5a49e2f3dd4e30be",
+      "repeat_archive_sha256": "ddcbaffe8c00b397385da2d09f5e6b1b489733dbc10e050e6bc5b29cf9c3946a"
+    }
+  },
+  "lod0": {
+    "sha256": "c237b598548f8beef31bab35212729db84dfabeedf69b53a8939b83235528f21",
+    "head_dimensions_blender_m": [
+      0.1599999964237213,
+      0.2199999988079071,
+      0.11999999731779099
+    ],
+    "bore_centers_blender_m": [
+      [
+        0.0,
+        -0.26,
+        0.18
+      ]
+    ],
+    "emitter_span_m": 0.17999999225139618,
+    "poses": [
+      {
+        "yaw_rad": 0.7,
+        "pitch_rad": -0.42,
+        "recoil_m": 0.012,
+        "rotor_rad": null,
+        "muzzle_blender_m": [
+          0.1353730857372284,
+          -0.1607206016778946,
+          0.2776481509208679
+        ]
+      },
+      {
+        "yaw_rad": -1.13,
+        "pitch_rad": 0.32,
+        "recoil_m": 0.008,
+        "rotor_rad": null,
+        "muzzle_blender_m": [
+          -0.2277219295501709,
+          -0.1074286699295044,
+          0.09869866073131561
+        ]
+      }
+    ],
+    "mounts": {
+      "surface-clamp": {
+        "mount_sha256": "01283900c728110a9d733d9f266ce5bfbdb09d9b672e00ae113bc8c85760a0ff",
+        "origin_alignment_on_rotated_anchor": true
+      },
+      "hover-pod": {
+        "mount_sha256": "d013afe0e2ec5627428db1b683adee6d6a0a47cf2906c5d55ba6a2c151dd2a49",
+        "origin_alignment_on_rotated_anchor": true
+      }
+    },
+    "amber": {
+      "forward-assembly": {
+        "triangles": 80,
+        "visible_area_m2": 0.00378129
+      },
+      "turret-head": {
+        "triangles": 0,
+        "visible_area_m2": 0
+      },
+      "yaw-bearing": {
+        "triangles": 0,
+        "visible_area_m2": 0
+      }
+    },
+    "unlit_color": {
+      "interior_samples": 8720,
+      "minimum_peak_rgb8": 35,
+      "black_samples": 0
+    },
+    "decoded_metalness_correct_area_fraction": {
+      "RB.dark-gunmetal": 1.0,
+      "RB.brushed-titanium": 1.0,
+      "RB.tactical-ceramic": 1.0,
+      "M44 amber": 1.0,
+      "Core carbon inserts": 1.0
+    },
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 470164,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.284
+        },
+        "normal": {
+          "bytes": 522381,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.001,
+          "decoded_unit_length_range": [
+            0.97409,
+            1.044544
+          ]
+        },
+        "orm": {
+          "bytes": 764570,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.594
+        },
+        "emissive": {
+          "bytes": 3602,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.028
+        }
+      },
+      "file_bytes": 4672204,
+      "primitives": 3,
+      "gltf_vertices": 4178,
+      "ktx2_bytes": 1760717,
+      "uastc_bytes_before_zstd": 5592512
+    }
+  },
+  "lod1": {
+    "sha256": "5e4fd730ffddcedbaa8748f4e65a8585ec67fbb115962839244ab318af8cab21",
+    "head_dimensions_blender_m": [
+      0.1600000262260437,
+      0.2199999988079071,
+      0.11999999731779099
+    ],
+    "bore_centers_blender_m": [
+      [
+        0.0,
+        -0.26,
+        0.18
+      ]
+    ],
+    "emitter_span_m": 0.17999999225139618,
+    "poses": [
+      {
+        "yaw_rad": 0.7,
+        "pitch_rad": -0.42,
+        "recoil_m": 0.012,
+        "rotor_rad": null,
+        "muzzle_blender_m": [
+          0.1353730857372284,
+          -0.1607206016778946,
+          0.2776481509208679
+        ]
+      },
+      {
+        "yaw_rad": -1.13,
+        "pitch_rad": 0.32,
+        "recoil_m": 0.008,
+        "rotor_rad": null,
+        "muzzle_blender_m": [
+          -0.2277219295501709,
+          -0.1074286699295044,
+          0.09869866073131561
+        ]
+      }
+    ],
+    "mounts": {
+      "surface-clamp": {
+        "mount_sha256": "ce09b7647d734d5d98dd994e89142fcbc53715d4ea6735ed1070acef754bf791",
+        "origin_alignment_on_rotated_anchor": true
+      },
+      "hover-pod": {
+        "mount_sha256": "469079788569d5940f6b3deb04c70044ad913a947430fde6425249637d93df96",
+        "origin_alignment_on_rotated_anchor": true
+      }
+    },
+    "amber": {
+      "forward-assembly": {
+        "triangles": 32,
+        "visible_area_m2": 0.00472899
+      },
+      "turret-head": {
+        "triangles": 0,
+        "visible_area_m2": 0
+      },
+      "yaw-bearing": {
+        "triangles": 0,
+        "visible_area_m2": 0
+      }
+    },
+    "unlit_color": {
+      "interior_samples": 3152,
+      "minimum_peak_rgb8": 36,
+      "black_samples": 0
+    },
+    "decoded_metalness_correct_area_fraction": {
+      "RB.dark-gunmetal": 1.0,
+      "RB.brushed-titanium": 1.0,
+      "RB.tactical-ceramic": 1.0,
+      "M44 amber": 1.0,
+      "Core carbon inserts": 1.0
+    },
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 470164,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.284
+        },
+        "normal": {
+          "bytes": 522381,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.001,
+          "decoded_unit_length_range": [
+            0.97409,
+            1.044544
+          ]
+        },
+        "orm": {
+          "bytes": 764570,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.594
+        },
+        "emissive": {
+          "bytes": 3602,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.028
+        }
+      },
+      "file_bytes": 4535996,
+      "primitives": 3,
+      "gltf_vertices": 1515,
+      "ktx2_bytes": 1760717,
+      "uastc_bytes_before_zstd": 5592512
+    }
+  },
+  "combined_positive_area_uv_overlaps": 0
+}

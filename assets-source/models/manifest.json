@@ -1384,6 +1384,774 @@
           "tolerance": 12
         }
       ]
+    },
+    {
+      "file": "m44-autocannon-t1/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "0bae9a77b0c525bc929c6fe037240f93cd2a1489cb2b884651cb5c3cd1376f1b",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 802,
+          "y": 806,
+          "rgb": [
+            203,
+            133,
+            12
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 291,
+          "y": 239,
+          "rgb": [
+            181,
+            186,
+            191
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 672,
+          "y": 412,
+          "rgb": [
+            27,
+            31,
+            41
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 291,
+          "y": 60,
+          "rgb": [
+            72,
+            79,
+            88
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 198,
+          "y": 496,
+          "rgb": [
+            67,
+            76,
+            87
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "m44-autocannon-t1/normal.ktx2",
+      "role": "normal",
+      "sha256": "cda646781675ae3ee58e0d407882603efccd7d2e42c153af1dcf379daaf68b58",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 802,
+          "y": 806,
+          "rgb": [
+            109,
+            128,
+            254
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 291,
+          "y": 239,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 672,
+          "y": 412,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 291,
+          "y": 60,
+          "rgb": [
+            128,
+            129,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 198,
+          "y": 496,
+          "rgb": [
+            127,
+            131,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "m44-autocannon-t1/orm.ktx2",
+      "role": "orm",
+      "sha256": "efd944cf2febad80b47161a3af1675110abd5a7dee26d69eb9712794d3d8cbbf",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 802,
+          "y": 806,
+          "rgb": [
+            255,
+            89,
+            71
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 291,
+          "y": 239,
+          "rgb": [
+            255,
+            70,
+            248
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 672,
+          "y": 412,
+          "rgb": [
+            212,
+            161,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 291,
+          "y": 60,
+          "rgb": [
+            148,
+            100,
+            227
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 198,
+          "y": 496,
+          "rgb": [
+            255,
+            171,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "m44-autocannon-t1/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "e2b30fe10eb798dc8da1aa5eee3206274f0477c9fae2532f08de2c961f645898",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 802,
+          "y": 806,
+          "rgb": [
+            245,
+            158,
+            11
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 291,
+          "y": 239,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 672,
+          "y": 412,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 291,
+          "y": 60,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 198,
+          "y": 496,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "m44-autocannon-t2/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "3ab876a588df292db6fcd6374cf3c9ed464560b69390450244b43f18995482f5",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 575,
+          "y": 703,
+          "rgb": [
+            203,
+            133,
+            12
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 210,
+          "y": 279,
+          "rgb": [
+            188,
+            193,
+            197
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 636,
+          "y": 317,
+          "rgb": [
+            24,
+            28,
+            38
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 210,
+          "y": 69,
+          "rgb": [
+            68,
+            75,
+            84
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 340,
+          "y": 535,
+          "rgb": [
+            67,
+            75,
+            86
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "m44-autocannon-t2/normal.ktx2",
+      "role": "normal",
+      "sha256": "4befaaf7fbb826a77c39d291f1af34efd96eca25cb9b285ef1ed4880e71e189b",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 575,
+          "y": 703,
+          "rgb": [
+            109,
+            128,
+            254
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 210,
+          "y": 279,
+          "rgb": [
+            127,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 636,
+          "y": 317,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 210,
+          "y": 69,
+          "rgb": [
+            126,
+            126,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 340,
+          "y": 535,
+          "rgb": [
+            128,
+            130,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "m44-autocannon-t2/orm.ktx2",
+      "role": "orm",
+      "sha256": "4e5181c008d2fe53376ca684d994906834c9e2099dc6629a0cc481a9b4805209",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 575,
+          "y": 703,
+          "rgb": [
+            255,
+            89,
+            71
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 210,
+          "y": 279,
+          "rgb": [
+            255,
+            81,
+            246
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 636,
+          "y": 317,
+          "rgb": [
+            255,
+            150,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 210,
+          "y": 69,
+          "rgb": [
+            126,
+            96,
+            227
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 340,
+          "y": 535,
+          "rgb": [
+            255,
+            164,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "m44-autocannon-t2/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "4b1a094e39fec47e90f9571aa83d88eab5d4275628d55e9ba8c3856e234bfd38",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 575,
+          "y": 703,
+          "rgb": [
+            245,
+            158,
+            11
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 210,
+          "y": 279,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 636,
+          "y": 317,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 210,
+          "y": 69,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 340,
+          "y": 535,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "m44-autocannon-t3/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "d9e92796eb2eef6dc24bb6dd96b5aecb2538e54443c090805565a1527c5d56a3",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 451,
+          "y": 798,
+          "rgb": [
+            203,
+            133,
+            12
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 295,
+          "y": 352,
+          "rgb": [
+            186,
+            191,
+            195
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 602,
+          "y": 379,
+          "rgb": [
+            26,
+            30,
+            40
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 873,
+          "y": 695,
+          "rgb": [
+            87,
+            94,
+            103
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 279,
+          "y": 798,
+          "rgb": [
+            61,
+            69,
+            80
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "m44-autocannon-t3/normal.ktx2",
+      "role": "normal",
+      "sha256": "52b81280054111b76d984d91fe2bcf1fc5d8967edd300fc97e6a002de72741d4",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 451,
+          "y": 798,
+          "rgb": [
+            128,
+            129,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 295,
+          "y": 352,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 602,
+          "y": 379,
+          "rgb": [
+            126,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 873,
+          "y": 695,
+          "rgb": [
+            101,
+            128,
+            252
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 279,
+          "y": 798,
+          "rgb": [
+            126,
+            131,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "m44-autocannon-t3/orm.ktx2",
+      "role": "orm",
+      "sha256": "c104c3f9e3953f1cabc8aaa32aee0b243bcc3871d624bed2138647877f671393",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 451,
+          "y": 798,
+          "rgb": [
+            255,
+            89,
+            71
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 295,
+          "y": 352,
+          "rgb": [
+            255,
+            81,
+            246
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 602,
+          "y": 379,
+          "rgb": [
+            234,
+            160,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 873,
+          "y": 695,
+          "rgb": [
+            21,
+            94,
+            237
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 279,
+          "y": 798,
+          "rgb": [
+            42,
+            161,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "m44-autocannon-t3/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "dd0326cca9fb85595fbed3d618a75a6e386c305f7441477ab298a324be16f80c",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "M44 amber",
+          "x": 451,
+          "y": 798,
+          "rgb": [
+            245,
+            158,
+            11
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 295,
+          "y": 352,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 602,
+          "y": 379,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 873,
+          "y": 695,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 279,
+          "y": 798,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
     }
   ],
   "models": [
@@ -1696,6 +2464,316 @@
           "normal": "hover-pod/normal.ktx2",
           "orm": "hover-pod/orm.ktx2",
           "emissive": "hover-pod/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "m44-autocannon-t1",
+      "lod": 0,
+      "file": "m44-autocannon-t1/m44-autocannon-t1-lod0.glb",
+      "sha256": "c237b598548f8beef31bab35212729db84dfabeedf69b53a8939b83235528f21",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0,
+            0.18,
+            0.26
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "M44 T1 satin armor": {
+          "basecolor": "m44-autocannon-t1/basecolor.ktx2",
+          "normal": "m44-autocannon-t1/normal.ktx2",
+          "orm": "m44-autocannon-t1/orm.ktx2",
+          "emissive": "m44-autocannon-t1/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "m44-autocannon-t1",
+      "lod": 1,
+      "file": "m44-autocannon-t1/m44-autocannon-t1-lod1.glb",
+      "sha256": "5e4fd730ffddcedbaa8748f4e65a8585ec67fbb115962839244ab318af8cab21",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0,
+            0.18,
+            0.26
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "M44 T1 satin armor": {
+          "basecolor": "m44-autocannon-t1/basecolor.ktx2",
+          "normal": "m44-autocannon-t1/normal.ktx2",
+          "orm": "m44-autocannon-t1/orm.ktx2",
+          "emissive": "m44-autocannon-t1/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "m44-autocannon-t2",
+      "lod": 0,
+      "file": "m44-autocannon-t2/m44-autocannon-t2-lod0.glb",
+      "sha256": "4b3fe2078bf8e4e07a28dd4d4f046d366bd515b09c2e18814348ac0a1332c45e",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0,
+            0.19,
+            0.29
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "M44 T2 satin armor": {
+          "basecolor": "m44-autocannon-t2/basecolor.ktx2",
+          "normal": "m44-autocannon-t2/normal.ktx2",
+          "orm": "m44-autocannon-t2/orm.ktx2",
+          "emissive": "m44-autocannon-t2/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "m44-autocannon-t2",
+      "lod": 1,
+      "file": "m44-autocannon-t2/m44-autocannon-t2-lod1.glb",
+      "sha256": "27da99de1ab9a74deadee565d048135ad1c309e89470c95f8bb20845d7fe4daa",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0,
+            0.19,
+            0.29
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "M44 T2 satin armor": {
+          "basecolor": "m44-autocannon-t2/basecolor.ktx2",
+          "normal": "m44-autocannon-t2/normal.ktx2",
+          "orm": "m44-autocannon-t2/orm.ktx2",
+          "emissive": "m44-autocannon-t2/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "m44-autocannon-t3",
+      "lod": 0,
+      "file": "m44-autocannon-t3/m44-autocannon-t3-lod0.glb",
+      "sha256": "48c31be1777178917d4c65d074a0674d7b264401d4eac98b1c4730931eb6389f",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0,
+            0.2,
+            0.32
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "rotor-face",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "M44 T3 satin armor": {
+          "basecolor": "m44-autocannon-t3/basecolor.ktx2",
+          "normal": "m44-autocannon-t3/normal.ktx2",
+          "orm": "m44-autocannon-t3/orm.ktx2",
+          "emissive": "m44-autocannon-t3/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "m44-autocannon-t3",
+      "lod": 1,
+      "file": "m44-autocannon-t3/m44-autocannon-t3-lod1.glb",
+      "sha256": "705983665964b83a88c1b5823e4ca3b682af231a67ace807975f3ee99797c6fc",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0,
+            0.2,
+            0.32
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "rotor-face",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "M44 T3 satin armor": {
+          "basecolor": "m44-autocannon-t3/basecolor.ktx2",
+          "normal": "m44-autocannon-t3/normal.ktx2",
+          "orm": "m44-autocannon-t3/orm.ktx2",
+          "emissive": "m44-autocannon-t3/emissive.ktx2"
         }
       }
     }

@@ -38,7 +38,7 @@
 - **Wave 3 (serial Blender workers per `blender-mcp.md` after `P3-T3`, using GPT-6.2 Astra):**
   - `P3-T4` complete (`01a1fadb12f5733a8eccefeb99e1f8b2`). The [Core Bastion](assets-source/models/core-bastion/README.md) is 6,826 tris with four 2048 px maps and an eight-second emitter sweep. The [Rift frame](assets-source/models/rift-portal/README.md) is 4,056 tris with five 1024 px maps, a flush anchor and the exact 0.95 × 1.35 m shared aperture. Both packages passed model-check, Blender re-import, byte-identical rebuilds and matched EEVEE views. The [art review index](docs/art-review-index.md) carries the evidence for P3-T7.
   - `P3-T5a` complete (`01a1fb3c841c708784a64a42cd4d0dcf`). The [Surface Clamp Base](assets-source/models/surface-clamp/README.md) uses 2,428/1,148 triangles and preserves four-foot contact on floor, table and wall fixtures. The [Repulsor Hover-Ring Pod](assets-source/models/hover-pod/README.md) uses 2,364/1,148 triangles with a 0.145 m emitter radius. Both use the same origin socket, one material per LOD and four 1024 px maps per asset. Each pair of exports rebuilt byte for byte on the pinned Linux backend. The larger mount leaves 4,072 and 1,352 triangles for the turret head at the respective 6,500/2,500 assembly limits.
-  - `P3-T5b` (`01a1fb3c87547701ac5685baf143b252`): M44 Autocannon (T1–T3) & Helios Plasma Mortar (T1–T3).
+  - `P3-T5b` (`01a1fb3c87547701ac5685baf143b252`): All three [M44 tiers](docs/art-review-index.md#m44-autocannon) are staged. The six GLBs and twelve maps reproduced byte for byte. Re-import verified both mounts and the exact yaw, pitch, recoil, muzzle and T3 rotary motion. T3 tops out at 6,036/2,452 assembled triangles. Finish Helios Plasma Mortar T1–T3 before closing this card.
   - `P3-T5c` (`01a1fb3c897177268bcaedf2577ed3d4`): Glacier Cryo-Arc (T1–T3) & Valkyrie Rail Sniper (T1–T3).
   - `P3-T5` (`01a1fadb16977224a3f5072a8ba38175`): Turret family rollup (closes once `P3-T5a/b/c` pass).
   - `P3-T6a` (`01a1fb3c8b1071cf8430eb90a84fa8ba`): Rigged Skitter Crawler (`≤4.5k/24b`) & Wasp Skimmer (`≤6.5k/24b`).
@@ -105,5 +105,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Continue serial Blender authoring.** The Core, Rift frame and both mounts are staged. Start `P3-T5b` with M44, then Helios. Continue through `P3-T5c`, `P3-T6a/b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
+1. **Continue serial Blender authoring.** The Core, Rift frame, both mounts and M44 are staged. Finish Helios in `P3-T5b`, then continue through `P3-T5c`, `P3-T6a/b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
 2. **Collect owner feedback** from the [public test build](https://rift-bastion.pardev.net/). Asset promotion stays gated by Owner Checkpoint 2.

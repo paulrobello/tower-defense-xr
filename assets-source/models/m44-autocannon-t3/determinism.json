@@ -1,0 +1,25 @@
+{
+  "blender": "5.2.2 LTS (d13f752e3b9c)",
+  "ktx_software": "4.4.2",
+  "architecture": "Linux x86_64 CPU",
+  "blender_threads": 3,
+  "encode_threads": 1,
+  "independent_builds": 2,
+  "matching_sha256": {
+    "stage/geometry.json": "f8f3c0745ac0ebd6ea90818f677d220e96ea4f9c9f21b04a14cf9f42dfa9b849",
+    "stage/basecolor.png": "b41c62bff05237985ccc4d5c33dae7ba263109f51e4c4a9b5fd4d50b99a922ae",
+    "stage/normal.png": "e00770a8c8585eed06f26fed36b0ac919dfd2356325506820a83e137b2e90027",
+    "stage/orm.png": "c5e85fcc266b363a8dd26bd8547842bf96c94be950d3e94554e32412386fbbb9",
+    "stage/emissive.png": "726a8a0787216e44ec8433ab5e269a94c071af9f8e9dc415b66891b675d16e76",
+    "stage/lod0/source.gltf": "a239ca58d20b585b88b49ada5fdc081620f49362931a8948ebe6f7e9dc95c3ad",
+    "stage/lod1/source.gltf": "2bd5287b5707dc8b8a6d20f382edd80c987287d0d1d6ec2912fff50e6e364e88",
+    "stage/lod0/source.bin": "304022576c1b3d09a6cde49ee91932a3e1be4f250464e942f4767c32bfb86db5",
+    "stage/lod1/source.bin": "a9ab2c3839d31e37e38f99d5ba710013d36be5d61d8fa1b97cfd0759ad79f7b7",
+    "models/basecolor.ktx2": "d9e92796eb2eef6dc24bb6dd96b5aecb2538e54443c090805565a1527c5d56a3",
+    "models/normal.ktx2": "52b81280054111b76d984d91fe2bcf1fc5d8967edd300fc97e6a002de72741d4",
+    "models/orm.ktx2": "c104c3f9e3953f1cabc8aaa32aee0b243bcc3871d624bed2138647877f671393",
+    "models/emissive.ktx2": "dd0326cca9fb85595fbed3d618a75a6e386c305f7441477ab298a324be16f80c",
+    "models/m44-autocannon-t3-lod0.glb": "48c31be1777178917d4c65d074a0674d7b264401d4eac98b1c4730931eb6389f",
+    "models/m44-autocannon-t3-lod1.glb": "705983665964b83a88c1b5823e4ca3b682af231a67ace807975f3ee99797c6fc"
+  }
+}

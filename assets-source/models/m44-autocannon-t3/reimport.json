@@ -1,0 +1,303 @@
+{
+  "editable_sources": {
+    "high": {
+      "sha256": "11db2e76416b68d7cef3ab9608acc75a49cd5f75e62d62b035bd5515cc0dde9b",
+      "triangles": 10496,
+      "embedded_source_images": 9,
+      "geometry_uv_hierarchy_material_slots_sha256": "024c8fc95ebc316062c75a9dfd074e445f88dae7bd16cd345f7fb07c17f2568b",
+      "repeat_archive_sha256": "75e5d6544eafb8cef36b5252bd700572395ef1aa747c5cd6d4e3c9daa30f7e1c"
+    },
+    "low": {
+      "sha256": "434f7732c1c5fc69ea8481f44092c0cb3a90c4563c8e2eb9f81a9ee3a7b3e278",
+      "triangles": 3608,
+      "embedded_source_images": 4,
+      "geometry_uv_hierarchy_material_slots_sha256": "552991d29d12cd6d53286ebd67f86d1bed4955a97696cf94daa97d89d11ed4fb",
+      "repeat_archive_sha256": "cff5bebbe5a0c92cdebb66b817de4a6cab25b3ec56eabaa10a8c30cdec400e2f"
+    }
+  },
+  "lod0": {
+    "sha256": "48c31be1777178917d4c65d074a0674d7b264401d4eac98b1c4730931eb6389f",
+    "head_dimensions_blender_m": [
+      0.20999999344348907,
+      0.25999999046325684,
+      0.14499999582767487
+    ],
+    "bore_centers_blender_m": [
+      [
+        0.02448,
+        -0.32,
+        0.2
+      ],
+      [
+        0.01224,
+        -0.32,
+        0.2212
+      ],
+      [
+        -0.01224,
+        -0.32,
+        0.2212
+      ],
+      [
+        -0.02448,
+        -0.32,
+        0.2
+      ],
+      [
+        -0.01224,
+        -0.32,
+        0.1788
+      ],
+      [
+        0.01224,
+        -0.32,
+        0.1788
+      ]
+    ],
+    "emitter_span_m": 0.23999999463558197,
+    "poses": [
+      {
+        "yaw_rad": 0.7,
+        "pitch_rad": -0.42,
+        "recoil_m": 0.012,
+        "rotor_rad": 0.53,
+        "muzzle_blender_m": [
+          0.1713234782218933,
+          -0.20340241491794586,
+          0.3223310708999634
+        ]
+      },
+      {
+        "yaw_rad": -1.13,
+        "pitch_rad": 0.32,
+        "recoil_m": 0.008,
+        "rotor_rad": 2.8,
+        "muzzle_blender_m": [
+          -0.27852070331573486,
+          -0.1313931792974472,
+          0.09995158016681671
+        ]
+      }
+    ],
+    "mounts": {
+      "surface-clamp": {
+        "mount_sha256": "01283900c728110a9d733d9f266ce5bfbdb09d9b672e00ae113bc8c85760a0ff",
+        "origin_alignment_on_rotated_anchor": true
+      },
+      "hover-pod": {
+        "mount_sha256": "d013afe0e2ec5627428db1b683adee6d6a0a47cf2906c5d55ba6a2c151dd2a49",
+        "origin_alignment_on_rotated_anchor": true
+      }
+    },
+    "amber": {
+      "forward-assembly": {
+        "triangles": 120,
+        "visible_area_m2": 0.00698432
+      },
+      "rotor-face": {
+        "triangles": 144,
+        "visible_area_m2": 0.00257147
+      },
+      "turret-head": {
+        "triangles": 6,
+        "visible_area_m2": 0.00912206
+      },
+      "yaw-bearing": {
+        "triangles": 0,
+        "visible_area_m2": 0
+      }
+    },
+    "unlit_color": {
+      "interior_samples": 14432,
+      "minimum_peak_rgb8": 35,
+      "black_samples": 0
+    },
+    "decoded_metalness_correct_area_fraction": {
+      "RB.dark-gunmetal": 1.0,
+      "RB.brushed-titanium": 1.0,
+      "RB.tactical-ceramic": 1.0,
+      "M44 amber": 1.0,
+      "Core carbon inserts": 1.0
+    },
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 565447,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.449
+        },
+        "normal": {
+          "bytes": 591110,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.046,
+          "decoded_unit_length_range": [
+            0.97099,
+            1.072784
+          ]
+        },
+        "orm": {
+          "bytes": 907333,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.84
+        },
+        "emissive": {
+          "bytes": 18332,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.091
+        }
+      },
+      "file_bytes": 5552924,
+      "primitives": 4,
+      "gltf_vertices": 6927,
+      "ktx2_bytes": 2082222,
+      "uastc_bytes_before_zstd": 5592512
+    }
+  },
+  "lod1": {
+    "sha256": "705983665964b83a88c1b5823e4ca3b682af231a67ace807975f3ee99797c6fc",
+    "head_dimensions_blender_m": [
+      0.20999997854232788,
+      0.25999999046325684,
+      0.14499999582767487
+    ],
+    "bore_centers_blender_m": [
+      [
+        0.02448,
+        -0.32,
+        0.2
+      ],
+      [
+        0.01224,
+        -0.32,
+        0.2212
+      ],
+      [
+        -0.01224,
+        -0.32,
+        0.2212
+      ],
+      [
+        -0.02448,
+        -0.32,
+        0.2
+      ],
+      [
+        -0.01224,
+        -0.32,
+        0.1788
+      ],
+      [
+        0.01224,
+        -0.32,
+        0.1788
+      ]
+    ],
+    "emitter_span_m": 0.23999999463558197,
+    "poses": [
+      {
+        "yaw_rad": 0.7,
+        "pitch_rad": -0.42,
+        "recoil_m": 0.012,
+        "rotor_rad": 0.53,
+        "muzzle_blender_m": [
+          0.1713234782218933,
+          -0.20340241491794586,
+          0.3223310708999634
+        ]
+      },
+      {
+        "yaw_rad": -1.13,
+        "pitch_rad": 0.32,
+        "recoil_m": 0.008,
+        "rotor_rad": 2.8,
+        "muzzle_blender_m": [
+          -0.27852070331573486,
+          -0.1313931792974472,
+          0.09995158016681671
+        ]
+      }
+    ],
+    "mounts": {
+      "surface-clamp": {
+        "mount_sha256": "ce09b7647d734d5d98dd994e89142fcbc53715d4ea6735ed1070acef754bf791",
+        "origin_alignment_on_rotated_anchor": true
+      },
+      "hover-pod": {
+        "mount_sha256": "469079788569d5940f6b3deb04c70044ad913a947430fde6425249637d93df96",
+        "origin_alignment_on_rotated_anchor": true
+      }
+    },
+    "amber": {
+      "forward-assembly": {
+        "triangles": 24,
+        "visible_area_m2": 0.0041461
+      },
+      "rotor-face": {
+        "triangles": 72,
+        "visible_area_m2": 0.00519956
+      },
+      "turret-head": {
+        "triangles": 2,
+        "visible_area_m2": 0.00607271
+      },
+      "yaw-bearing": {
+        "triangles": 0,
+        "visible_area_m2": 0
+      }
+    },
+    "unlit_color": {
+      "interior_samples": 5216,
+      "minimum_peak_rgb8": 34,
+      "black_samples": 0
+    },
+    "decoded_metalness_correct_area_fraction": {
+      "RB.dark-gunmetal": 1.0,
+      "RB.brushed-titanium": 1.0,
+      "RB.tactical-ceramic": 1.0,
+      "M44 amber": 1.0,
+      "Core carbon inserts": 1.0
+    },
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 565447,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.449
+        },
+        "normal": {
+          "bytes": 591110,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.046,
+          "decoded_unit_length_range": [
+            0.97099,
+            1.072784
+          ]
+        },
+        "orm": {
+          "bytes": 907333,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.84
+        },
+        "emissive": {
+          "bytes": 18332,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.091
+        }
+      },
+      "file_bytes": 5326812,
+      "primitives": 4,
+      "gltf_vertices": 2505,
+      "ktx2_bytes": 2082222,
+      "uastc_bytes_before_zstd": 5592512
+    }
+  },
+  "combined_positive_area_uv_overlaps": 0
+}
