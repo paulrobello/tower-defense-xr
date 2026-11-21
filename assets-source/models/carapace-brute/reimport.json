@@ -1,7 +1,7 @@
 {
   "lod0": {
-    "sha256": "bca48e122bda16e010cbe301450265ec8e362978b27a6f19d2a4ca9a00e62daa",
-    "triangles": 8720,
+    "sha256": "ef59811727077c6fcfb6288d746ea77a57ee55078b8cc0f6c1e0f1eb5e144aa9",
+    "triangles": 8904,
     "joints": [
       "root",
       "thorax",
@@ -28,36 +28,36 @@
       "mandible.R",
       "shield"
     ],
-    "inverse_bind_max_matrix_error": 2.355555120125974e-07,
-    "head_forward_of_thorax_gltf_z_m": 0.16528550594197636,
+    "inverse_bind_max_matrix_error": 3.074629482124891e-07,
+    "head_forward_of_thorax_gltf_z_m": 0.16528550593839073,
     "influences": [
       1,
       1
     ],
     "positive_area_uv_or_coplanar_pairs": 0,
-    "mean_texels_per_meter": 536.941997995189,
+    "mean_texels_per_meter": 521.0137729930307,
     "neutral_xyz_m": [
-      0.46000003814697266,
-      0.5199999809265137,
+      0.4599999785423279,
+      0.5199998617172241,
       0.48000001907348633
     ],
-    "minimum_z_m": -5.483700604713704e-08,
-    "connected_anatomical_parts": 89,
+    "minimum_z_m": -5.6580880425372015e-08,
+    "connected_anatomical_parts": 90,
     "clips": {
       "stomp_walk": {
         "samples": 71,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.03897285833954811,
-        "first_last_vertex_error_m": 4.7706993910878737e-08,
-        "start_rest_error_m": 0.0193650983273983,
-        "end_rest_error_m": 0.0193650983273983,
+        "max_vertex_travel_m": 0.03998042643070221,
+        "first_last_vertex_error_m": 4.470348358154297e-08,
+        "start_rest_error_m": 0.019590921700000763,
+        "end_rest_error_m": 0.019590921700000763,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 3,
         "maximum_height_m": 0.47999995946884155,
-        "minimum_surface_distance_m": -5.6485782806703355e-06,
-        "head_under_shield_minimum_clearance_m": 0.014537408947944641,
-        "maximum_head_subframe_travel_m": 0.0011241368483752012,
-        "actual_wall_root_skin_max_error_m": 1.3858881024821308e-07,
+        "minimum_surface_distance_m": -5.59712270842283e-06,
+        "head_under_shield_minimum_clearance_m": 0.03862293064594269,
+        "maximum_head_subframe_travel_m": 0.0011229515075683594,
+        "actual_wall_root_skin_max_error_m": 1.4088543577008458e-07,
         "wall_normal": [
           0.0,
           1.0,
@@ -88,67 +88,67 @@
         ],
         "foot_excursions_m": {
           "claw_fore.L": [
-            -4.731070930574788e-06,
-            0.026393936946988106
+            -4.726435690827202e-06,
+            0.025930944830179214
           ],
           "claw_mid.L": [
-            -5.193503056943882e-06,
-            0.026391526684165
+            -5.202757620281773e-06,
+            0.025928426533937454
           ],
           "claw_hind.L": [
-            -5.6348203543166164e-06,
-            0.026425734162330627
+            -5.59712270842283e-06,
+            0.025965947657823563
           ],
           "claw_fore.R": [
-            -4.728623935079668e-06,
-            0.026393964886665344
+            -4.7270909817598294e-06,
+            0.025930920615792274
           ],
           "claw_mid.R": [
-            -5.206695277593099e-06,
-            0.02639150060713291
+            -5.222291747486452e-06,
+            0.025928441435098648
           ],
           "claw_hind.R": [
-            -5.6485782806703355e-06,
-            0.026425745338201523
+            -5.572754616878228e-06,
+            0.02596595138311386
           ]
         }
       },
       "armor_brace": {
         "samples": 65,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.08987484127283096,
+        "max_vertex_travel_m": 0.08988429605960846,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 1.5680970477660594e-07,
-        "end_rest_error_m": 1.5680970477660594e-07,
+        "start_rest_error_m": 1.0745380052412656e-07,
+        "end_rest_error_m": 1.0745380052412656e-07,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 6,
         "maximum_height_m": 0.47999995946884155,
-        "minimum_surface_distance_m": -1.0169505770818432e-07,
-        "head_under_shield_minimum_clearance_m": 0.01454608142375946,
-        "maximum_head_subframe_travel_m": 0.00428235437721014,
-        "actual_wall_root_skin_max_error_m": 1.320246245463889e-07,
+        "minimum_surface_distance_m": -9.580669768638472e-08,
+        "head_under_shield_minimum_clearance_m": 0.03862294554710388,
+        "maximum_head_subframe_travel_m": 0.004282665904611349,
+        "actual_wall_root_skin_max_error_m": 1.4059655347550385e-07,
         "wall_normal": [
           0.0,
           1.0,
           0.0
         ],
         "wall_contact_residual_m": 0,
-        "maximum_pad_slip_m": 1.8375631043454632e-05,
-        "leading_shield_drop_m": 0.08174383640289307
+        "maximum_pad_slip_m": 1.911746039695572e-05,
+        "leading_shield_drop_m": 0.08213923871517181
       },
       "attack": {
         "samples": 45,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.06126321852207184,
+        "max_vertex_travel_m": 0.06128024309873581,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 1.5680970477660594e-07,
-        "end_rest_error_m": 1.5680970477660594e-07,
+        "start_rest_error_m": 1.0745380052412656e-07,
+        "end_rest_error_m": 1.0745380052412656e-07,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 4,
         "maximum_height_m": 0.47999995946884155,
-        "minimum_surface_distance_m": -1.6117726772790775e-05,
-        "head_under_shield_minimum_clearance_m": 0.01454608142375946,
-        "maximum_head_subframe_travel_m": 0.00882983859628439,
+        "minimum_surface_distance_m": -1.6105137547128834e-05,
+        "head_under_shield_minimum_clearance_m": 0.03862294554710388,
+        "maximum_head_subframe_travel_m": 0.008830098435282707,
         "actual_wall_root_skin_max_error_m": 1.463806830673553e-07,
         "wall_normal": [
           0.0,
@@ -160,17 +160,17 @@
       "hit": {
         "samples": 29,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.042002491652965546,
-        "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 1.5680970477660594e-07,
-        "end_rest_error_m": 1.5680970477660594e-07,
+        "max_vertex_travel_m": 0.04130193591117859,
+        "first_last_vertex_error_m": 5.0014708818935105e-08,
+        "start_rest_error_m": 1.0745380052412656e-07,
+        "end_rest_error_m": 1.0745380052412656e-07,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 6,
-        "maximum_height_m": 0.488098680973053,
-        "minimum_surface_distance_m": -2.2171969249029644e-05,
-        "head_under_shield_minimum_clearance_m": 0.01454608142375946,
-        "maximum_head_subframe_travel_m": 0.004141408018767834,
-        "actual_wall_root_skin_max_error_m": 1.463806830673553e-07,
+        "maximum_height_m": 0.4877147972583771,
+        "minimum_surface_distance_m": -2.2101932700024918e-05,
+        "head_under_shield_minimum_clearance_m": 0.03862294554710388,
+        "maximum_head_subframe_travel_m": 0.004137815907597542,
+        "actual_wall_root_skin_max_error_m": 1.4485584270375655e-07,
         "wall_normal": [
           0.0,
           1.0,
@@ -181,30 +181,66 @@
       "death": {
         "samples": 69,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.1326681524515152,
-        "first_last_vertex_error_m": 0.1326681226491928,
-        "start_rest_error_m": 1.5680970477660594e-07,
-        "end_rest_error_m": 0.13266810774803162,
+        "max_vertex_travel_m": 0.13263599574565887,
+        "first_last_vertex_error_m": 0.13263598084449768,
+        "start_rest_error_m": 1.0745380052412656e-07,
+        "end_rest_error_m": 0.1326359510421753,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 6,
         "maximum_height_m": 0.47999995946884155,
-        "minimum_surface_distance_m": -2.52617383011966e-06,
-        "head_under_shield_minimum_clearance_m": 0.01454608142375946,
-        "maximum_head_subframe_travel_m": 0.0037572479341179132,
-        "actual_wall_root_skin_max_error_m": 1.3758380198940178e-07,
+        "minimum_surface_distance_m": -2.539945398893906e-06,
+        "head_under_shield_minimum_clearance_m": 0.03862294554710388,
+        "maximum_head_subframe_travel_m": 0.0037563596852123737,
+        "actual_wall_root_skin_max_error_m": 1.4471206515695923e-07,
         "wall_normal": [
           0.0,
           1.0,
           0.0
         ],
         "wall_contact_residual_m": 0,
-        "collapsed_hold_drift_m": 1.0758059687532295e-07
+        "collapsed_hold_drift_m": 1.2419316419709503e-07
       }
+    },
+    "brace_heel_contact": {
+      "samples": 65,
+      "neutral_contact_patches": {
+        "claw_fore.L": {
+          "width_m": 0.03989192843437195,
+          "length_m": 0.04864118993282318,
+          "convex_area_m2": 0.0016155671328306198
+        },
+        "claw_mid.L": {
+          "width_m": 0.039891913533210754,
+          "length_m": 0.0486411526799202,
+          "convex_area_m2": 0.0016155614284798503
+        },
+        "claw_hind.L": {
+          "width_m": 0.03989189863204956,
+          "length_m": 0.04864117503166199,
+          "convex_area_m2": 0.0016155634075403214
+        },
+        "claw_fore.R": {
+          "width_m": 0.03989192843437195,
+          "length_m": 0.04864118993282318,
+          "convex_area_m2": 0.0016155671328306198
+        },
+        "claw_mid.R": {
+          "width_m": 0.039891913533210754,
+          "length_m": 0.0486411526799202,
+          "convex_area_m2": 0.001615561661310494
+        },
+        "claw_hind.R": {
+          "width_m": 0.03989189863204956,
+          "length_m": 0.04864117503166199,
+          "convex_area_m2": 0.0016155634075403214
+        }
+      },
+      "maximum_sole_plane_residual_m": 4.231779712426942e-06
     }
   },
   "lod1": {
-    "sha256": "59ea5bdd425e57c93f59ade894d4ee54f8f86be5bc6b0969a80671fea9b5b546",
-    "triangles": 3352,
+    "sha256": "af05ccabac7b2d847e695088b5f9aa1d47cd370da587144dbdab2e56d498e3d5",
+    "triangles": 4448,
     "joints": [
       "root",
       "thorax",
@@ -231,36 +267,36 @@
       "mandible.R",
       "shield"
     ],
-    "inverse_bind_max_matrix_error": 2.355555120125974e-07,
-    "head_forward_of_thorax_gltf_z_m": 0.16528550594197636,
+    "inverse_bind_max_matrix_error": 3.074629482124891e-07,
+    "head_forward_of_thorax_gltf_z_m": 0.16528550593839073,
     "influences": [
       1,
       1
     ],
     "positive_area_uv_or_coplanar_pairs": 0,
-    "mean_texels_per_meter": 526.4977572584453,
+    "mean_texels_per_meter": 518.970172650647,
     "neutral_xyz_m": [
-      0.46000003814697266,
+      0.4599999785423279,
       0.519033670425415,
-      0.4783659875392914
+      0.48000001907348633
     ],
-    "minimum_z_m": -5.483700604713704e-08,
-    "connected_anatomical_parts": 89,
+    "minimum_z_m": -5.6580880425372015e-08,
+    "connected_anatomical_parts": 90,
     "clips": {
       "stomp_walk": {
         "samples": 71,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.03876986727118492,
-        "first_last_vertex_error_m": 4.48970887134692e-08,
-        "start_rest_error_m": 0.0193650983273983,
-        "end_rest_error_m": 0.0193650983273983,
+        "max_vertex_travel_m": 0.03998042643070221,
+        "first_last_vertex_error_m": 4.470348358154297e-08,
+        "start_rest_error_m": 0.019590921700000763,
+        "end_rest_error_m": 0.019590921700000763,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 3,
-        "maximum_height_m": 0.47837236523628235,
-        "minimum_surface_distance_m": -5.645715646096505e-06,
-        "head_under_shield_minimum_clearance_m": 0.016387253999710083,
-        "maximum_head_subframe_travel_m": 0.001122131827287376,
-        "actual_wall_root_skin_max_error_m": 1.2489448945403256e-07,
+        "maximum_height_m": 0.47999995946884155,
+        "minimum_surface_distance_m": -5.59712270842283e-06,
+        "head_under_shield_minimum_clearance_m": 0.03966614603996277,
+        "maximum_head_subframe_travel_m": 0.0011209703516215086,
+        "actual_wall_root_skin_max_error_m": 1.406882897077627e-07,
         "wall_normal": [
           0.0,
           1.0,
@@ -291,68 +327,68 @@
         ],
         "foot_excursions_m": {
           "claw_fore.L": [
-            -4.73407317258534e-06,
-            0.026393936946988106
+            -4.726435690827202e-06,
+            0.025930944830179214
           ],
           "claw_mid.L": [
-            -5.18770002599922e-06,
-            0.026391526684165
+            -5.202757620281773e-06,
+            0.025928426533937454
           ],
           "claw_hind.L": [
-            -5.6319840950891376e-06,
-            0.026425734162330627
+            -5.59712270842283e-06,
+            0.025965947657823563
           ],
           "claw_fore.R": [
-            -4.731602984975325e-06,
-            0.026393964886665344
+            -4.7270909817598294e-06,
+            0.025930920615792274
           ],
           "claw_mid.R": [
-            -5.2014688662893604e-06,
-            0.02639150060713291
+            -5.222291747486452e-06,
+            0.025928441435098648
           ],
           "claw_hind.R": [
-            -5.645715646096505e-06,
-            0.026425745338201523
+            -5.572754616878228e-06,
+            0.02596595138311386
           ]
         }
       },
       "armor_brace": {
         "samples": 65,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.0899156928062439,
+        "max_vertex_travel_m": 0.08992485702037811,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 1.5668378239297454e-07,
-        "end_rest_error_m": 1.5668378239297454e-07,
+        "start_rest_error_m": 1.0745380052412656e-07,
+        "end_rest_error_m": 1.0745380052412656e-07,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 6,
-        "maximum_height_m": 0.4783659279346466,
-        "minimum_surface_distance_m": -1.0169505770818432e-07,
-        "head_under_shield_minimum_clearance_m": 0.016387268900871277,
-        "maximum_head_subframe_travel_m": 0.004270210396498442,
-        "actual_wall_root_skin_max_error_m": 1.248944999017061e-07,
+        "maximum_height_m": 0.47999995946884155,
+        "minimum_surface_distance_m": -9.580669768638472e-08,
+        "head_under_shield_minimum_clearance_m": 0.039686188101768494,
+        "maximum_head_subframe_travel_m": 0.004270551260560751,
+        "actual_wall_root_skin_max_error_m": 1.3685372486119478e-07,
         "wall_normal": [
           0.0,
           1.0,
           0.0
         ],
         "wall_contact_residual_m": 0,
-        "maximum_pad_slip_m": 1.831444023991935e-05,
-        "leading_shield_drop_m": 0.08174383640289307
+        "maximum_pad_slip_m": 1.911746039695572e-05,
+        "leading_shield_drop_m": 0.08224500715732574
       },
       "attack": {
         "samples": 45,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.06122531741857529,
+        "max_vertex_travel_m": 0.061244409531354904,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 1.5668378239297454e-07,
-        "end_rest_error_m": 1.5668378239297454e-07,
+        "start_rest_error_m": 1.0745380052412656e-07,
+        "end_rest_error_m": 1.0745380052412656e-07,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 4,
-        "maximum_height_m": 0.4783659279346466,
-        "minimum_surface_distance_m": -1.611582592886407e-05,
-        "head_under_shield_minimum_clearance_m": 0.016387268900871277,
-        "maximum_head_subframe_travel_m": 0.008757934905588627,
-        "actual_wall_root_skin_max_error_m": 1.399837004248495e-07,
+        "maximum_height_m": 0.47999995946884155,
+        "minimum_surface_distance_m": -1.6105137547128834e-05,
+        "head_under_shield_minimum_clearance_m": 0.039686188101768494,
+        "maximum_head_subframe_travel_m": 0.008758327923715115,
+        "actual_wall_root_skin_max_error_m": 1.5141368979887348e-07,
         "wall_normal": [
           0.0,
           1.0,
@@ -363,17 +399,17 @@
       "hit": {
         "samples": 29,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.040469955652952194,
-        "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 1.5668378239297454e-07,
-        "end_rest_error_m": 1.5668378239297454e-07,
+        "max_vertex_travel_m": 0.04036371037364006,
+        "first_last_vertex_error_m": 4.956176269388379e-08,
+        "start_rest_error_m": 1.0745380052412656e-07,
+        "end_rest_error_m": 1.0745380052412656e-07,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 6,
-        "maximum_height_m": 0.4883725643157959,
-        "minimum_surface_distance_m": -2.2171969249029644e-05,
-        "head_under_shield_minimum_clearance_m": 0.016387268900871277,
-        "maximum_head_subframe_travel_m": 0.004051350988447666,
-        "actual_wall_root_skin_max_error_m": 1.369772576604056e-07,
+        "maximum_height_m": 0.4873093366622925,
+        "minimum_surface_distance_m": -2.2101932700024918e-05,
+        "head_under_shield_minimum_clearance_m": 0.039686188101768494,
+        "maximum_head_subframe_travel_m": 0.004048171453177929,
+        "actual_wall_root_skin_max_error_m": 1.4770200551747538e-07,
         "wall_normal": [
           0.0,
           1.0,
@@ -384,47 +420,83 @@
       "death": {
         "samples": 69,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.131443589925766,
-        "first_last_vertex_error_m": 0.1314435601234436,
-        "start_rest_error_m": 1.5668378239297454e-07,
-        "end_rest_error_m": 0.1314435452222824,
+        "max_vertex_travel_m": 0.13141410052776337,
+        "first_last_vertex_error_m": 0.13141408562660217,
+        "start_rest_error_m": 1.0745380052412656e-07,
+        "end_rest_error_m": 0.13141407072544098,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 6,
-        "maximum_height_m": 0.4783659279346466,
-        "minimum_surface_distance_m": -2.5252988962165546e-06,
-        "head_under_shield_minimum_clearance_m": 0.016387268900871277,
-        "maximum_head_subframe_travel_m": 0.0037224791012704372,
-        "actual_wall_root_skin_max_error_m": 1.295978113025349e-07,
+        "maximum_height_m": 0.47999995946884155,
+        "minimum_surface_distance_m": -2.539945398893906e-06,
+        "head_under_shield_minimum_clearance_m": 0.039686188101768494,
+        "maximum_head_subframe_travel_m": 0.0037216655910015106,
+        "actual_wall_root_skin_max_error_m": 1.3685372486119478e-07,
         "wall_normal": [
           0.0,
           1.0,
           0.0
         ],
         "wall_contact_residual_m": 0,
-        "collapsed_hold_drift_m": 1.0751836043709773e-07
+        "collapsed_hold_drift_m": 1.2419316419709503e-07
       }
+    },
+    "brace_heel_contact": {
+      "samples": 65,
+      "neutral_contact_patches": {
+        "claw_fore.L": {
+          "width_m": 0.03989192843437195,
+          "length_m": 0.04864118993282318,
+          "convex_area_m2": 0.0016155671328306198
+        },
+        "claw_mid.L": {
+          "width_m": 0.039891913533210754,
+          "length_m": 0.0486411526799202,
+          "convex_area_m2": 0.0016155614284798503
+        },
+        "claw_hind.L": {
+          "width_m": 0.03989189863204956,
+          "length_m": 0.04864117503166199,
+          "convex_area_m2": 0.0016155634075403214
+        },
+        "claw_fore.R": {
+          "width_m": 0.03989192843437195,
+          "length_m": 0.04864118993282318,
+          "convex_area_m2": 0.0016155671328306198
+        },
+        "claw_mid.R": {
+          "width_m": 0.039891913533210754,
+          "length_m": 0.0486411526799202,
+          "convex_area_m2": 0.001615561661310494
+        },
+        "claw_hind.R": {
+          "width_m": 0.03989189863204956,
+          "length_m": 0.04864117503166199,
+          "convex_area_m2": 0.0016155634075403214
+        }
+      },
+      "maximum_sole_plane_residual_m": 4.231779712426942e-06
     }
   },
   "atlas": {
     "textures": {
       "basecolor": {
-        "bytes": 616803,
+        "bytes": 392365,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 1.483,
+        "level0_rmse_rgb8": 1.067,
         "decoded_alpha_range": [
           255,
           255
         ]
       },
       "normal": {
-        "bytes": 905292,
+        "bytes": 865629,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 1.107,
+        "level0_rmse_rgb8": 1.063,
         "decoded_unit_length_range": [
-          0.934182,
-          1.060616
+          0.950889,
+          1.078503
         ],
         "decoded_alpha_range": [
           255,
@@ -432,56 +504,332 @@
         ]
       },
       "orm": {
-        "bytes": 863940,
+        "bytes": 841884,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 1.777,
+        "level0_rmse_rgb8": 1.797,
         "decoded_alpha_range": [
           255,
           255
         ]
       },
       "emissive": {
-        "bytes": 25371,
+        "bytes": 18696,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 0.183,
+        "level0_rmse_rgb8": 0.184,
         "decoded_alpha_range": [
           255,
           255
         ]
       }
     },
-    "file_bytes": 6635664,
+    "file_bytes": 5955004,
     "primitives": 1,
-    "gltf_vertices": 3082,
-    "ktx2_bytes": 2411406,
+    "gltf_vertices": 3951,
+    "ktx2_bytes": 2118574,
     "uastc_bytes_before_zstd": 5592512
   },
   "sources": {
     "high.blend": {
-      "file_sha256": "1b20b9e24ce1046a7b1d0b7e89c51e2fb6ffbd8ae34b672b86bc5ea5e3fd806d",
-      "logical_geometry_hierarchy_skin_animation_sha256": "d4ee1881e9474bae34edb1e44c1dc881c54245862144671057bb89adb4e1f42b",
-      "skeleton_and_groups_sha256": "d9eb0294ad6b51647bf02788906afa770f5d96d28dc0b64206af46a90cc651d9",
+      "file_sha256": "c731534c4f2f3e5902d4c99da84cf84e3b4d96cb6e2dcc502a0abd4f6f797dca",
+      "logical_geometry_hierarchy_skin_animation_sha256": "f5f71f2fd8d96dac18d09494fec4e4b4ad76749a89ac8d83654c1d1a9fa39881",
+      "skeleton_and_groups_sha256": "147c1d516be24469369bd6396a51b419d9ec097bcee313f291f52f167045e98e",
       "clips_sha256": {
-        "armor_brace": "925fce57e7e77c4444d881728f0a0fe6f66c00750b8c27cf34846aa0fe86f0ab",
-        "attack": "879c20c40a982e492d87503c5c19d5d81adf08181be7c0d2b2798f1b6c7d0390",
-        "death": "33e67633222a5af4d9ed8183647f2748928018d1f475f22858ef81560b1e4108",
-        "hit": "4b4208b280037169143861ac4ebc017e63007efe6ddef7bafa31a1d5b3e7634e",
-        "stomp_walk": "e3105ce822416dbba61335ded0c2b910bdf5ebefa296c34998e4bb57de90b9a7"
-      }
+        "armor_brace": "70647cf8d7f9c70ede83d943eecac70173427cd982dbd870b264cc49f7c90cd7",
+        "attack": "ed46fae10164055af2da81625ad271e79be3fd9f95d5c19f6cd8c9a396e2a8fc",
+        "death": "b85a4ddab06109c0f8ea3a42df4036727c1707873fdfa0851b850df294b9d870",
+        "hit": "3fe9fc4c94da3918d9e2a78371623fd2d9db29cafcd8cbea497e295271ec4208",
+        "stomp_walk": "89cd2dcb13ecdb242a557416f5c07a346dc24ce5f93bc116a5792a4e3879e824"
+      },
+      "scene_normals_material_nodes_packed_images_sha256": "d928957c66e53b28dc56748bab4fd82b9cf069fca140c4d6376992a1299a0843"
     },
     "low.blend": {
-      "file_sha256": "6154933967b8ffd4259da4a6da655cf3a2255bbdfeff4036b959555650370d60",
-      "logical_geometry_hierarchy_skin_animation_sha256": "95e309e06bbf6654b50b1fea07bb3385ed01fdb5dbac2f69a1c27912e98605bf",
-      "skeleton_and_groups_sha256": "d9eb0294ad6b51647bf02788906afa770f5d96d28dc0b64206af46a90cc651d9",
+      "file_sha256": "4d5264968f477a6b06da2b823bbf937b6af85bd9ff1fb66cfd25aa2f7c12214d",
+      "logical_geometry_hierarchy_skin_animation_sha256": "2e0401a6e5b0f49f0f5baa418debb119dc507f8974091f0f8980cba90c31670d",
+      "skeleton_and_groups_sha256": "147c1d516be24469369bd6396a51b419d9ec097bcee313f291f52f167045e98e",
       "clips_sha256": {
-        "armor_brace": "925fce57e7e77c4444d881728f0a0fe6f66c00750b8c27cf34846aa0fe86f0ab",
-        "attack": "879c20c40a982e492d87503c5c19d5d81adf08181be7c0d2b2798f1b6c7d0390",
-        "death": "33e67633222a5af4d9ed8183647f2748928018d1f475f22858ef81560b1e4108",
-        "hit": "4b4208b280037169143861ac4ebc017e63007efe6ddef7bafa31a1d5b3e7634e",
-        "stomp_walk": "e3105ce822416dbba61335ded0c2b910bdf5ebefa296c34998e4bb57de90b9a7"
-      }
+        "armor_brace": "70647cf8d7f9c70ede83d943eecac70173427cd982dbd870b264cc49f7c90cd7",
+        "attack": "ed46fae10164055af2da81625ad271e79be3fd9f95d5c19f6cd8c9a396e2a8fc",
+        "death": "b85a4ddab06109c0f8ea3a42df4036727c1707873fdfa0851b850df294b9d870",
+        "hit": "3fe9fc4c94da3918d9e2a78371623fd2d9db29cafcd8cbea497e295271ec4208",
+        "stomp_walk": "89cd2dcb13ecdb242a557416f5c07a346dc24ce5f93bc116a5792a4e3879e824"
+      },
+      "scene_normals_material_nodes_packed_images_sha256": "283bea4c380263ef7434e937681709c9322c9ce256a81d1477958b9d4a2d8292"
     }
+  },
+  "decoded_mip_chains": {
+    "basecolor": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "24b15a03bd807f988085111aae86dcf3132f702120ca99deadf33030b89fe777"
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "a6f2c41fe69e9751218f0af60ed09b533fc18289979f793d74349c281fb57856"
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "eb24307f84ec90483946bd9bf88e28275644c10e66ef1e7349f22bac16a63e5d"
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "e29389e93529fe6304b6560cd9a810d1cdb526a884c79720e0c22d0ac8aa3988"
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "dbbc8c9e593a49b1a645651e57cd07d5b9dde84d0d7d3affd68941eb99379418"
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "39685be0fc4bd57b60ed5feac9c5f9da7b8d7331520059b8fbadf13305530d0b"
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "f9accd80b69988ebc9abe56632124a30f7d8c406da0315df242096c975da330e"
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "aab1febc0c17f56a73bf50359b5c79c34d512e2622aae136efd1eace9c0be711"
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "5e8d54a0f639b44d68ccabb9731492ba6132f425bde0e50676e7a1da130f518c"
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "426d9a9a20e54dc5fd8f58641b84b2cec3b66a204e3762714cbe538b9a6c0ffd"
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "c54015932f4d55a4d33155264b64500b6101c02a26ca99b01ea90cb6823e0e79"
+      }
+    ],
+    "emissive": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "68ca07fdfac5fb4de95d72c49bb778edc510b95b7523d6722c53e953d978c3c4"
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "096b2b53824f9d6fbfdccad5cf5aa013cab4e6f568a343542b4b9423ecc18bd7"
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "ad0a0508d79d652ee78af2edf97146e9872d2eb93ceb0228ca4057fe9561257a"
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "905a1404dbe40aeca941ee2c50149b63801eb78757cbaf2ee37c8bb1617af6d6"
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "c61f257f016f23d44cc281b2deab8d26b4f748081af6dd3c1c4e68b6ebf0364d"
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "b2c272a65d2ff556206e9cc8cb2d04aa2c329e960e504196c0c5f802704e2618"
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "1519f3c7349400e530572460b147915582f0f81498262824f3d3aaf32cc13a10"
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "b4cc6e92f1515aabccb43f7f0cb67bc341d064590195cc0ee20b41ae5e990877"
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "98d7b08fa436900094f207f416d630a9cf45b44e4b8918c00bd4838e85bc13c5"
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "e5eb7a20a1dac2741f03fbe2831c6bce2019d0cb759cb2a8acffe80cc4d74f49"
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "5df3a0356fd1597fd842916d470dbb1fc66875d83eff2fa1a294fe9c254840ca"
+      }
+    ],
+    "normal": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "a76cd16243ba87a9821d86aaa56fb0cb253dec2b1c779aaefbd6a7c8bb059c7e",
+        "decoded_unit_length_range": [
+          0.9508894235852019,
+          1.0785026714398813
+        ]
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "5af0328bf6a13b0e977e2555bade9ccc6c3417aa613a3868fddea7aaa5dd2982",
+        "decoded_unit_length_range": [
+          0.9624635185844297,
+          1.068129043692399
+        ]
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "385bca95950ddd27acf2109bd8952bbca9559776e68130569657eccfbb09189e",
+        "decoded_unit_length_range": [
+          0.9699126188857122,
+          1.0519968745522328
+        ]
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "360d47a0c41dd034f62479ccbda053ffeebf2c943d5711f60c12b32c679f978e",
+        "decoded_unit_length_range": [
+          0.9758561733419511,
+          1.0418907486775812
+        ]
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "419e7d0583d3ee7899cb354cd7208d99348e2e4d71690e826649e4035a214ba5",
+        "decoded_unit_length_range": [
+          0.9737105650621485,
+          1.041063839408493
+        ]
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "4393095426050dfde182bce7fb990ad30eb4cabb820bd6be76ef72c20700dd9c",
+        "decoded_unit_length_range": [
+          0.990186371530756,
+          1.0154591312370038
+        ]
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "6ab5d34b7d39b0c2f0368b6f203765afdfd8e991fcd230b4b8f4fc530c8c4dd3",
+        "decoded_unit_length_range": [
+          0.9926062688302871,
+          1.0116354986657532
+        ]
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "504f8b1d0ae35adf6b12c41df87b80ef6d175574afe7cb41b861ad342376c663",
+        "decoded_unit_length_range": [
+          0.9963177109542377,
+          1.0021046671565537
+        ]
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "abb8c5bbb76665b3bf95c9189a3c45c9032abb570bafacd52f426b75afe301df",
+        "decoded_unit_length_range": [
+          1.0000153785822494,
+          1.001490622970062
+        ]
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "f29bd16a7d11e235f43af32663de323079e8a23b2907249fecc398e668defd81",
+        "decoded_unit_length_range": [
+          1.000076890546421,
+          1.0004458829087104
+        ]
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "4301cea11a316f37d70afd3206b4800a095aea901ca81b3cc574c716768c0e1a",
+        "decoded_unit_length_range": [
+          1.0002614037425384,
+          1.0002614037425384
+        ]
+      }
+    ],
+    "orm": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "bd619b8df18de045b8242658793ffd7473f2669ec6325edf8b96cc311015bc1a"
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "a5328a15a6cca9e479ed26a167fb77255ba8ccd0b16ef014515f954aac89b1d5"
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "88ddad8ba6db85838cc9050848050d00ee4bb7bac9f0694a2df3ee7917c93a16"
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "8a6a7f9ea2d94dbf7450c733da18ead6032751643c7e958b6d0b778c7fe725a6"
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "c77d15c5af2156222cedebad57d81632ddd75188469d02ee91f45c15e56ab35b"
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "6cd68372fb72c7bf3fec6bbf23281f12b511012918a09d284e21dcf8a297fc1b"
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "5326bdad6c318157d50d7b3ac026ff7c2a92509a70397898e55cf329f2c86a55"
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "50b638c57a4ac948704d2173d01241c6c086c3578c1f47e0223f363dfeb20c89"
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "39af24fcbdca432f86a9d769d066e762639d5648388ceb3395b95ff3bb5001dc"
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "419301b435878f124b9593541df13238b1e3e7f575ec78ea7b0eabf66ce6c895"
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "c23043f366950da83df10a4bc4a7eb647060e8d51dd73867a233a07c7c3d8114"
+      }
+    ]
   }
 }

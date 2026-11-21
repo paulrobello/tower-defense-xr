@@ -5236,18 +5236,18 @@
     {
       "file": "carapace-brute/basecolor.ktx2",
       "role": "basecolor",
-      "sha256": "714e5266343051274dff3577dadf5bdc4224431eb66360255b332d7c5290292a",
+      "sha256": "b3c1109e5718c68332d9926d41356c31e01c2eb99ee28f0998487c11aa57e064",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "Prow face",
-          "x": 870,
+          "x": 818,
           "y": 887,
           "rgb": [
-            49,
-            61,
-            77
+            53,
+            64,
+            82
           ],
           "tolerance": 16
         },
@@ -5256,9 +5256,9 @@
           "x": 93,
           "y": 697,
           "rgb": [
-            28,
+            23,
             25,
-            28
+            32
           ],
           "tolerance": 16
         },
@@ -5268,7 +5268,7 @@
           "y": 187,
           "rgb": [
             255,
-            161,
+            159,
             43
           ],
           "tolerance": 16
@@ -5279,7 +5279,7 @@
           "y": 459,
           "rgb": [
             255,
-            123,
+            121,
             24
           ],
           "tolerance": 16
@@ -5289,18 +5289,18 @@
     {
       "file": "carapace-brute/normal.ktx2",
       "role": "normal",
-      "sha256": "531a16bab8b2781b4818c3a2fb3e0a94fbfcb33cc258c4f59a6ce70ae5ac0039",
+      "sha256": "78e561d07c41578d6675c84123bd4b5806ff234d000da7749dea6879d694d6f5",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "Prow face",
-          "x": 870,
+          "x": 818,
           "y": 887,
           "rgb": [
-            159,
-            150,
-            249
+            122,
+            130,
+            255
           ],
           "tolerance": 16
         },
@@ -5310,7 +5310,7 @@
           "y": 697,
           "rgb": [
             123,
-            128,
+            129,
             255
           ],
           "tolerance": 16
@@ -5320,9 +5320,9 @@
           "x": 62,
           "y": 187,
           "rgb": [
-            152,
-            147,
-            251
+            150,
+            153,
+            250
           ],
           "tolerance": 16
         },
@@ -5331,9 +5331,9 @@
           "x": 289,
           "y": 459,
           "rgb": [
-            131,
-            135,
-            255
+            142,
+            140,
+            254
           ],
           "tolerance": 16
         }
@@ -5342,18 +5342,18 @@
     {
       "file": "carapace-brute/orm.ktx2",
       "role": "orm",
-      "sha256": "f0459e24ca5dd45603103d3a440e75286fc15d337cfde0328c3cc7d75e3e82d3",
+      "sha256": "88416d604231e7f716ac5ccb680323ca7a8e625cb25eb59467b432aaff44f8ff",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "Prow face",
-          "x": 870,
+          "x": 818,
           "y": 887,
           "rgb": [
-            0,
-            93,
-            28
+            42,
+            95,
+            26
           ],
           "tolerance": 16
         },
@@ -5363,8 +5363,8 @@
           "y": 697,
           "rgb": [
             255,
-            146,
-            9
+            134,
+            11
           ],
           "tolerance": 16
         },
@@ -5374,7 +5374,7 @@
           "y": 187,
           "rgb": [
             0,
-            76,
+            78,
             11
           ],
           "tolerance": 16
@@ -5384,8 +5384,8 @@
           "x": 289,
           "y": 459,
           "rgb": [
-            21,
-            95,
+            128,
+            96,
             9
           ],
           "tolerance": 16
@@ -5395,13 +5395,13 @@
     {
       "file": "carapace-brute/emissive.ktx2",
       "role": "emissive",
-      "sha256": "766bcf7ad42229feedf2ddbf67ee88406ea1c00e794e270705409130952212aa",
+      "sha256": "0fb08489fa8c9209dfa224f8a8ac193d06ee87c7962d60f8ab7ab460d1f58461",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "Prow face",
-          "x": 870,
+          "x": 818,
           "y": 887,
           "rgb": [
             0,
@@ -5427,7 +5427,7 @@
           "y": 187,
           "rgb": [
             255,
-            161,
+            159,
             43
           ],
           "tolerance": 16
@@ -5438,7 +5438,7 @@
           "y": 459,
           "rgb": [
             255,
-            123,
+            121,
             24
           ],
           "tolerance": 16
@@ -7490,7 +7490,7 @@
       "id": "carapace-brute",
       "lod": 0,
       "file": "carapace-brute/carapace-brute-lod0.glb",
-      "sha256": "bca48e122bda16e010cbe301450265ec8e362978b27a6f19d2a4ca9a00e62daa",
+      "sha256": "ef59811727077c6fcfb6288d746ea77a57ee55078b8cc0f6c1e0f1eb5e144aa9",
       "limits": {
         "triangles": 9000,
         "materials": 1,
@@ -7520,7 +7520,7 @@
       "id": "carapace-brute",
       "lod": 1,
       "file": "carapace-brute/carapace-brute-lod1.glb",
-      "sha256": "59ea5bdd425e57c93f59ade894d4ee54f8f86be5bc6b0969a80671fea9b5b546",
+      "sha256": "af05ccabac7b2d847e695088b5f9aa1d47cd370da587144dbdab2e56d498e3d5",
       "limits": {
         "triangles": 4500,
         "materials": 1,

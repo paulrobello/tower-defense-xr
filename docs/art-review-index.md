@@ -150,7 +150,7 @@ The revised indigo dart uses four broader swept wings, deeper wing roots and lay
 
 ![Matched high, LOD0 and LOD1 views of Brute's sloped frontal armor and six armored pads](../assets-source/models/carapace-brute/review/comparison.jpg)
 
-The broad slate shell carries a recessed orange vent, a swept frontal shield and six armored feet. LOD0 uses 8,720 triangles and matches the nominal 0.52 × 0.46 × 0.48 m envelope. LOD1 uses 3,352 triangles. Both share one material, four 1024 px maps and a 24-bone rig. Both GLB re-imports play all five required clips. The brace lowers the shield about 82 mm with all six pads supported and under 0.02 mm of measured pad travel. The stomp alternates groups of three feet. The attack and hit recover to rest, and death holds its collapsed pose.
+The revised slate shell carries a stepped frontal shield, an open orange grille and six wider armored feet. LOD0 uses 8,904 triangles and matches the nominal 0.52 × 0.46 × 0.48 m envelope. LOD1 uses 4,448 triangles. Both share one material, four 1024 px maps and a 24-bone rig. Both GLB re-imports play all five required clips. The brace lowers its shield while all six pads remain supported. Each revised contact patch measures approximately 39.9 × 48.6 mm. The stomp alternates groups of three feet. The attack and hit recover to rest, and death holds its collapsed pose.
 
 [Sources, hashes and re-import checks](../assets-source/models/carapace-brute/README.md) · [Motion poses](../assets-source/models/carapace-brute/review/motion.jpg) · [Five-clip reel](../assets-source/models/carapace-brute/review/motion.mp4) · [Turntable](../assets-source/models/carapace-brute/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.
 
@@ -267,7 +267,7 @@ The 18 badges are 128 × 128 RGBA proof files in a 768 × 384 atlas. Reviewers c
 
 ## Passed revisions
 
-Forty-four of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following nine revised assets account for those results. The remaining findings are F10 and F11.
+Forty-five of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following ten revised assets account for those results. The remaining finding is F11.
 
 | Finding | Asset | Initial → revised | Exact proof and result |
 | --- | --- | ---: | --- |
@@ -280,5 +280,6 @@ Forty-four of 46 assets have independent visual scores of at least 80. The thirt
 | F7 | Glacier T2 | 75 → 87 | [Matched revision](../assets-source/models/glacier-cryo-arc-t2/review/revision-comparison.jpg). The long blades retain an open gap and a cyan inner channel at both LODs. The cyan is subtler head-on and the blades overlap in exact profile. The reviewed GLB hashes begin `bd46f13a` and `3572096d`. |
 | F8 | Skitter Crawler | 77 → 83 | [Matched revision](../assets-source/models/skitter-crawler/review/revision-comparison.jpg) and [floor/wall motion](../assets-source/models/skitter-crawler/review/locomotion.jpg). Tapered armor, knee guards and a sharper head and tail distinguish the crawler. The legs remain straighter than in the concept, and the eyes and shoulder detail are subtler at LOD1. The reviewed GLB hashes begin `ebc4e139` and `efa45b81`. |
 | F9 | Wasp Skimmer | 77 → 84 | [Matched revision](../assets-source/models/wasp-skimmer/review/revision-comparison.jpg) and [underside bank](../assets-source/models/wasp-skimmer/review/bank.jpg). The broader panels and nose armor read at both LODs, and the dorsal teal patch is gone. The hull remains thicker than the concept, with flat teal near the roots and angular tips at LOD1. The reviewed GLB hashes begin `e842938a` and `fdfad8f7`. |
+| F10 | Carapace Brute | 79 → 85 | [Matched revision](../assets-source/models/carapace-brute/review/revision-comparison.jpg) and [brace sequence](../assets-source/models/carapace-brute/review/brace.jpg). The layered shield, open grille and wider armored feet read at both LODs. The hips and rear shells remain more rounded than the concept. The reviewed GLB hashes begin `ef598117` and `af05ccab`. |
 
 The exact badge proof SHA-256 is `608eea9914f08dc20961df864f55e6ae8d59e4fdd015a4dd0fe7fba348310911`. The exact revised obsidian proof SHA-256 is `5ddcceed74d963da9662c547d41dfcf7a50b9300f7a5f24af0476dc8c89b7f44`.

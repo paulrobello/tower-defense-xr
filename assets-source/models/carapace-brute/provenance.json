@@ -1,12 +1,12 @@
 {
   "piece": "carapace-brute",
-  "stage": "P3-T6b staged animated character",
+  "stage": "P3-T7 F10 staged revision",
   "authoring_date": "2026-11-21",
   "authoring": {
     "model": "GPT-6.2 Astra",
     "reasoning_effort": "high",
     "tools": ["Blender 5.2.2 LTS d13f752e3b9c", "KTX-Software 4.4.2"],
-    "source": "Original parametrically lofted siege insect anatomy, shield articulation, analytically solved FK legs, surface finishes and five authored performances."
+    "source": "Original contour-lofted prow and greaves, reshaped dorsal inlet and retained articulated anatomy and five performances."
   },
   "reference": {
     "approved_direction": "Bastion Rib",
@@ -28,6 +28,20 @@
     "health_bar_above_support_m": 0.6,
     "target_lod_switch_m": 6
   },
+  "revision_of": {
+    "git_commit": "80c2b4fe7a0b092d44ec9bc532d8029d1d5976b0",
+    "previous_score": 79,
+    "previous_provenance_sha256": "04ac540d60da905a8f17ce1116e26b29263e2d6f018267170977557e084fada0",
+    "previous_glb_sha256": {
+      "lod0": "bca48e122bda16e010cbe301450265ec8e362978b27a6f19d2a4ca9a00e62daa",
+      "lod1": "59ea5bdd425e57c93f59ade894d4ee54f8f86be5bc6b0969a80671fea9b5b546"
+    }
+  },
+  "corrections": [
+    "The articulated prow has a keyed face, recessed dark border, rolled perimeter and thicker forward edge.",
+    "The dorsal intake has a wider exposed orange grille under a swept cowl. The cuticle has less mottling across its broad plates.",
+    "Six tapered, shouldered greaves overlap their patellar bearings and broad wedge-shaped soles."
+  ],
   "production": {
     "authoring_budget": {
       "max_lod0_triangles": 9000,
@@ -35,105 +49,123 @@
       "max_materials": 2,
       "max_texture_edge_px": 1024
     },
-    "measured_lod0_triangles": 8720,
-    "measured_lod1_triangles": 3352,
+    "measured_lod0_triangles": 8904,
+    "measured_lod1_triangles": 4448,
     "joints_per_lod": 24,
     "draw_primitives_per_lod": 1,
     "materials_per_lod": 1,
-    "weighting": "Each rigid plate, jaw, hoof or limb section is normalized to one anatomical joint. Overlapping chitin capsules span the moving joints.",
+    "weighting": "Rigid shell and greave sections use one normalized anatomical joint per vertex. Each tarsal sole is attached to its claw joint.",
     "frame_rate_fps": 30,
     "loop_clips": ["stomp_walk"],
     "one_shots": ["armor_brace", "attack", "hit", "death"],
     "atlas": "One 1024 px atlas, four portable UASTC KTX2 roles, eleven mips each. Cycles CPU material and short-range assembled AO plus shared chart high-to-low tangent frame transfer.",
-    "high_triangles": 62008,
+    "high_triangles": 57584,
     "review": "Matched EEVEE Metal oblique, front, flank and underside cameras across high and both decoded receivers. The neutral orbit contains 24 frames. The performed reel covers all five clips at 12 fps."
   },
-  "failed_attempts_and_corrections": [
-    "The initial brace widened the stance by 7.000014 mm while loading the shield. An all-vertex test on the reopened asset detected this in-plane slip despite six valid pad contacts. Held the pad targets fixed throughout brace and regenerated both clean final runs. Final maximum displacement across either LOD is 0.01838 mm, including interpolation between sampled keys.",
-    "The first shield-roof probe exposed head vertices above the outer roof by 26.147 mm in brace, 5.931 mm in attack, 13.251 mm in hit and 10.284 mm in death. Lowered the bearing and mask, retracted the head during loading and impact, and reduced the death compression after a prototype drove the jaw 29.012 mm beneath the floor. Every final imported subframe tests the whole head for attachment, checks its triangles against the shield, and raycasts the actual underside above each covered head vertex. Worst final vertical clearances are 14.537 mm at LOD0 and 16.387 mm at LOD1.",
-    "The initial matched underside camera cropped the tip of one contact pad. Lowered its aim point and widened the orthographic frame across all three versions, then regenerated the review package."
+  "checks": {
+    "candidate_verifier": "blender/verify_brute_revision.py",
+    "reimport": "reimport.json",
+    "both_imported_lods": true,
+    "matched_front_dorsal_grille_pixels": {
+      "original": 265,
+      "revised": 1380,
+      "region": "512 px LOD0 front with x=151..359 and y=0..144, counting R>90, R>1.2G, G>1.4B and R-B>68 in 8-bit RGB"
+    },
+    "all_mips_decoded": true,
+    "coverage": "Actual posed head-to-shield clearance, thorax and leg attachment, leg separation, rigid skin and inverse binds, footprint, six-sole brace contact, root stability, floor and vertical-wall orientation, and positive-area mesh and UV overlap."
+  },
+  "development_checks": [
+    "The first LOD0 probe exceeded its ceiling by 16 triangles. Fewer rings on buried shin cores restored margin.",
+    "The first distant mesh lost the upper gill attachment and its broadest shin station. Moving the gill root inward and retaining that contact station restored the verified assembly and neutral width.",
+    "The first-pass soles lengthened the hoof body but narrowed its load patch. The final sole is broader in both directions than the original and its full plantar outline is measured on both imported GLBs.",
+    "Matched first-pass Metal renders exposed a dark UV-pole mark on the main shield face. A final support ring localizes the pole to a small smooth cap. The first and final front crops are preserved in review/shield-pole-comparison.jpg."
   ],
   "clean_repeat": {
-    "platform": "Linux x86_64, maximum three aggregate CPU threads, independent empty stage and package directories F and G.",
+    "platform": "Two clean Linux x86_64 Blender 5.2.2 Cycles CPU builds and KTX-Software 4.4.2 packages. Each Blender process used up to three threads.",
     "products_match_sha256": {
-      "basecolor.ktx2": "714e5266343051274dff3577dadf5bdc4224431eb66360255b332d7c5290292a",
-      "basecolor.png": "84d19a59d4df02fa5c4f907a80631015cf71f8a63ea106486e0e09f3ff9ecdf1",
-      "carapace-brute-lod0.glb": "bca48e122bda16e010cbe301450265ec8e362978b27a6f19d2a4ca9a00e62daa",
-      "carapace-brute-lod1.glb": "59ea5bdd425e57c93f59ade894d4ee54f8f86be5bc6b0969a80671fea9b5b546",
-      "emissive.ktx2": "766bcf7ad42229feedf2ddbf67ee88406ea1c00e794e270705409130952212aa",
-      "emissive.png": "320e6ee53011e6faeca86a17d496f4b5523c76035c56fe51c1e35aaca8856c51",
-      "geometry.json": "c4b0b7f21d58d5e3e414bf855351e1a0c6f446cd5d1ff21926516fbc2aaf0fff",
-      "normal.ktx2": "531a16bab8b2781b4818c3a2fb3e0a94fbfcb33cc258c4f59a6ce70ae5ac0039",
-      "normal.png": "f30684dcb79c083cd2bd988cbd9d2ffe424c22f4b56e4c1d805a61205dbb89e8",
-      "orm.ktx2": "f0459e24ca5dd45603103d3a440e75286fc15d337cfde0328c3cc7d75e3e82d3",
-      "orm.png": "ae9152d218f4b9f390eb34d9473977d1d264550163612989f467d9ef009d7455"
+      "basecolor.ktx2": "b3c1109e5718c68332d9926d41356c31e01c2eb99ee28f0998487c11aa57e064",
+      "basecolor.png": "6ad94a5154d4ffef3017fbbe1a063ed702f70a5497ed561b172871cee09e6d9f",
+      "carapace-brute-lod0.glb": "ef59811727077c6fcfb6288d746ea77a57ee55078b8cc0f6c1e0f1eb5e144aa9",
+      "carapace-brute-lod1.glb": "af05ccabac7b2d847e695088b5f9aa1d47cd370da587144dbdab2e56d498e3d5",
+      "emissive.ktx2": "0fb08489fa8c9209dfa224f8a8ac193d06ee87c7962d60f8ab7ab460d1f58461",
+      "emissive.png": "abd65ad97174064d7fc222a8eb6e2151df7dccc2f2a937ee109bda42f18a3d3b",
+      "geometry.json": "f3fc3bc80a6dfc51366eb145e05fbbb41f5e59fcd265b0a9a0a00604988a874a",
+      "normal.ktx2": "78e561d07c41578d6675c84123bd4b5806ff234d000da7749dea6879d694d6f5",
+      "normal.png": "bf01f3f915d756e66d3713fd406a86f93e3eb5e9c1171ac707ac5f039588c7e7",
+      "orm.ktx2": "88416d604231e7f716ac5ccb680323ca7a8e625cb25eb59467b432aaff44f8ff",
+      "orm.png": "388f11cef66e01b1248f72578deafb5d278c2704757b7fc2060d70ae0a4a7201"
     },
-    "stage_f_editable": {
+    "first_editable": {
       "high.blend": {
-        "file_sha256": "1b20b9e24ce1046a7b1d0b7e89c51e2fb6ffbd8ae34b672b86bc5ea5e3fd806d",
-        "logical_geometry_hierarchy_skin_animation_sha256": "d4ee1881e9474bae34edb1e44c1dc881c54245862144671057bb89adb4e1f42b",
-        "skeleton_and_groups_sha256": "d9eb0294ad6b51647bf02788906afa770f5d96d28dc0b64206af46a90cc651d9",
+        "file_sha256": "c731534c4f2f3e5902d4c99da84cf84e3b4d96cb6e2dcc502a0abd4f6f797dca",
+        "logical_geometry_hierarchy_skin_animation_sha256": "f5f71f2fd8d96dac18d09494fec4e4b4ad76749a89ac8d83654c1d1a9fa39881",
+        "skeleton_and_groups_sha256": "147c1d516be24469369bd6396a51b419d9ec097bcee313f291f52f167045e98e",
         "clips_sha256": {
-          "armor_brace": "925fce57e7e77c4444d881728f0a0fe6f66c00750b8c27cf34846aa0fe86f0ab",
-          "attack": "879c20c40a982e492d87503c5c19d5d81adf08181be7c0d2b2798f1b6c7d0390",
-          "death": "33e67633222a5af4d9ed8183647f2748928018d1f475f22858ef81560b1e4108",
-          "hit": "4b4208b280037169143861ac4ebc017e63007efe6ddef7bafa31a1d5b3e7634e",
-          "stomp_walk": "e3105ce822416dbba61335ded0c2b910bdf5ebefa296c34998e4bb57de90b9a7"
-        }
+          "armor_brace": "70647cf8d7f9c70ede83d943eecac70173427cd982dbd870b264cc49f7c90cd7",
+          "attack": "ed46fae10164055af2da81625ad271e79be3fd9f95d5c19f6cd8c9a396e2a8fc",
+          "death": "b85a4ddab06109c0f8ea3a42df4036727c1707873fdfa0851b850df294b9d870",
+          "hit": "3fe9fc4c94da3918d9e2a78371623fd2d9db29cafcd8cbea497e295271ec4208",
+          "stomp_walk": "89cd2dcb13ecdb242a557416f5c07a346dc24ce5f93bc116a5792a4e3879e824"
+        },
+        "scene_normals_material_nodes_packed_images_sha256": "d928957c66e53b28dc56748bab4fd82b9cf069fca140c4d6376992a1299a0843"
       },
       "low.blend": {
-        "file_sha256": "6154933967b8ffd4259da4a6da655cf3a2255bbdfeff4036b959555650370d60",
-        "logical_geometry_hierarchy_skin_animation_sha256": "95e309e06bbf6654b50b1fea07bb3385ed01fdb5dbac2f69a1c27912e98605bf",
-        "skeleton_and_groups_sha256": "d9eb0294ad6b51647bf02788906afa770f5d96d28dc0b64206af46a90cc651d9",
+        "file_sha256": "4d5264968f477a6b06da2b823bbf937b6af85bd9ff1fb66cfd25aa2f7c12214d",
+        "logical_geometry_hierarchy_skin_animation_sha256": "2e0401a6e5b0f49f0f5baa418debb119dc507f8974091f0f8980cba90c31670d",
+        "skeleton_and_groups_sha256": "147c1d516be24469369bd6396a51b419d9ec097bcee313f291f52f167045e98e",
         "clips_sha256": {
-          "armor_brace": "925fce57e7e77c4444d881728f0a0fe6f66c00750b8c27cf34846aa0fe86f0ab",
-          "attack": "879c20c40a982e492d87503c5c19d5d81adf08181be7c0d2b2798f1b6c7d0390",
-          "death": "33e67633222a5af4d9ed8183647f2748928018d1f475f22858ef81560b1e4108",
-          "hit": "4b4208b280037169143861ac4ebc017e63007efe6ddef7bafa31a1d5b3e7634e",
-          "stomp_walk": "e3105ce822416dbba61335ded0c2b910bdf5ebefa296c34998e4bb57de90b9a7"
-        }
+          "armor_brace": "70647cf8d7f9c70ede83d943eecac70173427cd982dbd870b264cc49f7c90cd7",
+          "attack": "ed46fae10164055af2da81625ad271e79be3fd9f95d5c19f6cd8c9a396e2a8fc",
+          "death": "b85a4ddab06109c0f8ea3a42df4036727c1707873fdfa0851b850df294b9d870",
+          "hit": "3fe9fc4c94da3918d9e2a78371623fd2d9db29cafcd8cbea497e295271ec4208",
+          "stomp_walk": "89cd2dcb13ecdb242a557416f5c07a346dc24ce5f93bc116a5792a4e3879e824"
+        },
+        "scene_normals_material_nodes_packed_images_sha256": "283bea4c380263ef7434e937681709c9322c9ce256a81d1477958b9d4a2d8292"
       }
     },
-    "stage_g_editable": {
+    "second_editable": {
       "high.blend": {
-        "file_sha256": "5188054588b5f655aee836db39f197d48a5eb6787da02200cce68cf0312d0005",
-        "logical_geometry_hierarchy_skin_animation_sha256": "d4ee1881e9474bae34edb1e44c1dc881c54245862144671057bb89adb4e1f42b",
-        "skeleton_and_groups_sha256": "d9eb0294ad6b51647bf02788906afa770f5d96d28dc0b64206af46a90cc651d9",
+        "file_sha256": "fdba973e14a857ae56397d8271f7b2d2dfc2e9d9b008faa17f1ccc14a38ec8e1",
+        "logical_geometry_hierarchy_skin_animation_sha256": "f5f71f2fd8d96dac18d09494fec4e4b4ad76749a89ac8d83654c1d1a9fa39881",
+        "skeleton_and_groups_sha256": "147c1d516be24469369bd6396a51b419d9ec097bcee313f291f52f167045e98e",
         "clips_sha256": {
-          "armor_brace": "925fce57e7e77c4444d881728f0a0fe6f66c00750b8c27cf34846aa0fe86f0ab",
-          "attack": "879c20c40a982e492d87503c5c19d5d81adf08181be7c0d2b2798f1b6c7d0390",
-          "death": "33e67633222a5af4d9ed8183647f2748928018d1f475f22858ef81560b1e4108",
-          "hit": "4b4208b280037169143861ac4ebc017e63007efe6ddef7bafa31a1d5b3e7634e",
-          "stomp_walk": "e3105ce822416dbba61335ded0c2b910bdf5ebefa296c34998e4bb57de90b9a7"
-        }
+          "armor_brace": "70647cf8d7f9c70ede83d943eecac70173427cd982dbd870b264cc49f7c90cd7",
+          "attack": "ed46fae10164055af2da81625ad271e79be3fd9f95d5c19f6cd8c9a396e2a8fc",
+          "death": "b85a4ddab06109c0f8ea3a42df4036727c1707873fdfa0851b850df294b9d870",
+          "hit": "3fe9fc4c94da3918d9e2a78371623fd2d9db29cafcd8cbea497e295271ec4208",
+          "stomp_walk": "89cd2dcb13ecdb242a557416f5c07a346dc24ce5f93bc116a5792a4e3879e824"
+        },
+        "scene_normals_material_nodes_packed_images_sha256": "d928957c66e53b28dc56748bab4fd82b9cf069fca140c4d6376992a1299a0843"
       },
       "low.blend": {
-        "file_sha256": "cabdd4a6d08d851c8f0261523148a3c9cc42d5094d58192653697f75dac9db29",
-        "logical_geometry_hierarchy_skin_animation_sha256": "95e309e06bbf6654b50b1fea07bb3385ed01fdb5dbac2f69a1c27912e98605bf",
-        "skeleton_and_groups_sha256": "d9eb0294ad6b51647bf02788906afa770f5d96d28dc0b64206af46a90cc651d9",
+        "file_sha256": "291d8f156364c971fd842ce325f5d700334b42f8c270e00c84c23615118a0741",
+        "logical_geometry_hierarchy_skin_animation_sha256": "2e0401a6e5b0f49f0f5baa418debb119dc507f8974091f0f8980cba90c31670d",
+        "skeleton_and_groups_sha256": "147c1d516be24469369bd6396a51b419d9ec097bcee313f291f52f167045e98e",
         "clips_sha256": {
-          "armor_brace": "925fce57e7e77c4444d881728f0a0fe6f66c00750b8c27cf34846aa0fe86f0ab",
-          "attack": "879c20c40a982e492d87503c5c19d5d81adf08181be7c0d2b2798f1b6c7d0390",
-          "death": "33e67633222a5af4d9ed8183647f2748928018d1f475f22858ef81560b1e4108",
-          "hit": "4b4208b280037169143861ac4ebc017e63007efe6ddef7bafa31a1d5b3e7634e",
-          "stomp_walk": "e3105ce822416dbba61335ded0c2b910bdf5ebefa296c34998e4bb57de90b9a7"
-        }
+          "armor_brace": "70647cf8d7f9c70ede83d943eecac70173427cd982dbd870b264cc49f7c90cd7",
+          "attack": "ed46fae10164055af2da81625ad271e79be3fd9f95d5c19f6cd8c9a396e2a8fc",
+          "death": "b85a4ddab06109c0f8ea3a42df4036727c1707873fdfa0851b850df294b9d870",
+          "hit": "3fe9fc4c94da3918d9e2a78371623fd2d9db29cafcd8cbea497e295271ec4208",
+          "stomp_walk": "89cd2dcb13ecdb242a557416f5c07a346dc24ce5f93bc116a5792a4e3879e824"
+        },
+        "scene_normals_material_nodes_packed_images_sha256": "283bea4c380263ef7434e937681709c9322c9ce256a81d1477958b9d4a2d8292"
       }
-    },
-    "comparison": "Both GLBs, four PNGs, four KTX2 maps and geometry measurements match byte for byte. Separate editable fingerprints cover the rest hierarchy, mesh topology, skin, UVs, material assignments and animation curves."
+    }
   },
-  "checks": {
-    "candidate_verifier": "blender/verify_brute.py",
-    "reimport": "reimport.json",
-    "checked_both_lods": true,
-    "logical_sources_verified": true,
-    "connectivity": "All 89 anatomical parts connect to the thorax at each LOD. Sampled posed triangles connect through 18 leg articulations, two jaws, head and shield. Independent legs remain separated. Every sampled subframe also checks the head against the shield underside and confirms the neck remains connected.",
-    "support": "All five deformed clips measured on floor and rotated wall basis. Stomp maintains at least three contacts. Brace maintains six with fixed pad targets. The highest sampled vertex remains below the 0.60 m health bar."
+  "creative_score": 85,
+  "independent_visual_review": {
+    "date": "2026-11-21",
+    "score_out_of_100": 85,
+    "reviewed_glbs": {
+      "lod0": "ef59811727077c6fcfb6288d746ea77a57ee55078b8cc0f6c1e0f1eb5e144aa9",
+      "lod1": "af05ccabac7b2d847e695088b5f9aa1d47cd370da587144dbdab2e56d498e3d5"
+    },
+    "observations": "The independent reviewer noted the bulbous rear armor and the upper shield corner at LOD1."
   },
   "acceptance": {
-    "creative_owner": "pending complete asset batch review at P3-T7",
-    "runtime": "staged only, P4 promotion pending",
-    "independent_visual_score": "tracked by the phase review owner"
+    "creative_owner": "pending complete batch review",
+    "independent_visual_score": 85,
+    "runtime": "staged candidate; P4 and physical Quest acceptance pending"
   },
   "source_sha256": {
     "blender/brute_bake.py": "89793d3ed15d3d924e93ff3effc1ace152226c62689bdc8f1a7f2d4d412f8eb2",
@@ -141,13 +173,17 @@
     "blender/brute_shape.py": "833aaadb604842ff8ccab94140e9f6626cdc3ccba0fb0bf7a15a357cb8586540",
     "blender/build_materials.py": "fe5cdb5cf12c11ee931e685def2423812d1d5b64742d188ea669cffbd42772b7",
     "blender/carapace_brute.py": "833d7e241cf9f85f78488868ac2d1c0229eed0d1abe6fe7f746c7ce19e7c35a1",
+    "blender/carapace_brute_revision.py": "7380bd14771214877210825a8b40d64bcf1cd7b9379f975f35b35e9aae3e40e6",
     "blender/core_bastion.py": "26bd7b5a221c5f4fc7d17c58f53feeb57290e3e36d66e7b895ac56fea41a1a19",
+    "blender/core_bastion_revision.py": "5b9301fad2086819df6e8d4ff236ec78ebe6ce73179c565c0237838a0f16a4d4",
     "blender/core_bastion_shape.py": "c1b6df3d5bd80e695dbb28150183224bf808313b7c79e1af43a58de4ac1b6182",
+    "blender/document_brute_revision.py": "abeb1f339031eb4a1ea0afb576cca468bcc22bc86ea5975a4efca43a2d5e649a",
     "blender/materials.py": "fb2219a20eb700a15b76bdcfb7d9be5c7ceb4bf199f7e31204852c5fa6681eb3",
     "blender/package_brute.py": "4e8c5c8bf60853cb4c79813382ebf9063b90bc4f97adcafcaa2716352f52de18",
     "blender/package_core_bastion.py": "de2f82079aadef748e3ecdea5f65b3358e6bd3e1c5c2e2b6503f850c41d52d64",
     "blender/package_surface_clamp.py": "899980dc7ef0196aca30beb612e9062fa8d19f14f7e3a965901d87b6a3a68e59",
     "blender/review_brute.py": "8ad4681c82916f4b09bcd887aaf331beffafec40a5bb79b7c2947d67fdee98a4",
+    "blender/review_brute_revision.py": "91502a056070090afae515f1015c29ad2f358e4a18cd870ae54259fdfe1f47b6",
     "blender/review_core_bastion.py": "98d142618897bef956bc7aa7049a29a6827a403b1b96e4e573138cab9f3f87fe",
     "blender/review_materials.py": "ab7558febaef274294546e7e34a25ebfa35aaa7467f95f9d5887e402e768e23d",
     "blender/review_skitter.py": "74458aba08fe2c3d7c411b78c1043c8fc6405bfb8d43225dbabdfd02c9277725",
@@ -157,44 +193,56 @@
     "blender/skitter_shape.py": "88eecd38654845d5fc536555a01752b3f42312c78f9d3eed329571fa37a294db",
     "blender/surface_fields.py": "a2408130a5f39b9dfd625fa388b585b9ee239ed3bbd02bc2b89278f7eca5651e",
     "blender/verify_brute.py": "fc42413789f4d23348c1843c2139a00e345320a2f6e431b87193b4c7ae7aed3d",
+    "blender/verify_brute_revision.py": "d5190ee05a38b5acd86e5f4cde45cfef117042366da3eca37e354ad9eca05ac5",
     "blender/verify_core_bastion.py": "eee345536ef0c8f5f7ead150f48073f3bb4b3dec0546048359036b97edf5e1ab",
+    "blender/verify_core_bastion_revision.py": "169295e000d5158e24da91f1b2017ae2de59912db06724f36784fa9b45c3b885",
     "blender/verify_skitter.py": "c6f27e424c1e03c764b44705ffdb1057653ee0e9931bfe0c434b8ac873f0fba5",
     "scripts/assets/encode_ktx2.py": "ef7c2b27f936bab9cc0f02f27492cea4fd7c151045923f0308504c4867873515",
     "scripts/assets/ktx2.py": "ad0fe05d66f62b1bb51f93997c35982ea9df2a5072c9f30d0bef9cb948321966",
     "scripts/validate_glbs.py": "b1cce7201143a05202dd35ecc61827807991f228f18ac7249169ea3da2eb87c1"
   },
   "files": {
-    "README.md": "cf823fc232567e4827870d8d591082931c47784c9ce3407d0e7d8826ee637af3",
-    "basecolor.ktx2": "714e5266343051274dff3577dadf5bdc4224431eb66360255b332d7c5290292a",
-    "basecolor.png": "84d19a59d4df02fa5c4f907a80631015cf71f8a63ea106486e0e09f3ff9ecdf1",
-    "carapace-brute-lod0.glb": "bca48e122bda16e010cbe301450265ec8e362978b27a6f19d2a4ca9a00e62daa",
-    "carapace-brute-lod1.glb": "59ea5bdd425e57c93f59ade894d4ee54f8f86be5bc6b0969a80671fea9b5b546",
-    "emissive.ktx2": "766bcf7ad42229feedf2ddbf67ee88406ea1c00e794e270705409130952212aa",
-    "emissive.png": "320e6ee53011e6faeca86a17d496f4b5523c76035c56fe51c1e35aaca8856c51",
-    "geometry.json": "c4b0b7f21d58d5e3e414bf855351e1a0c6f446cd5d1ff21926516fbc2aaf0fff",
-    "high.blend": "1b20b9e24ce1046a7b1d0b7e89c51e2fb6ffbd8ae34b672b86bc5ea5e3fd806d",
-    "low.blend": "6154933967b8ffd4259da4a6da655cf3a2255bbdfeff4036b959555650370d60",
-    "normal.ktx2": "531a16bab8b2781b4818c3a2fb3e0a94fbfcb33cc258c4f59a6ce70ae5ac0039",
-    "normal.png": "f30684dcb79c083cd2bd988cbd9d2ffe424c22f4b56e4c1d805a61205dbb89e8",
-    "orm.ktx2": "f0459e24ca5dd45603103d3a440e75286fc15d337cfde0328c3cc7d75e3e82d3",
-    "orm.png": "ae9152d218f4b9f390eb34d9473977d1d264550163612989f467d9ef009d7455",
-    "reimport.json": "31d725e1f08d4fdaf053e1d5d2637d75194755d17b7dae47bc24a19e95985a8b",
-    "review/cameras.json": "30acb421bb87217628a4d8c2013e71d40ef8b42f98f8f5065704f89c22a2a2ac",
-    "review/comparison.jpg": "f420fb0b76a796da883b05842652f0271babb655ccb2d87da816a618def450bd",
-    "review/high-flank.png": "503b258b0a275c48d88dd0eed8c049a0b4cf5c89dc1084050db8941967d3e387",
-    "review/high-front.png": "e7bfcc19e80fcdd4cbd5e9aecfbebe72f207dd3ab6262af80bf37f1427607c59",
-    "review/high-oblique.png": "6716bf0539a6ddf1acd43bcbf47eb81d9d61c454e9c2b7cd0c9c677be74bb182",
-    "review/high-underside.png": "cb19613bacf0c8027291845a15570080e201b4345f9162fc376692ddb4d5e307",
-    "review/lod0-flank.png": "65cf9d93e35de17ccde7ef224d74ce044a05479523e9f8728443520f36fea70a",
-    "review/lod0-front.png": "8fcf267720c3240af78042d8e444e11c996624cba3fc33653c5428e294b4fde3",
-    "review/lod0-oblique.png": "9640efe6f86820f9d0e4f7f3122dc177818ad524123aca3afde1b75fbddd3690",
-    "review/lod0-underside.png": "43f9ead2b1427abc3ee87c6244292dc757d350d719781d9701e27e852fed8bb4",
-    "review/lod1-flank.png": "e07260bd1673e97139ee3a5b6c38288db116fe5cf2590f2a0856fb9ee62fc7fa",
-    "review/lod1-front.png": "e049186e4af489a34ef200f139cea032f229ce053f687b9d89e460e365f661de",
-    "review/lod1-oblique.png": "faa75f875d7c71ef77f46e816c95ad3f1e0da7a31c3ccc08ab98d616e0c38820",
-    "review/lod1-underside.png": "488e11185caa9a2bfc9850deccc02f5b981cf637bee9cf85e35f2a0cc9276271",
-    "review/motion.jpg": "cd7e4ed5c35e5ec4b6e72d672da1d635c92196b58a3f41f2fccd263839f5285a",
-    "review/motion.mp4": "de95d1f08b179eb5e7fdd9c7113859d11f525819d7a82dac87b6d26432c7c267",
-    "review/turntable.mp4": "f96dbe9e40496fe6d3011bfe06e7230a6fee289c84abc9e98091da839fecee8b"
+    "README.md": "afc15c828d40a7968d24c5f01f2191af7dabb5ea23df3069ba6d50e94b979aa6",
+    "basecolor.ktx2": "b3c1109e5718c68332d9926d41356c31e01c2eb99ee28f0998487c11aa57e064",
+    "basecolor.png": "6ad94a5154d4ffef3017fbbe1a063ed702f70a5497ed561b172871cee09e6d9f",
+    "carapace-brute-lod0.glb": "ef59811727077c6fcfb6288d746ea77a57ee55078b8cc0f6c1e0f1eb5e144aa9",
+    "carapace-brute-lod1.glb": "af05ccabac7b2d847e695088b5f9aa1d47cd370da587144dbdab2e56d498e3d5",
+    "emissive.ktx2": "0fb08489fa8c9209dfa224f8a8ac193d06ee87c7962d60f8ab7ab460d1f58461",
+    "emissive.png": "abd65ad97174064d7fc222a8eb6e2151df7dccc2f2a937ee109bda42f18a3d3b",
+    "geometry.json": "f3fc3bc80a6dfc51366eb145e05fbbb41f5e59fcd265b0a9a0a00604988a874a",
+    "high.blend": "c731534c4f2f3e5902d4c99da84cf84e3b4d96cb6e2dcc502a0abd4f6f797dca",
+    "low.blend": "4d5264968f477a6b06da2b823bbf937b6af85bd9ff1fb66cfd25aa2f7c12214d",
+    "normal.ktx2": "78e561d07c41578d6675c84123bd4b5806ff234d000da7749dea6879d694d6f5",
+    "normal.png": "bf01f3f915d756e66d3713fd406a86f93e3eb5e9c1171ac707ac5f039588c7e7",
+    "orm.ktx2": "88416d604231e7f716ac5ccb680323ca7a8e625cb25eb59467b432aaff44f8ff",
+    "orm.png": "388f11cef66e01b1248f72578deafb5d278c2704757b7fc2060d70ae0a4a7201",
+    "reimport.json": "3f9562e43e1dff64d8e13acabca5f79daf2fe7b40441e15483cc4b4080ff60c4",
+    "review/brace.jpg": "de89765514eeaf8f4c34cd2d07931bbb40f8816dabecffaea27843dedafb5b41",
+    "review/cameras.json": "f17edfd2ebe5e02b6d2f909025e074de9ede254712a1f4f91814cfbee4d74e2a",
+    "review/comparison.jpg": "18c2d4fd1ff07630148d106879edeb21b4efd349be8377cccf6bfdde2a0682cc",
+    "review/first-pass-lod0-front.png": "e8ad6a9d78e26b7f0e25f94abaf2118d5fc89dadc9df3a62ea5ea65ab537852c",
+    "review/high-brace-below.png": "b63e33c14c6e1b765e92045346eba3f5d4ee15abba5a48164262b8c8d88ee713",
+    "review/high-brace-flank.png": "720e7fe301c675eaf09d0a6c4b7745814d419f247945a3249379946871728fc6",
+    "review/high-flank.png": "71421968b30fa3d2467d09fbf0a0d3340de6c72ecaf5d213eeb30f0af07b69e3",
+    "review/high-front.png": "5dbd7d48401704fb4d493b9f975841af3304986ce93047ce12f93e83e2f73a01",
+    "review/high-oblique.png": "938b3168a9cd6db13846d9e748096d42c8a520db05962b0a48df4c8e99b91210",
+    "review/high-underside.png": "ea46a6c3dfba8ae09d9bc9f30c24d623483af6eec8c6d5996da4a3527ea907c0",
+    "review/lod0-brace-below.png": "acef5641d77b67d5366eb8665b7fbbfb95819920dc10c18a550e3260d8f5c9ea",
+    "review/lod0-brace-flank.png": "bec83551909db4d756d53a6d8c721e53969ddbfc8f438801f4416ddaceeccfcb",
+    "review/lod0-flank.png": "9bf82d7e8c8cb623043e1135a325eaa9cca055ca198290fbdf2bc34a186115ad",
+    "review/lod0-front.png": "e2c39ce6035d8170281116f27818555ed1f3ceef2e4396d6b3deb4cf04e07cea",
+    "review/lod0-oblique.png": "0fff225bee158b91bea79548329c1728775fe71e93e197a9ad007a60c5078d8e",
+    "review/lod0-underside.png": "dfd9032deffefc4f188b0c99166bfe2d519e7d3c1bfb163598f1e416bc4854fc",
+    "review/lod1-brace-below.png": "e06299bbc465a9ffa4c68d0c06f3fbdb8f2932d7a0dd8bc7b1048f725ec7b7df",
+    "review/lod1-brace-flank.png": "9a8aa0e45efb1db2355d524b60ef7278bef284c375a28934db55ae90495e36cd",
+    "review/lod1-flank.png": "265f9d8cd9e6de0d7be252e0dead0b9abfdd3d9b55f1a478cc7d938e88099c1a",
+    "review/lod1-front.png": "a299536514a130a66ba95a319ab0c68da56f3555e16c9bf5a621642d3516dcf1",
+    "review/lod1-oblique.png": "f414a741ac296dd2ba6635449cce6b9edaa913e7b7dd2afa31cb5b0c7a167c27",
+    "review/lod1-underside.png": "00178bf3716a425818eaa28a20b7940c18543fcb3f9233e5d119277455a834ef",
+    "review/motion.jpg": "13756f45fd7ce0d115091b5c35dc3a7a81f9b667967d2076e902385ee115104c",
+    "review/motion.mp4": "4f4d4be37e0514b44c7aacdf80f3f37e279cc3ecc03151c773dca81aa34a2499",
+    "review/revision-comparison.jpg": "2b55ebbb0273e8fb4149dfc6cbb7181d82c7a1ae6504e9c42e2f125b4bc95622",
+    "review/shield-pole-comparison.jpg": "4e999b58137f871e76e7db01a2a136fa75b784225a7270d6c9f9c371ad085912",
+    "review/turntable.mp4": "d10dc3834c74e50adb468e8a2335a3debefd09ad243abba339c64f0dc667c0a7"
   }
 }
