@@ -1,0 +1,252 @@
+{
+  "high_shells": {
+    "positive_area_coplanar_pairs": 0,
+    "inter_leg_intersections": 0,
+    "hub_intersections_outside_recessed_heel_key": 0,
+    "key_to_hub_triangle_pairs": {
+      "turret-clamp-leg-0": 30,
+      "turret-clamp-leg-1": 30,
+      "turret-clamp-leg-2": 30,
+      "turret-clamp-leg-3": 30
+    }
+  },
+  "lod0": {
+    "glb_sha256": "01283900c728110a9d733d9f266ce5bfbdb09d9b672e00ae113bc8c85760a0ff",
+    "max_radius_m": 0.1588081,
+    "central_top_m": 0.055,
+    "ring_radius_m": 0.11,
+    "contact": {
+      "floor": {
+        "origin_blender_m": [
+          0,
+          0,
+          0
+        ],
+        "normal_blender": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "sole_areas_m2": {
+          "turret-clamp-leg-0": 0.00113164,
+          "turret-clamp-leg-1": 0.00113164,
+          "turret-clamp-leg-2": 0.00113164,
+          "turret-clamp-leg-3": 0.00113164
+        },
+        "hub_clearance_m": 0.006
+      },
+      "table": {
+        "origin_blender_m": [
+          0.32,
+          0.26,
+          0.76
+        ],
+        "normal_blender": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "sole_areas_m2": {
+          "turret-clamp-leg-0": 0.00113164,
+          "turret-clamp-leg-1": 0.00113164,
+          "turret-clamp-leg-2": 0.00113164,
+          "turret-clamp-leg-3": 0.00113164
+        },
+        "hub_clearance_m": 0.006
+      },
+      "wall": {
+        "origin_blender_m": [
+          -0.48,
+          0.44,
+          1.24
+        ],
+        "normal_blender": [
+          0.30505862832069397,
+          -0.9523335695266724,
+          -4.371138828673793e-08
+        ],
+        "sole_areas_m2": {
+          "turret-clamp-leg-0": 0.00113164,
+          "turret-clamp-leg-1": 0.00113164,
+          "turret-clamp-leg-2": 0.00113164,
+          "turret-clamp-leg-3": 0.00113164
+        },
+        "hub_clearance_m": 0.006
+      }
+    },
+    "shells": {
+      "positive_area_coplanar_pairs": 0,
+      "inter_leg_intersections": 0,
+      "hub_intersections_outside_recessed_heel_key": 0,
+      "key_to_hub_triangle_pairs": {
+        "turret-clamp-leg-0": 30,
+        "turret-clamp-leg-1": 30,
+        "turret-clamp-leg-2": 30,
+        "turret-clamp-leg-3": 30
+      }
+    },
+    "geometry_triangles": 2428,
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 558411,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.1
+        },
+        "normal": {
+          "bytes": 452360,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.551,
+          "decoded_unit_length_range": [
+            0.966291,
+            1.03091
+          ]
+        },
+        "orm": {
+          "bytes": 754345,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.529
+        },
+        "emissive": {
+          "bytes": 16696,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.13
+        }
+      },
+      "file_bytes": 4196052,
+      "primitives": 5,
+      "gltf_vertices": 5244,
+      "ktx2_bytes": 1781812,
+      "uastc_bytes_before_zstd": 5592512
+    },
+    "unlit_color": {
+      "interior_samples": 9712,
+      "minimum_peak_rgb8": 70,
+      "black_samples": 0
+    }
+  },
+  "lod1": {
+    "glb_sha256": "ce09b7647d734d5d98dd994e89142fcbc53715d4ea6735ed1070acef754bf791",
+    "max_radius_m": 0.1588081,
+    "central_top_m": 0.055,
+    "ring_radius_m": 0.11,
+    "contact": {
+      "floor": {
+        "origin_blender_m": [
+          0,
+          0,
+          0
+        ],
+        "normal_blender": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "sole_areas_m2": {
+          "turret-clamp-leg-0": 0.00113164,
+          "turret-clamp-leg-1": 0.00113164,
+          "turret-clamp-leg-2": 0.00113164,
+          "turret-clamp-leg-3": 0.00113164
+        },
+        "hub_clearance_m": 0.006
+      },
+      "table": {
+        "origin_blender_m": [
+          0.32,
+          0.26,
+          0.76
+        ],
+        "normal_blender": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "sole_areas_m2": {
+          "turret-clamp-leg-0": 0.00113164,
+          "turret-clamp-leg-1": 0.00113164,
+          "turret-clamp-leg-2": 0.00113164,
+          "turret-clamp-leg-3": 0.00113164
+        },
+        "hub_clearance_m": 0.006
+      },
+      "wall": {
+        "origin_blender_m": [
+          -0.48,
+          0.44,
+          1.24
+        ],
+        "normal_blender": [
+          0.30505862832069397,
+          -0.9523335695266724,
+          -4.371138828673793e-08
+        ],
+        "sole_areas_m2": {
+          "turret-clamp-leg-0": 0.00113164,
+          "turret-clamp-leg-1": 0.00113164,
+          "turret-clamp-leg-2": 0.00113164,
+          "turret-clamp-leg-3": 0.00113164
+        },
+        "hub_clearance_m": 0.006
+      }
+    },
+    "shells": {
+      "positive_area_coplanar_pairs": 0,
+      "inter_leg_intersections": 0,
+      "hub_intersections_outside_recessed_heel_key": 0,
+      "key_to_hub_triangle_pairs": {
+        "turret-clamp-leg-0": 28,
+        "turret-clamp-leg-1": 28,
+        "turret-clamp-leg-2": 28,
+        "turret-clamp-leg-3": 28
+      }
+    },
+    "geometry_triangles": 1148,
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 558411,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.1
+        },
+        "normal": {
+          "bytes": 452360,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.551,
+          "decoded_unit_length_range": [
+            0.966291,
+            1.03091
+          ]
+        },
+        "orm": {
+          "bytes": 754345,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.529
+        },
+        "emissive": {
+          "bytes": 16696,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.13
+        }
+      },
+      "file_bytes": 4051552,
+      "primitives": 5,
+      "gltf_vertices": 2394,
+      "ktx2_bytes": 1781812,
+      "uastc_bytes_before_zstd": 5592512
+    },
+    "unlit_color": {
+      "interior_samples": 4592,
+      "minimum_peak_rgb8": 68,
+      "black_samples": 0
+    }
+  },
+  "combined_uv0_positive_area_overlaps": 0
+}

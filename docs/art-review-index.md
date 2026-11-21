@@ -63,3 +63,9 @@ The 6,826-triangle staged Core uses four 2048 px maps. Blender re-import preserv
 ![Matching high and re-imported low Rift portal views, including the oblique host and open aperture](../assets-source/models/rift-portal/review/comparison.jpg)
 
 The staged frame is 4,056 triangles and uses five 1024 px maps. The 0.95 × 1.35 m aperture disk shares all 104 boundary positions with the frame. The in-plane rim is 0.12 m wide at both axes. Its 72 mm axial span runs from the −25 mm shader surface to the +47 mm crown and rests against the anchor at Z = 0. The oblique proof uses a synthetic host plane cut to the same ellipse. The current circular runtime stencil and scanned-wall sampling remain Phase 4 verification work. [Rift sources, hashes and re-import checks](../assets-source/models/rift-portal/README.md)
+
+## Surface Clamp Base
+
+![Matched Surface Clamp Base source and imported LOD0 views](../assets-source/models/surface-clamp/review/comparison.jpg)
+
+The mount has four separate shoes, a 55 mm deck and a 0.15881 m measured radius within the 0.16 m footprint. Both its 2,428-triangle LOD0 and 1,148-triangle LOD1 retain the origin socket, share four 1024 px maps, and preserve contact on all four soles in floor, table and wall fixtures. [Clamp sources, hashes and re-import checks](../assets-source/models/surface-clamp/README.md)

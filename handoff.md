@@ -40,7 +40,7 @@
   - `P3-T3` complete (`01a1fadb108874ef8dd9dda60e64c92f`). The [material library](assets-source/materials/README.md) contains five finishes, an editable Blender 5.2.2 library and 16 portable maps in PNG and KTX2. A second bake matched all 32 map hashes. The [model validator](scripts/assets/model-check.md) checks texture roles, colors, decoded pixels, geometry, overlaps, skin structure, sockets, LODs and budgets. `make model-check` verified the staged textures and seven positive and negative tests. Blender export and re-import verified texture bindings. Measured gameplay performance and final owner approval remain downstream.
 - **Wave 3 (serial Blender workers per `blender-mcp.md` after `P3-T3`, using GPT-6.2 Astra):**
   - `P3-T4` complete (`01a1fadb12f5733a8eccefeb99e1f8b2`). The [Core Bastion](assets-source/models/core-bastion/README.md) is 6,826 tris with four 2048 px maps and an eight-second emitter sweep. The [Rift frame](assets-source/models/rift-portal/README.md) is 4,056 tris with five 1024 px maps, a flush anchor and the exact 0.95 × 1.35 m shared aperture. Both packages passed model-check, Blender re-import, byte-identical rebuilds and matched EEVEE views. The [art review index](docs/art-review-index.md) carries the evidence for P3-T7.
-  - `P3-T5a` (`01a1fb3c841c708784a64a42cd4d0dcf`): Shared Surface Clamp Base (`0.16 m` radius) & Repulsor Hover-Ring Pod.
+  - `P3-T5a` (`01a1fb3c841c708784a64a42cd4d0dcf`): The [Surface Clamp Base](assets-source/models/surface-clamp/README.md) is staged with 2,428 and 1,148 triangles, a common origin socket and exact four-foot contact. Both GLBs and all four 1024 px maps rebuilt byte for byte. Finish the Repulsor Hover-Ring Pod before closing the mount card.
   - `P3-T5b` (`01a1fb3c87547701ac5685baf143b252`): M44 Autocannon (T1–T3) & Helios Plasma Mortar (T1–T3).
   - `P3-T5c` (`01a1fb3c897177268bcaedf2577ed3d4`): Glacier Cryo-Arc (T1–T3) & Valkyrie Rail Sniper (T1–T3).
   - `P3-T5` (`01a1fadb16977224a3f5072a8ba38175`): Turret family rollup (closes once `P3-T5a/b/c` pass).
@@ -109,5 +109,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Continue serial Blender authoring.** The Core and Rift frame are staged. Start the shared Surface Clamp Base and Repulsor Hover-Ring Pod in `P3-T5a`, then continue through `P3-T5b/c`, `P3-T6a/b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
+1. **Continue serial Blender authoring.** The Core, Rift frame and Surface Clamp Base are staged. Finish the Repulsor Hover-Ring Pod in `P3-T5a`, then continue through `P3-T5b/c`, `P3-T6a/b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
 2. **Confirm with Paul** when he wants to push `main` and execute `docs/deploy-checklist.md` (`P0-T6`) to bring `https://rift-bastion.pardev.net/` live.

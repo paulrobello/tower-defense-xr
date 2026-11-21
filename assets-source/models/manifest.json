@@ -916,6 +916,218 @@
       "width": 1024,
       "height": 1024,
       "samples": []
+    },
+    {
+      "file": "surface-clamp/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "ee9a29b1e5d351f16604ee23ffd654ad77e202778a78fe47d3a9922b7a9a7685",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 565,
+          "y": 465,
+          "rgb": [
+            59,
+            68,
+            79
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 310,
+          "y": 909,
+          "rgb": [
+            79,
+            86,
+            95
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 247,
+          "y": 596,
+          "rgb": [
+            45,
+            226,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 668,
+          "y": 817,
+          "rgb": [
+            63,
+            71,
+            82
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "surface-clamp/normal.ktx2",
+      "role": "normal",
+      "sha256": "326c952ceb7e457294ce5d2c2d158578d9dfd6358fe58530dbbff7b9900182a6",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 565,
+          "y": 465,
+          "rgb": [
+            118,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 310,
+          "y": 909,
+          "rgb": [
+            123,
+            124,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 247,
+          "y": 596,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 668,
+          "y": 817,
+          "rgb": [
+            129,
+            126,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "surface-clamp/orm.ktx2",
+      "role": "orm",
+      "sha256": "64ace362c0ab86e316b83e53299f834dacec995ee75bfb5d50988c3bfe4bf9a3",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 565,
+          "y": 465,
+          "rgb": [
+            247,
+            172,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 310,
+          "y": 909,
+          "rgb": [
+            252,
+            91,
+            235
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 247,
+          "y": 596,
+          "rgb": [
+            255,
+            71,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 668,
+          "y": 817,
+          "rgb": [
+            243,
+            182,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "surface-clamp/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "fa82382daf4f70a87f8c6a3efcdb32a7be6239f204a4bfb57e952237b8d9cb48",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 565,
+          "y": 465,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 310,
+          "y": 909,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 247,
+          "y": 596,
+          "rgb": [
+            45,
+            226,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 668,
+          "y": 817,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
     }
   ],
   "models": [
@@ -1018,6 +1230,126 @@
         },
         "Rift aperture field": {
           "emissive": "rift-portal/vortex.ktx2"
+        }
+      }
+    },
+    {
+      "id": "surface-clamp",
+      "lod": 0,
+      "file": "surface-clamp/surface-clamp-lod0.glb",
+      "sha256": "01283900c728110a9d733d9f266ce5bfbdb09d9b672e00ae113bc8c85760a0ff",
+      "limits": {
+        "triangles": 6500,
+        "materials": 2,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "mountSocket": {
+          "parent": "surfaceClamp",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 1e-05
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "turret-clamp-hub",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-clamp-leg-0",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-clamp-leg-1",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-clamp-leg-2",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-clamp-leg-3",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Surface Clamp satin armor": {
+          "basecolor": "surface-clamp/basecolor.ktx2",
+          "normal": "surface-clamp/normal.ktx2",
+          "orm": "surface-clamp/orm.ktx2",
+          "emissive": "surface-clamp/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "surface-clamp",
+      "lod": 1,
+      "file": "surface-clamp/surface-clamp-lod1.glb",
+      "sha256": "ce09b7647d734d5d98dd994e89142fcbc53715d4ea6735ed1070acef754bf791",
+      "limits": {
+        "triangles": 2500,
+        "materials": 2,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "mountSocket": {
+          "parent": "surfaceClamp",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 1e-05
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "turret-clamp-hub",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-clamp-leg-0",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-clamp-leg-1",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-clamp-leg-2",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-clamp-leg-3",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Surface Clamp satin armor": {
+          "basecolor": "surface-clamp/basecolor.ktx2",
+          "normal": "surface-clamp/normal.ktx2",
+          "orm": "surface-clamp/orm.ktx2",
+          "emissive": "surface-clamp/emissive.ktx2"
         }
       }
     }
