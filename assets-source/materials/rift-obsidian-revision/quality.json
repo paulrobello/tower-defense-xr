@@ -1,0 +1,74 @@
+{
+  "rift-obsidian/basecolor.ktx2": {
+    "rmse_rgb_levels": [
+      0.584,
+      0.504,
+      0.645
+    ],
+    "wrap_rgb_absolute_p95_levels": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "wrap_rgb_absolute_max_levels": [
+      5.0,
+      4.0,
+      6.0
+    ]
+  },
+  "rift-obsidian/normal.ktx2": {
+    "rmse_rgb_levels": [
+      0.795,
+      0.803,
+      0.0
+    ],
+    "wrap_rgb_absolute_p95_levels": [
+      2.0,
+      2.0,
+      0.0
+    ],
+    "wrap_rgb_absolute_max_levels": [
+      6.0,
+      5.0,
+      0.0
+    ],
+    "decoded_normal_length": [
+      1.00002,
+      1.00315
+    ]
+  },
+  "rift-obsidian/orm.ktx2": {
+    "rmse_rgb_levels": [
+      1.046,
+      0.85,
+      0.0
+    ],
+    "wrap_rgb_absolute_p95_levels": [
+      3.0,
+      2.0,
+      0.0
+    ],
+    "wrap_rgb_absolute_max_levels": [
+      11.0,
+      6.0,
+      0.0
+    ]
+  },
+  "rift-obsidian/emissive.ktx2": {
+    "rmse_rgb_levels": [
+      0.493,
+      0.579,
+      0.866
+    ],
+    "wrap_rgb_absolute_p95_levels": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "wrap_rgb_absolute_max_levels": [
+      18.0,
+      23.0,
+      36.0
+    ]
+  }
+}

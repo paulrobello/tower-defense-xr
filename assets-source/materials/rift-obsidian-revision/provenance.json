@@ -1,0 +1,102 @@
+{
+  "asset": "Rift obsidian revision, P3-T7",
+  "authored_with": {
+    "model": "GPT-6.2 Astra",
+    "reasoning_effort": "high",
+    "method": "Original seeded periodic mineral fracture field in Blender. The minimum spacing between 77 toroidal seeds is 0.056 UV. Emission tapers at three-face junctions.",
+    "seed": 3229,
+    "tools": ["Blender 5.2.2 LTS d13f752e3b9c", "KTX-Software 4.4.2", "ImageMagick 7"]
+  },
+  "rights": "Original project-authored procedural material. The owner-approved Bastion Rib concept guided art direction. No external pixels, assets or paid generation.",
+  "reproduction": "Run the build, package, verify and review commands in README.md. Two independent Cycles CPU builds and UASTC encodes produced byte-identical PNGs, KTX2s, map reports, manifests and decoded quality measurements. Both separately generated Blender archives passed exact embedded image-role verification on scratch GLB export and reimport. Blender archives contain session-dependent bytes.",
+  "iterations": [
+    "Original 24-face material received 78/100 in the P3-T7 visual audit because a bright cyan junction repeated. Its source maps and the Rift Portal model remain frozen.",
+    "First revised field attenuated junctions but two nearby seeds yielded a wide glowing patch. Added minimum separation between seeds and repeated both builds and decodes."
+  ],
+  "contract": {
+    "tile_mm": 220,
+    "texture_px": 256,
+    "texels_per_m": 1163.636,
+    "channels": {
+      "basecolor": "sRGB",
+      "normal": "linear, tangent +Y",
+      "orm": "linear: ambient occlusion, roughness, metallic",
+      "emissive": "sRGB"
+    },
+    "mip_levels": 9,
+    "encoding": "UASTC quality 2, RDO, Zstandard 18, rd top-left"
+  },
+  "review": {
+    "lighting": "Original studio in blender/review_materials.py, EEVEE 12 temporal samples, 512 × 512 per frame. The plane spans two full UV repeats in each direction (440 mm).",
+    "strip": "assets-source/materials/rift-obsidian-revision/review/rift-obsidian.webp",
+    "views": {
+      "curved_coupon": {
+        "rectangle": "512x512+0+0",
+        "decoded_rgb8_sha256": "238d379ad5d9610f2aadeb009852bbfaf4c5c3d3a0cf0edbf4fedf2998c2859f"
+      },
+      "soft_2x2": {
+        "rectangle": "512x512+512+0",
+        "decoded_rgb8_sha256": "7c558d2022e5c6cf5e340fd6a1573dfb03a1b5fe42012a7bdeb74ffa010bcb1c"
+      },
+      "raking_2x2": {
+        "rectangle": "512x512+1024+0",
+        "decoded_rgb8_sha256": "927ad533234e5705d33a9924ea87bcdb0207d55ac634167a77ad4925d34ec5a6"
+      }
+    },
+    "pixel_hash_method": "ImageMagick crop strip to the indicated rectangle, reset page, emit unprofiled RGB bytes with -depth 8 rgb:-, then SHA-256."
+  },
+  "verification": {
+    "changed_active_manifest_indices": [12, 13, 14, 15],
+    "max_decoded_channel_rmse_255": 1.046,
+    "max_wrap_p95_255": 3,
+    "max_wrap_outlier_255": 36,
+    "normal_length_level0": [1.00002, 1.00315],
+    "mip_check": "All 36 levels decoded to opaque RGBA8 at the expected size. All decoded normals had length in (0.985,1.015); all ORM levels retained dielectric metalness below 4/255, roughness between 32/255 and 80/255 and occlusion above 215/255. Per-level hashes and ranges are in mips.json.",
+    "bright_cyan_pixels_criterion": "8-bit sRGB G > 70 and G > 1.4 × R",
+    "original_fraction": 0.0067291259765625,
+    "revised_fraction": 0.0016632080078125
+  },
+  "historical_input": "The unchanged Portal source receipt hash-binds the four original maps. Archived original-manifest.json is byte-for-byte the manifest cited by the historical shared library receipt. Its paths are relative to assets-source/materials.",
+  "approval": "Revised candidate staged for independent scoring and owner review. Runtime and physical Quest acceptance pending.",
+  "inputs_sha256": {
+    "assets-source/concepts/boards/bastion-rib.png": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3",
+    "assets-source/materials/bastion-materials.blend": "1503f34c2d831049200163d4cc947584ec175043a430df809743dc004c00fb9e",
+    "assets-source/materials/provenance.json": "dca8397de692c07d5b041b2ca37af25f163408456c496144110370ab392e6da2",
+    "assets-source/materials/review/rift-obsidian.webp": "4620888e65815291ed799f81197fff0179c783094634e317d036b4cd9f359698",
+    "assets-source/materials/review/surfaces.jpg": "25f9bbb8793a5874f4f6699189cf522dbc97b66fedd9e5f918ac9ec0ed77cc4a",
+    "assets-source/materials/rift-obsidian/basecolor.png": "ea4693c8751f5f3aa4af6c635e7e659394aa52ced562f1abd82a55ec9351f1b4",
+    "assets-source/materials/rift-obsidian/emissive.png": "5ec6173b7c99ddc263905930adec43b24221157bc0a8dcd7d6f44ae596430652",
+    "assets-source/materials/rift-obsidian/normal.png": "bd9268a32c5a540f180dd2eb527f5a91562f382381ee30212fdf856b83f9c2a8",
+    "assets-source/materials/rift-obsidian/orm.png": "55f77b63de69579068ef9e628659e14bbc52e45a9f85d7dd893f8bf0414b0742",
+    "assets-source/models/rift-portal/provenance.json": "1890ae939f8bf6d7ac856e58fc976b56c28928fc3ccb13ad0abc23d842b6573c",
+    "blender/build_materials.py": "fe5cdb5cf12c11ee931e685def2423812d1d5b64742d188ea669cffbd42772b7",
+    "blender/materials.py": "fb2219a20eb700a15b76bdcfb7d9be5c7ceb4bf199f7e31204852c5fa6681eb3",
+    "blender/package_materials.py": "6a163419d3d8f29cf79564b52a591d01a6daf43dcdbc654fead012e9c686ce39",
+    "blender/review_materials.py": "ab7558febaef274294546e7e34a25ebfa35aaa7467f95f9d5887e402e768e23d",
+    "blender/rift_obsidian_revision.py": "af1a42f9c9e7d82fe1c4b6b94ed6c26deb7dc68229444ff3af037ef9a2b20052",
+    "blender/surface_fields.py": "a2408130a5f39b9dfd625fa388b585b9ee239ed3bbd02bc2b89278f7eca5651e",
+    "blender/verify_materials.py": "48a4791049d0ad25d1fd6f4cabe53941bdc79ef5a880c1031376af4423cbcaec",
+    "scripts/assets/encode_ktx2.py": "ef7c2b27f936bab9cc0f02f27492cea4fd7c151045923f0308504c4867873515",
+    "scripts/assets/ktx2.py": "ad0fe05d66f62b1bb51f93997c35982ea9df2a5072c9f30d0bef9cb948321966"
+  },
+  "staged_sha256": {
+    "assets-source/materials/manifest.json": "f0d2a74cd2944d3ce01e883a9c516d43cfa5807fa09e9e73748ccf2e2c6c27ab",
+    "assets-source/materials/rift-obsidian-revision/README.md": "b4b4b87b021c85b2840a0834e2c4092ededa34566126385ec1e2fe5a2df75565",
+    "assets-source/materials/rift-obsidian-revision/bastion-materials.blend": "359a618ea43399c9986da40aae81c256de58e33cd3df71ab842d784691cba066",
+    "assets-source/materials/rift-obsidian-revision/manifest.json": "cb5c8feade3bfb51d4c3f3282e47392d0ae04d14284f8b75e89e6b4bade45210",
+    "assets-source/materials/rift-obsidian-revision/maps.json": "68f32c7d9ebf02c806b9d77c8c4bf8d27d968d253a364b63b8fa8f41676ceeee",
+    "assets-source/materials/rift-obsidian-revision/mips.json": "86bf25515a4cbba8ea0a0d12222dbfcb369f8cba3e4d3a71b26020e42dc536b9",
+    "assets-source/materials/rift-obsidian-revision/original-manifest.json": "d8ec97acef29b37390d7959035022b9eb0fb07b1131ee8bb8300ed424431fe30",
+    "assets-source/materials/rift-obsidian-revision/quality.json": "97f94222ff3b609ea8ce53a7d4a70ae47ae7fc67c89c5856726b3f1113bbc830",
+    "assets-source/materials/rift-obsidian-revision/review/rift-obsidian.webp": "5ddcceed74d963da9662c547d41dfcf7a50b9300f7a5f24af0476dc8c89b7f44",
+    "assets-source/materials/rift-obsidian-revision/review/surfaces.jpg": "949e3a9be16b4fca4f11a148d0b31d94e4a7ec3987daf774d72e636e26b3e156",
+    "assets-source/materials/rift-obsidian-revision/rift-obsidian/basecolor.ktx2": "40fff26f5c4df4f9b68bdf1f36e31fc9324ba2177f44df1b3bd25c1ca839dce3",
+    "assets-source/materials/rift-obsidian-revision/rift-obsidian/basecolor.png": "6403583c67643e831b0d6d281468d07d8fa19e3d036a549adf447c20bcfbcaf2",
+    "assets-source/materials/rift-obsidian-revision/rift-obsidian/emissive.ktx2": "be19e508bdc8bf4fefb03daf6171f1aa21d8ccba09d0bdc1961c15bc6b81cc3a",
+    "assets-source/materials/rift-obsidian-revision/rift-obsidian/emissive.png": "1b9c1877bb61395858e188bc6569279edc9d8aee311a6cf8cf09b55a1c9c935d",
+    "assets-source/materials/rift-obsidian-revision/rift-obsidian/normal.ktx2": "8f045b9e3977ac56fbfc07c8ab06f53329be62498df75c05c411ee2e500c4808",
+    "assets-source/materials/rift-obsidian-revision/rift-obsidian/normal.png": "ea7f2f2cead0d01e3e4fb2bc800cee07ec54584c70f41b0defa1dab1b9745e8b",
+    "assets-source/materials/rift-obsidian-revision/rift-obsidian/orm.ktx2": "747e67991972442c5db30ee6d34d7156ab90374e37628922f0703fac6569020e",
+    "assets-source/materials/rift-obsidian-revision/rift-obsidian/orm.png": "6b4fa40a20678d88c0966195a4227e92f6d35e22f3f6d33a5a4652cf46dffead"
+  }
+}

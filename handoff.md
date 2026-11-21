@@ -46,7 +46,7 @@
   - `P3-T6c` complete (`01a1fb3c91067130bdb8af122f51b91a`). [Apex Broodlord](docs/art-review-index.md#apex-broodlord) is staged at 23,480/7,840 tris with 28 bones, one material, four 2048 px maps and a standalone Phase 2 crack mask. Both imported LODs play the six clips with matched two-phase views and motion evidence.
   - `P3-T6` (`01a1fadb18be76c79209166e054aeb93`): Technical and evidence criteria passed for all five invaders. Both LODs of each play their required clips after re-import, and exact repeated exports and matched proof are indexed for `P3-T7`. The rollup closes when Paul approves the combined package at Owner Checkpoint 2.
 - **Wave 4 (Owner Checkpoint #2 before P4 promotion):**
-  - `P3-T7` (`01a1fb3c93b976f4850cfb761acebef9`): The [initial independent audit](docs/art-review-index.md#initial-independent-audit) scored 46 assets at `ab44c84`. Thirty-five cleared 80/100, and eleven need revision. The [recorded findings](docs/art-review-index.md#findings-requiring-revision) cover two badges, Rift obsidian, Core Bastion, Hover Pod, Helios T1, Glacier T2, Skitter, Wasp, Brute and Broodlord. Correct and independently re-score those exact assets before presenting the revised batch for Paul's creative approval.
+  - `P3-T7` (`01a1fb3c93b976f4850cfb761acebef9`): The [initial independent audit](docs/art-review-index.md#initial-independent-audit) scored 46 assets at `ab44c84`. Thirty-five cleared 80/100. Three [revisions](docs/art-review-index.md#passed-revisions) have passed independent re-review. Both tactical badges scored 87 and the revised Rift obsidian scored 86. Eight [model findings](docs/art-review-index.md#findings-requiring-revision) remain before Paul's creative approval.
 
 ### Phase 4 sound effects approved
 
@@ -105,5 +105,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Finish the combined asset audit and revisions.** Start with the two tactical badges and Rift obsidian, then correct the models in the order listed in the initial audit. Preserve the passing files and use independent visual review after each exact revised package passes its technical gates. Complete `P3-T7` and Owner Checkpoint 2 before production asset promotion. The private radial theme candidate remains ready for its later transplant.
+1. **Finish the combined asset audit and model revisions.** Begin with Core Bastion and continue through findings F4–F11 in the initial audit. Preserve the passing files and use independent visual review after each exact revised package passes its technical gates. Complete `P3-T7` and Owner Checkpoint 2 before production asset promotion. The private radial theme candidate remains ready for its later transplant.
 2. **Collect owner feedback** from the [public test build](https://rift-bastion.pardev.net/). Asset promotion stays gated by Owner Checkpoint 2.

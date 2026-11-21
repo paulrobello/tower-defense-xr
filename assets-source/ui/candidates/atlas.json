@@ -34,7 +34,8 @@
       "rect": [384, 0, 128, 128],
       "source": "originals/build-wave.png",
       "providerMatte": "originals/build-wave-alpha.png",
-      "sourceRect": [21, 1104, 817, 1446]
+      "sourceRect": [21, 1104, 817, 1446],
+      "refinement": "../provenance.json#/badgeRefinements/build-rail-sniper"
     },
     "wave-launch": {
       "file": "icons/wave-launch.png",
@@ -97,7 +98,8 @@
       "rect": [0, 256, 128, 128],
       "source": "originals/targets-stars.png",
       "providerMatte": "originals/targets-stars-alpha.png",
-      "sourceRect": [50, 41, 801, 810]
+      "sourceRect": [50, 41, 801, 810],
+      "refinement": "../provenance.json#/badgeRefinements/target-first"
     },
     "target-strongest": {
       "file": "icons/target-strongest.png",

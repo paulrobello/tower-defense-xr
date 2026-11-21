@@ -39,7 +39,7 @@ The three Nano Banana Pro sheets contain six icons each. Three background-remova
 
 Higgsfield billed **15 credits**. That includes one replacement desktop illustration. The first desktop source had a hard vertical seam across the scene. All nine provider originals remain unchanged. The [source manifest](../assets-source/ui/provenance.json) records each prompt, input hash, source hash, settings, job ID, cost, and provider rights references. [SHA-256 inventory](../assets-source/ui/checksums.json)
 
-From a bootstrapped repository root, run these commands to reproduce the 22 candidate files in a temporary directory and check staging against the nine provider sources, references, atlas pixels, title contrast and 27 hashes. The build uses the repository's pinned Biome to format atlas metadata.
+From a bootstrapped repository root, run these commands to reproduce the 22 candidate files in a temporary directory and check staging against the nine provider sources, references, atlas pixels, title contrast and 28 hashes. The build uses the repository's pinned Biome to format atlas metadata.
 
 ```sh
 uv run --no-project --python 3.13 --with pillow==12.3.0 python assets-source/ui/build.py --check
@@ -52,7 +52,9 @@ The independent P3-T7 score and Paul’s approval remain open. Physical Quest re
 
 ![Five shared materials shown on curved coupons and 2×2 repeats under two light angles](../assets-source/materials/review/surfaces.jpg)
 
-The Blender 5.2.2 library contains brushed titanium, matte ceramic, dark gunmetal, obsidian chitin and rift obsidian. A fresh build produced the same 16 source PNGs and 16 KTX2 files. Blender export and re-import preserved all five materials and 16 texture bindings. The KTX2 set totals 465,162 bytes. See the [material review and authoring instructions](../assets-source/materials/README.md), [map inventory](../assets-source/materials/manifest.json) and [decoded texture measurements](../assets-source/materials/quality.json). Independent scoring and the owner's release approval remain open at P3-T7.
+The original Blender 5.2.2 library contains brushed titanium, matte ceramic, dark gunmetal, obsidian chitin and rift obsidian. A fresh build produced the same 16 source PNGs and 16 KTX2 files. Blender export and re-import preserved all five materials and 16 texture bindings. The original KTX2 set totals 465,162 bytes. See the [material review and authoring instructions](../assets-source/materials/README.md), [active map inventory](../assets-source/materials/manifest.json) and [original decoded texture measurements](../assets-source/materials/quality.json). Owner approval remains open at P3-T7.
+
+The active inventory uses [the revised Rift obsidian tile](../assets-source/materials/rift-obsidian-revision/README.md). The original library and four original source PNGs remain available to reproduce the staged Rift Portal.
 
 ## Core Bastion
 
@@ -258,3 +260,15 @@ The 18 badges are 128 × 128 RGBA proof files in a 768 × 384 atlas. Reviewers c
 | F9 | Wasp Skimmer | 77 | Thin pointed wings, exposed spars and a stray teal LOD1 patch weaken the silhouette. Broaden the wing panels, restore the layered nose and fix dorsal color bleed. |
 | F10 | Carapace Brute | 79 | The shield is one rounded face, the vent is a small cap and the pads read as buttons. Restore stepped shield planes, expose more vent and broaden the armored shins and pads. |
 | F11 | Apex Broodlord | 75 | The frontal crest reads as separate upright paddles above round eyes. Broaden the crest root, add an angular brow and hooked jaws, and overlap the abdominal armor while retaining the split tips. |
+
+## Passed revisions
+
+Thirty-eight of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following three revised assets account for those results. The remaining findings are F4–F11.
+
+| Finding | Asset | Initial → revised | Exact proof and result |
+| --- | --- | ---: | --- |
+| F1 | Valkyrie icon | 73 → 87 | [Native 24 px comparison](../assets-source/ui/review/badge-revision.png) and [revised icon](../assets-source/ui/candidates/icons/build-rail-sniper.png). Two cobalt rails and their slot remain visible on both fields. The rail PNG SHA-256 begins `458126da10ba`. |
+| F2 | First-target icon | 77 → 87 | [Native 24 px comparison](../assets-source/ui/review/badge-revision.png) and [revised icon](../assets-source/ui/candidates/icons/target-first.png). The chevron and cyan finish post stay separate beside Launch Wave. The final target PNG SHA-256 begins `b4330bd1a0f5`. |
+| F3 | Rift obsidian | 78 → 86 | [Revised coupon and 2×2 repeats](../assets-source/materials/rift-obsidian-revision/review/rift-obsidian.webp) and [revision provenance](../assets-source/materials/rift-obsidian-revision/provenance.json). The irregular cyan inclusions remove the bright grid in both matched light angles. The reviewer still observed subtle dark repetition under raking light. |
+
+The exact badge proof SHA-256 is `608eea9914f08dc20961df864f55e6ae8d59e4fdd015a4dd0fe7fba348310911`. The exact revised obsidian proof SHA-256 is `5ddcceed74d963da9662c547d41dfcf7a50b9300f7a5f24af0476dc8c89b7f44`.

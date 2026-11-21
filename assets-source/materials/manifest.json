@@ -591,9 +591,9 @@
       ]
     },
     {
-      "file": "rift-obsidian/basecolor.ktx2",
+      "file": "rift-obsidian-revision/rift-obsidian/basecolor.ktx2",
       "role": "basecolor",
-      "sha256": "dc5de08b6300fea13d017a37a327e8c21f71407b4640ca88b276cca779ce6206",
+      "sha256": "40fff26f5c4df4f9b68bdf1f36e31fc9324ba2177f44df1b3bd25c1ca839dce3",
       "width": 256,
       "height": 256,
       "samples": [
@@ -601,9 +601,9 @@
           "x": 29,
           "y": 37,
           "rgb": [
-            56,
-            42,
-            78
+            50,
+            36,
+            67
           ],
           "tolerance": 12
         },
@@ -611,9 +611,9 @@
           "x": 127,
           "y": 83,
           "rgb": [
-            39,
-            29,
-            61
+            53,
+            38,
+            70
           ],
           "tolerance": 12
         },
@@ -621,18 +621,18 @@
           "x": 210,
           "y": 190,
           "rgb": [
-            40,
-            29,
-            62
+            47,
+            34,
+            63
           ],
           "tolerance": 12
         }
       ]
     },
     {
-      "file": "rift-obsidian/normal.ktx2",
+      "file": "rift-obsidian-revision/rift-obsidian/normal.ktx2",
       "role": "normal",
-      "sha256": "c43441323dfd4e080c6acc525889ab329edac69b45893384859d9fd2cedc91df",
+      "sha256": "8f045b9e3977ac56fbfc07c8ab06f53329be62498df75c05c411ee2e500c4808",
       "width": 256,
       "height": 256,
       "samples": [
@@ -640,8 +640,8 @@
           "x": 29,
           "y": 37,
           "rgb": [
-            129,
             127,
+            128,
             255
           ],
           "tolerance": 12
@@ -650,8 +650,8 @@
           "x": 127,
           "y": 83,
           "rgb": [
-            132,
-            130,
+            127,
+            127,
             255
           ],
           "tolerance": 12
@@ -660,17 +660,17 @@
           "x": 210,
           "y": 190,
           "rgb": [
-            129,
+            127,
             127,
             255
           ],
           "tolerance": 12
         },
         {
-          "x": 8,
+          "x": 7,
           "y": 255,
           "rgb": [
-            128,
+            127,
             128,
             255
           ],
@@ -679,9 +679,9 @@
       ]
     },
     {
-      "file": "rift-obsidian/orm.ktx2",
+      "file": "rift-obsidian-revision/rift-obsidian/orm.ktx2",
       "role": "orm",
-      "sha256": "e5da7e6b2f6cde01a0c8fc06ce65ed000aac00d7a2cdad51282013ab760ee749",
+      "sha256": "747e67991972442c5db30ee6d34d7156ab90374e37628922f0703fac6569020e",
       "width": 256,
       "height": 256,
       "samples": [
@@ -689,8 +689,8 @@
           "x": 29,
           "y": 37,
           "rgb": [
-            253,
-            57,
+            255,
+            55,
             0
           ],
           "tolerance": 12
@@ -700,7 +700,7 @@
           "y": 83,
           "rgb": [
             255,
-            40,
+            54,
             0
           ],
           "tolerance": 12
@@ -710,27 +710,27 @@
           "y": 190,
           "rgb": [
             255,
-            45,
+            50,
             0
           ],
           "tolerance": 12
         },
         {
-          "x": 3,
+          "x": 112,
           "y": 255,
           "rgb": [
-            235,
-            54,
+            238,
+            52,
             0
           ],
           "tolerance": 12
         },
         {
-          "x": 171,
-          "y": 182,
+          "x": 204,
+          "y": 235,
           "rgb": [
-            236,
-            72,
+            240,
+            68,
             0
           ],
           "tolerance": 12
@@ -738,9 +738,9 @@
       ]
     },
     {
-      "file": "rift-obsidian/emissive.ktx2",
+      "file": "rift-obsidian-revision/rift-obsidian/emissive.ktx2",
       "role": "emissive",
-      "sha256": "f78070505e2f951cbed3e2f0037a1af2354bb104c8347c232a1f9bbb67cd0fe1",
+      "sha256": "be19e508bdc8bf4fefb03daf6171f1aa21d8ccba09d0bdc1961c15bc6b81cc3a",
       "width": 256,
       "height": 256,
       "samples": [
@@ -775,22 +775,22 @@
           "tolerance": 12
         },
         {
-          "x": 4,
-          "y": 255,
+          "x": 222,
+          "y": 199,
           "rgb": [
-            49,
-            153,
-            155
+            30,
+            118,
+            126
           ],
           "tolerance": 12
         },
         {
-          "x": 174,
-          "y": 163,
+          "x": 17,
+          "y": 96,
           "rgb": [
-            108,
-            57,
-            176
+            48,
+            101,
+            129
           ],
           "tolerance": 12
         }

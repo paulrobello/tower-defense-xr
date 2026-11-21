@@ -1,0 +1,259 @@
+{
+  "generator": "Blender 5.2.2 LTS, Cycles CPU, 2 threads, 1 sample, EMIT and tangent NORMAL",
+  "resolution": [
+    256,
+    256
+  ],
+  "normal_convention": "OpenGL tangent +Y",
+  "orm_channels": [
+    "ambientOcclusion",
+    "roughness",
+    "metallic"
+  ],
+  "materials": {
+    "rift-obsidian": {
+      "tile_m": 0.22,
+      "texels_per_m": 1163.636,
+      "maps": {
+        "basecolor": {
+          "sha256": "6403583c67643e831b0d6d281468d07d8fa19e3d036a549adf447c20bcfbcaf2",
+          "min_rgb": [
+            38,
+            27,
+            53
+          ],
+          "max_rgb": [
+            61,
+            44,
+            79
+          ],
+          "samples": [
+            {
+              "x": 29,
+              "y": 37,
+              "rgb": [
+                50,
+                36,
+                67
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 127,
+              "y": 83,
+              "rgb": [
+                53,
+                38,
+                70
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 210,
+              "y": 190,
+              "rgb": [
+                47,
+                34,
+                63
+              ],
+              "tolerance": 12
+            }
+          ]
+        },
+        "normal": {
+          "sha256": "ea7f2f2cead0d01e3e4fb2bc800cee07ec54584c70f41b0defa1dab1b9745e8b",
+          "min_rgb": [
+            119,
+            119,
+            255
+          ],
+          "max_rgb": [
+            136,
+            136,
+            255
+          ],
+          "samples": [
+            {
+              "x": 29,
+              "y": 37,
+              "rgb": [
+                127,
+                128,
+                255
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 127,
+              "y": 83,
+              "rgb": [
+                127,
+                127,
+                255
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 210,
+              "y": 190,
+              "rgb": [
+                127,
+                127,
+                255
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 7,
+              "y": 255,
+              "rgb": [
+                127,
+                128,
+                255
+              ],
+              "tolerance": 4
+            }
+          ],
+          "normal_length": [
+            1.000015,
+            1.002412
+          ]
+        },
+        "orm": {
+          "sha256": "6b4fa40a20678d88c0966195a4227e92f6d35e22f3f6d33a5a4652cf46dffead",
+          "min_rgb": [
+            238,
+            42,
+            0
+          ],
+          "max_rgb": [
+            255,
+            68,
+            0
+          ],
+          "samples": [
+            {
+              "x": 29,
+              "y": 37,
+              "rgb": [
+                255,
+                55,
+                0
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 127,
+              "y": 83,
+              "rgb": [
+                255,
+                54,
+                0
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 210,
+              "y": 190,
+              "rgb": [
+                255,
+                50,
+                0
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 112,
+              "y": 255,
+              "rgb": [
+                238,
+                52,
+                0
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 204,
+              "y": 235,
+              "rgb": [
+                240,
+                68,
+                0
+              ],
+              "tolerance": 12
+            }
+          ],
+          "ao_mean_p05": [
+            0.99523,
+            0.95294
+          ]
+        },
+        "emissive": {
+          "sha256": "1b9c1877bb61395858e188bc6569279edc9d8aee311a6cf8cf09b55a1c9c935d",
+          "min_rgb": [
+            0,
+            0,
+            0
+          ],
+          "max_rgb": [
+            76,
+            118,
+            129
+          ],
+          "samples": [
+            {
+              "x": 29,
+              "y": 37,
+              "rgb": [
+                0,
+                0,
+                0
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 127,
+              "y": 83,
+              "rgb": [
+                0,
+                0,
+                0
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 210,
+              "y": 190,
+              "rgb": [
+                0,
+                0,
+                0
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 222,
+              "y": 199,
+              "rgb": [
+                30,
+                118,
+                126
+              ],
+              "tolerance": 12
+            },
+            {
+              "x": 17,
+              "y": 96,
+              "rgb": [
+                48,
+                101,
+                129
+              ],
+              "tolerance": 12
+            }
+          ]
+        }
+      }
+    }
+  }
+}

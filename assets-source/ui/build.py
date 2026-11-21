@@ -13,6 +13,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageOps
 BASE = Path(__file__).resolve().parent
 CELL = 128
 CONTENT = 104
+DETAIL_SCALE = 4
 
 
 def digest(path: Path) -> str:
@@ -75,6 +76,111 @@ def badge(source: Image.Image, matte: Image.Image, region: dict) -> Image.Image:
     return Image.alpha_composite(rim, frame)
 
 
+def paint_facet(
+    layer: Image.Image,
+    vertices: list[tuple[int, int]],
+    color: str | tuple[int, int, int, int],
+) -> None:
+    ImageDraw.Draw(layer).polygon(
+        [(x * DETAIL_SCALE, y * DETAIL_SCALE) for x, y in vertices], fill=color
+    )
+
+
+def rail_badge(frame: Image.Image) -> Image.Image:
+    scale = DETAIL_SCALE
+    art = frame.resize((CELL * scale, CELL * scale), Image.Resampling.BICUBIC)
+    head = art.crop((8 * scale, 39 * scale, 120 * scale, 75 * scale)).resize(
+        (111 * scale, 46 * scale), Image.Resampling.LANCZOS
+    )
+    # The clear slot has to survive the 128-to-24 px HUD reduction.
+    ImageDraw.Draw(head).rectangle(
+        (50 * scale, 24 * scale, 111 * scale, 31 * scale), fill=(0, 0, 0, 0)
+    )
+    paint_facet(head, [(36, 21), (50, 19), (108, 19), (108, 22), (50, 23)], "#bedaff")
+    paint_facet(head, [(42, 33), (54, 32), (108, 32), (108, 36), (53, 37)], "#86baff")
+    paint_facet(
+        head, [(46, 17), (54, 11), (100, 11), (105, 15), (105, 18), (51, 18)], "#568fff"
+    )
+    paint_facet(head, [(48, 38), (55, 37), (104, 37), (101, 42), (56, 42)], "#3e7de8")
+    paint_facet(
+        head,
+        [(6, 18), (14, 11), (31, 11), (35, 8), (45, 8), (36, 17), (17, 25), (7, 24)],
+        "#687f9e",
+    )
+    paint_facet(
+        head, [(10, 26), (17, 20), (26, 20), (24, 31), (17, 36), (10, 32)], "#547fec"
+    )
+    paint_facet(head, [(13, 25), (17, 21), (24, 21), (22, 25), (16, 29)], "#addaff")
+    head = head.rotate(17, resample=Image.Resampling.BICUBIC, expand=True)
+    result = Image.new("RGBA", art.size)
+    paint_facet(
+        result, [(32, 71), (53, 69), (49, 84), (60, 94), (23, 94), (31, 83)], "#a3b3c7"
+    )
+    paint_facet(
+        result, [(34, 73), (49, 71), (45, 84), (54, 91), (29, 91), (34, 82)], "#37465d"
+    )
+    paint_facet(
+        result,
+        [(19, 90), (54, 90), (64, 97), (64, 104), (15, 104), (15, 96)],
+        "#afc0cf",
+    )
+    paint_facet(result, [(20, 93), (53, 93), (60, 97), (55, 98), (18, 98)], "#647994")
+    paint_facet(result, [(18, 99), (61, 99), (61, 102), (18, 102)], "#333d50")
+    result.alpha_composite(head, (3 * scale, 13 * scale))
+    finished = Image.new("RGBA", frame.size)
+    finished.paste(result.resize((124, 124), Image.Resampling.LANCZOS), (2, 2))
+    return finished
+
+
+def first_badge(frame: Image.Image) -> Image.Image:
+    # The gate's outer right bevel and the ends of its top and bottom rails are
+    # unobscured in the sheet. Preserve those faces around a widened cyan panel.
+    scale = DETAIL_SCALE
+    post = frame.crop((88, 40, 117, 87)).resize(
+        (40 * scale, 88 * scale), Image.Resampling.LANCZOS
+    )
+    result = Image.new("RGBA", (CELL * scale, CELL * scale))
+    result.alpha_composite(post, (73 * scale, 20 * scale))
+    paint_facet(result, [(72, 35), (93, 35), (93, 92), (72, 92)], (0, 0, 0, 0))
+    paint_facet(
+        result,
+        [
+            (73, 31),
+            (99, 31),
+            (102, 34),
+            (102, 93),
+            (99, 96),
+            (73, 96),
+            (73, 87),
+            (91, 87),
+            (91, 40),
+            (73, 40),
+        ],
+        "#13bbd8",
+    )
+    paint_facet(result, [(73, 31), (99, 31), (102, 34), (77, 34), (73, 37)], "#a6f8ff")
+    paint_facet(result, [(91, 40), (94, 37), (94, 88), (91, 90)], "#62e5f5")
+    paint_facet(
+        result,
+        [(102, 29), (107, 32), (107, 96), (102, 100), (74, 100), (74, 96), (102, 93)],
+        "#34465a",
+    )
+    # A single solid titanium chevron leaves the finish marker as the larger shape.
+    paint_facet(
+        result,
+        [(13, 38), (26, 37), (60, 61), (60, 66), (26, 91), (13, 90), (29, 64)],
+        "#b5c5cf",
+    )
+    paint_facet(
+        result,
+        [(16, 40), (26, 39), (58, 62), (58, 65), (26, 89), (16, 88), (32, 64)],
+        "#30394a",
+    )
+    paint_facet(result, [(18, 41), (26, 41), (55, 63), (38, 64)], "#eef4f6")
+    paint_facet(result, [(18, 86), (38, 64), (55, 63), (26, 86)], "#597084")
+    return result.resize(frame.size, Image.Resampling.LANCZOS)
+
+
 def title(
     source: Image.Image, size: tuple[int, int], safe: list[float], strip: str
 ) -> Image.Image:
@@ -116,6 +222,10 @@ def build(out: Path) -> None:
                 raise ValueError(sheet + ": missing alpha")
             for col, key in enumerate(ids):
                 icon = badge(source, matte, regions[key])
+                if key == "build-rail-sniper":
+                    icon = rail_badge(icon)
+                elif key == "target-first":
+                    icon = first_badge(icon)
                 x, y = col * CELL, row * CELL
                 icon.save(out / "icons" / (key + ".png"), optimize=True)
                 atlas.paste(icon, (x, y))
@@ -126,6 +236,10 @@ def build(out: Path) -> None:
                     "providerMatte": record["file"],
                     "sourceRect": list(pixels(regions[key]["bounds"], source.size)),
                 }
+                if key in provenance["badgeRefinements"]:
+                    entries[key]["refinement"] = (
+                        "../provenance.json#/badgeRefinements/" + key
+                    )
     atlas.save(out / "tactical-atlas.png", optimize=True)
     metadata = {
         "atlas": "tactical-atlas.png",

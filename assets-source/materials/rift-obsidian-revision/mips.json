@@ -1,0 +1,550 @@
+{
+  "basecolor.ktx2": [
+    {
+      "level": 0,
+      "size": 256,
+      "decoded_rgba_sha256": "a2d96f63b417020ced3d78e71f8bd1d53bd8058273dcb2627d2c107b1742c63a",
+      "min_rgb": [
+        37,
+        26,
+        52
+      ],
+      "max_rgb": [
+        65,
+        48,
+        84
+      ]
+    },
+    {
+      "level": 1,
+      "size": 128,
+      "decoded_rgba_sha256": "6be7487d946f06422283d7ef2e28784845a75c55be458f5d6fff9b8da2ea2f9e",
+      "min_rgb": [
+        36,
+        26,
+        50
+      ],
+      "max_rgb": [
+        63,
+        45,
+        81
+      ]
+    },
+    {
+      "level": 2,
+      "size": 64,
+      "decoded_rgba_sha256": "5b0bda2f16d810accba94b3b1d1f15101003c8ff0f14e9866069270ce4379808",
+      "min_rgb": [
+        37,
+        26,
+        51
+      ],
+      "max_rgb": [
+        61,
+        44,
+        78
+      ]
+    },
+    {
+      "level": 3,
+      "size": 32,
+      "decoded_rgba_sha256": "2b87b0ce12cfab64940238f500d2812ab8da9e8a65a282e15bb0925aa82e17a4",
+      "min_rgb": [
+        37,
+        26,
+        51
+      ],
+      "max_rgb": [
+        60,
+        44,
+        78
+      ]
+    },
+    {
+      "level": 4,
+      "size": 16,
+      "decoded_rgba_sha256": "0eeb99c532ad9160dc5dc624c41708b83561f6098853169f2cb601b9e7db4a3a",
+      "min_rgb": [
+        38,
+        28,
+        54
+      ],
+      "max_rgb": [
+        60,
+        42,
+        78
+      ]
+    },
+    {
+      "level": 5,
+      "size": 8,
+      "decoded_rgba_sha256": "c64a0289aee27ff05a4aea67040b3eda0c8b28ae3b86c146451e9c9d54e89e9a",
+      "min_rgb": [
+        39,
+        28,
+        55
+      ],
+      "max_rgb": [
+        58,
+        42,
+        76
+      ]
+    },
+    {
+      "level": 6,
+      "size": 4,
+      "decoded_rgba_sha256": "1658321bcc6ab7f9391d1d79ec8cb2d23ae6bbcf0713573127bcfa0fc54269ee",
+      "min_rgb": [
+        48,
+        34,
+        64
+      ],
+      "max_rgb": [
+        53,
+        38,
+        70
+      ]
+    },
+    {
+      "level": 7,
+      "size": 2,
+      "decoded_rgba_sha256": "f110f2874a5d9bedb3cead4d539a92dba3b3a390a81c35703806b71a8414950b",
+      "min_rgb": [
+        50,
+        36,
+        66
+      ],
+      "max_rgb": [
+        51,
+        36,
+        67
+      ]
+    },
+    {
+      "level": 8,
+      "size": 1,
+      "decoded_rgba_sha256": "3c813edf5a1ff54083c1416a4a4596ca96c359a5219b247c410b9def14917bcb",
+      "min_rgb": [
+        51,
+        36,
+        67
+      ],
+      "max_rgb": [
+        51,
+        36,
+        67
+      ]
+    }
+  ],
+  "emissive.ktx2": [
+    {
+      "level": 0,
+      "size": 256,
+      "decoded_rgba_sha256": "9d22d234763ad8bf2a129c45e712dc1b1079b554d8663267cc2b82afc4a6ca02",
+      "min_rgb": [
+        0,
+        0,
+        0
+      ],
+      "max_rgb": [
+        76,
+        118,
+        129
+      ]
+    },
+    {
+      "level": 1,
+      "size": 128,
+      "decoded_rgba_sha256": "f9c0cb546955b08170722a2d7146d99454f20d26db746fc52ab2a988a3767811",
+      "min_rgb": [
+        0,
+        0,
+        0
+      ],
+      "max_rgb": [
+        57,
+        85,
+        93
+      ]
+    },
+    {
+      "level": 2,
+      "size": 64,
+      "decoded_rgba_sha256": "12a4d52be6ef88e5cb7e3a0ce75cc3ec89d2acb36b1e73d9997a42c4f0139a99",
+      "min_rgb": [
+        0,
+        0,
+        0
+      ],
+      "max_rgb": [
+        42,
+        58,
+        66
+      ]
+    },
+    {
+      "level": 3,
+      "size": 32,
+      "decoded_rgba_sha256": "b1b252fde6133837c1137610ebe037804c23563bd31523592b45679d242e462d",
+      "min_rgb": [
+        0,
+        0,
+        0
+      ],
+      "max_rgb": [
+        26,
+        35,
+        50
+      ]
+    },
+    {
+      "level": 4,
+      "size": 16,
+      "decoded_rgba_sha256": "d5add33aa6754210c848732b02064678d691965160761f08b733b2c826643a76",
+      "min_rgb": [
+        0,
+        0,
+        0
+      ],
+      "max_rgb": [
+        15,
+        19,
+        31
+      ]
+    },
+    {
+      "level": 5,
+      "size": 8,
+      "decoded_rgba_sha256": "49e32261bf1dcb59396a392a9e6f4e336d0dd3a3b7b803361f16190b9895793c",
+      "min_rgb": [
+        0,
+        0,
+        0
+      ],
+      "max_rgb": [
+        6,
+        12,
+        18
+      ]
+    },
+    {
+      "level": 6,
+      "size": 4,
+      "decoded_rgba_sha256": "5cfe5cb1908f71b7e1aee90c24d6c99a696821911198f16c91498ed2d4e4b12c",
+      "min_rgb": [
+        0,
+        0,
+        0
+      ],
+      "max_rgb": [
+        4,
+        6,
+        12
+      ]
+    },
+    {
+      "level": 7,
+      "size": 2,
+      "decoded_rgba_sha256": "be56d0fdf66c0744b8f24410277a780fe5c72e8482a69dbfa931a6387340ca8b",
+      "min_rgb": [
+        1,
+        3,
+        5
+      ],
+      "max_rgb": [
+        3,
+        3,
+        7
+      ]
+    },
+    {
+      "level": 8,
+      "size": 1,
+      "decoded_rgba_sha256": "c57ad66dab6c1fdcab58e10bd3d770d4f279bdc6ab1a70366e53d0e8fdfb1afc",
+      "min_rgb": [
+        2,
+        3,
+        6
+      ],
+      "max_rgb": [
+        2,
+        3,
+        6
+      ]
+    }
+  ],
+  "normal.ktx2": [
+    {
+      "level": 0,
+      "size": 256,
+      "decoded_rgba_sha256": "3ba424419d7e35cb58a0d614764bc00d8a14693d2f2915040af725303645cb6b",
+      "min_rgb": [
+        118,
+        119,
+        255
+      ],
+      "max_rgb": [
+        135,
+        135,
+        255
+      ]
+    },
+    {
+      "level": 1,
+      "size": 128,
+      "decoded_rgba_sha256": "09b612e38abe3750818befb3d5149df15271cc6c763eb8a83ff71937835982fe",
+      "min_rgb": [
+        121,
+        121,
+        255
+      ],
+      "max_rgb": [
+        134,
+        133,
+        255
+      ]
+    },
+    {
+      "level": 2,
+      "size": 64,
+      "decoded_rgba_sha256": "72a487844be02daf3e3facd47d713f9c84e4c99d0dd47cf64d909352ddfe4d79",
+      "min_rgb": [
+        120,
+        121,
+        255
+      ],
+      "max_rgb": [
+        132,
+        132,
+        255
+      ]
+    },
+    {
+      "level": 3,
+      "size": 32,
+      "decoded_rgba_sha256": "ade77958e6e54ddd72e61c11e547216e1ce6bd8080b436dcc95c8a59b382e4dc",
+      "min_rgb": [
+        121,
+        121,
+        255
+      ],
+      "max_rgb": [
+        132,
+        131,
+        255
+      ]
+    },
+    {
+      "level": 4,
+      "size": 16,
+      "decoded_rgba_sha256": "d7a900aef2bc5257f2a34ac9faaa12e703a19895d9845eee7032262433af4868",
+      "min_rgb": [
+        124,
+        123,
+        255
+      ],
+      "max_rgb": [
+        131,
+        131,
+        255
+      ]
+    },
+    {
+      "level": 5,
+      "size": 8,
+      "decoded_rgba_sha256": "4286b0a41281a215e790b2e542e43a105e7be0e9d41e2b9b64d593d45e3f4809",
+      "min_rgb": [
+        126,
+        126,
+        255
+      ],
+      "max_rgb": [
+        129,
+        128,
+        255
+      ]
+    },
+    {
+      "level": 6,
+      "size": 4,
+      "decoded_rgba_sha256": "80d4925a85e352ace3f6aa9ed8aab7279e9879f7609808e085f8c21dbcdb847e",
+      "min_rgb": [
+        127,
+        127,
+        255
+      ],
+      "max_rgb": [
+        128,
+        128,
+        255
+      ]
+    },
+    {
+      "level": 7,
+      "size": 2,
+      "decoded_rgba_sha256": "2c86248be89a8ff24fa52cd4a13ff34951173b276cb21ab3b0f2c8311baa8680",
+      "min_rgb": [
+        127,
+        127,
+        255
+      ],
+      "max_rgb": [
+        128,
+        128,
+        255
+      ]
+    },
+    {
+      "level": 8,
+      "size": 1,
+      "decoded_rgba_sha256": "4a9d1ce89bf3b9835faab10443a12e5bc5e9b5f1ffbb2a80da1173d176db0fc9",
+      "min_rgb": [
+        128,
+        127,
+        255
+      ],
+      "max_rgb": [
+        128,
+        127,
+        255
+      ]
+    }
+  ],
+  "orm.ktx2": [
+    {
+      "level": 0,
+      "size": 256,
+      "decoded_rgba_sha256": "8d616e4bcf6c294131bea07705e24198170cf5373a26a96851d8d6b06477b4b5",
+      "min_rgb": [
+        231,
+        40,
+        0
+      ],
+      "max_rgb": [
+        255,
+        72,
+        0
+      ]
+    },
+    {
+      "level": 1,
+      "size": 128,
+      "decoded_rgba_sha256": "0e62f6d59bdd8a8925a20e352c3d006a3c869092076d6c9703af6f447d179484",
+      "min_rgb": [
+        239,
+        40,
+        0
+      ],
+      "max_rgb": [
+        255,
+        67,
+        0
+      ]
+    },
+    {
+      "level": 2,
+      "size": 64,
+      "decoded_rgba_sha256": "889dc3ee5b136fcc5d7f63eca6fca3675d14646a0d396d3ff8ba678a5056bcad",
+      "min_rgb": [
+        244,
+        40,
+        0
+      ],
+      "max_rgb": [
+        255,
+        64,
+        0
+      ]
+    },
+    {
+      "level": 3,
+      "size": 32,
+      "decoded_rgba_sha256": "d8ba8394148f794cfbed383e3e41eb8a8a970ad0bd6de65cf3c53502ebdad74b",
+      "min_rgb": [
+        247,
+        42,
+        0
+      ],
+      "max_rgb": [
+        255,
+        62,
+        0
+      ]
+    },
+    {
+      "level": 4,
+      "size": 16,
+      "decoded_rgba_sha256": "e4d251b9d7fb31d548bb7bba04a66a8b589878666352dd9eb5ec36f3077369ac",
+      "min_rgb": [
+        252,
+        43,
+        0
+      ],
+      "max_rgb": [
+        255,
+        62,
+        0
+      ]
+    },
+    {
+      "level": 5,
+      "size": 8,
+      "decoded_rgba_sha256": "626faae440fc5504c07c2e1decf159dce673c3bd6f8691d0717007b6890531f7",
+      "min_rgb": [
+        253,
+        44,
+        0
+      ],
+      "max_rgb": [
+        254,
+        60,
+        0
+      ]
+    },
+    {
+      "level": 6,
+      "size": 4,
+      "decoded_rgba_sha256": "31e7f832c24744542f23932b5110e3f8e90436948b866c8a50732892bc3951ea",
+      "min_rgb": [
+        254,
+        49,
+        0
+      ],
+      "max_rgb": [
+        254,
+        56,
+        0
+      ]
+    },
+    {
+      "level": 7,
+      "size": 2,
+      "decoded_rgba_sha256": "c8c12ba13175c5b33ffaf0d10b08dc109da43a1c300250dd83993ba48ff089e8",
+      "min_rgb": [
+        253,
+        51,
+        0
+      ],
+      "max_rgb": [
+        254,
+        53,
+        0
+      ]
+    },
+    {
+      "level": 8,
+      "size": 1,
+      "decoded_rgba_sha256": "63be2636b31710d9cddef983fa2401efa19727782c06749a6b34e6210be0c51c",
+      "min_rgb": [
+        254,
+        53,
+        0
+      ],
+      "max_rgb": [
+        254,
+        53,
+        0
+      ]
+    }
+  ]
+}

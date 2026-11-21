@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "models": [],
+  "textures": [
+    {
+      "file": "rift-obsidian/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "40fff26f5c4df4f9b68bdf1f36e31fc9324ba2177f44df1b3bd25c1ca839dce3",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            50,
+            36,
+            67
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            53,
+            38,
+            70
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            47,
+            34,
+            63
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "rift-obsidian/normal.ktx2",
+      "role": "normal",
+      "sha256": "8f045b9e3977ac56fbfc07c8ab06f53329be62498df75c05c411ee2e500c4808",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            127,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 7,
+          "y": 255,
+          "rgb": [
+            127,
+            128,
+            255
+          ],
+          "tolerance": 4
+        }
+      ]
+    },
+    {
+      "file": "rift-obsidian/orm.ktx2",
+      "role": "orm",
+      "sha256": "747e67991972442c5db30ee6d34d7156ab90374e37628922f0703fac6569020e",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            255,
+            55,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            255,
+            54,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            255,
+            50,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 112,
+          "y": 255,
+          "rgb": [
+            238,
+            52,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 204,
+          "y": 235,
+          "rgb": [
+            240,
+            68,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "rift-obsidian/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "be19e508bdc8bf4fefb03daf6171f1aa21d8ccba09d0bdc1961c15bc6b81cc3a",
+      "width": 256,
+      "height": 256,
+      "samples": [
+        {
+          "x": 29,
+          "y": 37,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 127,
+          "y": 83,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 210,
+          "y": 190,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 222,
+          "y": 199,
+          "rgb": [
+            30,
+            118,
+            126
+          ],
+          "tolerance": 12
+        },
+        {
+          "x": 17,
+          "y": 96,
+          "rgb": [
+            48,
+            101,
+            129
+          ],
+          "tolerance": 12
+        }
+      ]
+    }
+  ]
+}

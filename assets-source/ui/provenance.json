@@ -305,5 +305,17 @@
       "chargedAt": "2026-11-21T04:10:01.769085Z",
       "usage": "Selected source"
     }
-  ]
+  ],
+  "badgeRefinements": {
+    "build-rail-sniper": {
+      "sheetKey": "build-wave",
+      "matteKey": "build-wave-alpha",
+      "method": "build.py rail_badge: separate and elevate the original twin-rail head, widen its transparent slot, repaint the cobalt bands and titanium lips, and redraw the pivot and mounting foot for the 24 px HUD."
+    },
+    "target-first": {
+      "sheetKey": "targets-stars",
+      "matteKey": "targets-stars-alpha",
+      "method": "build.py first_badge: isolate and enlarge the original finish post and its outer bevel, repaint its cyan bracket and replace the overlapping hollow arrow with a shorter solid titanium chevron. A transparent gap separates the two forms."
+    }
+  }
 }
