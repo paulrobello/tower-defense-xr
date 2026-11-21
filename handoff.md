@@ -8,7 +8,7 @@
 
 - **Updated:** November 21, 2026 (Pacific time)
 - **Repo:** `/Users/probello/Repos/tower-defense-xr`, branch `main`. The existing local formatting edit in the Phase 4 plan is separate from this handoff.
-- **Public baseline:** [GitHub](https://github.com/paulrobello/tower-defense-xr) and [live test build](https://rift-bastion.pardev.net/). Paul approved the first verified testing release on November 20, 2026. The published commit is `dcb9dca` and the deployed build ID is `f7278d12e27a`. The local backup branch `codex/rift-pre-publication-history` retains the original history. Obtain approval for subsequent pushes.
+- **Public build:** [GitHub](https://github.com/paulrobello/tower-defense-xr) and [live test build](https://rift-bastion.pardev.net/). The Quest calibration hotfix was deployed at commit `a32c892`, build `443a1533c24c`, on November 21, 2026. GitHub Actions passed the Linux gate and Pages deploy. The live manifest matched the verified build and content hash. The local backup branch `codex/rift-pre-publication-history` retains the original history. [Deployment run](https://github.com/paulrobello/tower-defense-xr/actions/runs/44939389047)
 - **Completed work (30 kanban cards `done`):**
   - **Phase 0 complete:** `P0-T1`–`P0-T6` closed. The local gates, 14/14 IWER smoke and build A→B Reload checks passed. [GitHub Actions](https://github.com/paulrobello/tower-defense-xr/actions/runs/44874742012) passed the pinned Linux gate and Pages deployment. The live manifest matched the verified build and Quest Browser rendered desktop calibration on its Adreno GPU. Immersive play and physical performance remain Phase 5 work.
   - **Phase 1 (100% complete):** `P1-T1`–`P1-T6` closed. `bun scripts/xr-emu/walk-p1.mjs` passes **19/19** checks (seated `1.2 m` `front-180` + standing `1.65 m` `full-360` calibration, floor/table/wall surface-clamp + thumbstick hover-pod `0.8–5.0 m`, `TOO_CLOSE` & `CAP 14/14` SDF labels, `auto-depth → room-mesh → off` cutouts).
@@ -23,11 +23,17 @@
 2. **Time & quota reporting:** Use Pacific time and include live provider balances at wave updates when available.
 3. **Spend & asset boundaries:** Paid Higgsfield and ElevenLabs generation inside the vertical-slice table in `PRD.md` is pre-approved with 3× retry headroom. **Meshy is strictly forbidden** (all 3D goes through Blender 5.2.2 LTS). Never self-record owner creative sign-off.
 4. **Radial menu re-skin:** Tracked explicitly in `PRD.md`, `plans/phase-4-aaa-rendering-fx-and-audio.md`, and kanban card `P4-T6` (`01a1fb37b41e73dfa3f531303c243df5`).
-5. **Git / kanban hygiene:** Create sibling git worktrees under `/Users/probello/Repos/tower-defense-xr-wt-<slug>` (bootstrapped with `bun install --frozen-lockfile`), rebase and squash-merge verified work, delete merged worktrees immediately, never add `Co-Authored-By:` trailers, and never push without approval. Kanban CLI invocation: `bun /Users/probello/Repos/kanban/cli/kanban.ts ...` (mint a fresh session-unique `--claimed-by` literal token).
+5. **Git / kanban hygiene:** Create sibling git worktrees under `/Users/probello/Repos/tower-defense-xr-wt-<slug>` (bootstrapped with `bun install --frozen-lockfile`), rebase and squash-merge verified work, delete merged worktrees immediately, and never add `Co-Authored-By:` trailers. Paul granted standing approval on November 21, 2026 to merge and deploy Rift Bastion when needed. Kanban CLI invocation is `bun /Users/probello/Repos/kanban/cli/kanban.ts ...`. Use a session-unique `--claimed-by` token.
 
 ---
 
-## Remaining Work (Kanban Project: `tower-defense-xr`, 11 Open Cards)
+## Remaining Work (Kanban Project: `tower-defense-xr`)
+
+### Quest calibration hotfix (physical retest pending)
+
+- Paul reported fragmented outlines, stutter, missing menus and unresponsive controls in immersive AR on the first public build. The hotfix draws the spatial UI over a fresh depth buffer, routes trigger selection to calibration and settings controls, preserves stable room surfaces through transient scan errors, and requests CPU depth with room-geometry fallback. This prevents Three.js from activating its separate GPU depth pass.
+- The Linux `make checkall-ci` passed all 218 tests. The Metal-backed IWER smoke, calibration and placement walk, and combat walk passed 14/14, 19/19 and 8/8 with zero console errors. Emulated WebXR trigger events moved and locked the Core, opened, paged through and closed Settings, cycled room occlusion and placed turrets. Stereo captures show the full calibration HUD and readable Settings in both eyes.
+- Card `01a1ff7656077486ab8170491b772b37` awaits a physical Quest check of the live hotfix. Reload the site in Quest Browser, enter Mixed Reality, open Settings and lock the Core with the controller trigger, then click a thumbstick and build a turret. Observe visibility and pacing while looking around. Phase 5 still owns instrumented frame pacing and both-posture acceptance.
 
 ### Next Up — Phase 3: Art Direction & Blender AAA Assets (2 open cards, `plans/phase-3-art-direction-and-blender-assets.md`)
 - **Wave 1 complete.**
@@ -105,5 +111,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Obtain approval at Owner Checkpoint 2.** Paul’s approval of the exact batch recorded in the art review closes the remaining creative criteria on `P3-T6` and `P3-T7`. `P4-T1` then promotes the approved package. The private radial theme candidate remains ready for its later transplant.
-2. **Collect owner feedback** from the [public test build](https://rift-bastion.pardev.net/). Asset promotion stays gated by Owner Checkpoint 2.
+1. **Collect the Quest retest** on build `443a1533c24c`. Record whether the HUD is visible, the trigger works, and motion is smooth during calibration and placement.
+2. **Obtain approval at Owner Checkpoint 2.** Paul’s approval of the exact batch recorded in the art review closes the remaining creative criteria on `P3-T6` and `P3-T7`. `P4-T1` then promotes the approved package. The private radial theme candidate remains ready for its later transplant.
