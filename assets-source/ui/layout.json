@@ -1,0 +1,91 @@
+{
+  "sheets": {
+    "build-wave": [
+      "build-autocannon",
+      "build-plasma-mortar",
+      "build-cryo-arc",
+      "build-rail-sniper",
+      "wave-launch",
+      "wave-warning"
+    ],
+    "commands": ["tier-1", "tier-2", "tier-3", "relocate", "sell", "emp-disrupted"],
+    "targets-stars": [
+      "target-first",
+      "target-strongest",
+      "target-closest",
+      "target-air",
+      "star-earned",
+      "star-empty"
+    ]
+  },
+  "radialActions": {
+    "build:autocannon": "build-autocannon",
+    "build:plasma-mortar": "build-plasma-mortar",
+    "build:cryo-arc": "build-cryo-arc",
+    "build:rail-sniper": "build-rail-sniper",
+    "wave:launch": "wave-launch",
+    "turret:upgrade": {
+      "nextTier": {
+        "T2": "tier-2",
+        "T3": "tier-3"
+      },
+      "maxTier": "tier-3"
+    },
+    "turret:priority": {
+      "priority": {
+        "first": "target-first",
+        "strongest": "target-strongest",
+        "closest": "target-closest",
+        "air": "target-air"
+      }
+    },
+    "turret:relocate": "relocate",
+    "turret:sell": "sell"
+  },
+  "desktopActionBus": {
+    "turret/build": {
+      "kind": {
+        "autocannon": "build-autocannon",
+        "plasma-mortar": "build-plasma-mortar",
+        "cryo-arc": "build-cryo-arc",
+        "rail-sniper": "build-rail-sniper"
+      }
+    },
+    "wave/launch": "wave-launch",
+    "turret/upgrade": {
+      "radialAction": "turret:upgrade"
+    },
+    "turret/set-priority": {
+      "radialAction": "turret:priority"
+    },
+    "turret/relocate": "relocate",
+    "turret/sell": "sell"
+  },
+  "states": {
+    "tier": {
+      "T1": "tier-1",
+      "T2": "tier-2",
+      "T3": "tier-3"
+    },
+    "waveWarning": "wave-warning",
+    "isDisrupted": "emp-disrupted",
+    "stars": {
+      "earned": "star-earned",
+      "empty": "star-empty"
+    }
+  },
+  "titles": {
+    "desktop-title": {
+      "width": 1920,
+      "height": 1080,
+      "textSafe": [0.04, 0.23, 0.39, 0.75],
+      "sourceKey": "desktop-alt"
+    },
+    "quest-title": {
+      "width": 1024,
+      "height": 1024,
+      "textSafe": [0.1, 0.75, 0.9, 0.94],
+      "sourceKey": "quest-title"
+    }
+  }
+}

@@ -1,0 +1,309 @@
+{
+  "provider": "Higgsfield",
+  "cliVersion": "1.2.2",
+  "creativeApproval": "P3-T1 style direction approved by Paul. P3-T7 UI and key art creative approval pending.",
+  "notes": "All originals are unmodified output bytes. Each generator request used an original project board as its only image reference; each cutout request used the job ID of its complete matching icon sheet. Seed is recorded only when exposed by the model. Sheet coordinates and subject isolation polygons are in regions.json.",
+  "billing": {
+    "quotedCredits": 15,
+    "chargedCredits": 15,
+    "method": "Per-job preflight and account spend entries matched one-to-one in model and timestamp order, within one second of each job creation. Provider timestamps are UTC."
+  },
+  "rights": "Project-authored prompts and project-generated references. Higgsfield permits commercial use of generated outputs; attribution is optional and exclusivity is not guaranteed.",
+  "rightsSources": [
+    "https://higgsfield.ai/terms-of-use-agreement",
+    "https://higgsfield.ai/creator-hub/help-center/account/who-owns-my-generations-and-can-i-use-them-commercially"
+  ],
+  "outputs": [
+    {
+      "key": "build-wave",
+      "file": "originals/build-wave.png",
+      "jobId": "d771b455-a73d-4083-aaeb-091c5987e780",
+      "model": "nano_banana_pro",
+      "createdAt": "2026-11-21T04:07:02.920362Z",
+      "quotedCredits": 2,
+      "prompt": "Original Rift Bastion in-game tactical icon sheet. Six separate, large, simplified front-facing graphic emblems in a precise three-column, two-row grid, one complete emblem centered inside each equal square cell. Every emblem occupies 65 percent of its own cell. Simple chunky vector-like game glyphs. Apply the restrained dark slate ceramic, bright titanium edging and selective luminous accent language of the supplied reference, interpreted as clear bold UI symbols; omit everything depicted on the reference board. Each symbol has a conspicuous readable contour, minimal facets and no fine marks, legible at 24 pixels. No enclosing tiles, frame, badges behind the symbols, dividers, cast shadows, words, letters, numerals, captions, labels, watermark, borders or floor. Flat uniform pure white background everywhere, with abundant identical empty margin around all six isolated shapes. Each cell remains completely independent. Top row left to right: (1) compact squat turret with one straight amber-tipped barrel in three-quarter side profile (M44). (2) short stout sharply upturned hollow orange mortar tube and a compact yaw base (Helios). (3) open cyan bifurcated tuning-fork emitter on a compact base (Glacier). Bottom row left to right: (4) long narrow side-profile twin-rail silhouette with a long slot, electric cobalt blue accent and compact base (Valkyrie). (5) bold right-facing cyan play triangle with a single offset horizontal speed line, meaning launch wave. (6) amber triangular warning frame with a dark exclamation shape cut into its center, prominent broad warning silhouette.",
+      "settings": {
+        "application": null,
+        "aspect_ratio": "3:2",
+        "batch_size": 1,
+        "height": 1696,
+        "resolution": "2k",
+        "surface": null,
+        "width": 2528
+      },
+      "references": [
+        {
+          "file": "../concepts/boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "width": 2528,
+      "height": 1696,
+      "format": "PNG",
+      "colorspace": "sRGB",
+      "channels": "srgb  3.0",
+      "bytes": 3266298,
+      "sha256": "f252699b770f6e58ef44202ce95ed29844f604d1b773e6cf211a7c9a657c00ee",
+      "chargedCredits": 2,
+      "chargedAt": "2026-11-21T04:07:03.030682Z",
+      "usage": "Selected source"
+    },
+    {
+      "key": "desktop-title",
+      "file": "originals/desktop-title.png",
+      "jobId": "c7d01d97-efa7-49a7-a4d5-7229248dd832",
+      "model": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T04:07:03.304696Z",
+      "quotedCredits": 2,
+      "prompt": "Original premium sci-fi game key art for Rift Bastion, the room-scale mixed reality defense game. Match the supplied Bastion Rib material design. Precisely composed cinematic WIDE desktop hero: the LEFT 42 percent is deep nearly black graphite interior wall and soft atmosphere, low contrast, completely empty reserved for separately typeset white title and menu buttons. Place all imagery in the right half. At right foreground a compact angular armored octagonal Core pedestal with dark ceramic inserts and silver ribs surrounds a floating faceted violet-cyan crystal and containment ring. A tidy little amber turret and a grounded obsidian six-legged alien create a clear diagonal. On a distant right-side concrete wall a tall oval violet/teal dimensional rift casts light over a modest believable room. Maintain depth, high focal contrast at the crystal, subtle atmospheric haze, realistic PBR materials. Art directed premium still, no lettering, placeholder text, marks, watermark, interface, guides, frames, typography, border or logos. Camera is at tabletop height; all focal forms well inside right 55 percent and safe from edges.",
+      "settings": {
+        "aspect_ratio": "16:9",
+        "batch_size": 1,
+        "height": 1536,
+        "mode": "auto",
+        "resolution": "2k",
+        "seed": 502126,
+        "width": 2752
+      },
+      "references": [
+        {
+          "file": "../concepts/boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "width": 2752,
+      "height": 1536,
+      "format": "PNG",
+      "colorspace": "sRGB",
+      "channels": "srgb  3.0",
+      "bytes": 6043801,
+      "sha256": "2a1c49eec64ae6fb7ae373b4afadac8c6cd503936f8e4c4d4f9f65d528a419f1",
+      "chargedCredits": 2,
+      "chargedAt": "2026-11-21T04:07:03.358952Z",
+      "usage": "Superseded desktop composition; hard vertical panel seam between title area and studio still."
+    },
+    {
+      "key": "commands",
+      "file": "originals/commands.png",
+      "jobId": "4e09c068-8957-476d-b600-2b3430ea4e6a",
+      "model": "nano_banana_pro",
+      "createdAt": "2026-11-21T04:08:25.383696Z",
+      "quotedCredits": 2,
+      "prompt": "Original Rift Bastion in-game tactical icon sheet. Six separate, large, simplified front-facing graphic emblems in a precise three-column, two-row grid, one complete emblem centered inside each equal square cell. Every emblem occupies 65 percent of its own cell. Simple chunky vector-like game glyphs. Apply the restrained dark slate ceramic, bright titanium edging and selective luminous accent language of the supplied reference, interpreted as clear bold UI symbols; omit everything depicted on the reference board. Each symbol has a conspicuous readable contour, minimal facets and no fine marks, legible at 24 pixels. No enclosing tiles, frame, badges behind the symbols, dividers, cast shadows, words, letters, numerals, captions, labels, watermark, borders or floor. Flat uniform pure white background everywhere, with abundant identical empty margin around all six isolated shapes. Each cell remains completely independent. Top row depicts rank pips all pointing UP. Left exactly ONE thick unbroken brushed silver upward chevron. Middle exactly TWO separate stacked upward chevrons. Right exactly THREE separate stacked upward chevrons. Each rank shown as an icon, gold upper bevel and titanium edge against graphite. Do not add stars, numbers, badges or text. Bottom row left to right: (4) relocate: one white-cyan cross of outward-pointing four directional arrows joined at their center. (5) sell for credits: two overlapping round gold credit tokens, one with a chamfered inset and one thin pale return arrow, no currency character. (6) EMP disrupted: a jagged cyan lightning bolt struck through with an angular diagonal red slash, electric-interruption icon.",
+      "settings": {
+        "application": null,
+        "aspect_ratio": "3:2",
+        "batch_size": 1,
+        "height": 1696,
+        "resolution": "2k",
+        "surface": null,
+        "width": 2528
+      },
+      "references": [
+        {
+          "file": "../concepts/boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "width": 2528,
+      "height": 1696,
+      "format": "PNG",
+      "colorspace": "sRGB",
+      "channels": "srgb  3.0",
+      "bytes": 3260283,
+      "sha256": "ee4b9ec9d7fa43e95f594d4fdb24d3ccafd840a58249eccbefe2e0b8a3fd40d5",
+      "chargedCredits": 2,
+      "chargedAt": "2026-11-21T04:08:25.454583Z",
+      "usage": "Selected source"
+    },
+    {
+      "key": "targets-stars",
+      "file": "originals/targets-stars.png",
+      "jobId": "c65249c4-e13c-462b-84c1-d4c2c49ef5b2",
+      "model": "nano_banana_pro",
+      "createdAt": "2026-11-21T04:08:25.48311Z",
+      "quotedCredits": 2,
+      "prompt": "Original Rift Bastion in-game tactical icon sheet. Six separate, large, simplified front-facing graphic emblems in a precise three-column, two-row grid, one complete emblem centered inside each equal square cell. Every emblem occupies 65 percent of its own cell. Simple chunky vector-like game glyphs. Apply the restrained dark slate ceramic, bright titanium edging and selective luminous accent language of the supplied reference, interpreted as clear bold UI symbols; omit everything depicted on the reference board. Each symbol has a conspicuous readable contour, minimal facets and no fine marks, legible at 24 pixels. No enclosing tiles, frame, badges behind the symbols, dividers, cast shadows, words, letters, numerals, captions, labels, watermark, borders or floor. Flat uniform pure white background everywhere, with abundant identical empty margin around all six isolated shapes. Each cell remains completely independent. Top row left to right: (1) first target: white facing-right leading arrowhead paired with a small cyan finish gate, very bold directional pictogram. (2) strongest target: broad silver shield crest with one central gold block, obvious shield outline. (3) closest target: broad cyan concentric target rings focused tightly on one filled center dot. Bottom row left to right: (4) air priority: angular upward-view swept-wing delta aircraft silhouette, titanium with cobalt accents. (5) earned star: one solid filled five-point gold star with broad satin center and crisp silver edge. (6) empty star: one thick SILVER OUTLINE five-point star enclosing a completely EMPTY white center, dim slate edging. Two stars same external silhouette and no enclosing plate.",
+      "settings": {
+        "application": null,
+        "aspect_ratio": "3:2",
+        "batch_size": 1,
+        "height": 1696,
+        "resolution": "2k",
+        "surface": null,
+        "width": 2528
+      },
+      "references": [
+        {
+          "file": "../concepts/boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "width": 2528,
+      "height": 1696,
+      "format": "PNG",
+      "colorspace": "sRGB",
+      "channels": "srgb  3.0",
+      "bytes": 4091208,
+      "sha256": "0cf2684e47da28e7695144f50ee0ca05c4d9373c1bf337981aeb889dbfd7ed68",
+      "chargedCredits": 2,
+      "chargedAt": "2026-11-21T04:08:25.591006Z",
+      "usage": "Selected source"
+    },
+    {
+      "key": "build-wave-alpha",
+      "file": "originals/build-wave-alpha.png",
+      "jobId": "44b47624-487e-468a-a819-b45c0741d9c4",
+      "model": "image_background_remover",
+      "createdAt": "2026-11-21T04:08:25.765954Z",
+      "quotedCredits": 1,
+      "prompt": null,
+      "settings": {},
+      "references": [
+        {
+          "file": "originals/build-wave.png",
+          "jobId": "d771b455-a73d-4083-aaeb-091c5987e780",
+          "sha256": "f252699b770f6e58ef44202ce95ed29844f604d1b773e6cf211a7c9a657c00ee"
+        }
+      ],
+      "width": 2528,
+      "height": 1696,
+      "format": "PNG",
+      "colorspace": "sRGB",
+      "channels": "srgba 4.0",
+      "bytes": 4804219,
+      "sha256": "99b351889f349f8965b82e453270e48fce528876c1e6b557b924522a42dc22c6",
+      "chargedCredits": 1,
+      "chargedAt": "2026-11-21T04:08:25.816459Z",
+      "usage": "Selected source"
+    },
+    {
+      "key": "commands-alpha",
+      "file": "originals/commands-alpha.png",
+      "jobId": "cbfe2ca3-cc7a-47d1-a949-0e73d7aba3e2",
+      "model": "image_background_remover",
+      "createdAt": "2026-11-21T04:09:28.593155Z",
+      "quotedCredits": 1,
+      "prompt": null,
+      "settings": {},
+      "references": [
+        {
+          "file": "originals/commands.png",
+          "jobId": "4e09c068-8957-476d-b600-2b3430ea4e6a",
+          "sha256": "ee4b9ec9d7fa43e95f594d4fdb24d3ccafd840a58249eccbefe2e0b8a3fd40d5"
+        }
+      ],
+      "width": 2528,
+      "height": 1696,
+      "format": "PNG",
+      "colorspace": "sRGB",
+      "channels": "srgba 4.0",
+      "bytes": 4704809,
+      "sha256": "c9940edce50f4bdbd1920bbe323e29d7ae12b818e35f3eecfd153d3b32f6748b",
+      "chargedCredits": 1,
+      "chargedAt": "2026-11-21T04:09:28.70412Z",
+      "usage": "Selected source"
+    },
+    {
+      "key": "quest-title",
+      "file": "originals/quest-title.png",
+      "jobId": "51b54c26-9bcc-41ed-ba8f-55f034dad960",
+      "model": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T04:09:28.89183Z",
+      "quotedCredits": 2,
+      "prompt": "Original striking square launch-card painting for Rift Bastion. Match the supplied Bastion Rib reference for the octagonal shielded titanium-and-ceramic Core, violet-cyan hovering faceted crystal and polished emitter collar. The Core dominates the UPPER MIDDLE half of this square with a tall violet/teal portal on a quiet room wall behind it. One small low chitin crawler in side silhouette from the upper-right suggests the invasion. Close cropped cinematic portrait, sculptural lighting, filmic dark slate, teal atmosphere and one amber pin light. Keep the entire LOWER 29 percent of the square as very dark, quiet unfocused foreground for a separately typeset bright title; reserve clear margins on every side. No lettering, callouts, typography, watermark, button, border, UI or logo. Format-specific focal composition, distinct from any wide version.",
+      "settings": {
+        "aspect_ratio": "1:1",
+        "batch_size": 1,
+        "height": 2048,
+        "mode": "auto",
+        "resolution": "2k",
+        "seed": 738328,
+        "width": 2048
+      },
+      "references": [
+        {
+          "file": "../concepts/boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "width": 2048,
+      "height": 2048,
+      "format": "PNG",
+      "colorspace": "sRGB",
+      "channels": "srgb  3.0",
+      "bytes": 6273693,
+      "sha256": "cd787b2b876b34ccaa5899ea5f801133a017ba0eef71490072523fd9f0d82e54",
+      "chargedCredits": 2,
+      "chargedAt": "2026-11-21T04:09:28.963046Z",
+      "usage": "Selected source"
+    },
+    {
+      "key": "targets-stars-alpha",
+      "file": "originals/targets-stars-alpha.png",
+      "jobId": "f10ba98e-abc1-47ad-b9fe-e6b82fa01123",
+      "model": "image_background_remover",
+      "createdAt": "2026-11-21T04:09:45.504295Z",
+      "quotedCredits": 1,
+      "prompt": null,
+      "settings": {},
+      "references": [
+        {
+          "file": "originals/targets-stars.png",
+          "jobId": "c65249c4-e13c-462b-84c1-d4c2c49ef5b2",
+          "sha256": "0cf2684e47da28e7695144f50ee0ca05c4d9373c1bf337981aeb889dbfd7ed68"
+        }
+      ],
+      "width": 2528,
+      "height": 1696,
+      "format": "PNG",
+      "colorspace": "sRGB",
+      "channels": "srgba 4.0",
+      "bytes": 4805322,
+      "sha256": "f6b191e9bedbeb3c2e8e70020f7edfbfd4ce490c70ceac6d2bd5251d74827f59",
+      "chargedCredits": 1,
+      "chargedAt": "2026-11-21T04:09:45.592182Z",
+      "usage": "Selected source"
+    },
+    {
+      "key": "desktop-alt",
+      "file": "originals/desktop-alt.png",
+      "jobId": "90b7d2cc-b77f-45e8-a3c5-b06f5c399a8d",
+      "model": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T04:10:01.733592Z",
+      "quotedCredits": 2,
+      "prompt": "A richly textured cinematic still inside a single continuous believable modern living room at night, for the original mixed reality game Rift Bastion. Wide-angle low camera across a wood sideboard, one uninterrupted wall spanning the entire picture from left to right. A spectacular tabletop tactical defense encounter in the right half: a chitinous wall crawler climbs out of a swirling purple-teal vertical energy tear fixed to a real wall, a compact amber turret protects a faceted glowing crystal inside a silver-ribbed armored octagonal pedestal. Use the supplied image only as a reference for surface materials and shapes, not the pose or composition. Real room-scale furniture, controlled light shafts, floating dust, reflections and contact shadows. LEFT third shows the same room in deep shadow: a subtle receding sofa silhouette and continuous wall texture, extending naturally across the middle. Low-contrast space here will take separately rendered title text. IMPORTANT: a single environmental camera frame, never a presentation board, product studio, black graphic rectangle, panel, gutter, diptych, hard vertical divider, letterbox, or isolated icons. Full bleed, dramatic environmental game key art. No text or watermark.",
+      "settings": {
+        "aspect_ratio": "16:9",
+        "batch_size": 1,
+        "height": 1536,
+        "mode": "auto",
+        "resolution": "2k",
+        "seed": 691973,
+        "width": 2752
+      },
+      "references": [
+        {
+          "file": "../concepts/boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "width": 2752,
+      "height": 1536,
+      "format": "PNG",
+      "colorspace": "sRGB",
+      "channels": "srgb  3.0",
+      "bytes": 6692223,
+      "sha256": "8b85b0c7c9fff3c0693f9f2ded0289854c181a28b4a62766cc5cbb0d7fd0bfd5",
+      "chargedCredits": 2,
+      "chargedAt": "2026-11-21T04:10:01.769085Z",
+      "usage": "Selected source"
+    }
+  ]
+}

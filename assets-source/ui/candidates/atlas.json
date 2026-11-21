@@ -1,0 +1,208 @@
+{
+  "atlas": "tactical-atlas.png",
+  "width": 768,
+  "height": 384,
+  "origin": "top-left",
+  "rectUnits": "pixels",
+  "cellSize": 128,
+  "colorSpace": "sRGB",
+  "alpha": "straight",
+  "icons": {
+    "build-autocannon": {
+      "file": "icons/build-autocannon.png",
+      "rect": [0, 0, 128, 128],
+      "source": "originals/build-wave.png",
+      "providerMatte": "originals/build-wave-alpha.png",
+      "sourceRect": [93, 181, 799, 669]
+    },
+    "build-plasma-mortar": {
+      "file": "icons/build-plasma-mortar.png",
+      "rect": [128, 0, 128, 128],
+      "source": "originals/build-wave.png",
+      "providerMatte": "originals/build-wave-alpha.png",
+      "sourceRect": [944, 125, 1555, 735]
+    },
+    "build-cryo-arc": {
+      "file": "icons/build-cryo-arc.png",
+      "rect": [256, 0, 128, 128],
+      "source": "originals/build-wave.png",
+      "providerMatte": "originals/build-wave-alpha.png",
+      "sourceRect": [1931, 93, 2324, 762]
+    },
+    "build-rail-sniper": {
+      "file": "icons/build-rail-sniper.png",
+      "rect": [384, 0, 128, 128],
+      "source": "originals/build-wave.png",
+      "providerMatte": "originals/build-wave-alpha.png",
+      "sourceRect": [21, 1104, 817, 1446]
+    },
+    "wave-launch": {
+      "file": "icons/wave-launch.png",
+      "rect": [512, 0, 128, 128],
+      "source": "originals/build-wave.png",
+      "providerMatte": "originals/build-wave-alpha.png",
+      "sourceRect": [891, 918, 1629, 1606]
+    },
+    "wave-warning": {
+      "file": "icons/wave-warning.png",
+      "rect": [640, 0, 128, 128],
+      "source": "originals/build-wave.png",
+      "providerMatte": "originals/build-wave-alpha.png",
+      "sourceRect": [1748, 966, 2483, 1598]
+    },
+    "tier-1": {
+      "file": "icons/tier-1.png",
+      "rect": [0, 128, 128, 128],
+      "source": "originals/commands.png",
+      "providerMatte": "originals/commands-alpha.png",
+      "sourceRect": [71, 226, 768, 646]
+    },
+    "tier-2": {
+      "file": "icons/tier-2.png",
+      "rect": [128, 128, 128, 128],
+      "source": "originals/commands.png",
+      "providerMatte": "originals/commands-alpha.png",
+      "sourceRect": [969, 157, 1559, 709]
+    },
+    "tier-3": {
+      "file": "icons/tier-3.png",
+      "rect": [256, 128, 128, 128],
+      "source": "originals/commands.png",
+      "providerMatte": "originals/commands-alpha.png",
+      "sourceRect": [1843, 104, 2401, 783]
+    },
+    "relocate": {
+      "file": "icons/relocate.png",
+      "rect": [384, 128, 128, 128],
+      "source": "originals/commands.png",
+      "providerMatte": "originals/commands-alpha.png",
+      "sourceRect": [68, 925, 768, 1628]
+    },
+    "sell": {
+      "file": "icons/sell.png",
+      "rect": [512, 128, 128, 128],
+      "source": "originals/commands.png",
+      "providerMatte": "originals/commands-alpha.png",
+      "sourceRect": [921, 952, 1607, 1575]
+    },
+    "emp-disrupted": {
+      "file": "icons/emp-disrupted.png",
+      "rect": [640, 128, 128, 128],
+      "source": "originals/commands.png",
+      "providerMatte": "originals/commands-alpha.png",
+      "sourceRect": [1808, 910, 2413, 1631]
+    },
+    "target-first": {
+      "file": "icons/target-first.png",
+      "rect": [0, 256, 128, 128],
+      "source": "originals/targets-stars.png",
+      "providerMatte": "originals/targets-stars-alpha.png",
+      "sourceRect": [50, 41, 801, 810]
+    },
+    "target-strongest": {
+      "file": "icons/target-strongest.png",
+      "rect": [128, 256, 128, 128],
+      "source": "originals/targets-stars.png",
+      "providerMatte": "originals/targets-stars-alpha.png",
+      "sourceRect": [901, 35, 1624, 807]
+    },
+    "target-closest": {
+      "file": "icons/target-closest.png",
+      "rect": [256, 256, 128, 128],
+      "source": "originals/targets-stars.png",
+      "providerMatte": "originals/targets-stars-alpha.png",
+      "sourceRect": [1724, 38, 2499, 813]
+    },
+    "target-air": {
+      "file": "icons/target-air.png",
+      "rect": [384, 256, 128, 128],
+      "source": "originals/targets-stars.png",
+      "providerMatte": "originals/targets-stars-alpha.png",
+      "sourceRect": [74, 892, 759, 1652]
+    },
+    "star-earned": {
+      "file": "icons/star-earned.png",
+      "rect": [512, 256, 128, 128],
+      "source": "originals/targets-stars.png",
+      "providerMatte": "originals/targets-stars-alpha.png",
+      "sourceRect": [877, 892, 1654, 1652]
+    },
+    "star-empty": {
+      "file": "icons/star-empty.png",
+      "rect": [640, 256, 128, 128],
+      "source": "originals/targets-stars.png",
+      "providerMatte": "originals/targets-stars-alpha.png",
+      "sourceRect": [1730, 892, 2505, 1652]
+    }
+  },
+  "radialActions": {
+    "build:autocannon": "build-autocannon",
+    "build:plasma-mortar": "build-plasma-mortar",
+    "build:cryo-arc": "build-cryo-arc",
+    "build:rail-sniper": "build-rail-sniper",
+    "wave:launch": "wave-launch",
+    "turret:upgrade": {
+      "nextTier": {
+        "T2": "tier-2",
+        "T3": "tier-3"
+      },
+      "maxTier": "tier-3"
+    },
+    "turret:priority": {
+      "priority": {
+        "first": "target-first",
+        "strongest": "target-strongest",
+        "closest": "target-closest",
+        "air": "target-air"
+      }
+    },
+    "turret:relocate": "relocate",
+    "turret:sell": "sell"
+  },
+  "desktopActionBus": {
+    "turret/build": {
+      "kind": {
+        "autocannon": "build-autocannon",
+        "plasma-mortar": "build-plasma-mortar",
+        "cryo-arc": "build-cryo-arc",
+        "rail-sniper": "build-rail-sniper"
+      }
+    },
+    "wave/launch": "wave-launch",
+    "turret/upgrade": {
+      "radialAction": "turret:upgrade"
+    },
+    "turret/set-priority": {
+      "radialAction": "turret:priority"
+    },
+    "turret/relocate": "relocate",
+    "turret/sell": "sell"
+  },
+  "states": {
+    "tier": {
+      "T1": "tier-1",
+      "T2": "tier-2",
+      "T3": "tier-3"
+    },
+    "waveWarning": "wave-warning",
+    "isDisrupted": "emp-disrupted",
+    "stars": {
+      "earned": "star-earned",
+      "empty": "star-empty"
+    }
+  },
+  "titles": {
+    "desktop-title": {
+      "source": "originals/desktop-alt.png",
+      "file": "desktop-title.jpg",
+      "size": [1920, 1080],
+      "textSafe": [76, 248, 749, 810]
+    },
+    "quest-title": {
+      "source": "originals/quest-title.png",
+      "file": "quest-title.jpg",
+      "size": [1024, 1024],
+      "textSafe": [102, 768, 922, 963]
+    }
+  }
+}
