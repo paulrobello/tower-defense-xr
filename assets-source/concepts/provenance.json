@@ -1,0 +1,690 @@
+{
+  "provider": "Higgsfield",
+  "cliVersion": "1.2.2 (53301eadf7311fc6a6a4c024cf4aff432028e974)",
+  "purpose": "P3-T1 art direction and offline owner review",
+  "workingReference": "bastion-rib",
+  "creativeApproval": "pending Paul Robello, checkpoint 1",
+  "settingsNotes": "Each job used generate create cinematic_studio_2_5, --aspect-ratio 3:2 --resolution 2k --batch-size 1. The service chose its default auto mode and assigned a seed. Sheets received one --image pointing to the selected completed board job. Every reference ID was matched against returned params.medias. No separate negative-prompt or upscaling pass.",
+  "billing": {
+    "quotedCredits": 40,
+    "chargedCredits": 40,
+    "evidence": "Per-job generate cost quotation and account transactions. The transaction feed omits job IDs. The spend events were matched one-to-one in creation order by model, amount and timestamp within one second of each job. Provider timestamps are UTC."
+  },
+  "sourceHistory": "Unmodified provider PNGs, downloaded directly from completed result URLs. The JPEG contact sheets in previews are review derivatives, assembled from their named source PNGs; no assets in this set are runtime files.",
+  "rights": "The six boards use project-written text only. All eleven sheets use one project-generated board. No third-party image inputs. Higgsfield Terms of Use \u00a74.4 allows commercial use of outputs. Its creator help center states attribution is optional and exclusive outputs are not guaranteed.",
+  "rightsSources": [
+    "https://higgsfield.ai/terms-of-use-agreement",
+    "https://higgsfield.ai/creator-hub/help-center/account/who-owns-my-generations-and-can-i-use-them-commercially"
+  ],
+  "outputs": [
+    {
+      "key": "facet-foundry",
+      "file": "boards/facet-foundry.png",
+      "jobId": "ffaa1c47-603d-4944-87af-0d3f567dfffc",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:24:30.996783Z",
+      "prompt": "A wide original material and shape study for Rift Bastion, a tabletop-scale mixed reality science fiction defense game. Build one curated industrial design presentation on a neutral studio cyclorama. Dominant hero: squat faceted octagonal Core Bastion with floating violet-cyan crystal and encircling emitter. Adjacent small fictional turret, wall-flush tall oval violet/teal portal, and one contrasting insectoid alien with obsidian chitin. Show material samples: bead-blasted brushed titanium, broad matte slate ceramic shells, inset carbon structure, light localized to recesses. Amber kinetic, orange plasma, cyan cryo, cobalt-white rail each read as discrete energy accents. Crisp inspectable surfaces, no people, no text, no labels, no logo, no existing franchise designs. All objects wholly in frame. Folded shield plates: three massive ceramic facets separated by deep dark seams, near-black undershell, brushed silver bevels. Neutral grey field. Hero at left; quiet hard studio light, spare, sober aerospace industrial catalog.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 328894
+      },
+      "quotedCredits": 2,
+      "references": [],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 7207243,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "97d4446b97c0a12452125faba7cd176447d8e92aeb58641f6a8a686998f3c7b2",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:24:31.045382Z"
+    },
+    {
+      "key": "pearl-laminate",
+      "file": "boards/pearl-laminate.png",
+      "jobId": "fb6b5d52-1502-4dc9-b498-8e90fb801da3",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:25:40.941523Z",
+      "prompt": "A wide original material and shape study for Rift Bastion, a tabletop-scale mixed reality science fiction defense game. Build one curated industrial design presentation on a neutral studio cyclorama. Dominant hero: squat faceted octagonal Core Bastion with floating violet-cyan crystal and encircling emitter. Adjacent small fictional turret, wall-flush tall oval violet/teal portal, and one contrasting insectoid alien with obsidian chitin. Show material samples: bead-blasted brushed titanium, broad matte slate ceramic shells, inset carbon structure, light localized to recesses. Amber kinetic, orange plasma, cyan cryo, cobalt-white rail each read as discrete energy accents. Crisp inspectable surfaces, no people, no text, no labels, no logo, no existing franchise designs. All objects wholly in frame. Cold ivory ceramic shielding with charcoal seams and a double-layer shingled shell; faceted hem around the base, thin silver edge returns. Warm grey studio, precise product portrait at eye level with smaller lineup to the right.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 640409
+      },
+      "quotedCredits": 2,
+      "references": [],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 5932320,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "5b6099885dbc15e61dd12897ed7d4e1c73eb6df6cb72c3ab1131d75998758893",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:25:40.994045Z"
+    },
+    {
+      "key": "pressure-cast",
+      "file": "boards/pressure-cast.png",
+      "jobId": "4ee8f137-c16d-421e-9a4f-9a7da177d109",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:25:41.123011Z",
+      "prompt": "A wide original material and shape study for Rift Bastion, a tabletop-scale mixed reality science fiction defense game. Build one curated industrial design presentation on a neutral studio cyclorama. Dominant hero: squat faceted octagonal Core Bastion with floating violet-cyan crystal and encircling emitter. Adjacent small fictional turret, wall-flush tall oval violet/teal portal, and one contrasting insectoid alien with obsidian chitin. Show material samples: bead-blasted brushed titanium, broad matte slate ceramic shells, inset carbon structure, light localized to recesses. Amber kinetic, orange plasma, cyan cryo, cobalt-white rail each read as discrete energy accents. Crisp inspectable surfaces, no people, no text, no labels, no logo, no existing franchise designs. All objects wholly in frame. Deep navy pressure housings: heavy rounded forged shoulders broken by three squared datum cuts, half-shells set apart to show carbon gussets. Low 3/4 view on a middle-grey tabletop, brighter brushed metal against blue graphite.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 848010
+      },
+      "quotedCredits": 2,
+      "references": [],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 7910335,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "76648668f13ff62852def0316cf8d6de339ce67a44b6b681adae6c0507a634ad",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:25:41.157217Z"
+    },
+    {
+      "key": "vector-keel",
+      "file": "boards/vector-keel.png",
+      "jobId": "65e0a341-69f1-4a84-8c4a-0c9cce4b6fe0",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:25:41.284672Z",
+      "prompt": "A wide original material and shape study for Rift Bastion, a tabletop-scale mixed reality science fiction defense game. Build one curated industrial design presentation on a neutral studio cyclorama. Dominant hero: squat faceted octagonal Core Bastion with floating violet-cyan crystal and encircling emitter. Adjacent small fictional turret, wall-flush tall oval violet/teal portal, and one contrasting insectoid alien with obsidian chitin. Show material samples: bead-blasted brushed titanium, broad matte slate ceramic shells, inset carbon structure, light localized to recesses. Amber kinetic, orange plasma, cyan cryo, cobalt-white rail each read as discrete energy accents. Crisp inspectable surfaces, no people, no text, no labels, no logo, no existing franchise designs. All objects wholly in frame. Directional swept armor: long tapered shell keels, fine toothed negative spaces, clean raised spine, neutral stone-grey titanium, cold blue-grey background. Place compact hero front, small profile group behind.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 879673
+      },
+      "quotedCredits": 2,
+      "references": [],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 10461592,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "12fb3071dd7dc0809c7a90b3712d46d4fc3a1384c6b9967cfe7f61d45e3b904f",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:25:41.345735Z"
+    },
+    {
+      "key": "bastion-rib",
+      "file": "boards/bastion-rib.png",
+      "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:26:20.878811Z",
+      "prompt": "A wide original material and shape study for Rift Bastion, a tabletop-scale mixed reality science fiction defense game. Build one curated industrial design presentation on a neutral studio cyclorama. Dominant hero: squat faceted octagonal Core Bastion with floating violet-cyan crystal and encircling emitter. Adjacent small fictional turret, wall-flush tall oval violet/teal portal, and one contrasting insectoid alien with obsidian chitin. Show material samples: bead-blasted brushed titanium, broad matte slate ceramic shells, inset carbon structure, light localized to recesses. Amber kinetic, orange plasma, cyan cryo, cobalt-white rail each read as discrete energy accents. Crisp inspectable surfaces, no people, no text, no labels, no logo, no existing franchise designs. All objects wholly in frame. Exposed silver ribs protecting broad satin-black ceramic panels, repeated triplet struts, ring nested in chunky buttresses. Light dusty blue field and large soft neutral lights. Separate silhouettes with wide negative space.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 131142
+      },
+      "quotedCredits": 2,
+      "references": [],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 7150460,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:26:20.916341Z"
+    },
+    {
+      "key": "basalt-inlay",
+      "file": "boards/basalt-inlay.png",
+      "jobId": "a8e93b35-9903-4d06-92ab-0402ae920c92",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:26:24.14604Z",
+      "prompt": "A wide original material and shape study for Rift Bastion, a tabletop-scale mixed reality science fiction defense game. Build one curated industrial design presentation on a neutral studio cyclorama. Dominant hero: squat faceted octagonal Core Bastion with floating violet-cyan crystal and encircling emitter. Adjacent small fictional turret, wall-flush tall oval violet/teal portal, and one contrasting insectoid alien with obsidian chitin. Show material samples: bead-blasted brushed titanium, broad matte slate ceramic shells, inset carbon structure, light localized to recesses. Amber kinetic, orange plasma, cyan cryo, cobalt-white rail each read as discrete energy accents. Crisp inspectable surfaces, no people, no text, no labels, no logo, no existing franchise designs. All objects wholly in frame. Dark basalt-inspired slate plates, broad triangular cuts with pale ceramic inlay on the shoulders; visually quiet rear faces, occasional warm metal joining edges, characterful crenellated flanks. High-key shale studio, bright shape definition.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 87873
+      },
+      "quotedCredits": 2,
+      "references": [],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 8858917,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "791bd81eb2f1810e978443c8873a3c2c4348081c5279632ae6418dec554b968b",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:26:24.15939Z"
+    },
+    {
+      "key": "core-bastion",
+      "file": "sheets/core-bastion.png",
+      "jobId": "39636156-ae4c-485e-ab8b-3ca62391eebf",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:27:49.036854Z",
+      "prompt": "Core Bastion. One low eight-sided armored pedestal carrying a hovering violet-cyan octahedral crystal, its top clearly visible. Physical chassis radius 0.38 m, total height including crystal 0.72 m. The eight-sided lower pedestal is 0.4032 m high and tapers from 0.38 m to 0.3116 m radius. Crystal radius 0.15 m, centered 0.57 m above the flush foot. Three-quarter hero left, orthographic front with a faint half-dome forcefield traced around the lower emitter radius 0.52 m at right, clean top orthographic below. A raised circular containment collar and an emitter ring grounded around the base. The shield is light; the pedestal is solid. No turret, legs, wheels, wires or furniture. Original full-bleed 3:2 landscape production concept plate for a tabletop-scale mixed-reality game. The attached board supplies the material palette, manufacturing finish and lighting language only. Render only the named subject in this brief. Clearly separated uncropped views of the exact same design, aligned on a neutral matte studio field, high key light, controlled reflection, soft underside fill. Rotate the object for views; preserve its structure and proportions. Physically based surfacing. A readable outer silhouette and a few broad material islands at arm's length. No logos, text, letters, numbers, invasive callouts, horizon lines or fictional UI.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 505593
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 5870514,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "861dbc29c44a0cb64ce805da180421fe17001aa39e6f2b45135a7e3b4f42e810",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:27:49.185831Z"
+    },
+    {
+      "key": "plasma-mortar",
+      "file": "sheets/plasma-mortar.png",
+      "jobId": "70333c56-70ba-42af-9199-c7a5da347063",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:29:03.049482Z",
+      "prompt": "Helios Plasma Mortar, fictional tabletop game piece. Present SIX distinct views in a strict two-row, three-column catalog grid with ample spacing. Upper row progression left-to-right: T1, T2, T3 three-quarter views at equal scale. Lower row from left: separate orthographic side elevation of T2, detached low four-legged surface clamp underside, detached legless repulsor hover-ring pod viewed from below. Show the upper turrets on low matching mounts. All tiers share a 0.16 m mounting radius, a horizontal yaw ring and horizontal pitch axle. Heights in order 0.27, 0.29, 0.31 m. Squat rounded plasma cradles with projected mouths turned upward. T1 a single thick hot-orange tube mouth. T2 exactly two separate broad chambers. T3 two heavy emitter mouths under one elliptical shockwave collar, darker armored shoulders, orange heat deep inside. Each facing is consistent; no additional machine types or guns on the base. Original full-bleed 3:2 landscape production concept plate for a tabletop-scale mixed-reality game. The attached board supplies the material palette, manufacturing finish and lighting language only. Render only the named subject in this brief. Clearly separated uncropped views of the exact same design, aligned on a neutral matte studio field, high key light, controlled reflection, soft underside fill. Rotate the object for views; preserve its structure and proportions. Physically based surfacing. A readable outer silhouette and a few broad material islands at arm's length. No logos, text, letters, numbers, invasive callouts, horizon lines or fictional UI.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 149547
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 6557305,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "e611dfbbfe9fab7b6a5f4ad449f9af9963d6af4bca73f724b57c7a12c6491e0f",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:29:03.060748Z"
+    },
+    {
+      "key": "rift-portal",
+      "file": "sheets/rift-portal.png",
+      "jobId": "b4d95253-aa84-4542-8401-7fd3ff5d92d6",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:29:03.464403Z",
+      "prompt": "Dimensional Rift Portal. An upright elliptical violet/teal shimmering breach inside a segmented brushed titanium bezel. Exactly 0.95 m wide by 1.35 m high nominal aperture, 0.12 m thick rim, virtual interior recess 0.45 m. Main front elevation shows the complete tall ellipse. Beside it an oblique view mounted flush to a simple wall tile plus a narrow orthographic side view showing the rim and host plane. Aperture surface is continuous and planar with deep swirling light behind it. Leave the center visually open, no column, platform, feet, spikes, ground support or gateway arch. Original full-bleed 3:2 landscape production concept plate for a tabletop-scale mixed-reality game. The attached board supplies the material palette, manufacturing finish and lighting language only. Render only the named subject in this brief. Clearly separated uncropped views of the exact same design, aligned on a neutral matte studio field, high key light, controlled reflection, soft underside fill. Rotate the object for views; preserve its structure and proportions. Physically based surfacing. A readable outer silhouette and a few broad material islands at arm's length. No logos, text, letters, numbers, invasive callouts, horizon lines or fictional UI.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 692371
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 6461312,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "6ab834ae9cf552dc5e2f4b4ffcea65c2a02e968936840da039a40b3e44551c81",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:29:03.501648Z"
+    },
+    {
+      "key": "cryo-arc",
+      "file": "sheets/cryo-arc.png",
+      "jobId": "93e08dde-029b-4a89-aae4-d5e82f4c2458",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:29:50.061432Z",
+      "prompt": "Glacier Cryo-Arc, fictional tabletop game piece. Present SIX distinct views in a strict two-row, three-column catalog grid with ample spacing. Upper row progression left-to-right: T1, T2, T3 three-quarter views at equal scale. Lower row from left: separate orthographic side elevation of T2, detached low four-legged surface clamp underside, detached legless repulsor hover-ring pod viewed from below. Show the upper turrets on low matching mounts. All tiers share a 0.16 m mounting radius, a horizontal yaw ring and horizontal pitch axle. Heights in order 0.28, 0.3, 0.32 m. Open forks and slim isolated cyan coils. T1 one luminous coil emitter. T2 two distinct prongs with empty air between. T3 three discrete projecting rods surrounding a small faceted cryo crystal, seen clearly end-on. Silver shoulder over dark carbon armature. Each facing is consistent; no additional machine types or guns on the base. Original full-bleed 3:2 landscape production concept plate for a tabletop-scale mixed-reality game. The attached board supplies the material palette, manufacturing finish and lighting language only. Render only the named subject in this brief. Clearly separated uncropped views of the exact same design, aligned on a neutral matte studio field, high key light, controlled reflection, soft underside fill. Rotate the object for views; preserve its structure and proportions. Physically based surfacing. A readable outer silhouette and a few broad material islands at arm's length. No logos, text, letters, numbers, invasive callouts, horizon lines or fictional UI.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 473096
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 6562103,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "5284e03dc48fdb11f0301054305282a9d696cf8d49ddbced988f942b8859daff",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:29:50.097177Z"
+    },
+    {
+      "key": "rail-sniper",
+      "file": "sheets/rail-sniper.png",
+      "jobId": "e4f2f8ca-95fb-4a4a-9de2-f89fa9bb875e",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:29:55.052557Z",
+      "prompt": "Valkyrie Rail Sniper, fictional tabletop game piece. Present SIX distinct views in a strict two-row, three-column catalog grid with ample spacing. Upper row progression left-to-right: T1, T2, T3 three-quarter views at equal scale. Lower row from left: separate orthographic side elevation of T2, detached low four-legged surface clamp underside, detached legless repulsor hover-ring pod viewed from below. Show the upper turrets on low matching mounts. All tiers share a 0.16 m mounting radius, a horizontal yaw ring and horizontal pitch axle. Heights in order 0.25, 0.27, 0.29 m. The longest and narrowest horizontal silhouette of the four. T1 one compact straight capacitor rail with one blue stripe. T2 elongated single rail with stacked dorsal and ventral capacitor fins. T3 two parallel accelerator beams with a long open slot and cobalt-white energy. Each facing is consistent; no additional machine types or guns on the base. Original full-bleed 3:2 landscape production concept plate for a tabletop-scale mixed-reality game. The attached board supplies the material palette, manufacturing finish and lighting language only. Render only the named subject in this brief. Clearly separated uncropped views of the exact same design, aligned on a neutral matte studio field, high key light, controlled reflection, soft underside fill. Rotate the object for views; preserve its structure and proportions. Physically based surfacing. A readable outer silhouette and a few broad material islands at arm's length. No logos, text, letters, numbers, invasive callouts, horizon lines or fictional UI.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 533926
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 5716973,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "501d2cd3c8bd3c4376f1aadf9db72951bfcdb3ab0df9dd21515a11d9917bfdfb",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:29:55.103503Z"
+    },
+    {
+      "key": "wasp-skimmer",
+      "file": "sheets/wasp-skimmer.png",
+      "jobId": "d8c79e83-3ffe-4851-910d-b89e594f498f",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:30:42.034562Z",
+      "prompt": "Wasp Skimmer. Family resemblance to the alien's obsidian chitin and recessed articulated tendons on the board. Target length, width, height are 0.38, 0.42, 0.22 m respectively. Hull #312e81, primary emissive #2dd4bf. Small wasp-like aerial scout, needle-shaped elongated indigo fuselage, swept pairs of fine teal-veined wings that read as one lateral wing mass on each side when banked. Large hovering three-quarter portrait on left, plan and side orthographics on right. Give the two wing masses plenty of breathing room. Original full-bleed 3:2 landscape production concept plate for a tabletop-scale mixed-reality game. The attached board supplies the material palette, manufacturing finish and lighting language only. Render only the named subject in this brief. Clearly separated uncropped views of the exact same design, aligned on a neutral matte studio field, high key light, controlled reflection, soft underside fill. Rotate the object for views; preserve its structure and proportions. Physically based surfacing. A readable outer silhouette and a few broad material islands at arm's length. No logos, text, letters, numbers, invasive callouts, horizon lines or fictional UI.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 433930
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 5701068,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "45760d8479e82dd424be47442258d671f95a7e6dcc05f6c04e0b71b306bbf533",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:30:42.084252Z"
+    },
+    {
+      "key": "carapace-brute",
+      "file": "sheets/carapace-brute.png",
+      "jobId": "676bf49c-8d1b-47bd-b53a-45aa57e55fb0",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:30:42.809173Z",
+      "prompt": "Carapace Brute. Family resemblance to the alien's obsidian chitin and recessed articulated tendons on the board. Target length, width, height are 0.52, 0.46, 0.48 m respectively. Hull #1e293b, primary emissive #f97316. Heavy low armored insectoid with a broad wedge-shaped sloped frontal plate that shields the head, a compact ground stance with stout legs and a discrete orange dorsal heat vent. Large frontal three-quarter to show the braced shield, true side and top orthographic views to show its directional armor. Original full-bleed 3:2 landscape production concept plate for a tabletop-scale mixed-reality game. The attached board supplies the material palette, manufacturing finish and lighting language only. Render only the named subject in this brief. Clearly separated uncropped views of the exact same design, aligned on a neutral matte studio field, high key light, controlled reflection, soft underside fill. Rotate the object for views; preserve its structure and proportions. Physically based surfacing. A readable outer silhouette and a few broad material islands at arm's length. No logos, text, letters, numbers, invasive callouts, horizon lines or fictional UI.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 836929
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 6726106,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "07456a2accf7e25e2c3b0bcac7e8235b7c0659e063f8734062384d4c8efa0cdc",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:30:42.85619Z"
+    },
+    {
+      "key": "rift-disruptor",
+      "file": "sheets/rift-disruptor.png",
+      "jobId": "d8da1af9-a01e-48a0-9e46-aba7b887788a",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:30:58.772258Z",
+      "prompt": "Rift Disruptor. Family resemblance to the alien's obsidian chitin and recessed articulated tendons on the board. Target length, width, height are 0.42, 0.44, 0.32 m respectively. Hull #4c1d95, primary emissive #38bdf8. Compact floating faceted violet octahedral hull, one horizontally orbiting detached cyan EMP ring defining a broad disc around the center. Smooth elements are biological chitin and articulated plates. Large hovering three-quarter view, front orthographic and top orthographic. One small secondary view shows an expanding translucent pulse separate from the physical ring. No wings, feet or weapon barrel. Original full-bleed 3:2 landscape production concept plate for a tabletop-scale mixed-reality game. The attached board supplies the material palette, manufacturing finish and lighting language only. Render only the named subject in this brief. Clearly separated uncropped views of the exact same design, aligned on a neutral matte studio field, high key light, controlled reflection, soft underside fill. Rotate the object for views; preserve its structure and proportions. Physically based surfacing. A readable outer silhouette and a few broad material islands at arm's length. No logos, text, letters, numbers, invasive callouts, horizon lines or fictional UI.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 631593
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 6741908,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "b2bce8b753d2ae557dbbd48381cd41ccbf48b8a823ebc8a43a99bf3c5b9fb6b4",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:30:58.814929Z"
+    },
+    {
+      "key": "skitter-crawler",
+      "file": "sheets/skitter-crawler.png",
+      "jobId": "9827f278-0b58-42b6-aeb5-855012ca2792",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:31:23.649102Z",
+      "prompt": "Skitter Crawler creature turnaround. Each of the three views shows the very same low, flattened, six-legged alien beetle. Only this species may appear on the entire page. No separate figures, observer, scale figure or silhouettes in the empty areas. One large full-body three-quarter left, true overhead right upper, wall-climbing side elevation right lower. A segmented charcoal-black chitin exoskeleton, closely overlapping beetle plates, fully organic tapered joints, long narrow violet emissive tissue along its dorsal midline. Absolutely insectoid: no bolted metal housing, constructed machinery, turret components or polished silver humanoid armor. Each side has exactly three angled hooked legs, 6 in total; flat belly close to its contact surface. Its dimensions length 0.34 m, width 0.26 m, height 0.18 m. Preserve the readable planes, restrained highlights and neutral cyclorama lighting of the supplied art direction, using only the dark obsidian biological finish. Generous whitespace between panels, no overlay, no lettering, no text. Studio sculpture portrait with orthographic views.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 850267
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 5982270,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "186a05b3d423b2fa0fea5a2ace3c81e70198c758d34ee40201037608431e7edd",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:31:23.69837Z"
+    },
+    {
+      "key": "apex-broodlord",
+      "file": "sheets/apex-broodlord.png",
+      "jobId": "b296b1b6-089c-4321-a45f-83bb038aae9b",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:31:37.954356Z",
+      "prompt": "Apex Broodlord. Family resemblance to the alien's obsidian chitin and recessed articulated tendons on the board. Target length, width, height are 0.92, 0.78, 0.84 m respectively. Hull #18181b, primary emissive #ec4899. Heavy boss matriarch with high angular crest, broad obsidian armored back, layered chitin flanks and low widely planted limbs. Major three-quarter image at left in Phase 1 with narrow magenta crest fissures. At right a clean matching three-quarter Phase 2 with molten red-orange cracks running through the same plates. Below: exact side elevation showing the heavy thorax and crest. Keep the same underlying anatomy, size and limb count across both phases. No gore. Original full-bleed 3:2 landscape production concept plate for a tabletop-scale mixed-reality game. The attached board supplies the material palette, manufacturing finish and lighting language only. Render only the named subject in this brief. Clearly separated uncropped views of the exact same design, aligned on a neutral matte studio field, high key light, controlled reflection, soft underside fill. Rotate the object for views; preserve its structure and proportions. Physically based surfacing. A readable outer silhouette and a few broad material islands at arm's length. No logos, text, letters, numbers, invasive callouts, horizon lines or fictional UI.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 72940
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 5702795,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "68a0e22b744d59196df9b4d3f8ce0ba80b4123d6e89c09c266fb19c49b5ac226",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:31:38.018996Z"
+    },
+    {
+      "key": "autocannon",
+      "file": "sheets/autocannon.png",
+      "jobId": "92fbcc51-0540-4c71-a37e-c87f0f4d1375",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:32:00.48936Z",
+      "prompt": "An industrial art sheet of the M44 turret miniature in three grades. Exactly three versions in the top row. LEFT: one narrow amber-tipped forward cylinder on a squat titanium turret. MIDDLE: exactly TWO narrow amber-tipped cylinders, one on the left and one on the right, EMPTY SPACE BETWEEN THEM. Twin linked barrels arranged horizontally side-by-side in one row, with exactly TWO circular apertures total. RIGHT: one thick six-hole rotary cylinder, six little amber-edged holes arranged in a circle. Three-quarter view directed toward camera so the mouths can be counted. Design fidelity priorities are 1 barrel, 2 barrels, 6 barrels. Emphasize broad matte slate armor, crisp silver outer ribs and a recessed black yaw/pitch joint. All three bases share the 0.16-meter radius footprint. Bottom row: a side elevation of the twin version, a separated four-foot X-shaped clamp mount underside, and a legless hovering annular pod underside. Use reference image for metal lighting and material finish only. The whole sheet is a mechanical studio catalog photographed on blank grey. Strictly hardware only, absolutely no creatures, no people, no silhouettes, zero extra subjects between panels. Balanced palette of titanium, dark ceramic and amber; no labels or text, wide negative space around every isolated component.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 701192
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 5736376,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "f1e4df15de3f4f56d553a1aa640b94cf94cdfc56868156d3e61c76e6e2f5c128",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:32:00.550521Z"
+    }
+  ],
+  "previousAttempts": [
+    {
+      "key": "autocannon-first",
+      "file": "attempts/autocannon-first.png",
+      "jobId": "2f2360eb-ecf7-4b2d-91aa-3ac207fec261",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:29:03.152726Z",
+      "prompt": "M44 Autocannon, fictional tabletop game piece. Present SIX distinct views in a strict two-row, three-column catalog grid with ample spacing. Upper row progression left-to-right: T1, T2, T3 three-quarter views at equal scale. Lower row from left: separate orthographic side elevation of T2, detached low four-legged surface clamp underside, detached legless repulsor hover-ring pod viewed from below. Show the upper turrets on low matching mounts. All tiers share a 0.16 m mounting radius, a horizontal yaw ring and horizontal pitch axle. Heights in order 0.24, 0.26, 0.28 m. Compact asymmetric slabs around a straight horizontal barrel. T1 one amber-tipped barrel. T2 two clearly separated linked barrels. T3 the circular front of one six-bore rotary cluster with a thermal shroud ring and amber vents. Make the circular sextet unmistakable. Each facing is consistent; no additional machine types or guns on the base. Original full-bleed 3:2 landscape production concept plate for a tabletop-scale mixed-reality game. The attached board supplies the material palette, manufacturing finish and lighting language only. Render only the named subject in this brief. Clearly separated uncropped views of the exact same design, aligned on a neutral matte studio field, high key light, controlled reflection, soft underside fill. Rotate the object for views; preserve its structure and proportions. Physically based surfacing. A readable outer silhouette and a few broad material islands at arm's length. No logos, text, letters, numbers, invasive callouts, horizon lines or fictional UI.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 357536
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 6508595,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "6b14ac4f3a0fca749bdf753816404f1e7c9fd153a1ef1f899341191d99d4ca4c",
+      "subject": "autocannon",
+      "reason": "A second creature from the board overlaps the upper-right tier study.",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:29:03.18033Z"
+    },
+    {
+      "key": "skitter-crawler-first",
+      "file": "attempts/skitter-crawler-first.png",
+      "jobId": "20a1919b-fbc4-4c4c-850f-f7c5512a4f56",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:30:02.951503Z",
+      "prompt": "Skitter Crawler. Family resemblance to the alien's obsidian chitin and recessed articulated tendons on the board. Target length, width, height are 0.34, 0.26, 0.18 m respectively. Hull #3f3f46, primary emissive #a855f7. Six individually separated angular legs in three bilateral pairs, low segmented thorax held close to contact, long violet luminous spine. Show a planted three-quarter view, top silhouette for leg count, and side orthographic on a vertical strip of wall, hooking its feet against the contact plane. Original full-bleed 3:2 landscape production concept plate for a tabletop-scale mixed-reality game. The attached board supplies the material palette, manufacturing finish and lighting language only. Render only the named subject in this brief. Clearly separated uncropped views of the exact same design, aligned on a neutral matte studio field, high key light, controlled reflection, soft underside fill. Rotate the object for views; preserve its structure and proportions. Physically based surfacing. A readable outer silhouette and a few broad material islands at arm's length. No logos, text, letters, numbers, invasive callouts, horizon lines or fictional UI.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 261148
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 4579570,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "98d8a1e6adf55efcee90ce429834e0b8453d951951a71eb0ab2a258c7114bfd1",
+      "subject": "skitter-crawler",
+      "reason": "A second creature appears in the wall elevation and the silver hull reads as defender hardware. The replacement isolates one six-legged insect with overlapping chitin.",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:30:03.033847Z"
+    },
+    {
+      "key": "autocannon-retry",
+      "file": "attempts/autocannon-retry.png",
+      "jobId": "031d96f8-c28d-4e65-80d0-a239780012a0",
+      "requestedModel": "cinematic_studio_2_5",
+      "returnedModel": "cinematic_studio_2_5",
+      "createdAt": "2026-11-21T03:30:31.190815Z",
+      "prompt": "Create a clean isolated industrial product catalogue plate for the fictional M44 tabletop turret model. The reference image only gives colors and material finish. Every panel is exclusively a piece of unoccupied mechanical hardware on uninterrupted pale neutral gray. No organic shapes, characters, insects, aliens, figurines, silhouettes of people or creatures, backdrop objects, text or symbols anywhere. Arrange six separated views. Upper left: short, compact single small-bore tube on shoulder and yaw base. Upper center: twin parallel tubes on the same shoulder. Upper right: one six-bore rotary drum with amber tip accents, viewed from front three-quarter so all six dark openings read. Lower left: orthographic side of the middle model; lower center: the underside of a detached four-foot X-shaped clamp on its own; lower right: a circular legless repulsor pod with a clear luminous ring on its own. Strong faceted charcoal ceramic side armor, continuous exposed silver ribs, carbon recessed mechanics. Each tier has its own mount of radius 0.16 m and rises 0.24, 0.26, 0.28 m respectively. Equal scale, generous empty space strictly between objects, studio fill under the barrel, no overlaps. Use all six cells for mechanical game assets only.",
+      "settings": {
+        "aspect_ratio": "3:2",
+        "resolution": "2k",
+        "batch_size": 1,
+        "mode": "auto",
+        "seed": 437576
+      },
+      "quotedCredits": 2,
+      "references": [
+        {
+          "file": "boards/bastion-rib.png",
+          "jobId": "3b57f3d8-cb66-4983-9050-31094ae12cbc",
+          "sha256": "2646b6dacdbc98259368808576849a70734399e535274a9559ff4ff7deac31e3"
+        }
+      ],
+      "format": "PNG",
+      "width": 2528,
+      "height": 1696,
+      "bytes": 5603295,
+      "colorspace": "sRGB",
+      "profiles": null,
+      "sha256": "ecfc3f8af06828f7054bef0996cc3d22633556ec5f56fa9861dd3934cf3836f6",
+      "subject": "autocannon",
+      "reason": "The middle three-quarter view has four visible tubes instead of the required two.",
+      "chargedCredits": 2,
+      "chargeRecordedAt": "2026-11-21T03:30:31.237396Z"
+    }
+  ],
+  "previews": [
+    {
+      "file": "previews/boards.jpg",
+      "sourceKeys": [
+        "facet-foundry",
+        "pearl-laminate",
+        "pressure-cast",
+        "vector-keel",
+        "bastion-rib",
+        "basalt-inlay"
+      ],
+      "sha256": "3f6032c1a1f85982008c9648ecd3b9336e230c8647dac09221ace692ce946bab"
+    },
+    {
+      "file": "previews/hardware.jpg",
+      "sourceKeys": [
+        "core-bastion",
+        "rift-portal",
+        "autocannon",
+        "plasma-mortar",
+        "cryo-arc",
+        "rail-sniper"
+      ],
+      "sha256": "62139b851e322243c4227f71bc74845beb7e52285d781310c145356657c15bbf"
+    },
+    {
+      "file": "previews/invaders.jpg",
+      "sourceKeys": [
+        "skitter-crawler",
+        "wasp-skimmer",
+        "carapace-brute",
+        "rift-disruptor",
+        "apex-broodlord"
+      ],
+      "sha256": "e61753ce52259f829281296dfbce48e7120125e76ea3d3be3e4b4734f2b4528e"
+    }
+  ]
+}

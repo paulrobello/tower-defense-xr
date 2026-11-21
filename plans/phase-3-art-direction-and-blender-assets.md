@@ -23,7 +23,7 @@
   - 5 Rigged Invaders → `$create-rigged-character-assets`.
   - Tileable materials → `$create-tileable-pbr-materials`.
   - Every asset finishes with `$validate-generated-assets` before promotion to `public/assets/`.
-- **Model Routing (Owner Directive):** Use **Claude Opus 5.5 (High)** for visual authoring/art direction/Blender work (switching to an equivalent healthy high-tier model only if the Partner pool hits 429).
+- **Model routing:** Use **GPT-6.2 Astra** for visual authoring, art direction, and Blender. Use **GPT-6.2 Sol** for most nonvisual work, including asset validation tooling.
 - **Blender Authoring Rules (`~/.claude/guides/blender-mcp.md`, `blender-game-export.md`):**
   - Keep checked-in deterministic Python generators (`blender/`), separate high-poly and low-poly `.blend` sources under `assets-source/`, and unique staging folders.
   - Finalize low-poly topology, corner normals, UVs, and triangulation before baking; bake Cycles portable maps (`baseColor` sRGB, `emissive` sRGB, tangent `normal` linear neutral `(0.5, 0.5, 1.0)`, packed `ORM` linear R=AO / G=Roughness / B=Metallic; metallic base-color baked via temporary emission pass to prevent darkening).
