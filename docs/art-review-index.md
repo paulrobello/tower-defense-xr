@@ -51,3 +51,9 @@ The independent P3-T7 score and Paul’s approval remain open. Physical Quest re
 ![Five shared materials shown on curved coupons and 2×2 repeats under two light angles](../assets-source/materials/review/surfaces.jpg)
 
 The Blender 5.2.2 library contains brushed titanium, matte ceramic, dark gunmetal, obsidian chitin and rift obsidian. A fresh build produced the same 16 source PNGs and 16 KTX2 files. Blender export and re-import preserved all five materials and 16 texture bindings. The KTX2 set totals 465,162 bytes. See the [material review and authoring instructions](../assets-source/materials/README.md), [map inventory](../assets-source/materials/manifest.json) and [decoded texture measurements](../assets-source/materials/quality.json). Independent scoring and the owner's release approval remain open at P3-T7.
+
+## Core Bastion
+
+![Matching high and re-imported low Core Bastion views](../assets-source/models/core-bastion/review/comparison.jpg)
+
+The 6,826-triangle staged Core uses four 2048 px maps. Blender re-import preserved the 0.38 m base radius, 0.72 m visual height, separate shield envelope and emitter animation. The low views use decoded KTX2 textures. See the [Core sources, hashes and re-import checks](../assets-source/models/core-bastion/README.md) and [emitter motion](../assets-source/models/core-bastion/review/emitter-motion.webp). The Core remains staged for independent scoring and owner approval at P3-T7.

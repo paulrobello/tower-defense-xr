@@ -1,0 +1,674 @@
+{
+  "version": 1,
+  "textures": [
+    {
+      "file": "core-bastion/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "986882ce91a8d6187c2f818fab98477fccd6ab028523006afd73e397075fdf50",
+      "width": 2048,
+      "height": 2048,
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 737,
+          "y": 1644,
+          "rgb": [
+            194,
+            198,
+            201
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 291,
+          "y": 1229,
+          "rgb": [
+            30,
+            34,
+            45
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 60,
+          "y": 1266,
+          "rgb": [
+            88,
+            95,
+            104
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-0",
+          "x": 499,
+          "y": 872,
+          "rgb": [
+            86,
+            43,
+            139
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-1",
+          "x": 922,
+          "y": 594,
+          "rgb": [
+            19,
+            144,
+            164
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-2",
+          "x": 434,
+          "y": 598,
+          "rgb": [
+            115,
+            67,
+            162
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-3",
+          "x": 427,
+          "y": 857,
+          "rgb": [
+            25,
+            102,
+            130
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-4",
+          "x": 525,
+          "y": 860,
+          "rgb": [
+            76,
+            22,
+            125
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-5",
+          "x": 1039,
+          "y": 1783,
+          "rgb": [
+            37,
+            93,
+            129
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-6",
+          "x": 402,
+          "y": 870,
+          "rgb": [
+            57,
+            25,
+            95
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 1960,
+          "y": 1370,
+          "rgb": [
+            45,
+            226,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 1873,
+          "y": 678,
+          "rgb": [
+            139,
+            92,
+            246
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 1169,
+          "y": 1333,
+          "rgb": [
+            59,
+            68,
+            79
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "core-bastion/normal.ktx2",
+      "role": "normal",
+      "sha256": "18298091649f6a7ebbaa9b8b14a1606c6f32ac4f15f3591d02d97897589b1e19",
+      "width": 2048,
+      "height": 2048,
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 737,
+          "y": 1644,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 291,
+          "y": 1229,
+          "rgb": [
+            129,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 60,
+          "y": 1266,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-0",
+          "x": 499,
+          "y": 872,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-1",
+          "x": 922,
+          "y": 594,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-2",
+          "x": 434,
+          "y": 598,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-3",
+          "x": 427,
+          "y": 857,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-4",
+          "x": 525,
+          "y": 860,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-5",
+          "x": 1039,
+          "y": 1783,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-6",
+          "x": 402,
+          "y": 870,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 1960,
+          "y": 1370,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 1873,
+          "y": 678,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 1169,
+          "y": 1333,
+          "rgb": [
+            127,
+            133,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "core-bastion/orm.ktx2",
+      "role": "orm",
+      "sha256": "101c68f2e27fa51af24f8155f5d64d0a2c4c96b6b330d0c6bf60b09e9931555e",
+      "width": 2048,
+      "height": 2048,
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 737,
+          "y": 1644,
+          "rgb": [
+            0,
+            88,
+            246
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 291,
+          "y": 1229,
+          "rgb": [
+            255,
+            164,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 60,
+          "y": 1266,
+          "rgb": [
+            0,
+            93,
+            238
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-0",
+          "x": 499,
+          "y": 872,
+          "rgb": [
+            255,
+            46,
+            18
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-1",
+          "x": 922,
+          "y": 594,
+          "rgb": [
+            255,
+            46,
+            18
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-2",
+          "x": 434,
+          "y": 598,
+          "rgb": [
+            255,
+            46,
+            18
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-3",
+          "x": 427,
+          "y": 857,
+          "rgb": [
+            255,
+            46,
+            18
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-4",
+          "x": 525,
+          "y": 860,
+          "rgb": [
+            255,
+            46,
+            18
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-5",
+          "x": 1039,
+          "y": 1783,
+          "rgb": [
+            255,
+            46,
+            18
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-6",
+          "x": 402,
+          "y": 870,
+          "rgb": [
+            255,
+            46,
+            18
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 1960,
+          "y": 1370,
+          "rgb": [
+            255,
+            71,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 1873,
+          "y": 678,
+          "rgb": [
+            255,
+            71,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 1169,
+          "y": 1333,
+          "rgb": [
+            248,
+            169,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "core-bastion/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "b6c5e9c4fd744bd74f230187661abde988b06c4eaf3cfa510d8439ab1424734c",
+      "width": 2048,
+      "height": 2048,
+      "samples": [
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 737,
+          "y": 1644,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 291,
+          "y": 1229,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 60,
+          "y": 1266,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-0",
+          "x": 499,
+          "y": 872,
+          "rgb": [
+            86,
+            43,
+            139
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-1",
+          "x": 922,
+          "y": 594,
+          "rgb": [
+            19,
+            144,
+            164
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-2",
+          "x": 434,
+          "y": 598,
+          "rgb": [
+            115,
+            67,
+            162
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-3",
+          "x": 427,
+          "y": 857,
+          "rgb": [
+            25,
+            102,
+            130
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-4",
+          "x": 525,
+          "y": 860,
+          "rgb": [
+            76,
+            22,
+            125
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-5",
+          "x": 1039,
+          "y": 1783,
+          "rgb": [
+            37,
+            93,
+            129
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "gem-6",
+          "x": 402,
+          "y": 870,
+          "rgb": [
+            57,
+            25,
+            95
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 1960,
+          "y": 1370,
+          "rgb": [
+            45,
+            226,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 1873,
+          "y": 678,
+          "rgb": [
+            139,
+            92,
+            246
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 1169,
+          "y": 1333,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    }
+  ],
+  "models": [
+    {
+      "id": "core-bastion",
+      "lod": 0,
+      "file": "core-bastion/core-bastion.glb",
+      "sha256": "d04f631ffcaea4518fef480bf68d7a4c6c05fe578364abb575bbc9eb51e25301",
+      "limits": {
+        "triangles": 14000,
+        "materials": 3,
+        "bones": 0,
+        "sockets": 0,
+        "texture_size": 2048
+      },
+      "sockets": {},
+      "animations": [
+        "ShieldEmitterSweep"
+      ],
+      "planar_primitives": [
+        {
+          "node": "containmentCollar",
+          "primitive": 0,
+          "max_degrees": 2
+        },
+        {
+          "node": "energyCrystal",
+          "primitive": 0,
+          "max_degrees": 2
+        },
+        {
+          "node": "pedestal",
+          "primitive": 0,
+          "max_degrees": 2
+        },
+        {
+          "node": "shieldEmitterRing",
+          "primitive": 0,
+          "max_degrees": 2
+        }
+      ],
+      "material_textures": {
+        "Bastion Rib": {
+          "basecolor": "core-bastion/basecolor.ktx2",
+          "normal": "core-bastion/normal.ktx2",
+          "orm": "core-bastion/orm.ktx2",
+          "emissive": "core-bastion/emissive.ktx2"
+        },
+        "Bastion Prism": {
+          "basecolor": "core-bastion/basecolor.ktx2",
+          "normal": "core-bastion/normal.ktx2",
+          "orm": "core-bastion/orm.ktx2",
+          "emissive": "core-bastion/emissive.ktx2"
+        },
+        "Bastion Field": {
+          "basecolor": "core-bastion/basecolor.ktx2",
+          "normal": "core-bastion/normal.ktx2",
+          "orm": "core-bastion/orm.ktx2",
+          "emissive": "core-bastion/emissive.ktx2"
+        }
+      }
+    }
+  ]
+}

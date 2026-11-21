@@ -1,0 +1,110 @@
+{
+  "glb_sha256": "d04f631ffcaea4518fef480bf68d7a4c6c05fe578364abb575bbc9eb51e25301",
+  "blender": "5.2.2 LTS",
+  "controls_blender_z_up": {
+    "pedestal": {
+      "radial_min_m": 0.08100000002122307,
+      "radial_max_m": 0.3800000148188141,
+      "bottom_m": 0.0,
+      "top_m": 0.41600000858306885,
+      "triangles": 4178
+    },
+    "containmentCollar": {
+      "radial_min_m": 0.18049999004093778,
+      "radial_max_m": 0.20000000645081295,
+      "bottom_m": 0.4480000138282776,
+      "top_m": 0.46399998664855957,
+      "triangles": 1760
+    },
+    "energyCrystal": {
+      "radial_min_m": 0.0,
+      "radial_max_m": 0.0810000031527126,
+      "bottom_m": 0.41999998688697815,
+      "top_m": 0.7200000286102295,
+      "triangles": 56
+    },
+    "shieldEmitterRing": {
+      "radial_min_m": 0.48899999192915544,
+      "radial_max_m": 0.4990000114214146,
+      "bottom_m": 0.011500000022351742,
+      "top_m": 0.012450000271201134,
+      "triangles": 832
+    }
+  },
+  "emitter_motion": [
+    {
+      "seconds": 0,
+      "world_angle_deg": 0.0
+    },
+    {
+      "seconds": 0.5,
+      "world_angle_deg": 22.5
+    },
+    {
+      "seconds": 1,
+      "world_angle_deg": 45.0
+    },
+    {
+      "seconds": 2,
+      "world_angle_deg": 90.0
+    },
+    {
+      "seconds": 4,
+      "world_angle_deg": 180.0
+    },
+    {
+      "seconds": 6,
+      "world_angle_deg": 270.0
+    },
+    {
+      "seconds": 8,
+      "world_angle_deg": 0.0
+    }
+  ],
+  "sampled_crystal_bob_m": [
+    -0.018,
+    0,
+    0.018
+  ],
+  "embedded_png_fallbacks_verified": 4,
+  "root": "coreBastion",
+  "placement_keepout_m": 0.55,
+  "runtime_shield_dome_radius_m": 0.52,
+  "budgets": {
+    "textures": {
+      "basecolor": {
+        "bytes": 1510609,
+        "mip_levels": 12,
+        "uastc_mip_bytes_before_zstd": 5592432,
+        "level0_rmse_rgb8": 0.937
+      },
+      "normal": {
+        "bytes": 940184,
+        "mip_levels": 12,
+        "uastc_mip_bytes_before_zstd": 5592432,
+        "level0_rmse_rgb8": 0.382,
+        "decoded_unit_length_range": [
+          0.976486,
+          1.02174
+        ]
+      },
+      "orm": {
+        "bytes": 1962473,
+        "mip_levels": 12,
+        "uastc_mip_bytes_before_zstd": 5592432,
+        "level0_rmse_rgb8": 1.074
+      },
+      "emissive": {
+        "bytes": 147750,
+        "mip_levels": 12,
+        "uastc_mip_bytes_before_zstd": 5592432,
+        "level0_rmse_rgb8": 0.208
+      }
+    },
+    "file_bytes": 11029476,
+    "primitives": 4,
+    "gltf_vertices": 15034,
+    "ktx2_bytes": 4561016,
+    "uastc_bytes_before_zstd": 22369728
+  }
+}
