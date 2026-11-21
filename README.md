@@ -21,7 +21,7 @@ Room-scale WebXR mixed-reality tactical sci-fi tower defense for Meta Quest 3 (s
 | P0 — Foundation & Deploy Pipeline | Complete. GitHub Actions and Pages passed, with HTTPS live. |
 | P1 — Room-Scale MR, Occlusion & Hybrid Placement | Complete (verified via unit tests + 19/19 seated/standing IWER XR walk; physical Quest check in P5) |
 | P2 — Combat Simulation, Navigation & 12-Wave Slice | Complete (218 unit tests + 12/12 desktop campaign + 8/8 IWER combat walk passing) |
-| P3 — Art Direction & Blender AAA Asset Production | Art direction approved. UI art, shared materials, Core, Rift frame, both mounts, and the M44, Helios and Glacier tiers are staged. |
+| P3 — Art Direction & Blender AAA Asset Production | Art direction approved. UI art, shared materials, Core, Rift frame, both mounts, and all four turret families are staged. |
 | P4 — AAA Rendering, FX & Spatial Audio | Sound effects approved. The radial theme passed private IWER verification and awaits asset promotion. |
 | P5 — Quest 3 Tuning, Verification & Release | Planned |
 

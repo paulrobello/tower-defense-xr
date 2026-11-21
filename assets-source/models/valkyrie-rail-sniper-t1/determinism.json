@@ -1,0 +1,34 @@
+{
+  "blender": "5.2.2 LTS (d13f752e3b9c)",
+  "ktx_software": "4.4.2",
+  "architecture": "Linux x86_64 CPU",
+  "blender_threads": 2,
+  "encode_threads": 1,
+  "independent_builds": 2,
+  "final_source_replay": true,
+  "paired_build_generator_sha256": {
+    "blender/valkyrie_shape.py": "1801f41536fe9fe6ff4a7de5dcaeb2eb7b5899ca1170b71d7ef59cab0d92a4d4",
+    "blender/valkyrie_rail.py": "b763c1ba8f60a19323ad6f2133693308d6d87de9ae3b7c04e34bc31f352910c5"
+  },
+  "matching_sha256": {
+    "stage/geometry.json": "7df57fb4ed8f8f8af6d3bdc02295e3e13da20807c9525309cdf1988501864592",
+    "stage/basecolor.png": "a8774abcf9bad6ee605d29820c540a3e7aca5dff471833ef03764ce9c9c3a5cb",
+    "stage/normal.png": "51b0c275ff9347d7bc2a3dd685c418750ebce4b811bb75d17a15ed5ee7c00915",
+    "stage/orm.png": "fcd12cf57f93d80cc8a5ea01ce770aab5d44953ebe8434c789ee8f3632d4ec38",
+    "stage/emissive.png": "9fb2d4033733c53c8cdfcd08afdfa212b75975ad7737efa4f944ae48ad742395",
+    "stage/lod0/source.gltf": "07f097a19282f7f35a45e1156ec8e9e25e92debe830e8214b2a0be7e12ad2851",
+    "stage/lod0/source.bin": "081a8a58374011f7d951a7daef267afddfa62a7ca91ac6037b8d69db284e574c",
+    "stage/lod1/source.gltf": "9232059dd8091890d880fab6496af4045363c859465a84e3921c53483bc49b5f",
+    "stage/lod1/source.bin": "7790314d064e1c3775ace283c01e1b796375fcc92876af30a700990fabe34ab2",
+    "models/basecolor.ktx2": "9c3007be8f3b03b86d8770e2ff4c4c69415b7decb99799a1acb94404e79cb6da",
+    "models/normal.ktx2": "ba16f3cb645a95588c3f0474700a7036fc97b7ee48ae3770b0be2ce9984cc19f",
+    "models/orm.ktx2": "51801c7b24e1175be5318ef5733995b383e9ccea774771a15f74a3bbab5b38b4",
+    "models/emissive.ktx2": "a8687bcbcda24e2b25f40a9b8464a0e33d4bd3a3a68521ae1795434f27d7a79d",
+    "models/valkyrie-rail-sniper-t1-lod0.glb": "a2bc5110f7e7a28e9685a8bb8e2533dfefe3d34a208561fe930ec1d8e45803d7",
+    "models/valkyrie-rail-sniper-t1-lod1.glb": "24469fd3d740aea81d548b88f1973e70afa7d218b43ca3532d023ce4897f9631"
+  },
+  "generator_sha256": {
+    "blender/valkyrie_shape.py": "cb6e9e62196fc3c4329fb71f257ba538f0bef6a1734399840b2af26d294dcede",
+    "blender/valkyrie_rail.py": "bea5c0c5fb00c5d15bb07933d9bff544bdeaf5a18f79f443b9e8c7f8dc663173"
+  }
+}

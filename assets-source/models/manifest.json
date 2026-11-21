@@ -3864,6 +3864,906 @@
           "tolerance": 12
         }
       ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t1/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "9c3007be8f3b03b86d8770e2ff4c4c69415b7decb99799a1acb94404e79cb6da",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 596,
+          "y": 800,
+          "rgb": [
+            35,
+            71,
+            156
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 584,
+          "y": 800,
+          "rgb": [
+            164,
+            201,
+            249
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 354,
+          "y": 763,
+          "rgb": [
+            192,
+            196,
+            199
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 743,
+          "y": 94,
+          "rgb": [
+            31,
+            35,
+            45
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 537,
+          "y": 503,
+          "rgb": [
+            84,
+            91,
+            100
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 270,
+          "y": 763,
+          "rgb": [
+            65,
+            73,
+            84
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t1/normal.ktx2",
+      "role": "normal",
+      "sha256": "ba16f3cb645a95588c3f0474700a7036fc97b7ee48ae3770b0be2ce9984cc19f",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 596,
+          "y": 800,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 584,
+          "y": 800,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 354,
+          "y": 763,
+          "rgb": [
+            127,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 743,
+          "y": 94,
+          "rgb": [
+            125,
+            123,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 537,
+          "y": 503,
+          "rgb": [
+            129,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 270,
+          "y": 763,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t1/orm.ktx2",
+      "role": "orm",
+      "sha256": "51801c7b24e1175be5318ef5733995b383e9ccea774771a15f74a3bbab5b38b4",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 596,
+          "y": 800,
+          "rgb": [
+            191,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 584,
+          "y": 800,
+          "rgb": [
+            234,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 354,
+          "y": 763,
+          "rgb": [
+            255,
+            85,
+            248
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 743,
+          "y": 94,
+          "rgb": [
+            242,
+            186,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 537,
+          "y": 503,
+          "rgb": [
+            212,
+            92,
+            237
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 270,
+          "y": 763,
+          "rgb": [
+            255,
+            155,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t1/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "a8687bcbcda24e2b25f40a9b8464a0e33d4bd3a3a68521ae1795434f27d7a79d",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 596,
+          "y": 800,
+          "rgb": [
+            59,
+            130,
+            246
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 584,
+          "y": 800,
+          "rgb": [
+            198,
+            222,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 354,
+          "y": 763,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 743,
+          "y": 94,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 537,
+          "y": 503,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 270,
+          "y": 763,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t2/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "febbee6657c87c472fd6824119836a718a7b1d200973907c897bbc4d14524714",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 318,
+          "y": 127,
+          "rgb": [
+            35,
+            71,
+            156
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 331,
+          "y": 127,
+          "rgb": [
+            164,
+            201,
+            249
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 103,
+          "y": 452,
+          "rgb": [
+            198,
+            201,
+            204
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 604,
+          "y": 176,
+          "rgb": [
+            31,
+            35,
+            45
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 789,
+          "y": 783,
+          "rgb": [
+            81,
+            88,
+            97
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 316,
+          "y": 452,
+          "rgb": [
+            64,
+            73,
+            84
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t2/normal.ktx2",
+      "role": "normal",
+      "sha256": "d9c584f2b88c6ba7cb42640bf22fb699a7865d43625160b40331e0e3bcc1fe18",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 318,
+          "y": 127,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 331,
+          "y": 127,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 103,
+          "y": 452,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 604,
+          "y": 176,
+          "rgb": [
+            125,
+            123,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 789,
+          "y": 783,
+          "rgb": [
+            127,
+            125,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 316,
+          "y": 452,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t2/orm.ktx2",
+      "role": "orm",
+      "sha256": "629a50ebb16cf533fd41c63ccb08be70a78359420dc2ba08f08bf10c3bed5f1f",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 318,
+          "y": 127,
+          "rgb": [
+            234,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 331,
+          "y": 127,
+          "rgb": [
+            191,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 103,
+          "y": 452,
+          "rgb": [
+            170,
+            93,
+            248
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 604,
+          "y": 176,
+          "rgb": [
+            242,
+            186,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 789,
+          "y": 783,
+          "rgb": [
+            148,
+            93,
+            235
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 316,
+          "y": 452,
+          "rgb": [
+            255,
+            173,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t2/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "af117f634de088ea49a2c37e6fb6399fcc61b97e959bda20bd3c3dc5e23c3db1",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 318,
+          "y": 127,
+          "rgb": [
+            59,
+            130,
+            246
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 331,
+          "y": 127,
+          "rgb": [
+            198,
+            222,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 103,
+          "y": 452,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 604,
+          "y": 176,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 789,
+          "y": 783,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 316,
+          "y": 452,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t3/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "c1ffe2e4f255c1e8231a60d396e7489fb9b99fa6cdc922119ef3da1d7f8ffc1e",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 613,
+          "y": 822,
+          "rgb": [
+            35,
+            71,
+            156
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 601,
+          "y": 822,
+          "rgb": [
+            164,
+            201,
+            249
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 369,
+          "y": 867,
+          "rgb": [
+            187,
+            192,
+            196
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 759,
+          "y": 75,
+          "rgb": [
+            32,
+            36,
+            47
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 795,
+          "y": 453,
+          "rgb": [
+            82,
+            90,
+            99
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 281,
+          "y": 867,
+          "rgb": [
+            57,
+            65,
+            76
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t3/normal.ktx2",
+      "role": "normal",
+      "sha256": "7e3b990e55f609189b6ef7ed77304aaf4a5bcaaa7c29d93e2ebf363ff3036ea1",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 613,
+          "y": 822,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 601,
+          "y": 822,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 369,
+          "y": 867,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 759,
+          "y": 75,
+          "rgb": [
+            126,
+            122,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 795,
+          "y": 453,
+          "rgb": [
+            129,
+            129,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 281,
+          "y": 867,
+          "rgb": [
+            128,
+            121,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t3/orm.ktx2",
+      "role": "orm",
+      "sha256": "7023d54ec55679e5de9346b1cc87ca9c90b4c9d816e096171d4fe80394a7474c",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 613,
+          "y": 822,
+          "rgb": [
+            255,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 601,
+          "y": 822,
+          "rgb": [
+            234,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 369,
+          "y": 867,
+          "rgb": [
+            255,
+            78,
+            247
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 759,
+          "y": 75,
+          "rgb": [
+            250,
+            181,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 795,
+          "y": 453,
+          "rgb": [
+            169,
+            94,
+            235
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 281,
+          "y": 867,
+          "rgb": [
+            251,
+            155,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "valkyrie-rail-sniper-t3/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "b4bf1beadfb33db0983455443dacebf185c3be46550b760a72dbb1f3c9632cc8",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Valkyrie cobalt",
+          "x": 613,
+          "y": 822,
+          "rgb": [
+            59,
+            130,
+            246
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Valkyrie white core",
+          "x": 601,
+          "y": 822,
+          "rgb": [
+            198,
+            222,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 369,
+          "y": 867,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 759,
+          "y": 75,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 795,
+          "y": 453,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 281,
+          "y": 867,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
     }
   ],
   "models": [
@@ -5086,6 +5986,306 @@
           "normal": "glacier-cryo-arc-t3/normal.ktx2",
           "orm": "glacier-cryo-arc-t3/orm.ktx2",
           "emissive": "glacier-cryo-arc-t3/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "valkyrie-rail-sniper-t1",
+      "lod": 0,
+      "file": "valkyrie-rail-sniper-t1/valkyrie-rail-sniper-t1-lod0.glb",
+      "sha256": "a2bc5110f7e7a28e9685a8bb8e2533dfefe3d34a208561fe930ec1d8e45803d7",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.19,
+            0.34
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Valkyrie T1 satin armor": {
+          "basecolor": "valkyrie-rail-sniper-t1/basecolor.ktx2",
+          "normal": "valkyrie-rail-sniper-t1/normal.ktx2",
+          "orm": "valkyrie-rail-sniper-t1/orm.ktx2",
+          "emissive": "valkyrie-rail-sniper-t1/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "valkyrie-rail-sniper-t1",
+      "lod": 1,
+      "file": "valkyrie-rail-sniper-t1/valkyrie-rail-sniper-t1-lod1.glb",
+      "sha256": "24469fd3d740aea81d548b88f1973e70afa7d218b43ca3532d023ce4897f9631",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.19,
+            0.34
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Valkyrie T1 satin armor": {
+          "basecolor": "valkyrie-rail-sniper-t1/basecolor.ktx2",
+          "normal": "valkyrie-rail-sniper-t1/normal.ktx2",
+          "orm": "valkyrie-rail-sniper-t1/orm.ktx2",
+          "emissive": "valkyrie-rail-sniper-t1/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "valkyrie-rail-sniper-t2",
+      "lod": 0,
+      "file": "valkyrie-rail-sniper-t2/valkyrie-rail-sniper-t2-lod0.glb",
+      "sha256": "648513ec018d7a9413ec015a213307720d07c30cc2ba2f8de23811ebc7ee5244",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.2,
+            0.38
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Valkyrie T2 satin armor": {
+          "basecolor": "valkyrie-rail-sniper-t2/basecolor.ktx2",
+          "normal": "valkyrie-rail-sniper-t2/normal.ktx2",
+          "orm": "valkyrie-rail-sniper-t2/orm.ktx2",
+          "emissive": "valkyrie-rail-sniper-t2/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "valkyrie-rail-sniper-t2",
+      "lod": 1,
+      "file": "valkyrie-rail-sniper-t2/valkyrie-rail-sniper-t2-lod1.glb",
+      "sha256": "e5a0707a01dcc48397ce71814a7b63043e8f1907162938534143db184554938d",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.2,
+            0.38
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Valkyrie T2 satin armor": {
+          "basecolor": "valkyrie-rail-sniper-t2/basecolor.ktx2",
+          "normal": "valkyrie-rail-sniper-t2/normal.ktx2",
+          "orm": "valkyrie-rail-sniper-t2/orm.ktx2",
+          "emissive": "valkyrie-rail-sniper-t2/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "valkyrie-rail-sniper-t3",
+      "lod": 0,
+      "file": "valkyrie-rail-sniper-t3/valkyrie-rail-sniper-t3-lod0.glb",
+      "sha256": "95deafbe4b734b766fc80713cbaff3cdc9c13002957416a873648de3165882fc",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.21,
+            0.42
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Valkyrie T3 satin armor": {
+          "basecolor": "valkyrie-rail-sniper-t3/basecolor.ktx2",
+          "normal": "valkyrie-rail-sniper-t3/normal.ktx2",
+          "orm": "valkyrie-rail-sniper-t3/orm.ktx2",
+          "emissive": "valkyrie-rail-sniper-t3/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "valkyrie-rail-sniper-t3",
+      "lod": 1,
+      "file": "valkyrie-rail-sniper-t3/valkyrie-rail-sniper-t3-lod1.glb",
+      "sha256": "a29cd13200c44f45db35a50321cd18cafad01d58aceee78ae9991da95474614e",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.21,
+            0.42
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Valkyrie T3 satin armor": {
+          "basecolor": "valkyrie-rail-sniper-t3/basecolor.ktx2",
+          "normal": "valkyrie-rail-sniper-t3/normal.ktx2",
+          "orm": "valkyrie-rail-sniper-t3/orm.ktx2",
+          "emissive": "valkyrie-rail-sniper-t3/emissive.ktx2"
         }
       }
     }

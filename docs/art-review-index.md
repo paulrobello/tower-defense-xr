@@ -111,3 +111,15 @@ The staged heads progress from a recessed single coil to a fork and a three-pylo
 | T3 conduit | 2,712 / 1,320 | [Source, proofs and hashes](../assets-source/models/glacier-cryo-arc-t3/README.md) |
 
 The largest assembly measures 5,140 / 2,468 triangles with two materials. LOD1 retains the casing profiles that define the material boundaries. Each tier has four 1024 px maps and an editable Blender pair. The T1 ORM map uses UASTC quality 3 with RDO disabled to preserve the brushed-titanium ambient occlusion sample within the existing tolerance. That map grew by 165,986 bytes. Independent scoring and owner approval remain P3-T7 work.
+
+## Valkyrie Rail Sniper
+
+The compact cobalt rail gains dorsal and ventral capacitor fins at T2 and a pair of open accelerators at T3. All three heads use recessed graphite side panels with a titanium border based on the approved concept. The T3 exported rails leave a clear opening at least 46.64 mm wide over 250 mm beyond the housing. Neutral muzzle pose, yaw, pitch, recoil and moving clearance on both mounts were verified after re-import.
+
+| Tier | Head LOD0 / LOD1 triangles | Review |
+| --- | ---: | --- |
+| T1 compact rail | 1,164 / 900 | [Source, proofs and hashes](../assets-source/models/valkyrie-rail-sniper-t1/README.md) |
+| T2 capacitor fins | 1,444 / 1,180 | [Source, proofs and hashes](../assets-source/models/valkyrie-rail-sniper-t2/README.md) |
+| T3 twin accelerators | 1,640 / 1,336 | [Source, proofs and hashes](../assets-source/models/valkyrie-rail-sniper-t3/README.md) |
+
+The largest assembly measures 4,068 / 2,484 triangles and two materials. Each tier uses four 1024 px maps, editable high and low Blender files, and matched high, low and mounted EEVEE views. Independent scoring and owner approval remain P3-T7 work.

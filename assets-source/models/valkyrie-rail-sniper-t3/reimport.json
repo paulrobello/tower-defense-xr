@@ -1,0 +1,802 @@
+{
+  "editable_sources": {
+    "high": {
+      "sha256": "2bcbb849ca9870d739cf2d2161b00c203b5c66d35313a87c163613757a4c421f",
+      "triangles": 2200,
+      "embedded_source_images": 9,
+      "geometry_uv_hierarchy_material_slots_sha256": "c6585aff75de28fade25c512a64598b3415a8158bebe873d883508c1e2bc2bb5",
+      "repeat_archive_sha256": "03f48ca070a498fb15d183161f78f7300d59e7d33d55b3a2738505bac3f56c0d"
+    },
+    "low": {
+      "sha256": "356dba500ed4547b01337a88e2b6b4c0fe691854a07bdffd2fca356b3c64a5ff",
+      "triangles": 1640,
+      "embedded_source_images": 4,
+      "geometry_uv_hierarchy_material_slots_sha256": "e57d286a3036b9d46cfecad8c95511647db6170c3b7cb3fdf529d884f15445aa",
+      "repeat_archive_sha256": "273528bb6ce63ac7d67a79ec1bfb197fcb28d2e90f828afc69bd228965b8e0cd"
+    }
+  },
+  "lod0": {
+    "sha256": "95deafbe4b734b766fc80713cbaff3cdc9c13002957416a873648de3165882fc",
+    "head_dimensions_blender_m": [
+      0.1899999976158142,
+      0.3400000035762787,
+      0.13999998569488525
+    ],
+    "overall_height_m": 0.28999999165534973,
+    "emitters": {
+      "rail_count": 2,
+      "axial_lengths_m": [
+        0.35999998822808266,
+        0.35999998822808266
+      ],
+      "strip_and_dark_probes": [
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "carbon_gunmetal_seam_probes": [
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.14,
+          "expected": "carbon",
+          "decoded_metal_rgb8": 0
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.23,
+          "expected": "gunmetal",
+          "decoded_metal_rgb8": 238
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.14,
+          "expected": "carbon",
+          "decoded_metal_rgb8": 0
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.23,
+          "expected": "gunmetal",
+          "decoded_metal_rgb8": 237
+        }
+      ],
+      "clear_slot_min_width_m": 0.046640001237392426,
+      "clear_slot_length_beyond_hull_m": 0.24999999999999997
+    },
+    "poses": [
+      {
+        "moving_min_z_m": 0.12147797644138336,
+        "yaw_blender_rad": 0.7,
+        "pitch_blender_rad": -0.42,
+        "recoil_m": 0.055,
+        "muzzle_world_blender_m": [
+          0.202882319688797,
+          -0.2408704161643982,
+          0.3549215495586395
+        ],
+        "fork_world_blender_m": [
+          0.04512568935751915,
+          0.03800884261727333,
+          0.08799999952316284
+        ]
+      },
+      {
+        "moving_min_z_m": 0.06036728620529175,
+        "yaw_blender_rad": -1.13,
+        "pitch_blender_rad": 0.32,
+        "recoil_m": 0.008,
+        "muzzle_world_blender_m": [
+          -0.366504430770874,
+          -0.17289982736110687,
+          0.07811418175697327
+        ],
+        "fork_world_blender_m": [
+          0.02517293021082878,
+          -0.05336032062768936,
+          0.08799999952316284
+        ]
+      },
+      {
+        "moving_min_z_m": 0.07515190541744232,
+        "yaw_blender_rad": -0.3,
+        "pitch_blender_rad": 0.32,
+        "recoil_m": 0.055,
+        "muzzle_world_blender_m": [
+          -0.10657239705324173,
+          -0.34451958537101746,
+          0.09289880096912384
+        ],
+        "fork_world_blender_m": [
+          0.05636485293507576,
+          -0.017435692250728607,
+          0.08799999952316284
+        ]
+      },
+      {
+        "moving_min_z_m": 0.15000000596046448,
+        "yaw_blender_rad": 0,
+        "pitch_blender_rad": 0,
+        "recoil_m": 0,
+        "muzzle_world_blender_m": [
+          0.0,
+          -0.41999998688697815,
+          0.20999999344348907
+        ],
+        "fork_world_blender_m": [
+          0.05900000035762787,
+          0.0,
+          0.08799999952316284
+        ]
+      }
+    ],
+    "mounts": {
+      "surface-clamp": {
+        "mount_sha256": "01283900c728110a9d733d9f266ce5bfbdb09d9b672e00ae113bc8c85760a0ff",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.054999999701976776,
+        "neutral_moving_clearance_m": 0.09500014036893845,
+        "posed_moving_clearances_m": [
+          0.06647813320159912,
+          0.005367416888475418,
+          0.020152032375335693,
+          0.09500014036893845
+        ]
+      },
+      "hover-pod": {
+        "mount_sha256": "d013afe0e2ec5627428db1b683adee6d6a0a47cf2906c5d55ba6a2c151dd2a49",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.080000139772892,
+        "posed_moving_clearances_m": [
+          0.05147813260555267,
+          0.045445184296287675,
+          0.005152031779289246,
+          0.080000139772892
+        ]
+      }
+    },
+    "finishes": {
+      "high_precision_face_matches": [],
+      "casing_high_finish_area_agreement": 1.0,
+      "occupied_uv_fraction": 0.4512845541985876,
+      "uv_texels_per_meter": {
+        "RB.brushed-titanium": 1391.8057502833797,
+        "RB.dark-gunmetal": 1129.6705689672756,
+        "RB.tactical-ceramic": 880.5573432194991,
+        "Core carbon inserts": 1370.2809297247506,
+        "Valkyrie cobalt": 1647.8530869716674,
+        "Valkyrie white core": 1783.0212381108083
+      },
+      "metalness_correct_area_fraction": {
+        "RB.brushed-titanium": 1.0,
+        "RB.dark-gunmetal": 1.0,
+        "RB.tactical-ceramic": 1.0,
+        "Core carbon inserts": 1.0,
+        "Valkyrie cobalt": 1.0,
+        "Valkyrie white core": 1.0
+      },
+      "cobalt_white_correct_area_fraction": {
+        "Valkyrie cobalt": 1.0,
+        "Valkyrie white core": 1.0
+      },
+      "unlit_probes": {
+        "interior_samples": 6560,
+        "minimum_peak_rgb8": 35,
+        "black_samples": 0
+      }
+    },
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 532293,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.432
+        },
+        "normal": {
+          "bytes": 479709,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.933,
+          "decoded_unit_length_range": [
+            0.977116,
+            1.035257
+          ]
+        },
+        "orm": {
+          "bytes": 864044,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.637
+        },
+        "emissive": {
+          "bytes": 5995,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.013
+        }
+      },
+      "file_bytes": 4914640,
+      "primitives": 3,
+      "gltf_vertices": 3200,
+      "ktx2_bytes": 1882041,
+      "uastc_bytes_before_zstd": 5592512
+    }
+  },
+  "lod1": {
+    "sha256": "a29cd13200c44f45db35a50321cd18cafad01d58aceee78ae9991da95474614e",
+    "head_dimensions_blender_m": [
+      0.1899999976158142,
+      0.3400000035762787,
+      0.13999998569488525
+    ],
+    "overall_height_m": 0.28999999165534973,
+    "emitters": {
+      "rail_count": 2,
+      "axial_lengths_m": [
+        0.35999998822808266,
+        0.35999998822808266
+      ],
+      "strip_and_dark_probes": [
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.56,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.69,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.84,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "carbon_gunmetal_seam_probes": [
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.14,
+          "expected": "carbon",
+          "decoded_metal_rgb8": 0
+        },
+        {
+          "center_x_m": -0.041800000000000004,
+          "fraction": 0.23,
+          "expected": "gunmetal",
+          "decoded_metal_rgb8": 237
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.14,
+          "expected": "carbon",
+          "decoded_metal_rgb8": 0
+        },
+        {
+          "center_x_m": 0.041800000000000004,
+          "fraction": 0.23,
+          "expected": "gunmetal",
+          "decoded_metal_rgb8": 229
+        }
+      ],
+      "clear_slot_min_width_m": 0.04663991928100586,
+      "clear_slot_length_beyond_hull_m": 0.24999999999999997
+    },
+    "poses": [
+      {
+        "moving_min_z_m": 0.12147797644138336,
+        "yaw_blender_rad": 0.7,
+        "pitch_blender_rad": -0.42,
+        "recoil_m": 0.055,
+        "muzzle_world_blender_m": [
+          0.202882319688797,
+          -0.2408704161643982,
+          0.3549215495586395
+        ],
+        "fork_world_blender_m": [
+          0.045125700533390045,
+          0.038008853793144226,
+          0.08799999952316284
+        ]
+      },
+      {
+        "moving_min_z_m": 0.06036728620529175,
+        "yaw_blender_rad": -1.13,
+        "pitch_blender_rad": 0.32,
+        "recoil_m": 0.008,
+        "muzzle_world_blender_m": [
+          -0.366504430770874,
+          -0.17289982736110687,
+          0.07811418175697327
+        ],
+        "fork_world_blender_m": [
+          0.02517293579876423,
+          -0.053360335528850555,
+          0.08799999952316284
+        ]
+      },
+      {
+        "moving_min_z_m": 0.07515190541744232,
+        "yaw_blender_rad": -0.3,
+        "pitch_blender_rad": 0.32,
+        "recoil_m": 0.055,
+        "muzzle_world_blender_m": [
+          -0.10657239705324173,
+          -0.34451958537101746,
+          0.09289880096912384
+        ],
+        "fork_world_blender_m": [
+          0.056364867836236954,
+          -0.017435697838664055,
+          0.08799999952316284
+        ]
+      },
+      {
+        "moving_min_z_m": 0.15000000596046448,
+        "yaw_blender_rad": 0,
+        "pitch_blender_rad": 0,
+        "recoil_m": 0,
+        "muzzle_world_blender_m": [
+          0.0,
+          -0.41999998688697815,
+          0.20999999344348907
+        ],
+        "fork_world_blender_m": [
+          0.05900001525878906,
+          0.0,
+          0.08799999952316284
+        ]
+      }
+    ],
+    "mounts": {
+      "surface-clamp": {
+        "mount_sha256": "ce09b7647d734d5d98dd994e89142fcbc53715d4ea6735ed1070acef754bf791",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.054999999701976776,
+        "neutral_moving_clearance_m": 0.09500014036893845,
+        "posed_moving_clearances_m": [
+          0.06647813320159912,
+          0.005367416888475418,
+          0.020152032375335693,
+          0.09500014036893845
+        ]
+      },
+      "hover-pod": {
+        "mount_sha256": "469079788569d5940f6b3deb04c70044ad913a947430fde6425249637d93df96",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.080000139772892,
+        "posed_moving_clearances_m": [
+          0.05147813260555267,
+          0.04364727142560111,
+          0.005152031779289246,
+          0.080000139772892
+        ]
+      }
+    },
+    "finishes": {
+      "high_precision_face_matches": [
+        {
+          "mesh": "forward-assembly",
+          "face": 844,
+          "source_triangle": 1308,
+          "bvh_m": 3.0163816973072244e-06,
+          "projected_interior_m": 0.0,
+          "source_barycentric": [
+            0.3333609450865948,
+            0.33313377905384844,
+            0.33350527585955675
+          ]
+        }
+      ],
+      "casing_high_finish_area_agreement": 1.0,
+      "occupied_uv_fraction": 0.446664611903462,
+      "uv_texels_per_meter": {
+        "RB.brushed-titanium": 1388.436481024832,
+        "RB.dark-gunmetal": 1132.9928299326596,
+        "RB.tactical-ceramic": 883.5943088166387,
+        "Core carbon inserts": 1366.213466278821,
+        "Valkyrie cobalt": 1666.5759540807944,
+        "Valkyrie white core": 1803.2769930443771
+      },
+      "metalness_correct_area_fraction": {
+        "RB.brushed-titanium": 1.0,
+        "RB.dark-gunmetal": 1.0,
+        "RB.tactical-ceramic": 1.0,
+        "Core carbon inserts": 1.0,
+        "Valkyrie cobalt": 1.0,
+        "Valkyrie white core": 1.0
+      },
+      "cobalt_white_correct_area_fraction": {
+        "Valkyrie cobalt": 1.0,
+        "Valkyrie white core": 1.0
+      },
+      "unlit_probes": {
+        "interior_samples": 5344,
+        "minimum_peak_rgb8": 34,
+        "black_samples": 0
+      }
+    },
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 532293,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.432
+        },
+        "normal": {
+          "bytes": 479709,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.933,
+          "decoded_unit_length_range": [
+            0.977116,
+            1.035257
+          ]
+        },
+        "orm": {
+          "bytes": 864044,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.637
+        },
+        "emissive": {
+          "bytes": 5995,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.013
+        }
+      },
+      "file_bytes": 4888816,
+      "primitives": 3,
+      "gltf_vertices": 2700,
+      "ktx2_bytes": 1882041,
+      "uastc_bytes_before_zstd": 5592512
+    }
+  },
+  "combined_positive_area_uv_overlaps": 0
+}

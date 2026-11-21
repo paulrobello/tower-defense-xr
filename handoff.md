@@ -6,10 +6,10 @@
 
 ## State
 
-- **Updated:** November 20, 2026 (Pacific time)
+- **Updated:** November 21, 2026 (Pacific time)
 - **Repo:** `/Users/probello/Repos/tower-defense-xr`, branch `main`. The existing local formatting edit in the Phase 4 plan is separate from this handoff.
 - **Public baseline:** [GitHub](https://github.com/paulrobello/tower-defense-xr) and [live test build](https://rift-bastion.pardev.net/). Paul approved the first verified testing release on November 20, 2026. The published commit is `dcb9dca` and the deployed build ID is `f7278d12e27a`. The local backup branch `codex/rift-pre-publication-history` retains the original history. Obtain approval for subsequent pushes.
-- **Completed work (25 kanban cards `done`):**
+- **Completed work (27 kanban cards `done`):**
   - **Phase 0 complete:** `P0-T1`–`P0-T6` closed. The local gates, 14/14 IWER smoke and build A→B Reload checks passed. [GitHub Actions](https://github.com/paulrobello/tower-defense-xr/actions/runs/44874742012) passed the pinned Linux gate and Pages deployment. The live manifest matched the verified build and Quest Browser rendered desktop calibration on its Adreno GPU. Immersive play and physical performance remain Phase 5 work.
   - **Phase 1 (100% complete):** `P1-T1`–`P1-T6` closed. `bun scripts/xr-emu/walk-p1.mjs` passes **19/19** checks (seated `1.2 m` `front-180` + standing `1.65 m` `full-360` calibration, floor/table/wall surface-clamp + thumbstick hover-pod `0.8–5.0 m`, `TOO_CLOSE` & `CAP 14/14` SDF labels, `auto-depth → room-mesh → off` cutouts).
   - **Phase 2 (100% complete):** `P2-T1`–`P2-T6` closed. **218/218 Vitest tests** pass; `bun scripts/check-desktop-campaign.ts` passes **12/12** checks (full 12-wave + Wave 12 Apex Broodlord Boss Phase 2 → Victory `3/3` stars → IndexedDB reload + JSON backup); `bun scripts/xr-emu/walk-p2.mjs` passes **8/8** checks (`150 ≤ 200` draws, `12,080` tris, zero console errors).
@@ -27,9 +27,9 @@
 
 ---
 
-## Remaining Work (Kanban Project: `tower-defense-xr`, 16 Open Cards)
+## Remaining Work (Kanban Project: `tower-defense-xr`, 14 Open Cards)
 
-### Next Up — Phase 3: Art Direction & Blender AAA Assets (12 cards, `plans/phase-3-art-direction-and-blender-assets.md`)
+### Next Up — Phase 3: Art Direction & Blender AAA Assets (5 open cards, `plans/phase-3-art-direction-and-blender-assets.md`)
 - **Wave 1 complete.**
   - `P3-T1` (`01a1fadb0b8b7467b36c14f730c1d52d`): Paul approved **Bastion Rib**, the [art bible](docs/art-bible.md), and all eleven concept sheets in chat on November 20, 2026. This clears Owner Checkpoint 1. All 20 original images decoded and matched their [recorded hashes](assets-source/concepts/provenance.json). The turret tier and muzzle, invader, mount, Core and Rift dimensions matched the blockouts.
 - **Wave 2 complete.**
@@ -39,8 +39,8 @@
   - `P3-T4` complete (`01a1fadb12f5733a8eccefeb99e1f8b2`). The [Core Bastion](assets-source/models/core-bastion/README.md) is 6,826 tris with four 2048 px maps and an eight-second emitter sweep. The [Rift frame](assets-source/models/rift-portal/README.md) is 4,056 tris with five 1024 px maps, a flush anchor and the exact 0.95 × 1.35 m shared aperture. Both packages passed model-check, Blender re-import, byte-identical rebuilds and matched EEVEE views. The [art review index](docs/art-review-index.md) carries the evidence for P3-T7.
   - `P3-T5a` complete (`01a1fb3c841c708784a64a42cd4d0dcf`). The [Surface Clamp Base](assets-source/models/surface-clamp/README.md) uses 2,428/1,148 triangles and preserves four-foot contact on floor, table and wall fixtures. The [Repulsor Hover-Ring Pod](assets-source/models/hover-pod/README.md) uses 2,364/1,148 triangles with a 0.145 m emitter radius. Both use the same origin socket, one material per LOD and four 1024 px maps per asset. Each pair of exports rebuilt byte for byte on the pinned Linux backend. The larger mount leaves 4,072 and 1,352 triangles for the turret head at the respective 6,500/2,500 assembly limits.
   - `P3-T5b` complete (`01a1fb3c87547701ac5685baf143b252`). All three [M44](docs/art-review-index.md#m44-autocannon) and [Helios](docs/art-review-index.md#helios-plasma-mortar) tiers are staged, with editable high/low sources, two GLB LODs per tier and matching view sets. Re-import verified both mounts and the tier transforms. Their largest assemblies measure M44 6,036/2,452 and Helios 6,452/2,500 triangles. The visual approval gate is P3-T7.
-  - `P3-T5c` (`01a1fb3c897177268bcaedf2577ed3d4`): All three [Glacier tiers](docs/art-review-index.md#glacier-cryo-arc) are staged. Both LODs preserve the cryo emitters, source muzzle and mount transforms. The largest assembly uses 5,140/2,468 triangles and two materials. Finish Valkyrie Rail Sniper T1–T3 before closing the card.
-  - `P3-T5` (`01a1fadb16977224a3f5072a8ba38175`): Turret family rollup (closes once `P3-T5a/b/c` pass).
+  - `P3-T5c` complete (`01a1fb3c897177268bcaedf2577ed3d4`). All three [Glacier](docs/art-review-index.md#glacier-cryo-arc) and [Valkyrie](docs/art-review-index.md#valkyrie-rail-sniper) tiers are staged with editable high and low sources, repeat-matched GLBs and maps, and views on both mounts. Re-import verified the neutral muzzle and articulated yaw, pitch and recoil. Their largest assemblies measure Glacier 5,140/2,468 and Valkyrie 4,068/2,484 triangles. Valkyrie T3 retains a 46.64 mm minimum open rail gap.
+  - `P3-T5` complete (`01a1fadb16977224a3f5072a8ba38175`). All 48 combinations of four heads, three tiers, two LODs and two mounts pass the assembly budget. The largest uses 6,452/2,500 triangles and two materials. The full model gate checks 30 GLBs and 81 KTX2 textures, including the shared material library. Final turret approval remains at `P3-T7`.
   - `P3-T6a` (`01a1fb3c8b1071cf8430eb90a84fa8ba`): Rigged Skitter Crawler (`≤4.5k/24b`) & Wasp Skimmer (`≤6.5k/24b`).
   - `P3-T6b` (`01a1fb3c8def7766a0bd37d25c39874d`): Rigged Carapace Brute (`≤9k/28b`) & Rift Disruptor (`≤6.5k/24b`).
   - `P3-T6c` (`01a1fb3c91067130bdb8af122f51b91a`): Rigged Wave 12 Boss Apex Broodlord (`≤28k/48b`, 2048 px KTX2 + Phase-2 crack emissive mask).
@@ -105,5 +105,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Continue serial Blender authoring.** The Core, Rift frame, both mounts and the M44, Helios and Glacier heads are staged. Finish Valkyrie in `P3-T5c`, then continue through `P3-T6a/b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
+1. **Continue serial Blender authoring.** The Core, Rift frame and the entire turret kit are staged. Author Skitter Crawler first, then Wasp Skimmer for `P3-T6a`. Continue through `P3-T6b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
 2. **Collect owner feedback** from the [public test build](https://rift-bastion.pardev.net/). Asset promotion stays gated by Owner Checkpoint 2.

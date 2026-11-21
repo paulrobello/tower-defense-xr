@@ -1,0 +1,589 @@
+{
+  "editable_sources": {
+    "high": {
+      "sha256": "6370a70c9c55e192111b5fba1f862882a81f2e258ba355ef22d69a36a6dd4055",
+      "triangles": 2004,
+      "embedded_source_images": 9,
+      "geometry_uv_hierarchy_material_slots_sha256": "3eaa42bad43a93fbcb504cda8f3adf91f980ada3e8242dd86130487b0da16ebd",
+      "repeat_archive_sha256": "d05294343ceb4b75442544e25977fba75d082f2f3ef3e31a7c5e1f4b061e4452"
+    },
+    "low": {
+      "sha256": "c99dd81c6d97345c2f11d9e0ab4a5f52413a33e566cfdb8c8908f5c48ea22554",
+      "triangles": 1444,
+      "embedded_source_images": 4,
+      "geometry_uv_hierarchy_material_slots_sha256": "7aa2d4e12ef1511cac5e39e49ec7a343d3120650da365276931f3c3a4cf8aa43",
+      "repeat_archive_sha256": "0efc303d3d29e7acb74d89f6b7e628740363b45d4d61525b90ba32980e33b819"
+    }
+  },
+  "lod0": {
+    "sha256": "648513ec018d7a9413ec015a213307720d07c30cc2ba2f8de23811ebc7ee5244",
+    "head_dimensions_blender_m": [
+      0.17000000178813934,
+      0.3100000023841858,
+      0.1300000101327896
+    ],
+    "overall_height_m": 0.27000001072883606,
+    "emitters": {
+      "rail_count": 1,
+      "axial_lengths_m": [
+        0.3199999965727329
+      ],
+      "strip_and_dark_probes": [
+        {
+          "center_x_m": 0,
+          "fraction": 0.56,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.56,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.56,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.69,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.69,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.69,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.84,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.84,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.84,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "carbon_gunmetal_seam_probes": [
+        {
+          "center_x_m": 0,
+          "fraction": 0.14,
+          "expected": "carbon",
+          "decoded_metal_rgb8": 0
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.23,
+          "expected": "gunmetal",
+          "decoded_metal_rgb8": 222
+        }
+      ],
+      "dorsal_ventral_extents_m": [
+        0.042559996247291565,
+        0.042559996247291565
+      ],
+      "open_fin_gap_rays": 6
+    },
+    "poses": [
+      {
+        "moving_min_z_m": 0.11438895016908646,
+        "yaw_blender_rad": 0.7,
+        "pitch_blender_rad": -0.42,
+        "recoil_m": 0.055,
+        "muzzle_world_blender_m": [
+          0.17935319244861603,
+          -0.2129356563091278,
+          0.3286111354827881
+        ],
+        "fork_world_blender_m": [
+          0.04512568935751915,
+          0.03800884261727333,
+          0.08299999684095383
+        ]
+      },
+      {
+        "moving_min_z_m": 0.055193640291690826,
+        "yaw_blender_rad": -1.13,
+        "pitch_blender_rad": 0.32,
+        "recoil_m": 0.008,
+        "muzzle_world_blender_m": [
+          -0.3321644365787506,
+          -0.15669980645179749,
+          0.08069684356451035
+        ],
+        "fork_world_blender_m": [
+          0.02517293021082878,
+          -0.05336032062768936,
+          0.08299999684095383
+        ]
+      },
+      {
+        "moving_min_z_m": 0.0699782595038414,
+        "yaw_blender_rad": -0.3,
+        "pitch_blender_rad": 0.32,
+        "recoil_m": 0.055,
+        "muzzle_world_blender_m": [
+          -0.09535166621208191,
+          -0.30824601650238037,
+          0.09548146277666092
+        ],
+        "fork_world_blender_m": [
+          0.05636485293507576,
+          -0.017435692250728607,
+          0.08299999684095383
+        ]
+      },
+      {
+        "moving_min_z_m": 0.14000000059604645,
+        "yaw_blender_rad": 0,
+        "pitch_blender_rad": 0,
+        "recoil_m": 0,
+        "muzzle_world_blender_m": [
+          0.0,
+          -0.3799999952316284,
+          0.20000000298023224
+        ],
+        "fork_world_blender_m": [
+          0.05900000035762787,
+          0.0,
+          0.08299999684095383
+        ]
+      }
+    ],
+    "mounts": {
+      "surface-clamp": {
+        "mount_sha256": "01283900c728110a9d733d9f266ce5bfbdb09d9b672e00ae113bc8c85760a0ff",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.054999999701976776,
+        "neutral_moving_clearance_m": 0.08500019460916519,
+        "posed_moving_clearances_m": [
+          0.059389084577560425,
+          0.00019380077719688416,
+          0.014978401362895966,
+          0.08500019460916519
+        ]
+      },
+      "hover-pod": {
+        "mount_sha256": "d013afe0e2ec5627428db1b683adee6d6a0a47cf2906c5d55ba6a2c151dd2a49",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.07000019401311874,
+        "posed_moving_clearances_m": [
+          0.04438908398151398,
+          0.03462999359929694,
+          0.04008336054602878,
+          0.07000019401311874
+        ]
+      }
+    },
+    "finishes": {
+      "high_precision_face_matches": [],
+      "casing_high_finish_area_agreement": 1.0,
+      "occupied_uv_fraction": 0.4478507729409291,
+      "uv_texels_per_meter": {
+        "RB.brushed-titanium": 1613.074646673006,
+        "RB.dark-gunmetal": 1189.190154956292,
+        "RB.tactical-ceramic": 974.15166941967,
+        "Core carbon inserts": 1502.2890058524138,
+        "Valkyrie cobalt": 2034.3764751308422,
+        "Valkyrie white core": 2209.3391986894135
+      },
+      "metalness_correct_area_fraction": {
+        "RB.brushed-titanium": 1.0,
+        "RB.dark-gunmetal": 1.0,
+        "RB.tactical-ceramic": 1.0,
+        "Core carbon inserts": 1.0,
+        "Valkyrie cobalt": 1.0,
+        "Valkyrie white core": 1.0
+      },
+      "cobalt_white_correct_area_fraction": {
+        "Valkyrie cobalt": 1.0,
+        "Valkyrie white core": 1.0
+      },
+      "unlit_probes": {
+        "interior_samples": 5776,
+        "minimum_peak_rgb8": 36,
+        "black_samples": 0
+      }
+    },
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 519413,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.395
+        },
+        "normal": {
+          "bytes": 483271,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.88,
+          "decoded_unit_length_range": [
+            0.976486,
+            1.03097
+          ]
+        },
+        "orm": {
+          "bytes": 881647,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.641
+        },
+        "emissive": {
+          "bytes": 5504,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.011
+        }
+      },
+      "file_bytes": 4837976,
+      "primitives": 3,
+      "gltf_vertices": 2749,
+      "ktx2_bytes": 1889835,
+      "uastc_bytes_before_zstd": 5592512
+    }
+  },
+  "lod1": {
+    "sha256": "e5a0707a01dcc48397ce71814a7b63043e8f1907162938534143db184554938d",
+    "head_dimensions_blender_m": [
+      0.17000001668930054,
+      0.3100000023841858,
+      0.1300000101327896
+    ],
+    "overall_height_m": 0.27000001072883606,
+    "emitters": {
+      "rail_count": 1,
+      "axial_lengths_m": [
+        0.3199999965727329
+      ],
+      "strip_and_dark_probes": [
+        {
+          "center_x_m": 0,
+          "fraction": 0.56,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.56,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.56,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.69,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.69,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.69,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.84,
+          "relative_band_height": 0,
+          "decoded_rgb": [
+            198,
+            222,
+            255
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.84,
+          "relative_band_height": 0.15,
+          "decoded_rgb": [
+            59,
+            130,
+            246
+          ]
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.84,
+          "relative_band_height": 0.58,
+          "decoded_rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "carbon_gunmetal_seam_probes": [
+        {
+          "center_x_m": 0,
+          "fraction": 0.14,
+          "expected": "carbon",
+          "decoded_metal_rgb8": 0
+        },
+        {
+          "center_x_m": 0,
+          "fraction": 0.23,
+          "expected": "gunmetal",
+          "decoded_metal_rgb8": 231
+        }
+      ],
+      "dorsal_ventral_extents_m": [
+        0.042559996247291565,
+        0.042559996247291565
+      ],
+      "open_fin_gap_rays": 6
+    },
+    "poses": [
+      {
+        "moving_min_z_m": 0.11438895016908646,
+        "yaw_blender_rad": 0.7,
+        "pitch_blender_rad": -0.42,
+        "recoil_m": 0.055,
+        "muzzle_world_blender_m": [
+          0.17935319244861603,
+          -0.2129356563091278,
+          0.3286111354827881
+        ],
+        "fork_world_blender_m": [
+          0.045125700533390045,
+          0.038008853793144226,
+          0.08299999684095383
+        ]
+      },
+      {
+        "moving_min_z_m": 0.055193640291690826,
+        "yaw_blender_rad": -1.13,
+        "pitch_blender_rad": 0.32,
+        "recoil_m": 0.008,
+        "muzzle_world_blender_m": [
+          -0.3321644365787506,
+          -0.15669980645179749,
+          0.08069684356451035
+        ],
+        "fork_world_blender_m": [
+          0.02517293579876423,
+          -0.053360335528850555,
+          0.08299999684095383
+        ]
+      },
+      {
+        "moving_min_z_m": 0.0699782595038414,
+        "yaw_blender_rad": -0.3,
+        "pitch_blender_rad": 0.32,
+        "recoil_m": 0.055,
+        "muzzle_world_blender_m": [
+          -0.09535166621208191,
+          -0.30824601650238037,
+          0.09548146277666092
+        ],
+        "fork_world_blender_m": [
+          0.056364867836236954,
+          -0.017435697838664055,
+          0.08299999684095383
+        ]
+      },
+      {
+        "moving_min_z_m": 0.14000000059604645,
+        "yaw_blender_rad": 0,
+        "pitch_blender_rad": 0,
+        "recoil_m": 0,
+        "muzzle_world_blender_m": [
+          0.0,
+          -0.3799999952316284,
+          0.20000000298023224
+        ],
+        "fork_world_blender_m": [
+          0.05900001525878906,
+          0.0,
+          0.08299999684095383
+        ]
+      }
+    ],
+    "mounts": {
+      "surface-clamp": {
+        "mount_sha256": "ce09b7647d734d5d98dd994e89142fcbc53715d4ea6735ed1070acef754bf791",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.054999999701976776,
+        "neutral_moving_clearance_m": 0.08500019460916519,
+        "posed_moving_clearances_m": [
+          0.059389084577560425,
+          0.00019380822777748108,
+          0.014978408813476562,
+          0.08500019460916519
+        ]
+      },
+      "hover-pod": {
+        "mount_sha256": "469079788569d5940f6b3deb04c70044ad913a947430fde6425249637d93df96",
+        "origin_alignment_on_rotated_anchor": true,
+        "mount_top_m": 0.07000000029802322,
+        "neutral_moving_clearance_m": 0.07000019401311874,
+        "posed_moving_clearances_m": [
+          0.04438908398151398,
+          0.034594982862472534,
+          0.038238151896857205,
+          0.07000019401311874
+        ]
+      }
+    },
+    "finishes": {
+      "high_precision_face_matches": [],
+      "casing_high_finish_area_agreement": 1.0,
+      "occupied_uv_fraction": 0.442088866970481,
+      "uv_texels_per_meter": {
+        "RB.brushed-titanium": 1612.4150040347968,
+        "RB.dark-gunmetal": 1191.3659368180336,
+        "RB.tactical-ceramic": 975.5149347868105,
+        "Core carbon inserts": 1492.876894269852,
+        "Valkyrie cobalt": 2060.1127377817024,
+        "Valkyrie white core": 2237.2895613148794
+      },
+      "metalness_correct_area_fraction": {
+        "RB.brushed-titanium": 1.0,
+        "RB.dark-gunmetal": 1.0,
+        "RB.tactical-ceramic": 1.0,
+        "Core carbon inserts": 1.0,
+        "Valkyrie cobalt": 1.0,
+        "Valkyrie white core": 1.0
+      },
+      "cobalt_white_correct_area_fraction": {
+        "Valkyrie cobalt": 1.0,
+        "Valkyrie white core": 1.0
+      },
+      "unlit_probes": {
+        "interior_samples": 4720,
+        "minimum_peak_rgb8": 34,
+        "black_samples": 0
+      }
+    },
+    "atlas": {
+      "textures": {
+        "basecolor": {
+          "bytes": 519413,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.395
+        },
+        "normal": {
+          "bytes": 483271,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.88,
+          "decoded_unit_length_range": [
+            0.976486,
+            1.03097
+          ]
+        },
+        "orm": {
+          "bytes": 881647,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 1.641
+        },
+        "emissive": {
+          "bytes": 5504,
+          "mip_levels": 11,
+          "uastc_mip_bytes_before_zstd": 1398128,
+          "level0_rmse_rgb8": 0.011
+        }
+      },
+      "file_bytes": 4813592,
+      "primitives": 3,
+      "gltf_vertices": 2274,
+      "ktx2_bytes": 1889835,
+      "uastc_bytes_before_zstd": 5592512
+    }
+  },
+  "combined_positive_area_uv_overlaps": 0
+}
