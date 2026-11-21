@@ -182,6 +182,8 @@ The initial batch fingerprint is `ab4f4a089e176871a8379387e251673ebd7cc69558db50
 
 I rechecked 1,730 model source and output hash entries and 27 UI inventory entries. The concept verifier decoded six boards, eleven sheets and three archived attempts with matching hashes. The deterministic UI build reproduced 22 candidates. The pinned Linux gate passed 40 GLBs, 102 KTX2 textures and 218 project tests.
 
+The three Valkyrie source receipts reference the [formatter configuration used for their export records](../assets-source/models/biome-ab44c84.json.orig). The archive preserves those input bytes alongside later repository formatter settings.
+
 ### Model budgets and visual scores
 
 Numbers come from the exported GLB accessors and staged KTX2 mip headers. Materials and bones are the maximum per LOD for each package. KTX2 size counts shared texture files once per model. The RGBA8 mip estimate gives the uncompressed capacity for these maps. Live Quest texture formats, residency and frame timing are measured in Phase 5.

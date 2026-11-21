@@ -97,7 +97,6 @@
     "assets-source/models/surface-clamp/orm.png": "4898772a27fb5f27e6c4f6615785738d31c768ae5e00adfe388a9a8c80f8e8ef",
     "assets-source/models/surface-clamp/surface-clamp-lod0.glb": "01283900c728110a9d733d9f266ce5bfbdb09d9b672e00ae113bc8c85760a0ff",
     "assets-source/models/surface-clamp/surface-clamp-lod1.glb": "ce09b7647d734d5d98dd994e89142fcbc53715d4ea6735ed1070acef754bf791",
-    "biome.json": "5ce0f4a01261a459fa9bdb7a47be276bbfa57eceb35bb21058326ec05998a265",
     "blender/build_materials.py": "fe5cdb5cf12c11ee931e685def2423812d1d5b64742d188ea669cffbd42772b7",
     "blender/core_bastion.py": "26bd7b5a221c5f4fc7d17c58f53feeb57290e3e36d66e7b895ac56fea41a1a19",
     "blender/core_bastion_shape.py": "c1b6df3d5bd80e695dbb28150183224bf808313b7c79e1af43a58de4ac1b6182",
@@ -139,7 +138,8 @@
     "scripts/assets/model-check.md": "308871ad6bb19f7e4f7a3469c247f09c69bedaa9be51c25538fa6b82d976a301",
     "scripts/validate_glbs.py": "b1cce7201143a05202dd35ecc61827807991f228f18ac7249169ea3da2eb87c1",
     "src/content/turrets.ts": "a61cf2d4bf65c75366313a91642f29a8e2efda551d3224eede12fcabdf4b03b4",
-    "src/render/blockouts.ts": "c8df989851de8906227ef60d3af30095ebfebbabc8d08550cadd41dc2da3328c"
+    "src/render/blockouts.ts": "c8df989851de8906227ef60d3af30095ebfebbabc8d08550cadd41dc2da3328c",
+    "assets-source/models/biome-ab44c84.json.orig": "5ce0f4a01261a459fa9bdb7a47be276bbfa57eceb35bb21058326ec05998a265"
   },
   "output_sha256": {
     "README.md": "c67e31f2d2e3aab7926a104433f3835431e07760803b6b71780433e9efd021cc",

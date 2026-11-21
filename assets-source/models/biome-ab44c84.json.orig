@@ -1,0 +1,23 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": { "includes": ["**", "!dist", "!dist-iwer", "!node_modules", "!.local", "!output"] },
+  "formatter": { "indentStyle": "space", "indentWidth": 2, "lineWidth": 100 },
+  "javascript": { "formatter": { "quoteStyle": "single", "semicolons": "always" } },
+  "linter": { "enabled": true, "rules": { "preset": "recommended" } },
+  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "overrides": [
+    {
+      "includes": [
+        "assets-source/materials/manifest.json",
+        "assets-source/materials/maps.json",
+        "assets-source/materials/quality.json",
+        "assets-source/models/manifest.json",
+        "assets-source/models/*/geometry.json",
+        "assets-source/models/*/reimport.json",
+        "assets-source/models/*/review/*cameras.json"
+      ],
+      "formatter": { "enabled": false }
+    }
+  ]
+}
