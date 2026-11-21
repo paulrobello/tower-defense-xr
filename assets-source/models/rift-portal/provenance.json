@@ -46,7 +46,8 @@
   "export_notice": "Blender reported multiple image nodes reaching one texture sampler. The exported document contains one sampler for all five textures, linear magnification and trilinear minification; the exact shared ORM, PNG and KTX2 bindings passed independent validation.",
   "corrections": [
     "First studio review exposed overly bright titanium, narrow side inserts, and a regular vortex pattern. The retained candidate has pearl tint, reduced micro-normal strength, widened dark blue inset panels with tapered ends, and a domain-warped multiscale vortex.",
-    "Replaced the review-only solid wall lining with the cut host interface plane after close inspection showed the original calibration panel intersected the aperture throat."
+    "Replaced the review-only solid wall lining with the cut host interface plane after close inspection showed the original calibration panel intersected the aperture throat.",
+    "The glTF importer uses quaternion mode. The pose verifier now explicitly applies XYZ rotations and checks independently calculated wall, ceiling and oblique forward normals and the full shader offset vector."
   ],
   "acceptance": {
     "technical": "Staged P3 geometry, bake, KTX2, deterministic export and re-import passed.",
@@ -80,7 +81,7 @@
     "blender/rift_portal.py": "b05ee893c1a1272de28d6a9e944d6c19dbb2f65471781d15c9081d28ab227e57",
     "blender/surface_fields.py": "a2408130a5f39b9dfd625fa388b585b9ee239ed3bbd02bc2b89278f7eca5651e",
     "blender/verify_core_bastion.py": "eee345536ef0c8f5f7ead150f48073f3bb4b3dec0546048359036b97edf5e1ab",
-    "blender/verify_rift_portal.py": "0cf310d0160a98712974f6817111512b9929bf5cb37ee050402da4686040410e",
+    "blender/verify_rift_portal.py": "fba47fd37dd5123a7bedfc5b9d725eaafd071c25259366ec7099a12976bbca9f",
     "docs/art-bible.md": "c7d854579a450b32ffb0c23575c201fdf2c09359619b8ba06cad64d9e615656f",
     "docs/blender-kit-project.md": "32b374b2767af97dbb4c3a7ab13c4a7594655f35c27499ed2f7c6086807670a4",
     "scripts/assets/encode_ktx2.py": "ef7c2b27f936bab9cc0f02f27492cea4fd7c151045923f0308504c4867873515",
@@ -103,7 +104,7 @@
     "normal.png": "f55bd65540605c38132b8ff9ddc884af9a4da790994bd8742c5498cb80d300a3",
     "orm.ktx2": "a917ff20e62687f5a3ea20566b87d62035dda748a18435fb64c8e2ff0c1ff1e8",
     "orm.png": "17a244a784bf3e9cc64621c43457abfc8bd0cd97a061376e1a4234e68b0c8c0f",
-    "reimport.json": "8486dffc3753ea82a24f12ff3b1986b5aaa34f0d13c5b8a9ed272ca86245a9b9",
+    "reimport.json": "a67a22eec5cc859bf17ece0db3becf153afe3a0705a482b413a6e5f252c5dc91",
     "rift-portal.glb": "b4550fe74e570d69f32b7f190e29fdeb68ab28591275944e0ede10de72ee2bd6",
     "vortex.ktx2": "5485fc141c0c3593b58851143569a60f29bd4ef933b5bdef357d06d698e0ff28",
     "vortex.png": "f7c68759a856fdb89f6be4334562d5131798f50ebcba7669934a200d12df99e8"

@@ -58,6 +58,23 @@
       59
     ]
   ],
+  "verified_forward_normals_gltf": [
+    [
+      0.0,
+      0.0,
+      1.0
+    ],
+    [
+      0.0,
+      -1.0,
+      -0.0
+    ],
+    [
+      0.7106239,
+      -0.5591929,
+      0.4269859
+    ]
+  ],
   "embedded_png_fallbacks_verified": 5,
   "budgets": {
     "textures": {

@@ -77,14 +77,25 @@ def verify(path: Path, ktx: Path) -> dict:
     max_angle = max((b - a) % math.tau for a, b in zip(angles, angles[1:] + angles[:1]))
     wall_contacts = {p for p in frame_pts if p[2] == 0.0}
     assert len(wall_contacts) == len(ring) * 2
-    for pitch, spin in ((0, 0), (90, 0), (34, 59)):
-        root.rotation_euler = (math.radians(pitch), 0, math.radians(spin))
+    poses = ((0, 0), (90, 0), (34, 59))
+    tested_normals = []
+    root.rotation_mode = "XYZ"
+    for pitch, spin in poses:
+        pitch_rad, spin_rad = math.radians(pitch), math.radians(spin)
+        root.rotation_euler = (pitch_rad, 0, spin_rad)
         bpy.context.view_layer.update()
         forward = (root.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized()
-        depth = (field.matrix_world.translation - anchor.matrix_world.translation).dot(
-            forward
+        expected = Vector(
+            (
+                math.cos(pitch_rad) * math.sin(spin_rad),
+                -math.cos(pitch_rad) * math.cos(spin_rad),
+                -math.sin(pitch_rad),
+            )
         )
-        assert abs(depth + 0.025) < EPSILON
+        assert (forward - expected).length < EPSILON, "mount pose did not rotate"
+        offset = field.matrix_world.translation - anchor.matrix_world.translation
+        assert (offset + 0.025 * expected).length < EPSILON
+        tested_normals.append(gltf_point(forward))
     packed = {
         hashlib.sha256(bytes(im.packed_file.data)).digest()
         for im in bpy.data.images
@@ -139,7 +150,8 @@ def verify(path: Path, ktx: Path) -> dict:
         "wall_contact_vertices": len(wall_contacts),
         "maximum_ellipse_chord_error_bound_m": 0.675 * (1 - math.cos(max_angle / 2)),
         "shader_uv": "u=0.5+x/0.95, Blender v=0.5+y/1.35; glTF v=0.5-y/1.35",
-        "tested_transform_pitch_spin_degrees": [[0, 0], [90, 0], [34, 59]],
+        "tested_transform_pitch_spin_degrees": poses,
+        "verified_forward_normals_gltf": tested_normals,
         "embedded_png_fallbacks_verified": len(maps),
         "budgets": budget,
     }
