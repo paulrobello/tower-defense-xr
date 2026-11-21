@@ -18,11 +18,13 @@ Room-scale WebXR mixed-reality tactical sci-fi tower defense for Meta Quest 3 (s
 
 | Phase | Status |
 | --- | --- |
-| P0 — Foundation & Deploy Pipeline | Local complete (`P0-T1`–`P0-T5` done; `P0-T6` CI ready, awaiting push/DNS approval) |
+| P0 — Foundation & Deploy Pipeline | Complete. GitHub Actions and Pages passed, with HTTPS live. |
 | P1 — Room-Scale MR, Occlusion & Hybrid Placement | Complete (verified via unit tests + 19/19 seated/standing IWER XR walk; physical Quest check in P5) |
 | P2 — Combat Simulation, Navigation & 12-Wave Slice | Complete (218 unit tests + 12/12 desktop campaign + 8/8 IWER combat walk passing) |
-| P3 — Art Direction & Blender AAA Asset Production | Ready to start (`P3-T1` Higgsfield style board & art bible next) |
-| P4 — AAA Rendering, FX & Spatial Audio | Planned (`P4-T4` ElevenLabs SFX unblocked; includes `P4-T6` radial menu re-skin) |
+| P3 — Art Direction & Blender AAA Asset Production | Art direction approved. UI art, shared materials, Core, Rift frame and both mounts are staged. |
+| P4 — AAA Rendering, FX & Spatial Audio | Sound effects approved. The radial theme passed private IWER verification and awaits asset promotion. |
 | P5 — Quest 3 Tuning, Verification & Release | Planned |
 
-*Development ports `4272` (dev) and `4273` (preview) are reserved in `~/.claude/used_ports.md`. Deployment target: `https://rift-bastion.pardev.net/`.*
+[Play the current test build](https://rift-bastion.pardev.net/). The final art and sound packages are staged for a later runtime release.
+
+Development uses port `4272` for dev and `4273` for preview.

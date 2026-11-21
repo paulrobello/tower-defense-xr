@@ -87,7 +87,8 @@
     2. Commit `public/CNAME` containing `rift-bastion.pardev.net` **only after** DNS resolves.
     3. Explicitly register custom domain via `PUT /repos/paulrobello/tower-defense-xr/pages`.
     4. Verify live browser render (not merely HTTP 200) over HTTPS once Let's Encrypt cert issues.
-- **Verification:** GitHub Actions CI green on `main`; live Playwright/agentchrome render confirms `https://rift-bastion.pardev.net/` loads with zero console/CSP errors and valid `version.json`.
+- **Verification:** The [GitHub Actions gate and Pages deployment](https://github.com/paulrobello/tower-defense-xr/actions/runs/44874742012) passed on commit `dcb9dca`. Cloudflare DNS resolved the CNAME before the Pages marker commit. The live manifest matched the pinned Linux build (`f7278d12e27a`).
+- **Live smoke, November 20, 2026:** The attached Quest Browser loaded the title and entered desktop calibration. The calibration view rendered 41 draw calls and 93 sampled colors on Adreno 740 with zero browser console or WebGL errors. GitHub.io redirects to the enforced HTTPS custom domain. The physical immersive checks belong to Phase 5.
 
 ---
 
@@ -95,4 +96,4 @@
 
 - `make checkall` and `make checkall-ci` pass locally and in CI.
 - `make xr-emu` passes on local Metal GPU proving `immersive-ar` entry, layer framebuffer scale, foveation write, Settings persistence, `?perf` recorder, and build A→B Reload notice.
-- `https://rift-bastion.pardev.net/` renders live in a real browser with valid HTTPS.
+- The [public test build](https://rift-bastion.pardev.net/) rendered in Quest Browser over enforced HTTPS.

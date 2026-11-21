@@ -8,9 +8,9 @@
 
 - **Updated:** November 20, 2026 (Pacific time)
 - **Repo:** `/Users/probello/Repos/tower-defense-xr`, branch `main`. The existing local formatting edit in the Phase 4 plan is separate from this handoff.
-- **Unpushed local commits:** The project history is local, with no Git remote configured. **Do not push without Paul's explicit approval.**
-- **Completed work (23 kanban cards `done`):**
-  - **Phase 0 (local complete):** `P0-T1`–`P0-T5` closed. `make checkall`, `make checkall-ci` (Gitleaks clean), `make pre-commit`, `make xr-emu` (14/14 on Apple M4 Max Metal GPU), and `bun scripts/check-build-upgrade.ts` (desktop auto-reload + XR HUD `Update: Reload`) all pass on `main`.
+- **Public baseline:** [GitHub](https://github.com/paulrobello/tower-defense-xr) and [live test build](https://rift-bastion.pardev.net/). Paul approved the first verified testing release on November 20, 2026. The published commit is `dcb9dca` and the deployed build ID is `f7278d12e27a`. The local backup branch `codex/rift-pre-publication-history` retains the original history. Obtain approval for subsequent pushes.
+- **Completed work (24 kanban cards `done`):**
+  - **Phase 0 complete:** `P0-T1`–`P0-T6` closed. The local gates, 14/14 IWER smoke and build A→B Reload checks passed. [GitHub Actions](https://github.com/paulrobello/tower-defense-xr/actions/runs/44874742012) passed the pinned Linux gate and Pages deployment. The live manifest matched the verified build and Quest Browser rendered desktop calibration on its Adreno GPU. Immersive play and physical performance remain Phase 5 work.
   - **Phase 1 (100% complete):** `P1-T1`–`P1-T6` closed. `bun scripts/xr-emu/walk-p1.mjs` passes **19/19** checks (seated `1.2 m` `front-180` + standing `1.65 m` `full-360` calibration, floor/table/wall surface-clamp + thumbstick hover-pod `0.8–5.0 m`, `TOO_CLOSE` & `CAP 14/14` SDF labels, `auto-depth → room-mesh → off` cutouts).
   - **Phase 2 (100% complete):** `P2-T1`–`P2-T6` closed. **218/218 Vitest tests** pass; `bun scripts/check-desktop-campaign.ts` passes **12/12** checks (full 12-wave + Wave 12 Apex Broodlord Boss Phase 2 → Victory `3/3` stars → IndexedDB reload + JSON backup); `bun scripts/xr-emu/walk-p2.mjs` passes **8/8** checks (`150 ≤ 200` draws, `12,080` tris, zero console errors).
 - **Note on workspace directory:** `/Users/probello/tower-defense-xr` is an empty folder where the session opened; the actual git repository lives at `/Users/probello/Repos/tower-defense-xr` (so `file:../mux-xr/packages/xr-workspace` resolves cleanly). Always run commands and create sibling worktrees under `/Users/probello/Repos/`.
@@ -27,10 +27,7 @@
 
 ---
 
-## Remaining Work (Kanban Project: `tower-defense-xr`, 18 Open Cards)
-
-### Blocked (1 card)
-- **`P0-T6`** (`01a1fadae7b771b882e38e61f0cdd161`, `blocked`): `.github/workflows/ci.yml` and `docs/deploy-checklist.md` are merged on `main` (`75b5bcf`). Waiting on Paul's explicit approval to push `main`, create the GitHub repo, create the Cloudflare DNS-only CNAME `rift-bastion.pardev.net → paulrobello.github.io`, commit `public/CNAME` *after* DNS resolves, call `PUT /repos/paulrobello/tower-defense-xr/pages`, and verify live HTTPS render.
+## Remaining Work (Kanban Project: `tower-defense-xr`, 17 Open Cards)
 
 ### Next Up — Phase 3: Art Direction & Blender AAA Assets (12 cards, `plans/phase-3-art-direction-and-blender-assets.md`)
 - **Wave 1 complete.**
@@ -56,7 +53,7 @@
 - **`P4-T4` complete** (`01a1fadb229176818b2c3bc81999c4a6`). Paul approved all 28 cues in chat on November 20, 2026. The [audio review record](assets-source/audio/sfx/README.md) binds the approval to the catalog hash. The original 29 takes, 28 lossless masters and 56 Opus/MP3 derivatives passed hash, codec, loudness, true-peak, silence, mono and loop checks. The four negative controls rejected clipping, silence, phase cancellation and a hash mismatch. ElevenLabs reconciled 538 included credits and zero overage.
 - Desktop Chrome verified both formats, original playback, stop/reset and rift repeat. Quest 3 Browser loaded all cues over USB and reported support for both formats. Independent Quest playback was not observed because its tab was hidden. The isolated audio stays under the private, gitignored `assets-source/audio/sfx/` archive. Suno mastering and in-game mixing belong to `P4-T5`.
 
-### Remaining Phase 4 & Phase 5 Cards (10 cards)
+### Remaining Phase 4 & Phase 5 cards
 - **Phase 4 (`plans/phase-4-aaa-rendering-fx-and-audio.md`):**
   - `P4-T1` (`01a1fadb1b4d7398ada36dbe2c6c5c32`): Promote KTX2 GLBs (`public/assets/manifest.json`), `createImageBitmap` off-thread streaming, `compileAsync` load veil.
   - `P4-T2` (`01a1fadb1e057789a2cd2aeff05ad76b`): Procedural PMREM IBL, dynamic hero lighting, shadow tuning, and Rift Portal depth-parallax shader. *(GPT-6.2 Astra)*
@@ -103,11 +100,10 @@
 2. **Blender live MCP add-on (`TCP 9876`):** Was not listening during the 2:34 PM PST probe; start Blender with the community "MCP for Blender" add-on (or run headless `--background --factory-startup --python-exit-code 1`) before `P3-T3`–`P3-T6c`.
 3. **Physical Quest 3 acceptance:** All IWER passes (`P0`, `P1`, `P2`) are emulator evidence only. Real room scans, live WebXR `depth-sensing` GPU cost vs `room-mesh` fallback, comfort, and sustained `≥50 delivered FPS` stay open for Phase 5 (`P5-T2`–`P5-T4`).
 4. **Suno music WAVs (`P4-T5`):** `suno-music-prompt.md` is ready for Paul to generate the 6 loops + 2 stingers on Suno Custom v6; archive his downloaded WAVs untouched under `assets-source/audio/music/raw/` when delivered.
-5. **External deployment (`P0-T6`):** Repo remote, push, Cloudflare DNS-only CNAME, and GitHub Pages custom domain await Paul's approval.
 
 ---
 
 ## Next Steps (Recommended Resume Order)
 
 1. **Continue serial Blender authoring.** The Core, Rift frame and both mounts are staged. Start `P3-T5b` with M44, then Helios. Continue through `P3-T5c`, `P3-T6a/b/c` and the `P3-T7` audit and Owner Checkpoint 2. The private radial theme candidate is independent of modeling. Owner Checkpoint 2 gates production asset promotion.
-2. **Confirm with Paul** when he wants to push `main` and execute `docs/deploy-checklist.md` (`P0-T6`) to bring `https://rift-bastion.pardev.net/` live.
+2. **Collect owner feedback** from the [public test build](https://rift-bastion.pardev.net/). Asset promotion stays gated by Owner Checkpoint 2.
