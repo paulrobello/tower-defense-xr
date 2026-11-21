@@ -123,6 +123,7 @@ describe('XR session manager entry', () => {
     expect(new Set(init.optionalFeatures).size).toBe(init.optionalFeatures?.length);
     expect(init.optionalFeatures).not.toContain('hand-tracking');
     expect(init.depthSensing).toEqual(DEFAULT_DEPTH_SENSING);
+    expect(init.depthSensing?.usagePreference).toEqual(['cpu-optimized']);
     expect(harness.rendererXr.setReferenceSpaceType).toHaveBeenCalledWith('local-floor');
     expect(xr.presenting).toBe(true);
     expect(xr.state).toMatchObject({
@@ -134,11 +135,12 @@ describe('XR session manager entry', () => {
     });
   });
 
-  it('omits depth-sensing init when disabled', async () => {
+  it('omits the depth-sensing feature and init when disabled', async () => {
     const harness = createHarness();
     await manager(harness, { depthSensing: null }).enter();
     const init = harness.xr.requestSession.mock.calls[0]?.[1] as XRSessionInit;
     expect(init.depthSensing).toBeUndefined();
+    expect(init.optionalFeatures).not.toContain('depth-sensing');
   });
 
   it('applies the framebuffer scale before the projection layer is created', async () => {

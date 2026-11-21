@@ -111,6 +111,13 @@ export interface RadialBuildStateSnapshot {
   readonly phase?: GamePhase;
 }
 
+interface XrPanelTarget {
+  readonly root: THREE.Object3D;
+  cellAt(object: THREE.Object3D): string | null;
+  setHovered(id: string | null): void;
+  activate(id: string): boolean;
+}
+
 export interface XrRadialControlsOptions {
   readonly scene: THREE.Scene;
   readonly actionBus: ActionBus;
@@ -121,6 +128,7 @@ export interface XrRadialControlsOptions {
     rayDirection: Readonly<Vec3>,
   ) => RadialTurretTarget | null;
   readonly isBusy?: () => boolean;
+  readonly getPanel?: () => XrPanelTarget | null;
   readonly recenterHoldSec?: number;
   readonly stickDeadZone?: number;
   readonly renderOrder?: number;
@@ -153,7 +161,10 @@ export interface XrRadialControls {
   /** Cancels any pending trigger press for `source` without dispatching. */
   handleSelectEnd(source: XRInputSource): boolean;
   /** Attaches `selectstart`/`select`/`selectend` listeners directly to an `XRSession`. */
-  attachSession(session: XRSession): () => void;
+  attachSession(
+    session: XRSession,
+    onWorldSelect?: (event: XRInputSourceEvent) => void,
+  ): () => void;
   close(): void;
   reset(): void;
   dispose(): void;
@@ -390,6 +401,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
 
   const controllerRays = new PlacementRays(scene);
   controllerRays.group.name = 'rift-bastion-radial-rays';
+  const stopKeepRaysAbove = keepAbove(controllerRays.group, renderOrder + 1);
   const pointer: Pointer = createPointer({ far: 8 });
   const aimObject = new THREE.Object3D();
 
@@ -411,12 +423,54 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
 
   const stickPressedBySource = new Map<XRInputSource, boolean>();
   const rayActions = new Map<XRInputSource, RadialChoiceId>();
+  const rayCells = new Map<XRInputSource, string>();
+  const panelPresses = new Map<XRInputSource, { panel: XrPanelTarget; cell: string }>();
+  let pointedPanel: XrPanelTarget | null = null;
+  let panelModal = false;
   const triggerStart = new Map<
     XRInputSource,
     { generation: number; action: RadialChoiceId | null }
   >();
   // Tracks sources whose trigger was held or pressed while grip was down so release stays suppressed.
   const gripSuppressedTriggers = new Set<XRInputSource>();
+
+  function updatePanelRays(
+    panel: XrPanelTarget | null,
+    sources: readonly XRInputSource[],
+    frame: XRFrame,
+    referenceSpace: XRReferenceSpace,
+  ): void {
+    if (pointedPanel !== panel) pointedPanel?.setHovered(null);
+    pointedPanel = panel;
+    if (!panel) return;
+
+    panel.root.updateWorldMatrix(true, true);
+    const beams: PlacementRayTarget[] = [];
+    for (const source of sources) {
+      if (source.hand || !source.gamepad) continue;
+      const pose = frame.getPose(source.targetRaySpace, referenceSpace);
+      if (!pose) continue;
+
+      const { position, orientation } = pose.transform;
+      aimObject.position.set(position.x, position.y, position.z);
+      aimObject.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
+      const hit = pointer.castFrom(aimObject, [panel.root]);
+      const cell = hit && panel.cellAt(hit.object);
+      if (cell) rayCells.set(source, cell);
+      if (hit || panelModal || options.isBusy?.()) {
+        beams.push({
+          source,
+          origin: aimObject.position.clone(),
+          direction: new THREE.Vector3(0, 0, -1).applyQuaternion(aimObject.quaternion),
+          distance: hit?.distance ?? 0.85,
+          contact: Boolean(cell),
+          valid: true,
+        });
+      }
+    }
+    panel.setHovered(rayCells.values().next().value ?? null);
+    controllerRays.update(beams);
+  }
 
   function resolveBuildState(): RadialBuildStateSnapshot {
     if (options.getBuildState) {
@@ -609,6 +663,11 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
     stickPressedBySource.clear();
     triggerStart.clear();
     gripSuppressedTriggers.clear();
+    panelPresses.clear();
+    rayCells.clear();
+    pointedPanel?.setHovered(null);
+    pointedPanel = null;
+    panelModal = false;
     anyGripHeld = false;
     bothStickHoldSec = 0;
     recenterFiredForHold = false;
@@ -648,9 +707,13 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       return owner;
     },
     shouldSuppressWorldTrigger(source) {
-      if (anyGripHeld) return true;
+      if (anyGripHeld || panelModal) return true;
       if (source && isControllerGripPressed(source)) return true;
-      if (source && gripSuppressedTriggers.has(source)) return true;
+      if (
+        source &&
+        (gripSuppressedTriggers.has(source) || rayCells.has(source) || panelPresses.has(source))
+      )
+        return true;
       if (menu?.root.visible) return true;
       return false;
     },
@@ -664,6 +727,8 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       previousTimeMs = timeMs;
 
       menu?.update(dtSec);
+      panelModal = busy;
+      rayCells.clear();
 
       const inputSources = [...(frame.session?.inputSources ?? [])];
       const activeSet = new Set<XRInputSource>(inputSources);
@@ -698,6 +763,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         if (!activeSet.has(known)) {
           stickPressedBySource.delete(known);
           triggerStart.delete(known);
+          panelPresses.delete(known);
           gripSuppressedTriggers.delete(known);
           rayActions.delete(known);
           if (selectingSource === known) selectingSource = null;
@@ -710,6 +776,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       // Strict Grip Suppression: pressing grip cancels any pending trigger presses immediately.
       if (gripHeld) {
         invalidatePendingTriggers();
+        panelPresses.clear();
       }
 
       // Both-thumbstick-click 1.0 s recovery gesture (only when neither grip is held).
@@ -831,7 +898,13 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         }
       } else if (!menu?.root.visible) {
         hoveredAction = null;
-        controllerRays.clear();
+        const panel = options.getPanel?.() ?? null;
+        updatePanelRays(panel?.root.visible ? panel : null, inputSources, frame, referenceSpace);
+        if (!pointedPanel) controllerRays.clear();
+      }
+      if (menu?.root.visible && pointedPanel) {
+        pointedPanel.setHovered(null);
+        pointedPanel = null;
       }
     },
     handleSelectStart(source) {
@@ -843,7 +916,10 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         return true;
       }
       if (!menu?.root.visible) {
-        return false;
+        const cell = rayCells.get(source);
+        if (!pointedPanel || !cell) return false;
+        panelPresses.set(source, { panel: pointedPanel, cell });
+        return true;
       }
       const aimed = rayActions.get(source) ?? null;
       const eligible = Boolean(menu.interactive && (source === owner || aimed !== null));
@@ -862,7 +938,9 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
     handleSelect(source) {
       if (disposed) return false;
       const press = triggerStart.get(source);
+      const panelPress = panelPresses.get(source);
       triggerStart.delete(source);
+      panelPresses.delete(source);
       if (selectingSource === source) selectingSource = null;
 
       const wasGripSuppressed =
@@ -871,6 +949,18 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       if (wasGripSuppressed) {
         return true;
       }
+
+      if (panelPress) {
+        if (
+          !menu?.root.visible &&
+          options.getPanel?.() === panelPress.panel &&
+          panelPress.panel.root.visible &&
+          rayCells.get(source) === panelPress.cell
+        )
+          panelPress.panel.activate(panelPress.cell);
+        return true;
+      }
+      if (panelModal || rayCells.has(source)) return true;
 
       if (!menu?.root.visible && (!press || press.generation === 0)) {
         return false;
@@ -890,16 +980,17 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
     handleSelectEnd(source) {
       if (disposed) return false;
       const hadPress = triggerStart.delete(source);
+      const hadPanelPress = panelPresses.delete(source);
       if (selectingSource === source) selectingSource = null;
       const wasSuppressed = gripSuppressedTriggers.delete(source);
-      return hadPress || wasSuppressed || Boolean(menu?.root.visible);
+      return hadPress || hadPanelPress || wasSuppressed || Boolean(menu?.root.visible);
     },
-    attachSession(session) {
+    attachSession(session, onWorldSelect) {
       const onSelectStart = (event: XRInputSourceEvent) => {
         controls.handleSelectStart(event.inputSource);
       };
       const onSelect = (event: XRInputSourceEvent) => {
-        controls.handleSelect(event.inputSource);
+        if (!controls.handleSelect(event.inputSource)) onWorldSelect?.(event);
       };
       const onSelectEnd = (event: XRInputSourceEvent) => {
         controls.handleSelectEnd(event.inputSource);
@@ -922,6 +1013,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       disposed = true;
       reset();
       stopKeepAbove();
+      stopKeepRaysAbove();
       root.removeFromParent();
       controllerRays.dispose();
     },

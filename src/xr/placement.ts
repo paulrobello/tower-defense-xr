@@ -316,6 +316,7 @@ export interface TurretPlacementController {
     frame: XRFrame,
     referenceSpace: XRReferenceSpace,
     dtSec: number,
+    suppressTrigger?: (source: XRInputSource) => boolean,
   ): PlacementValidationResult | null;
   confirmPlacement(source?: ActionSource): PlacedTurretRecord | null;
   placeTurret(input: DirectPlaceTurretInput, source?: ActionSource): PlacedTurretRecord | null;
@@ -1495,7 +1496,7 @@ export function createTurretPlacementController(
       notify();
       return validation;
     },
-    updateFromXrFrame(frame, referenceSpace, dtSec) {
+    updateFromXrFrame(frame, referenceSpace, dtSec, suppressTrigger) {
       if (!active) {
         placementRays?.clear();
         return null;
@@ -1527,6 +1528,7 @@ export function createTurretPlacementController(
           buttonEdgesBySource.set(source, edges);
         }
         edges.update(source.gamepad);
+        if (suppressTrigger?.(source)) continue;
 
         const origin = new THREE.Vector3(
           pose.transform.position.x,

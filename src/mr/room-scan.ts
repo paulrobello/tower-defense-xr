@@ -119,6 +119,8 @@ export type RoomSurfaceListener = (snapshot: RoomSurfaceSnapshot) => void;
 export interface FrameUpdateOptions {
   /** Monotonic timestamp in milliseconds used for the empty-scan grace window. */
   nowMs?: number;
+  /** Leave the virtual arena when a live tracked surface becomes available. */
+  resumeLiveScan?: boolean;
   /** Explicit permission-denial hint when `plane-detection`/`mesh-detection` were withheld. */
   permissionDenied?: boolean;
   /** Hint indicating the device/browser supports room scanning (withheld features => denied). */
@@ -177,7 +179,7 @@ export interface RoomSurfaceModel {
 }
 
 const DEFAULT_EMPTY_GRACE_MS = 1500;
-const MATRIX_EPSILON = 1e-6;
+const MATRIX_EPSILON = 1e-4;
 const MESH_PLANE_BAND_M = 0.025;
 const HULL_EPSILON = 1e-5;
 
@@ -564,21 +566,6 @@ function buildStatusDetails(
   }
 }
 
-function readGrantedFeatures(frame: XRFrame): GrantedScanFeatures {
-  const session = frame.session as (XRSession & { enabledFeatures?: Iterable<string> }) | undefined;
-  if (session?.enabledFeatures) {
-    const set = new Set<string>(session.enabledFeatures);
-    return {
-      planeDetection: set.has('plane-detection'),
-      meshDetection: set.has('mesh-detection'),
-    };
-  }
-  return {
-    planeDetection: frame.detectedPlanes !== undefined,
-    meshDetection: frame.detectedMeshes !== undefined,
-  };
-}
-
 function isPermissionDeniedError(error: unknown): boolean {
   if (typeof error === 'object' && error !== null && 'name' in error) {
     const name = String(error.name);
@@ -741,11 +728,12 @@ export function createRoomSurfaceModel(options: RoomSurfaceModelOptions = {}): R
         }
       }
     }
+    if (!changed) return false;
     surfaces = nextSurfaces;
     const nextMap = new Map<string, RoomSurface>();
     for (const surface of nextSurfaces) nextMap.set(surface.id, surface);
     surfaceMap = nextMap;
-    if (changed) modelRevision += 1;
+    modelRevision += 1;
     syncAllAnchors();
     return changed;
   }
@@ -902,7 +890,7 @@ export function createRoomSurfaceModel(options: RoomSurfaceModelOptions = {}): R
       notify();
     },
     updateFromFrame(frame, referenceSpace, frameOptions) {
-      if (usingVirtualFallback) {
+      if (usingVirtualFallback && !frameOptions?.resumeLiveScan) {
         return buildSnapshot();
       }
 
@@ -914,7 +902,24 @@ export function createRoomSurfaceModel(options: RoomSurfaceModelOptions = {}): R
       }
 
       const prevStatus = status;
-      const features = readGrantedFeatures(frame);
+      const enabledFeatures = frame.session?.enabledFeatures;
+      let planes: XRFrame['detectedPlanes'];
+      let meshes: XRFrame['detectedMeshes'];
+      try {
+        if (!enabledFeatures || enabledFeatures.includes('plane-detection')) {
+          planes = frame.detectedPlanes;
+        }
+        if (!enabledFeatures || enabledFeatures.includes('mesh-detection')) {
+          meshes = frame.detectedMeshes;
+        }
+      } catch {
+        return buildSnapshot();
+      }
+      if (usingVirtualFallback && !planes?.size && !meshes?.size) return buildSnapshot();
+      const features = {
+        planeDetection: enabledFeatures?.includes('plane-detection') ?? planes !== undefined,
+        meshDetection: enabledFeatures?.includes('mesh-detection') ?? meshes !== undefined,
+      };
       const featuresChanged =
         features.planeDetection !== grantedFeatures.planeDetection ||
         features.meshDetection !== grantedFeatures.meshDetection;
@@ -937,17 +942,19 @@ export function createRoomSurfaceModel(options: RoomSurfaceModelOptions = {}): R
       if (scanStartedAtMs === null) scanStartedAtMs = nowMs;
 
       const nextSurfaces: RoomSurface[] = [];
+      const readPose = (space: XRSpace): XRPose | null => {
+        try {
+          return frame.getPose(space, referenceSpace) ?? null;
+        } catch {
+          scanInterrupted = true;
+          return null;
+        }
+      };
+      let scanInterrupted = false;
 
       if (features.planeDetection) {
-        let planes: Iterable<XRPlane> | undefined;
-        try {
-          planes = frame.detectedPlanes;
-        } catch {
-          planes = undefined;
-        }
         for (const plane of planes ?? []) {
-          if (plane.polygon.length < 3) continue;
-          const pose = frame.getPose(plane.planeSpace, referenceSpace);
+          const pose = readPose(plane.planeSpace);
           if (!pose) continue;
           const worldMatrix = new THREE.Matrix4().fromArray(pose.transform.matrix);
           const tracked = getOrUpdateTrackedEntry(
@@ -956,6 +963,12 @@ export function createRoomSurfaceModel(options: RoomSurfaceModelOptions = {}): R
             plane.lastChangedTime,
             worldMatrix,
           );
+          const previous = surfaceMap.get(tracked.id);
+          if (previous?.revision === tracked.revision) {
+            nextSurfaces.push(previous);
+            continue;
+          }
+          if (plane.polygon.length < 3) continue;
           const localPolygon = plane.polygon.map((p) => ({ x: p.x, z: p.z }));
           nextSurfaces.push(
             buildRoomSurfaceFromLocalPolygon({
@@ -973,14 +986,8 @@ export function createRoomSurfaceModel(options: RoomSurfaceModelOptions = {}): R
       }
 
       if (features.meshDetection) {
-        let meshes: Iterable<XRMesh> | undefined;
-        try {
-          meshes = frame.detectedMeshes;
-        } catch {
-          meshes = undefined;
-        }
         for (const mesh of meshes ?? []) {
-          const pose = frame.getPose(mesh.meshSpace, referenceSpace);
+          const pose = readPose(mesh.meshSpace);
           if (!pose) continue;
           const meshPoseMatrix = new THREE.Matrix4().fromArray(pose.transform.matrix);
 
@@ -997,6 +1004,11 @@ export function createRoomSurfaceModel(options: RoomSurfaceModelOptions = {}): R
 
           const worldMatrix = meshPoseMatrix.clone().multiply(extracted.localToMeshMatrix);
           const tracked = getOrUpdateTrackedEntry(mesh, 'mesh', mesh.lastChangedTime, worldMatrix);
+          const previous = surfaceMap.get(tracked.id);
+          if (previous?.revision === tracked.revision) {
+            nextSurfaces.push(previous);
+            continue;
+          }
           const extraBoundsPoints = extracted.localVertices.map((v) =>
             v.clone().applyMatrix4(meshPoseMatrix),
           );
@@ -1017,6 +1029,10 @@ export function createRoomSurfaceModel(options: RoomSurfaceModelOptions = {}): R
         }
       }
 
+      if (scanInterrupted || (usingVirtualFallback && nextSurfaces.length === 0)) {
+        return buildSnapshot();
+      }
+      usingVirtualFallback = false;
       let nextStatus: RoomScanStatus;
       if (nextSurfaces.length > 0) {
         nextStatus = 'ready';

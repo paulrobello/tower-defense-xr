@@ -165,10 +165,15 @@ function createMockRenderer() {
     xr,
     toneMapping: 0,
     outputColorSpace: '',
+    autoClearColor: true,
+    autoClearDepth: true,
+    info: { autoReset: true, reset: vi.fn() },
     setPixelRatio: vi.fn(),
     setClearColor: vi.fn(),
     setSize: vi.fn(),
-    render: vi.fn(),
+    render: vi.fn(function (this: THREE.WebGLRenderer, _scene: THREE.Scene) {
+      return { clearColor: this.autoClearColor, clearDepth: this.autoClearDepth };
+    }),
     setAnimationLoop: vi.fn((fn: ((time: number, frame?: XRFrame) => void) | null) => {
       loop = fn;
     }),
@@ -230,6 +235,13 @@ describe('desktop bootstrap shell', () => {
     mock.tick(16, frame);
     expect(mock.xr.setFoveation).toHaveBeenCalledWith(1);
     expect(onFrame).toHaveBeenCalledWith(0, 16, frame);
+    expect(mock.renderer.info.reset).toHaveBeenCalledTimes(1);
+    const render = vi.mocked(mock.renderer.render);
+    expect(render.mock.calls.map(([scene]) => scene)).toEqual([shell.scene, shell.xrOverlayScene]);
+    expect(render.mock.results.map(({ value }) => value)).toEqual([
+      { clearColor: true, clearDepth: true },
+      { clearColor: false, clearDepth: true },
+    ]);
     offFrame();
 
     // Exiting XR restores virtual room and desktop mode.

@@ -243,6 +243,16 @@ async function createEmulatedPage(url) {
     }
 
     window.__p1Helpers = {
+      async pressControl(name) {
+        const app = window.__riftBastionApp;
+        const control = app.shell.xrOverlayScene.getObjectByName(name);
+        if (!control) throw new Error(`Missing XR control ${name}`);
+        const target = control.getWorldPosition(control.position.clone());
+        const head = window.__xrEmu.device.position;
+        this.aimController('right', { x: head.x + 0.2, y: head.y - 0.23, z: head.z }, target);
+        await window.__xrEmu.frames(3);
+        await this.pressButton('right', 'trigger', 2, 3);
+      },
       setHeadPose(x, y, z, pitch = 0, yaw = 0) {
         const device = window.__xrEmu.device;
         device.position.set(x, y, z);
@@ -363,9 +373,20 @@ try {
 
     const standingLocked = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
-      app.bus.dispatch({ type: 'calibrate/confirm' }, 'xr');
-      await window.__xrEmu.frames(4);
+      const initialCore = { ...app.calibration.coreAnchor.position };
+      const controls = window.__p1Helpers;
+      const head = window.__xrEmu.device.position;
+      controls.aimController(
+        'right',
+        { x: head.x + 0.2, y: head.y - 0.23, z: head.z },
+        { x: 0.9, y: 0, z: 0.25 },
+      );
+      await window.__xrEmu.frames(3);
+      await controls.pressButton('right', 'trigger', 2, 3);
+      const movedCore = Math.abs(app.calibration.coreAnchor.position.x - initialCore.x) > 0.2;
+      await window.__p1Helpers.pressControl('tactical-hud-primary-action');
       return {
+        movedCore,
         phase: app.state.phase,
         locked: app.calibration.locked,
         playArc: app.calibration.playArc,
@@ -374,7 +395,8 @@ try {
     });
     record(
       'xr-standing-lock-core',
-      standingLocked.phase === 'prep' &&
+      standingLocked.movedCore &&
+        standingLocked.phase === 'prep' &&
         standingLocked.locked === true &&
         standingLocked.playArc === 'full-360' &&
         standingLocked.portalCount >= 2,
@@ -481,10 +503,14 @@ try {
 
     const seatedLocked = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
-      const activated = app.tacticalHud.activate('primary-action');
-      await window.__xrEmu.frames(4);
+      await window.__p1Helpers.pressControl('tactical-hud-settings');
+      const openedSettings = app.xrSettings.visible && !app.tacticalHud.xrRoot.visible;
+      await window.__p1Helpers.pressControl('settings-close');
+      const closedSettings = !app.xrSettings.visible && app.tacticalHud.xrRoot.visible;
+      await window.__p1Helpers.pressControl('tactical-hud-primary-action');
       return {
-        activated,
+        openedSettings,
+        closedSettings,
         phase: app.state.phase,
         locked: app.calibration.locked,
         playArc: app.calibration.playArc,
@@ -492,7 +518,8 @@ try {
     });
     record(
       'xr-seated-lock-core',
-      seatedLocked.activated === true &&
+      seatedLocked.openedSettings === true &&
+        seatedLocked.closedSettings === true &&
         seatedLocked.phase === 'prep' &&
         seatedLocked.locked === true,
       seatedLocked,
@@ -879,8 +906,7 @@ try {
     const occlusionStart = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
       app.placement.cancelPlacement();
-      app.bus.dispatch({ type: 'menu/open-settings' }, 'xr');
-      await window.__xrEmu.frames(3);
+      await window.__p1Helpers.pressControl('tactical-hud-settings');
       return {
         xrSettingsVisible: app.xrSettings.visible,
         settingMode: app.settings.get().roomOcclusion,
@@ -898,8 +924,9 @@ try {
 
     const occlusionRoomMesh = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
-      const activated = app.xrSettings.activate('room-occlusion');
-      await window.__xrEmu.frames(4);
+      await window.__p1Helpers.pressControl('settings-next');
+      await window.__p1Helpers.pressControl('settings-room-occlusion');
+      const activated = app.settings.get().roomOcclusion === 'room-mesh';
 
       // Pure ray-triangle intersection (Moller-Trumbore) against occluder mesh world triangles
       // to prove a genuine aperture hole exists at each portal center while surrounding wall exists.
@@ -1029,17 +1056,16 @@ try {
 
     const occlusionOff = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
-      const activated = app.xrSettings.activate('room-occlusion');
-      await window.__xrEmu.frames(4);
-      const closed = app.xrSettings.activate('close');
-      await window.__xrEmu.frames(2);
+      await window.__p1Helpers.pressControl('settings-room-occlusion');
+      const activated = app.settings.get().roomOcclusion === 'off';
+      await window.__p1Helpers.pressControl('settings-close');
       return {
         activated,
         settingMode: app.settings.get().roomOcclusion,
         requestedMode: app.occlusion.requestedMode,
         effectiveMode: app.occlusion.effectiveMode,
         roomMeshVisible: app.occlusion.roomMeshRoot.visible,
-        xrSettingsClosed: closed && !app.xrSettings.visible,
+        xrSettingsClosed: !app.xrSettings.visible,
       };
     });
     await snap(page, '10-xr-occlusion-off.jpg');
