@@ -80,7 +80,7 @@ The mount has four separate shoes, a 55 mm deck and a 0.15881 m measured radius 
 
 The revised legless pod preserves its 0.156 m outer radius, 0.145 m emitter radius and 0.070 m height. Its 2,428-triangle LOD0 and 1,132-triangle LOD1 share the identity socket, one material and four 1024 px maps. The curved bowl uses more radial stations and retains its sharp finish boundaries. Both GLBs passed re-import for clearance, shell intersections and the ceramic shoulder's decoded finish. The original mount remains with the turret-head provenance. [Active pod sources, hashes and re-import checks](../assets-source/models/hover-pod-revision/README.md)
 
-At `4f18f1f` the active mount passed all 24 exported head combinations through the family verifiers. The minimum conservative posed clearance was 1.29 mm. Helios T3 was the largest paired assembly at 6,452 / 2,484 triangles on the revised pod. The later Helios T1 revision has its own active-mount verification and preserves the earlier receipt. [Exact compatibility records](../assets-source/models/hover-pod-revision/head-compatibility.json)
+At `4f18f1f` the active mount passed all 24 exported head combinations through the family verifiers. The minimum conservative posed clearance was 1.29 mm. Helios T3 was the largest paired assembly at 6,452 / 2,484 triangles on the revised pod. The later Helios T1 and Glacier T2 revisions each have active-mount verification and preserve their earlier receipts. [Exact compatibility records](../assets-source/models/hover-pod-revision/head-compatibility.json)
 
 ## M44 Autocannon
 
@@ -113,7 +113,7 @@ The staged heads progress from a recessed single coil to a fork and a three-pylo
 | Tier | Head LOD0 / LOD1 triangles | Review |
 | --- | ---: | --- |
 | T1 coil | 2,604 / 1,276 | [Source, proofs and hashes](../assets-source/models/glacier-cryo-arc-t1/README.md) |
-| T2 fork | 1,640 / 936 | [Source, proofs and hashes](../assets-source/models/glacier-cryo-arc-t2/README.md) |
+| T2 fork, revised | 1,312 / 1,088 | [Source, proofs and hashes](../assets-source/models/glacier-cryo-arc-t2/README.md) |
 | T3 conduit | 2,712 / 1,320 | [Source, proofs and hashes](../assets-source/models/glacier-cryo-arc-t3/README.md) |
 
 The largest assembly measures 5,140 / 2,468 triangles with two materials. LOD1 retains the casing profiles that define the material boundaries. Each tier has four 1024 px maps and an editable Blender pair. The T1 ORM map uses UASTC quality 3 with RDO disabled to preserve the brushed-titanium ambient occlusion sample within the existing tolerance. That map grew by 165,986 bytes. Independent scoring and owner approval remain P3-T7 work.
@@ -265,7 +265,7 @@ The 18 badges are 128 × 128 RGBA proof files in a 768 × 384 atlas. Reviewers c
 
 ## Passed revisions
 
-Forty-one of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following six revised assets account for those results. The remaining findings are F7–F11.
+Forty-two of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following seven revised assets account for those results. The remaining findings are F8–F11.
 
 | Finding | Asset | Initial → revised | Exact proof and result |
 | --- | --- | ---: | --- |
@@ -275,5 +275,6 @@ Forty-one of 46 assets have independent visual scores of at least 80. The thirty
 | F4 | Core Bastion | 78 → 86 | [Matched revision views](../assets-source/models/core-bastion/review/revision-comparison.jpg). The dark belly tapers below the waist, and all four attached feet support the recessed base. The pointed feet and broad pale crown remain more prominent than in the concept. The exact revised GLB SHA-256 is `564ee6bc93f7fafcc12129acb95081208a1db7c51c7f9035a017bef8a99e7c05`. |
 | F5 | Hover Pod | 78 → 81 | [Matched underside revision](../assets-source/models/hover-pod-revision/review/underside-comparison.jpg). The bowl carries a continuous highlight and the cyan optic remains round at LOD1. The outer rim remains angular and the imported top cap has less detail. The reviewed LOD0 and LOD1 GLB hashes begin `db15e31bd646` and `c6c39de56241`. |
 | F6 | Helios T1 | 76 → 83 | [Matched revision](../assets-source/models/helios-plasma-mortar-t1/review/revision-comparison.jpg). The dark chamber and smaller bright center read at both LODs. The rear highlight is smoother, with some mottling on the low shoulder and polygon corners on its pivot cap. The reviewed GLB hashes begin `bd90a619` and `acb97ddf`. |
+| F7 | Glacier T2 | 75 → 87 | [Matched revision](../assets-source/models/glacier-cryo-arc-t2/review/revision-comparison.jpg). The long blades retain an open gap and a cyan inner channel at both LODs. The cyan is subtler head-on and the blades overlap in exact profile. The reviewed GLB hashes begin `bd46f13a` and `3572096d`. |
 
 The exact badge proof SHA-256 is `608eea9914f08dc20961df864f55e6ae8d59e4fdd015a4dd0fe7fba348310911`. The exact revised obsidian proof SHA-256 is `5ddcceed74d963da9662c547d41dfcf7a50b9300f7a5f24af0476dc8c89b7f44`.

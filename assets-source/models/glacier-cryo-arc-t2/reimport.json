@@ -1,22 +1,88 @@
 {
   "editable_sources": {
     "high": {
-      "sha256": "590a9eaa07eead0af1a62f567b4ebe126e61b9aac986a0004077b62fa694e361",
-      "triangles": 3736,
+      "sha256": "73d90a4fe269c13fc639440611d3d2be70ed18258eceb3a642641c53f324e44a",
+      "triangles": 1872,
       "embedded_source_images": 9,
-      "geometry_uv_hierarchy_material_slots_sha256": "67c995258d0a82a819f003df3c90d3569211c6cafeee35b149c8d2ea2d412f4a",
-      "repeat_archive_sha256": "6f6f834651da44e08b88c6be3199a788a3ef58db8d96b45f5905c67b971e6614"
+      "geometry_uv_hierarchy_material_slots_sha256": "8ec9bda95d363d663490d99c5c0a44996986847b624e0f1649c145efe9b3ecfd",
+      "repeat_archive_sha256": "9d5554a24219c695adf8ce42ebb6f20f0b4d1e71ce21a1e13193e1d5b05ac3ee"
     },
     "low": {
-      "sha256": "3c13c3a7ba17987cb56f1616c7a3d785e8b23ac72fa37350fd60fd5f266056c1",
-      "triangles": 1640,
+      "sha256": "3bea9d7073898ed1c20466ad324ed2d0e58a6f6169ee046cc04a976bfb491fd0",
+      "triangles": 1312,
       "embedded_source_images": 4,
-      "geometry_uv_hierarchy_material_slots_sha256": "503ab51081589a1aafe8522c7f6261a013e811c8c9bd4727f68f2a173c56fe12",
-      "repeat_archive_sha256": "8887459f05a22771acc7010e6cb38591fd2813684faae93653556330ad805367"
+      "geometry_uv_hierarchy_material_slots_sha256": "560310fc965505757d83f7d11804a7cc8b85db81e68892f7cdfadd0940bf52b1",
+      "repeat_archive_sha256": "62f3826fe30fb0679165b7381d36df974841c2f5856a96daae32a6a59b385cf5"
+    }
+  },
+  "decoded_mip_chains": {
+    "basecolor": {
+      "levels_decoded": 11,
+      "level_bytes": [
+        4194304,
+        1048576,
+        262144,
+        65536,
+        16384,
+        4096,
+        1024,
+        256,
+        64,
+        16,
+        4
+      ]
+    },
+    "normal": {
+      "levels_decoded": 11,
+      "level_bytes": [
+        4194304,
+        1048576,
+        262144,
+        65536,
+        16384,
+        4096,
+        1024,
+        256,
+        64,
+        16,
+        4
+      ]
+    },
+    "orm": {
+      "levels_decoded": 11,
+      "level_bytes": [
+        4194304,
+        1048576,
+        262144,
+        65536,
+        16384,
+        4096,
+        1024,
+        256,
+        64,
+        16,
+        4
+      ]
+    },
+    "emissive": {
+      "levels_decoded": 11,
+      "level_bytes": [
+        4194304,
+        1048576,
+        262144,
+        65536,
+        16384,
+        4096,
+        1024,
+        256,
+        64,
+        16,
+        4
+      ]
     }
   },
   "lod0": {
-    "sha256": "d87caa88f3d725c95260f92cb2fc2a99a71afe421017627db060e5756e0240ed",
+    "sha256": "bd46f13a9f0dd74d7a3279a62ab3a7a897a81bed1507fd66d7052f555d9cca77",
     "head_dimensions_blender_m": [
       0.18000000715255737,
       0.18000000715255737,
@@ -25,32 +91,34 @@
     "overall_height_m": 0.30000001192092896,
     "emitters": [
       {
-        "base_center_blender_m": [
-          -0.046799998730421066,
-          0.0,
-          0.2539999783039093
-        ],
         "tip_center_blender_m": [
-          -0.046799998730421066,
+          -0.0468,
           -0.1599999964237213,
           0.25999999046325684
         ],
-        "axial_length_m": 0.1599999964237213,
-        "nominal_radius_m": 0.026
+        "axial_length_m": 0.16,
+        "exposed_beyond_casing_m": 0.12748799473047256,
+        "minimum_half_gap_m": 0.023800000548362732,
+        "blade_widths_at_45_78_100_percent_m": [
+          0.03800000436604023,
+          0.03099999949336052,
+          0.010999999940395355
+        ]
       },
       {
-        "base_center_blender_m": [
-          0.046799998730421066,
-          0.0,
-          0.2539999783039093
-        ],
         "tip_center_blender_m": [
-          0.046799998730421066,
+          0.0468,
           -0.1599999964237213,
           0.25999999046325684
         ],
-        "axial_length_m": 0.1599999964237213,
-        "nominal_radius_m": 0.026
+        "axial_length_m": 0.16,
+        "exposed_beyond_casing_m": 0.12748799473047256,
+        "minimum_half_gap_m": 0.023800000548362732,
+        "blade_widths_at_45_78_100_percent_m": [
+          0.03800000436604023,
+          0.03099999949336052,
+          0.010999999940395355
+        ]
       }
     ],
     "poses": [
@@ -113,10 +181,11 @@
           0.04450809210538864,
           0.04815337806940079,
           0.045000068843364716
-        ]
+        ],
+        "active_file": "assets-source/models/surface-clamp/surface-clamp-lod0.glb"
       },
       "hover-pod": {
-        "mount_sha256": "d013afe0e2ec5627428db1b683adee6d6a0a47cf2906c5d55ba6a2c151dd2a49",
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
         "origin_alignment_on_rotated_anchor": true,
         "mount_top_m": 0.07000000029802322,
         "neutral_moving_clearance_m": 0.030000068247318268,
@@ -124,18 +193,19 @@
           0.029508091509342194,
           0.03315337747335434,
           0.030000068247318268
-        ]
+        ],
+        "active_file": "assets-source/models/hover-pod-revision/hover-pod-lod0.glb"
       }
     },
     "finishes": {
       "casing_high_finish_area_agreement": 1.0,
-      "occupied_uv_fraction": 0.4481329455485021,
+      "occupied_uv_fraction": 0.4426922779306539,
       "uv_texels_per_meter": {
-        "RB.brushed-titanium": 1619.6127531801014,
-        "RB.dark-gunmetal": 1695.7630955881102,
-        "RB.tactical-ceramic": 1219.70471384648,
-        "Core carbon inserts": 1420.3326513754025,
-        "Glacier arc cyan": 1932.8379291021154
+        "RB.brushed-titanium": 1653.225921221966,
+        "RB.dark-gunmetal": 1846.006037253465,
+        "RB.tactical-ceramic": 1237.3662924282823,
+        "Core carbon inserts": 1403.750675636433,
+        "Glacier arc cyan": 1910.288474736323
       },
       "metalness_correct_area_fraction": {
         "RB.brushed-titanium": 1.0,
@@ -148,7 +218,7 @@
         "Glacier arc cyan": 1.0
       },
       "unlit_probes": {
-        "interior_samples": 6560,
+        "interior_samples": 5248,
         "minimum_peak_rgb8": 34,
         "black_samples": 0
       }
@@ -156,43 +226,501 @@
     "atlas": {
       "textures": {
         "basecolor": {
-          "bytes": 484230,
+          "bytes": 491693,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 1.329
+          "level0_rmse_rgb8": 1.323
         },
         "normal": {
-          "bytes": 535716,
+          "bytes": 485373,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 1.011,
+          "level0_rmse_rgb8": 0.936,
           "decoded_unit_length_range": [
             0.969088,
-            1.045133
+            1.030194
           ]
         },
         "orm": {
-          "bytes": 824926,
+          "bytes": 849191,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 1.612
+          "level0_rmse_rgb8": 1.568
         },
         "emissive": {
-          "bytes": 16190,
+          "bytes": 5594,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 0.105
+          "level0_rmse_rgb8": 0.028
         }
       },
-      "file_bytes": 4835348,
+      "file_bytes": 4671344,
       "primitives": 3,
-      "gltf_vertices": 3148,
-      "ktx2_bytes": 1861062,
+      "gltf_vertices": 2949,
+      "ktx2_bytes": 1831851,
       "uastc_bytes_before_zstd": 5592512
-    }
+    },
+    "finish_strip_probes": [
+      {
+        "side": -1,
+        "strip": "upper channel",
+        "point_m": [
+          -0.03880000114440918,
+          -0.08399999886751175,
+          0.27027595043182373
+        ],
+        "pixel": [
+          963,
+          826
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "inward channel",
+        "point_m": [
+          -0.029056617990136147,
+          -0.08399999886751175,
+          0.2630000114440918
+        ],
+        "pixel": [
+          936,
+          826
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "outer titanium",
+        "point_m": [
+          -0.06500454246997833,
+          -0.08399999886751175,
+          0.2630000114440918
+        ],
+        "pixel": [
+          1013,
+          826
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 248
+      },
+      {
+        "side": -1,
+        "strip": "upper channel",
+        "point_m": [
+          -0.03880000114440918,
+          -0.10499999672174454,
+          0.2700842022895813
+        ],
+        "pixel": [
+          962,
+          791
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "inward channel",
+        "point_m": [
+          -0.03037545643746853,
+          -0.10499999672174454,
+          0.2630000114440918
+        ],
+        "pixel": [
+          936,
+          791
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "outer titanium",
+        "point_m": [
+          -0.06361249834299088,
+          -0.10499999672174454,
+          0.2630000114440918
+        ],
+        "pixel": [
+          1014,
+          791
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 246
+      },
+      {
+        "side": -1,
+        "strip": "upper channel",
+        "point_m": [
+          -0.03880000114440918,
+          -0.12600000202655792,
+          0.2698821723461151
+        ],
+        "pixel": [
+          960,
+          754
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 50
+      },
+      {
+        "side": -1,
+        "strip": "inward channel",
+        "point_m": [
+          -0.03174365311861038,
+          -0.12600000202655792,
+          0.2630000114440918
+        ],
+        "pixel": [
+          934,
+          754
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "outer titanium",
+        "point_m": [
+          -0.06216363236308098,
+          -0.12600000202655792,
+          0.2630000114440918
+        ],
+        "pixel": [
+          1014,
+          754
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 246
+      },
+      {
+        "side": -1,
+        "strip": "upper channel",
+        "point_m": [
+          -0.03880000114440918,
+          -0.14499999582767487,
+          0.2685109078884125
+        ],
+        "pixel": [
+          958,
+          712
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "inward channel",
+        "point_m": [
+          -0.03435777127742767,
+          -0.14499999582767487,
+          0.2630000114440918
+        ],
+        "pixel": [
+          935,
+          712
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "outer titanium",
+        "point_m": [
+          -0.05948749929666519,
+          -0.14499999582767487,
+          0.2630000114440918
+        ],
+        "pixel": [
+          1014,
+          712
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 245
+      },
+      {
+        "side": 1,
+        "strip": "upper channel",
+        "point_m": [
+          0.03880000114440918,
+          -0.08399999886751175,
+          0.2702818512916565
+        ],
+        "pixel": [
+          662,
+          925
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 50
+      },
+      {
+        "side": 1,
+        "strip": "inward channel",
+        "point_m": [
+          0.02905389294028282,
+          -0.08399999886751175,
+          0.2630000114440918
+        ],
+        "pixel": [
+          717,
+          925
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "outer titanium",
+        "point_m": [
+          0.06500454246997833,
+          -0.08399999886751175,
+          0.2630000114440918
+        ],
+        "pixel": [
+          856,
+          925
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 246
+      },
+      {
+        "side": 1,
+        "strip": "upper channel",
+        "point_m": [
+          0.03880000114440918,
+          -0.10499999672174454,
+          0.2700957655906677
+        ],
+        "pixel": [
+          665,
+          908
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "inward channel",
+        "point_m": [
+          0.030369842424988747,
+          -0.10499999672174454,
+          0.2630000114440918
+        ],
+        "pixel": [
+          719,
+          908
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "outer titanium",
+        "point_m": [
+          0.06361250579357147,
+          -0.10499999672174454,
+          0.2630000114440918
+        ],
+        "pixel": [
+          855,
+          908
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 245
+      },
+      {
+        "side": 1,
+        "strip": "upper channel",
+        "point_m": [
+          0.03880000114440918,
+          -0.12600000202655792,
+          0.26988181471824646
+        ],
+        "pixel": [
+          667,
+          890
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "inward channel",
+        "point_m": [
+          0.03174382448196411,
+          -0.12600000202655792,
+          0.2630000114440918
+        ],
+        "pixel": [
+          720,
+          890
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "outer titanium",
+        "point_m": [
+          0.06216363236308098,
+          -0.12600000202655792,
+          0.2630000114440918
+        ],
+        "pixel": [
+          853,
+          890
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 246
+      },
+      {
+        "side": 1,
+        "strip": "upper channel",
+        "point_m": [
+          0.03880000114440918,
+          -0.14499999582767487,
+          0.26852408051490784
+        ],
+        "pixel": [
+          674,
+          869
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "inward channel",
+        "point_m": [
+          0.034351617097854614,
+          -0.14499999582767487,
+          0.2630000114440918
+        ],
+        "pixel": [
+          722,
+          869
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "outer titanium",
+        "point_m": [
+          0.05948749929666519,
+          -0.14499999582767487,
+          0.2630000114440918
+        ],
+        "pixel": [
+          853,
+          869
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 245
+      }
+    ]
   },
   "lod1": {
-    "sha256": "d11001f3812f529f4242c384f699b2dfad30fdb4f96dd37c28d075f7663c1d09",
+    "sha256": "3572096d78e177d0becbf03a0c9e859a11d107a43da296afac31e73fc2d534c1",
     "head_dimensions_blender_m": [
       0.18000000715255737,
       0.18000000715255737,
@@ -201,32 +729,34 @@
     "overall_height_m": 0.30000001192092896,
     "emitters": [
       {
-        "base_center_blender_m": [
-          -0.046799998730421066,
-          0.0,
-          0.2539999783039093
-        ],
         "tip_center_blender_m": [
-          -0.046799998730421066,
+          -0.0468,
           -0.1599999964237213,
           0.25999999046325684
         ],
-        "axial_length_m": 0.1599999964237213,
-        "nominal_radius_m": 0.026
+        "axial_length_m": 0.16,
+        "exposed_beyond_casing_m": 0.12748799473047256,
+        "minimum_half_gap_m": 0.02379995584487915,
+        "blade_widths_at_45_78_100_percent_m": [
+          0.03799998760223389,
+          0.03100001811981201,
+          0.010999977588653564
+        ]
       },
       {
-        "base_center_blender_m": [
-          0.046799998730421066,
-          0.0,
-          0.2539999783039093
-        ],
         "tip_center_blender_m": [
-          0.046799998730421066,
+          0.0468,
           -0.1599999964237213,
           0.25999999046325684
         ],
-        "axial_length_m": 0.1599999964237213,
-        "nominal_radius_m": 0.026
+        "axial_length_m": 0.16,
+        "exposed_beyond_casing_m": 0.12748799473047256,
+        "minimum_half_gap_m": 0.023800015449523926,
+        "blade_widths_at_45_78_100_percent_m": [
+          0.03799998760223389,
+          0.03100001811981201,
+          0.01100003719329834
+        ]
       }
     ],
     "poses": [
@@ -289,10 +819,11 @@
           0.044508084654808044,
           0.04815337806940079,
           0.045000120997428894
-        ]
+        ],
+        "active_file": "assets-source/models/surface-clamp/surface-clamp-lod1.glb"
       },
       "hover-pod": {
-        "mount_sha256": "469079788569d5940f6b3deb04c70044ad913a947430fde6425249637d93df96",
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
         "origin_alignment_on_rotated_anchor": true,
         "mount_top_m": 0.07000000029802322,
         "neutral_moving_clearance_m": 0.030000120401382446,
@@ -300,18 +831,19 @@
           0.029508084058761597,
           0.03315337747335434,
           0.030000120401382446
-        ]
+        ],
+        "active_file": "assets-source/models/hover-pod-revision/hover-pod-lod1.glb"
       }
     },
     "finishes": {
       "casing_high_finish_area_agreement": 1.0,
-      "occupied_uv_fraction": 0.44025829161185875,
+      "occupied_uv_fraction": 0.4352217120931993,
       "uv_texels_per_meter": {
-        "RB.brushed-titanium": 1636.5901271080145,
-        "RB.dark-gunmetal": 1729.2289588893493,
-        "RB.tactical-ceramic": 1212.8426638326712,
-        "Core carbon inserts": 1397.1903815472463,
-        "Glacier arc cyan": 2035.0403289000524
+        "RB.brushed-titanium": 1651.637467034603,
+        "RB.dark-gunmetal": 1851.7288972212452,
+        "RB.tactical-ceramic": 1235.8833291907956,
+        "Core carbon inserts": 1391.6385906541973,
+        "Glacier arc cyan": 1911.37853810957
       },
       "metalness_correct_area_fraction": {
         "RB.brushed-titanium": 1.0,
@@ -324,7 +856,7 @@
         "Glacier arc cyan": 1.0
       },
       "unlit_probes": {
-        "interior_samples": 3744,
+        "interior_samples": 4352,
         "minimum_peak_rgb8": 36,
         "black_samples": 0
       }
@@ -332,40 +864,498 @@
     "atlas": {
       "textures": {
         "basecolor": {
-          "bytes": 484230,
+          "bytes": 491693,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 1.329
+          "level0_rmse_rgb8": 1.323
         },
         "normal": {
-          "bytes": 535716,
+          "bytes": 485373,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 1.011,
+          "level0_rmse_rgb8": 0.936,
           "decoded_unit_length_range": [
             0.969088,
-            1.045133
+            1.030194
           ]
         },
         "orm": {
-          "bytes": 824926,
+          "bytes": 849191,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 1.612
+          "level0_rmse_rgb8": 1.568
         },
         "emissive": {
-          "bytes": 16190,
+          "bytes": 5594,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 0.105
+          "level0_rmse_rgb8": 0.028
         }
       },
-      "file_bytes": 4768800,
+      "file_bytes": 4650848,
       "primitives": 3,
-      "gltf_vertices": 1850,
-      "ktx2_bytes": 1861062,
+      "gltf_vertices": 2550,
+      "ktx2_bytes": 1831851,
       "uastc_bytes_before_zstd": 5592512
-    }
+    },
+    "finish_strip_probes": [
+      {
+        "side": -1,
+        "strip": "upper channel",
+        "point_m": [
+          -0.03880000114440918,
+          -0.08399999886751175,
+          0.27027595043182373
+        ],
+        "pixel": [
+          753,
+          562
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "inward channel",
+        "point_m": [
+          -0.02905658818781376,
+          -0.08399999886751175,
+          0.2630000114440918
+        ],
+        "pixel": [
+          698,
+          562
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "outer titanium",
+        "point_m": [
+          -0.06500449776649475,
+          -0.08399999886751175,
+          0.2630000114440918
+        ],
+        "pixel": [
+          856,
+          562
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 246
+      },
+      {
+        "side": -1,
+        "strip": "upper channel",
+        "point_m": [
+          -0.03880000114440918,
+          -0.10499999672174454,
+          0.2700842022895813
+        ],
+        "pixel": [
+          752,
+          544
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 50
+      },
+      {
+        "side": -1,
+        "strip": "inward channel",
+        "point_m": [
+          -0.030375417321920395,
+          -0.10499999672174454,
+          0.2630000114440918
+        ],
+        "pixel": [
+          697,
+          544
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "outer titanium",
+        "point_m": [
+          -0.06361246109008789,
+          -0.10499999672174454,
+          0.2630000114440918
+        ],
+        "pixel": [
+          857,
+          544
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 245
+      },
+      {
+        "side": -1,
+        "strip": "upper channel",
+        "point_m": [
+          -0.03880000114440918,
+          -0.12600000202655792,
+          0.2698821723461151
+        ],
+        "pixel": [
+          748,
+          527
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "inward channel",
+        "point_m": [
+          -0.0317436046898365,
+          -0.12600000202655792,
+          0.2630000114440918
+        ],
+        "pixel": [
+          694,
+          527
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "outer titanium",
+        "point_m": [
+          -0.06216360256075859,
+          -0.12600000202655792,
+          0.2630000114440918
+        ],
+        "pixel": [
+          858,
+          527
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 245
+      },
+      {
+        "side": -1,
+        "strip": "upper channel",
+        "point_m": [
+          -0.03880000114440918,
+          -0.14499999582767487,
+          0.2685109078884125
+        ],
+        "pixel": [
+          742,
+          506
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "inward channel",
+        "point_m": [
+          -0.03435775637626648,
+          -0.14499999582767487,
+          0.2630000114440918
+        ],
+        "pixel": [
+          694,
+          506
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": -1,
+        "strip": "outer titanium",
+        "point_m": [
+          -0.05948749557137489,
+          -0.14499999582767487,
+          0.2630000114440918
+        ],
+        "pixel": [
+          859,
+          506
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 244
+      },
+      {
+        "side": 1,
+        "strip": "upper channel",
+        "point_m": [
+          0.03880000114440918,
+          -0.08399999886751175,
+          0.2702818512916565
+        ],
+        "pixel": [
+          662,
+          743
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "inward channel",
+        "point_m": [
+          0.02905392460525036,
+          -0.08399999886751175,
+          0.2630000114440918
+        ],
+        "pixel": [
+          717,
+          743
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "outer titanium",
+        "point_m": [
+          0.06500455737113953,
+          -0.08399999886751175,
+          0.2630000114440918
+        ],
+        "pixel": [
+          856,
+          743
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 247
+      },
+      {
+        "side": 1,
+        "strip": "upper channel",
+        "point_m": [
+          0.03880000114440918,
+          -0.10499999672174454,
+          0.2700957655906677
+        ],
+        "pixel": [
+          665,
+          726
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "inward channel",
+        "point_m": [
+          0.030369866639375687,
+          -0.10499999672174454,
+          0.2630000114440918
+        ],
+        "pixel": [
+          719,
+          726
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "outer titanium",
+        "point_m": [
+          0.06361252069473267,
+          -0.10499999672174454,
+          0.2630000114440918
+        ],
+        "pixel": [
+          855,
+          726
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 245
+      },
+      {
+        "side": 1,
+        "strip": "upper channel",
+        "point_m": [
+          0.03880000114440918,
+          -0.12600000202655792,
+          0.26988181471824646
+        ],
+        "pixel": [
+          667,
+          708
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "inward channel",
+        "point_m": [
+          0.03174383565783501,
+          -0.12600000202655792,
+          0.2630000114440918
+        ],
+        "pixel": [
+          720,
+          708
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "outer titanium",
+        "point_m": [
+          0.062163665890693665,
+          -0.12600000202655792,
+          0.2630000114440918
+        ],
+        "pixel": [
+          853,
+          708
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 246
+      },
+      {
+        "side": 1,
+        "strip": "upper channel",
+        "point_m": [
+          0.03880000114440918,
+          -0.14499999582767487,
+          0.26852405071258545
+        ],
+        "pixel": [
+          674,
+          687
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "inward channel",
+        "point_m": [
+          0.034351643174886703,
+          -0.14499999582767487,
+          0.2630000114440918
+        ],
+        "pixel": [
+          722,
+          687
+        ],
+        "emissive_rgb": [
+          6,
+          182,
+          212
+        ],
+        "metallic_u8": 51
+      },
+      {
+        "side": 1,
+        "strip": "outer titanium",
+        "point_m": [
+          0.05948754772543907,
+          -0.14499999582767487,
+          0.2630000114440918
+        ],
+        "pixel": [
+          853,
+          687
+        ],
+        "emissive_rgb": [
+          0,
+          0,
+          0
+        ],
+        "metallic_u8": 245
+      }
+    ]
   },
   "combined_positive_area_uv_overlaps": 0
 }

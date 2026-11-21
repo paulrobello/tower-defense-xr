@@ -3356,14 +3356,14 @@
     {
       "file": "glacier-cryo-arc-t2/basecolor.ktx2",
       "role": "basecolor",
-      "sha256": "c4469fcd84cc7b768c7a215f54442e75a86d9b887c76ad686dcc65d0de7a9a75",
+      "sha256": "843b4213c95d2c4ea1d53a1d633db1bf123d70d29e20a132e7ce15489d90cec0",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "Glacier arc cyan",
-          "x": 974,
-          "y": 83,
+          "x": 690,
+          "y": 542,
           "rgb": [
             10,
             103,
@@ -3373,10 +3373,10 @@
         },
         {
           "surface": "RB.brushed-titanium",
-          "x": 301,
-          "y": 175,
+          "x": 304,
+          "y": 183,
           "rgb": [
-            192,
+            191,
             196,
             199
           ],
@@ -3384,30 +3384,30 @@
         },
         {
           "surface": "Core carbon inserts",
-          "x": 915,
-          "y": 404,
+          "x": 935,
+          "y": 400,
           "rgb": [
             26,
             30,
-            40
+            41
           ],
           "tolerance": 12
         },
         {
           "surface": "RB.dark-gunmetal",
-          "x": 301,
-          "y": 23,
+          "x": 984,
+          "y": 21,
           "rgb": [
-            81,
-            89,
-            98
+            66,
+            73,
+            82
           ],
           "tolerance": 12
         },
         {
           "surface": "RB.tactical-ceramic",
-          "x": 204,
-          "y": 870,
+          "x": 206,
+          "y": 872,
           "rgb": [
             61,
             70,
@@ -3420,14 +3420,14 @@
     {
       "file": "glacier-cryo-arc-t2/normal.ktx2",
       "role": "normal",
-      "sha256": "f746a630d1b18f6a47de1fa9d977086bfeb2918227317a77f2f23318efc0bf50",
+      "sha256": "2ab52a048ff0b1e484d66ff68c62769370db4e923a35af1459788d5ebaae431b",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "Glacier arc cyan",
-          "x": 974,
-          "y": 83,
+          "x": 690,
+          "y": 542,
           "rgb": [
             128,
             128,
@@ -3437,8 +3437,8 @@
         },
         {
           "surface": "RB.brushed-titanium",
-          "x": 301,
-          "y": 175,
+          "x": 304,
+          "y": 183,
           "rgb": [
             128,
             127,
@@ -3448,19 +3448,19 @@
         },
         {
           "surface": "Core carbon inserts",
-          "x": 915,
-          "y": 404,
+          "x": 935,
+          "y": 400,
           "rgb": [
             129,
-            126,
+            127,
             255
           ],
           "tolerance": 12
         },
         {
           "surface": "RB.dark-gunmetal",
-          "x": 301,
-          "y": 23,
+          "x": 984,
+          "y": 21,
           "rgb": [
             129,
             128,
@@ -3470,8 +3470,8 @@
         },
         {
           "surface": "RB.tactical-ceramic",
-          "x": 204,
-          "y": 870,
+          "x": 206,
+          "y": 872,
           "rgb": [
             128,
             128,
@@ -3484,14 +3484,14 @@
     {
       "file": "glacier-cryo-arc-t2/orm.ktx2",
       "role": "orm",
-      "sha256": "267c0f077740d2ba5e8875ac83d2ec14af841aca9e121b6a56a95188c072376a",
+      "sha256": "3b68cad088d748a7291cda1fe3b535961285caa1a10d7a08197d09b3defe7290",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "Glacier arc cyan",
-          "x": 974,
-          "y": 83,
+          "x": 690,
+          "y": 542,
           "rgb": [
             255,
             82,
@@ -3501,41 +3501,41 @@
         },
         {
           "surface": "RB.brushed-titanium",
-          "x": 301,
-          "y": 175,
+          "x": 304,
+          "y": 183,
           "rgb": [
-            234,
-            85,
-            247
+            212,
+            86,
+            246
           ],
           "tolerance": 12
         },
         {
           "surface": "Core carbon inserts",
-          "x": 915,
-          "y": 404,
+          "x": 935,
+          "y": 400,
           "rgb": [
             255,
-            164,
+            166,
             0
           ],
           "tolerance": 12
         },
         {
           "surface": "RB.dark-gunmetal",
-          "x": 301,
-          "y": 23,
+          "x": 984,
+          "y": 21,
           "rgb": [
-            127,
-            98,
-            233
+            251,
+            95,
+            226
           ],
           "tolerance": 12
         },
         {
           "surface": "RB.tactical-ceramic",
-          "x": 204,
-          "y": 870,
+          "x": 206,
+          "y": 872,
           "rgb": [
             255,
             169,
@@ -3548,14 +3548,14 @@
     {
       "file": "glacier-cryo-arc-t2/emissive.ktx2",
       "role": "emissive",
-      "sha256": "49cdb0765d0161bf59926e668aa09a67f4a00cafe2ae4e9d914d47836222a4e9",
+      "sha256": "41a2677d9874cf531c2a384593f1e103ec277079060b43befb4395e0a7b586a5",
       "width": 1024,
       "height": 1024,
       "samples": [
         {
           "surface": "Glacier arc cyan",
-          "x": 974,
-          "y": 83,
+          "x": 690,
+          "y": 542,
           "rgb": [
             6,
             182,
@@ -3565,8 +3565,8 @@
         },
         {
           "surface": "RB.brushed-titanium",
-          "x": 301,
-          "y": 175,
+          "x": 304,
+          "y": 183,
           "rgb": [
             0,
             0,
@@ -3576,8 +3576,8 @@
         },
         {
           "surface": "Core carbon inserts",
-          "x": 915,
-          "y": 404,
+          "x": 935,
+          "y": 400,
           "rgb": [
             0,
             0,
@@ -3587,8 +3587,8 @@
         },
         {
           "surface": "RB.dark-gunmetal",
-          "x": 301,
-          "y": 23,
+          "x": 984,
+          "y": 21,
           "rgb": [
             0,
             0,
@@ -3598,8 +3598,8 @@
         },
         {
           "surface": "RB.tactical-ceramic",
-          "x": 204,
-          "y": 870,
+          "x": 206,
+          "y": 872,
           "rgb": [
             0,
             0,
@@ -6870,7 +6870,7 @@
       "id": "glacier-cryo-arc-t2",
       "lod": 0,
       "file": "glacier-cryo-arc-t2/glacier-cryo-arc-t2-lod0.glb",
-      "sha256": "d87caa88f3d725c95260f92cb2fc2a99a71afe421017627db060e5756e0240ed",
+      "sha256": "bd46f13a9f0dd74d7a3279a62ab3a7a897a81bed1507fd66d7052f555d9cca77",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -6920,7 +6920,7 @@
       "id": "glacier-cryo-arc-t2",
       "lod": 1,
       "file": "glacier-cryo-arc-t2/glacier-cryo-arc-t2-lod1.glb",
-      "sha256": "d11001f3812f529f4242c384f699b2dfad30fdb4f96dd37c28d075f7663c1d09",
+      "sha256": "3572096d78e177d0becbf03a0c9e859a11d107a43da296afac31e73fc2d534c1",
       "limits": {
         "triangles": 1352,
         "materials": 1,

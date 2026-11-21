@@ -71,7 +71,6 @@
     "assets-source/materials/tactical-ceramic/normal.png": "3ed93b63194ecde2df1c940d40fc07cb88dc3d36ab10b24265a2f5b3454e03c6",
     "assets-source/materials/tactical-ceramic/orm.png": "5a7e18574c708db4dba3962117b01e3fae9570d064bbac5765c2d7839d519a28",
     "assets-source/models/glacier-cryo-arc-t1/reimport.json": "a5ce6579d865a0249a17b707e10d116c3959ec88826998268420469ac07632bc",
-    "assets-source/models/glacier-cryo-arc-t2/reimport.json": "81fdf39b46759824a009f76486b3662918ac3dc2e485d5e07fa30959e14b0f51",
     "assets-source/models/glacier-cryo-arc-t3/reimport.json": "c6dfe61a50fd269b89155bd47f34aeaf8788497108a00d23c0047eeed451a9e1",
     "assets-source/models/helios-plasma-mortar-t2/reimport.json": "6951bf5242e4d0e5addb24f8daa20d0c93dd996b89ca41618f27a791241bc142",
     "assets-source/models/helios-plasma-mortar-t3/reimport.json": "b30037db7bffa11409eae08efc64b41198c157ee5b197e14c2460ca28325899b",
@@ -136,7 +135,8 @@
     "scripts/validate_glbs.py": "b1cce7201143a05202dd35ecc61827807991f228f18ac7249169ea3da2eb87c1",
     "src/content/turrets.ts": "a61cf2d4bf65c75366313a91642f29a8e2efda551d3224eede12fcabdf4b03b4",
     "src/render/blockouts.ts": "c8df989851de8906227ef60d3af30095ebfebbabc8d08550cadd41dc2da3328c",
-    "assets-source/models/helios-plasma-mortar-t1/review/prior-reimport.json.orig": "742453b0e90cbf7db2ec093401809d9fd29f16a3fa76b1b713ded79509edf83c"
+    "assets-source/models/helios-plasma-mortar-t1/review/prior-reimport.json.orig": "742453b0e90cbf7db2ec093401809d9fd29f16a3fa76b1b713ded79509edf83c",
+    "assets-source/models/glacier-cryo-arc-t2/review/prior-reimport.json.orig": "81fdf39b46759824a009f76486b3662918ac3dc2e485d5e07fa30959e14b0f51"
   },
   "asset_sha256": {
     "README.md": "73714858f6d051eb2d6144673c3e055a076af3b7d08668f89e51cdfd2d01da1a",

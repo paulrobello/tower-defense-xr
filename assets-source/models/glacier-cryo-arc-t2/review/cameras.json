@@ -178,5 +178,21 @@
     }
   },
   "gpu_backend": "METAL",
-  "gpu_renderer": "Metal API"
+  "gpu_renderer": "Metal API",
+  "resolved_packages": {
+    "prior": {
+      "high.blend": "590a9eaa07eead0af1a62f567b4ebe126e61b9aac986a0004077b62fa694e361",
+      "glacier-cryo-arc-t2-lod0.glb": "d87caa88f3d725c95260f92cb2fc2a99a71afe421017627db060e5756e0240ed",
+      "assets-source/models/surface-clamp/surface-clamp-lod0.glb": "01283900c728110a9d733d9f266ce5bfbdb09d9b672e00ae113bc8c85760a0ff",
+      "assets-source/models/hover-pod-revision/hover-pod-lod0.glb": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "glacier-cryo-arc-t2-lod1.glb": "d11001f3812f529f4242c384f699b2dfad30fdb4f96dd37c28d075f7663c1d09"
+    },
+    "revision": {
+      "high.blend": "73d90a4fe269c13fc639440611d3d2be70ed18258eceb3a642641c53f324e44a",
+      "glacier-cryo-arc-t2-lod0.glb": "bd46f13a9f0dd74d7a3279a62ab3a7a897a81bed1507fd66d7052f555d9cca77",
+      "assets-source/models/surface-clamp/surface-clamp-lod0.glb": "01283900c728110a9d733d9f266ce5bfbdb09d9b672e00ae113bc8c85760a0ff",
+      "assets-source/models/hover-pod-revision/hover-pod-lod0.glb": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "glacier-cryo-arc-t2-lod1.glb": "3572096d78e177d0becbf03a0c9e859a11d107a43da296afac31e73fc2d534c1"
+    }
+  }
 }

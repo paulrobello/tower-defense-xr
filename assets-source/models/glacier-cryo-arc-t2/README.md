@@ -1,32 +1,35 @@
 # Glacier Cryo-Arc T2
 
-The tier 2 head has two separated chamfered electrodes with cyan inward faces. The effect socket faces forward at neutral aim. [Approved sheet](../../concepts/sheets/cryo-arc.png) · [Matched views](review/comparison.jpg) · [Surface clamp](review/mounted-surface-clamp.png) · [Hover pod](review/mounted-hover-pod.png)
+Two tapered blades project 127.5 mm beyond the upper casing. A recessed cyan channel runs across the inward bevel of each blade. The outer ridge is titanium and the nose is dark. The fork stays open across both levels of detail, with at least 47.6 mm between the blades. The two tip centers remain 93.6 mm apart.
 
-| Mesh | Head triangles | With surface clamp | With hover pod |
+[Approved Glacier sheet](../../concepts/sheets/cryo-arc.png) · [Prior and revised heads on the active mounts](review/revision-comparison.jpg) · [Revised high source and both exported levels](review/comparison.jpg)
+
+| Mesh | Head triangles | On surface clamp | On revised hover pod |
 | --- | ---: | ---: | ---: |
-| LOD0 | 1,640 | 4,068 | 4,004 |
-| LOD1 | 936 | 2,084 | 2,084 |
+| LOD0 | 1,312 | 3,740 | 3,740 |
+| LOD1 | 1,088 | 2,236 | 2,220 |
 
-Both levels use one 1024-pixel square atlas with embedded base color, tangent normal, packed ORM and emissive maps. The assembled turret takes two materials. Both mounts accept the identity head root. Runtime yaw, pitch and recoil drive separate nodes. The muzzle faces glTF +Z at rest. LOD1 begins beyond four meters.
+Both levels share one 1024 × 1024 material with embedded base color, tangent normal, ORM and emissive textures. Each assembled turret uses two materials. At neutral aim the shared muzzle socket remains centered 160 mm forward and 260 mm above the mounting plane. The neutral moving assembly clears the clamp by 45 mm and the revised hover pod by 30 mm.
 
-[Re-import checks](reimport.json) measure each emitter, mount alignment, moving clearance at three poses, decoded face finish and glow, and UV overlap. The neutral pitching assembly clears the clamp by 45.0 mm and the hover pod by 30.0 mm. Three scripted poses exercise the exported yaw, pitch and recoil controls. [Bake measurements](geometry.json) record UV coverage and density, projection repairs and source pixel samples. [Repeat build](determinism.json) compares two complete CPU bakes and KTX2 encodes. A fresh run from the final generator matched both uncompressed meshes, the four PNGs and the bake measurements. [Provenance](provenance.json) binds the exact staged files and review images. Owner review and in-game Quest acceptance remain pending.
+The [reimport measurements](reimport.json) include three yaw, pitch and recoil poses on each actual mount, checks of both tip centers and widths, decoded emission and metalness at 24 physical finish locations per LOD, all eleven mip levels of each KTX2, and a combined UV-overlap test. The [repeat-build record](determinism.json) compares two independent Linux bakes and encodes. The [provenance](provenance.json) binds these outputs, their predecessors and the matched renders. Independent visual review scored this revision 87/100, up from 75/100. The cyan area appears smaller head-on, and one blade occludes the other in the exact side view. Owner review and runtime Quest acceptance remain pending.
 
-## Rebuild
+## Rebuilding and reviewing
 
-From the repository root, choose a new stage and model directory for each run. Use Blender 5.2.2 LTS and KTX-Software 4.4.2.
+Use Blender 5.2.2 LTS and KTX-Software 4.4.2. From the repository root, set `BLENDER` and `KTX` to the pinned executables. Start in a fresh staging directory.
 
 ```sh
-tier=2
+work=.local/glacier-t2-revision
+id=glacier-cryo-arc-t2
 for run in 1 2; do
-  stage=".local/glacier-stage/$run/$tier"
-  models=".local/glacier-models/$run"
-  "$BLENDER" -b -t 2 --factory-startup --python-exit-code 1 -P blender/glacier_cryo.py -- --tier "$tier" --out "$stage"
-  python3 -B blender/package_glacier.py --tier "$tier" --stage "$stage" --models "$models" --ktx "$KTX"
+  "$BLENDER" -b -t 2 --factory-startup --python-exit-code 1 -P blender/glacier_t2_revision.py -- --tier 2 --out "$work/stage/$run"
+  python3 -B blender/package_glacier.py --tier 2 --stage "$work/stage/$run" --models "$work/packages/$run" --ktx "$KTX"
 done
-piece=".local/glacier-models/1/glacier-cryo-arc-t2"
-"$BLENDER" -b -t 3 --factory-startup --python-exit-code 1 -P blender/verify_glacier.py -- --piece "$piece" --ktx "$KTX" --repeat-stage ".local/glacier-stage/2/$tier"
-RIFT_MODEL_CHECK_KTX="$KTX" make model-check MODEL_CHECK_ARGS="--manifest .local/glacier-models/1/manifest.json --ktx $KTX"
-"$BLENDER" -b -t 3 --factory-startup --python-exit-code 1 -P blender/review_glacier.py -- --piece "$piece" --ktx "$KTX"
-"$BLENDER" -b -t 2 --factory-startup --python-exit-code 1 -P blender/glacier_cryo.py -- --tier "$tier" --out ".local/glacier-stage/final/$tier"
-python3 -B blender/document_glacier.py --piece "$piece" --final-stage ".local/glacier-stage/final/$tier" --stages ".local/glacier-stage/1/$tier" ".local/glacier-stage/2/$tier" --packages "$piece" ".local/glacier-models/2/glacier-cryo-arc-t2"
+piece="$work/packages/1/$id"
+python3 -B scripts/validate_glbs.py --manifest "$work/packages/1/manifest.json" --ktx "$KTX"
+"$BLENDER" -b -t 2 --factory-startup --python-exit-code 1 -P blender/verify_glacier_t2_revision.py -- --piece "$piece" --repeat-stage "$work/stage/2" --ktx "$KTX"
+mkdir -p "$work/old/$id" "$piece/review"
+git archive 4f18f1fee8c46f934bc4f980e4bf9b816b652e88 "assets-source/models/$id" | tar -x -C "$work/old/$id" --strip-components=3
+cp "$work/old/$id/reimport.json" "$piece/review/prior-reimport.json.orig"
+"$BLENDER" -b -t 3 --factory-startup --python-exit-code 1 -P blender/review_glacier_t2_revision.py -- --piece "$piece" --before "$work/old/$id" --ktx "$KTX"
+python3 -B blender/document_glacier_t2_revision.py --piece "$piece" --prior "$work/old/$id" --stages "$work/stage/1" "$work/stage/2" --packages "$piece" "$work/packages/2/$id"
 ```
