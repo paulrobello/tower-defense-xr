@@ -57,3 +57,9 @@ The Blender 5.2.2 library contains brushed titanium, matte ceramic, dark gunmeta
 ![Matching high and re-imported low Core Bastion views](../assets-source/models/core-bastion/review/comparison.jpg)
 
 The 6,826-triangle staged Core uses four 2048 px maps. Blender re-import preserved the 0.38 m base radius, 0.72 m visual height, separate shield envelope and emitter animation. The low views use decoded KTX2 textures. See the [Core sources, hashes and re-import checks](../assets-source/models/core-bastion/README.md) and [emitter motion](../assets-source/models/core-bastion/review/emitter-motion.webp). The Core remains staged for independent scoring and owner approval at P3-T7.
+
+## Dimensional Rift Portal
+
+![Matching high and re-imported low Rift portal views, including the oblique host and open aperture](../assets-source/models/rift-portal/review/comparison.jpg)
+
+The staged frame is 4,056 triangles and uses five 1024 px maps. The 0.95 × 1.35 m aperture disk shares all 104 boundary positions with the frame. The in-plane rim is 0.12 m wide at both axes. Its 72 mm axial span runs from the −25 mm shader surface to the +47 mm crown and rests against the anchor at Z = 0. The oblique proof uses a synthetic host plane cut to the same ellipse. The current circular runtime stencil and scanned-wall sampling remain Phase 4 verification work. [Rift sources, hashes and re-import checks](../assets-source/models/rift-portal/README.md)

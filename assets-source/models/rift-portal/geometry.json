@@ -1,0 +1,331 @@
+{
+  "high_frame": {
+    "triangles": 9728,
+    "source_vertices": 4864,
+    "uv_texels_per_m": {
+      "RB.dark-gunmetal": 825.1,
+      "RB.brushed-titanium": 841.1,
+      "Rift midnight inlay": 611.9,
+      "RB.rift-obsidian": 854.8,
+      "light-cyan": 851.2,
+      "light-violet": 863.3
+    },
+    "uv_area_fraction": 0.8784
+  },
+  "low_frame": {
+    "triangles": 3952,
+    "source_vertices": 1976,
+    "uv_texels_per_m": {
+      "RB.dark-gunmetal": 825.3,
+      "RB.brushed-titanium": 841.0,
+      "Rift midnight inlay": 613.3,
+      "RB.rift-obsidian": 854.9,
+      "light-cyan": 851.5,
+      "light-violet": 863.6
+    },
+    "uv_area_fraction": 0.8784
+  },
+  "receiver_sha256": "f22e37f2fb124a22b38391fe55145dd438997a364111b2b7b50a47e4ce287f95",
+  "low_aperture_triangles": 104,
+  "high_aperture_triangles": 256,
+  "bake": {
+    "matched_receiver_replacements": {
+      "pixels": 11373,
+      "max_angle_deg": 12
+    },
+    "normal_lower_hemisphere_pixels": 0,
+    "normal": {
+      "sha256": "f55bd65540605c38132b8ff9ddc884af9a4da790994bd8742c5498cb80d300a3",
+      "samples": [
+        {
+          "surface": "Rift midnight inlay",
+          "x": 890,
+          "y": 617,
+          "rgb": [
+            127,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 572,
+          "y": 851,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 572,
+          "y": 431,
+          "rgb": [
+            129,
+            129,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 572,
+          "y": 310,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 572,
+          "y": 275,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.rift-obsidian",
+          "x": 572,
+          "y": 795,
+          "rgb": [
+            130,
+            125,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    "basecolor": {
+      "sha256": "d407c58b49fe970fbea7d83f8515beb8ada9e424eb5955dd81d914821f284790",
+      "samples": [
+        {
+          "surface": "Rift midnight inlay",
+          "x": 890,
+          "y": 617,
+          "rgb": [
+            24,
+            51,
+            66
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 572,
+          "y": 851,
+          "rgb": [
+            139,
+            128,
+            151
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 572,
+          "y": 431,
+          "rgb": [
+            86,
+            93,
+            102
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 572,
+          "y": 310,
+          "rgb": [
+            45,
+            226,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 572,
+          "y": 275,
+          "rgb": [
+            71,
+            79,
+            88
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.rift-obsidian",
+          "x": 572,
+          "y": 795,
+          "rgb": [
+            45,
+            33,
+            66
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    "orm": {
+      "sha256": "17a244a784bf3e9cc64621c43457abfc8bd0cd97a061376e1a4234e68b0c8c0f",
+      "samples": [
+        {
+          "surface": "Rift midnight inlay",
+          "x": 890,
+          "y": 617,
+          "rgb": [
+            255,
+            76,
+            156
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 572,
+          "y": 851,
+          "rgb": [
+            255,
+            85,
+            249
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 572,
+          "y": 431,
+          "rgb": [
+            253,
+            88,
+            240
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 572,
+          "y": 310,
+          "rgb": [
+            234,
+            71,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 572,
+          "y": 275,
+          "rgb": [
+            252,
+            95,
+            229
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.rift-obsidian",
+          "x": 572,
+          "y": 795,
+          "rgb": [
+            255,
+            49,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    "emissive": {
+      "sha256": "29cc60456f6ddb446ea6f703c04cdc446c516ced7f4423e35082d213c16126ba",
+      "samples": [
+        {
+          "surface": "Rift midnight inlay",
+          "x": 890,
+          "y": 617,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 572,
+          "y": 851,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 572,
+          "y": 431,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 572,
+          "y": 310,
+          "rgb": [
+            45,
+            226,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 572,
+          "y": 275,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.rift-obsidian",
+          "x": 572,
+          "y": 795,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    "contact_AO": {
+      "ray_length_m": 0.026,
+      "samples": 12,
+      "mean_of_occupied": 0.9629902839660645
+    },
+    "vortex": {
+      "sha256": "f7c68759a856fdb89f6be4334562d5131798f50ebcba7669934a200d12df99e8",
+      "samples": []
+    }
+  }
+}

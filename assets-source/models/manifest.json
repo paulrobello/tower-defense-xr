@@ -608,6 +608,314 @@
           "tolerance": 12
         }
       ]
+    },
+    {
+      "file": "rift-portal/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "bd5b4d03244b21e7e43ca05ded5d0c8d16a99a409475e88583f477dad3f5e2dd",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Rift midnight inlay",
+          "x": 890,
+          "y": 617,
+          "rgb": [
+            24,
+            51,
+            66
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 572,
+          "y": 851,
+          "rgb": [
+            139,
+            128,
+            151
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 572,
+          "y": 431,
+          "rgb": [
+            86,
+            93,
+            102
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 572,
+          "y": 310,
+          "rgb": [
+            45,
+            226,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 572,
+          "y": 275,
+          "rgb": [
+            71,
+            79,
+            88
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.rift-obsidian",
+          "x": 572,
+          "y": 795,
+          "rgb": [
+            45,
+            33,
+            66
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "rift-portal/normal.ktx2",
+      "role": "normal",
+      "sha256": "1a104f3bbd00e526767140449b5d303df809aae5e23bdf0c950d94e90347abe8",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Rift midnight inlay",
+          "x": 890,
+          "y": 617,
+          "rgb": [
+            127,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 572,
+          "y": 851,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 572,
+          "y": 431,
+          "rgb": [
+            129,
+            129,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 572,
+          "y": 310,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 572,
+          "y": 275,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.rift-obsidian",
+          "x": 572,
+          "y": 795,
+          "rgb": [
+            130,
+            125,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "rift-portal/orm.ktx2",
+      "role": "orm",
+      "sha256": "a917ff20e62687f5a3ea20566b87d62035dda748a18435fb64c8e2ff0c1ff1e8",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Rift midnight inlay",
+          "x": 890,
+          "y": 617,
+          "rgb": [
+            255,
+            76,
+            156
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 572,
+          "y": 851,
+          "rgb": [
+            255,
+            85,
+            249
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 572,
+          "y": 431,
+          "rgb": [
+            253,
+            88,
+            240
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 572,
+          "y": 310,
+          "rgb": [
+            234,
+            71,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 572,
+          "y": 275,
+          "rgb": [
+            252,
+            95,
+            229
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.rift-obsidian",
+          "x": 572,
+          "y": 795,
+          "rgb": [
+            255,
+            49,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "rift-portal/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "98f3667f8a0010f67683f5923fc2f995b0894c46b53ac48c21e543ab675c3027",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Rift midnight inlay",
+          "x": 890,
+          "y": 617,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 572,
+          "y": 851,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 572,
+          "y": 431,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-cyan",
+          "x": 572,
+          "y": 310,
+          "rgb": [
+            45,
+            226,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "light-violet",
+          "x": 572,
+          "y": 275,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.rift-obsidian",
+          "x": 572,
+          "y": 795,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "rift-portal/vortex.ktx2",
+      "role": "emissive",
+      "sha256": "5485fc141c0c3593b58851143569a60f29bd4ef933b5bdef357d06d698e0ff28",
+      "width": 1024,
+      "height": 1024,
+      "samples": []
     }
   ],
   "models": [
@@ -667,6 +975,49 @@
           "normal": "core-bastion/normal.ktx2",
           "orm": "core-bastion/orm.ktx2",
           "emissive": "core-bastion/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "rift-portal",
+      "lod": 0,
+      "file": "rift-portal/rift-portal.glb",
+      "sha256": "b4550fe74e570d69f32b7f190e29fdeb68ab28591275944e0ede10de72ee2bd6",
+      "limits": {
+        "triangles": 4500,
+        "materials": 2,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "apertureAnchor": {
+          "parent": "riftPortal",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 0.0001
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "portalInterior",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Rift segmented bezel": {
+          "basecolor": "rift-portal/basecolor.ktx2",
+          "normal": "rift-portal/normal.ktx2",
+          "orm": "rift-portal/orm.ktx2",
+          "emissive": "rift-portal/emissive.ktx2"
+        },
+        "Rift aperture field": {
+          "emissive": "rift-portal/vortex.ktx2"
         }
       }
     }

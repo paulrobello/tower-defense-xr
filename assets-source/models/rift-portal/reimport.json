@@ -1,0 +1,105 @@
+{
+  "glb_sha256": "b4550fe74e570d69f32b7f190e29fdeb68ab28591275944e0ede10de72ee2bd6",
+  "blender": "5.2.2 LTS",
+  "root": "riftPortal",
+  "socket": "apertureAnchor",
+  "triangles": {
+    "portalFrame": 3952,
+    "portalInterior": 104
+  },
+  "gltf_frame_bounds_m": [
+    [
+      -0.595,
+      0.595
+    ],
+    [
+      -0.795,
+      0.795
+    ],
+    [
+      -0.025,
+      0.047
+    ]
+  ],
+  "gltf_aperture_bounds_m": [
+    [
+      -0.475,
+      0.475
+    ],
+    [
+      -0.675,
+      0.675
+    ],
+    [
+      -0.025,
+      -0.025
+    ]
+  ],
+  "rim_width_m_at_axes": 0.12,
+  "anchor_plane_m": 0.0,
+  "frontmost_m": 0.047,
+  "inner_bezel_m": -0.015,
+  "shader_plane_m": -0.025,
+  "boundary_vertices_shared_with_frame": 104,
+  "wall_contact_vertices": 208,
+  "maximum_ellipse_chord_error_bound_m": 0.0004300942744123709,
+  "shader_uv": "u=0.5+x/0.95, Blender v=0.5+y/1.35; glTF v=0.5-y/1.35",
+  "tested_transform_pitch_spin_degrees": [
+    [
+      0,
+      0
+    ],
+    [
+      90,
+      0
+    ],
+    [
+      34,
+      59
+    ]
+  ],
+  "embedded_png_fallbacks_verified": 5,
+  "budgets": {
+    "textures": {
+      "basecolor": {
+        "bytes": 369029,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 1.531
+      },
+      "normal": {
+        "bytes": 431825,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 0.608,
+        "decoded_unit_length_range": [
+          0.99,
+          1.01121
+        ]
+      },
+      "orm": {
+        "bytes": 527362,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 1.669
+      },
+      "emissive": {
+        "bytes": 30639,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 0.453
+      },
+      "vortex": {
+        "level0_rmse_rgb8": 0.898,
+        "bytes": 482939,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128
+      }
+    },
+    "file_bytes": 4869036,
+    "primitives": 2,
+    "gltf_vertices": 11025,
+    "ktx2_bytes": 1841794,
+    "uastc_bytes_before_zstd": 6990640
+  }
+}
