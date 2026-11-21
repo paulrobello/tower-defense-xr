@@ -1,0 +1,426 @@
+{
+  "schema_version": 1,
+  "provider": "ElevenLabs",
+  "model_id": "eleven_text_to_sound_v2",
+  "endpoint": "https://api.elevenlabs.io/v1/sound-generation",
+  "output_format": "mp3_44100_128",
+  "max_attempts_per_cue": 3,
+  "rights": {
+    "plan": "starter",
+    "account_status": "active",
+    "use": "Paid plan permits commercial incorporation into a game, subject to terms and prohibited-use policy. Private project review only for isolated clips. Standalone distribution and public sample libraries are outside this review package.",
+    "terms": [
+      "https://elevenlabs.io/terms-of-use",
+      "https://elevenlabs.io/elevenapi-terms",
+      "https://elevenlabs.io/creative-terms",
+      "https://elevenlabs.io/docs/overview/administration/billing"
+    ]
+  },
+  "delivery": {
+    "sample_rate_hz": 48000,
+    "channels": 1,
+    "max_true_peak_dbtp": -2,
+    "max_mono_cancellation_db": 6,
+    "max_leading_silence_ms": 45,
+    "max_trailing_silence_ms": 115,
+    "max_interior_silence_ms": 300,
+    "silence_threshold_dbfs": -55,
+    "max_peak_delta_ratio": 2,
+    "max_loop_edge_delta_db": 6,
+    "max_loop_interior_drop_db": 16,
+    "max_asset_bytes": 180000,
+    "first_pass_request_limit": 28,
+    "profiles": {
+      "feedback": {
+        "target_lufs": -22,
+        "lufs_range": [-29, -19]
+      },
+      "repeatable": {
+        "target_lufs": -25,
+        "lufs_range": [-32, -22]
+      },
+      "heavy": {
+        "target_lufs": -20,
+        "lufs_range": [-27, -17]
+      },
+      "critical": {
+        "target_lufs": -19,
+        "lufs_range": [-25, -16]
+      },
+      "ambient": {
+        "target_lufs": -29,
+        "lufs_range": [-33, -27]
+      }
+    }
+  },
+  "cues": [
+    {
+      "id": "surface-clamp",
+      "family": "placement-ui",
+      "label": "Surface clamp lock",
+      "trigger": "Confirm a turret latched onto a floor, table, or wall.",
+      "duration_seconds": 0.85,
+      "duration_range_seconds": [0.23, 0.8],
+      "profile": "feedback",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A compact brushed-titanium clamp snaps onto a hard surface. Immediate dry double mechanical click, a tight lower thunk as the latch seats, and a very short metal tick tail. Close-miked miniature machinery, roughly half a second of action. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "hover-pod",
+      "family": "placement-ui",
+      "label": "Hover-pod deploy",
+      "trigger": "Confirm a turret detached into repulsor hover.",
+      "duration_seconds": 1.6,
+      "duration_range_seconds": [0.55, 1.55],
+      "profile": "feedback",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A tiny repulsor hover pod deploys: two light ceramic petals snap open, then a smooth rising midrange electromagnetic flutter settles for a split second and fades. Quick clean lift without a sub-bass lead-in. One isolated cue with no dialogue, music, or background ambience.",
+      "mastering_edit": {
+        "start_s": 0.49,
+        "end_s": 1.6,
+        "why": "Omit the isolated opening tick and 0.49 s pause before the continuous repulsor lift."
+      }
+    },
+    {
+      "id": "invalid-placement",
+      "family": "placement-ui",
+      "label": "Invalid placement buzz",
+      "trigger": "Signal a rejected turret placement.",
+      "duration_seconds": 0.68,
+      "duration_range_seconds": [0.18, 0.65],
+      "profile": "feedback",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "One short, dry, muted negative-feedback buzz from a tactical instrument. A pair of tightly spaced descending square-ish electrical chirrs, low-mid nasal timbre, immediate onset, clean hard ending. No piercing ringing. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "relocate",
+      "family": "placement-ui",
+      "label": "Relocate teleport",
+      "trigger": "Confirm a turret snapped to its new position.",
+      "duration_seconds": 1.25,
+      "duration_range_seconds": [0.35, 1.2],
+      "profile": "feedback",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A close-up miniature sci-fi relocation effect. A quick hollow inward vacuum whisper, a bright granular phase snap, then a distinct clean arrival plock and a fast decay. Three continuous stages of one compact gesture. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "sell",
+      "family": "placement-ui",
+      "label": "Sell chime",
+      "trigger": "Confirm that selling a turret refunded requisition.",
+      "duration_seconds": 1.0,
+      "duration_range_seconds": [0.28, 0.95],
+      "profile": "feedback",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A tidy equipment refund indication, two small tuned metal tokens with a soft ascending pair of bright bell-like pings. Warm filtered terminal speaker character, each ping sharply articulated and gently damped. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "radial-tick",
+      "family": "placement-ui",
+      "label": "Radial tick / confirm",
+      "trigger": "Mark a selection or confirmation in the radial menu.",
+      "duration_seconds": 0.55,
+      "duration_range_seconds": [0.17, 0.53],
+      "profile": "feedback",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "One tiny tactile encoder tick with a brief soft confirming harmonic, as a milled mechanical dial crosses a detent. Crisp light plastic-metal attack and immediately damped, focused high mids, small and restrained. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "autocannon-burst",
+      "family": "turrets",
+      "label": "Autocannon burst",
+      "trigger": "Mark the Autocannon’s burst fire.",
+      "duration_seconds": 0.9,
+      "duration_range_seconds": [0.25, 0.85],
+      "profile": "repeatable",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A compact fictional turret gives three tightly spaced dry kinetic pops in one quick burst. Each has a hard metallic snap, a short amber-electric thud, and a hint of casing rattle. Small mounted mechanism at close range, sharp separation, rapid tail. One isolated cue with no dialogue, music, or background ambience.",
+      "mastering_edit": {
+        "start_s": 0.0,
+        "end_s": 0.35,
+        "why": "Keep the complete burst and remove the 0.53 s near-silent tail."
+      }
+    },
+    {
+      "id": "autocannon-impact",
+      "family": "turrets",
+      "label": "Autocannon impact",
+      "trigger": "Mark a kinetic hit against an invader.",
+      "duration_seconds": 0.64,
+      "duration_range_seconds": [0.18, 0.61],
+      "profile": "repeatable",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "One direct kinetic tracer strikes thick ceramic chitin: tight bright tack against granular shell, a tiny flurry of dry metallic sparks, then dead quiet. Compact, sharp and small, with no reverberation. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "plasma-launch",
+      "family": "turrets",
+      "label": "Plasma Mortar launch",
+      "trigger": "Mark a Plasma Mortar shell leaving its turret.",
+      "duration_seconds": 1.1,
+      "duration_range_seconds": [0.3, 1.04],
+      "profile": "repeatable",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "One futuristic mortar ejects a molten plasma packet. A short upward siphoning hiss feeds into a rounded hollow pressure plunk, followed by a brief fiery air trail that recedes quickly. Strong midrange, defined attack. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "plasma-detonation",
+      "family": "turrets",
+      "label": "Plasma Mortar detonation",
+      "trigger": "Mark the Plasma Mortar’s area hit.",
+      "duration_seconds": 1.95,
+      "duration_range_seconds": [0.6, 1.9],
+      "profile": "heavy",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A compact molten-plasma detonation strikes a hard indoor surface. A hot rapid crack with a controlled rounded mid-bass pressure bloom, followed by a fan of fizzing ember grit that decays naturally. Defined near-field pulse, no subwoofer wash. One isolated cue with no dialogue, music, or background ambience.",
+      "mastering_edit": {
+        "start_s": 0.74,
+        "end_s": 1.92,
+        "why": "Isolate the main detonation and its decay after an unrelated opening transient and 0.50 s pause."
+      }
+    },
+    {
+      "id": "cryo-charge",
+      "family": "turrets",
+      "label": "Cryo-Arc charge",
+      "trigger": "Telegraph the Cryo-Arc turret’s discharge.",
+      "duration_seconds": 1.16,
+      "duration_range_seconds": [0.33, 1.1],
+      "profile": "repeatable",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A sci-fi cryogenic coil winds up in a single clean rising electric shiver. Fine crystalline ticks form around a narrow bright cyan buzz, with a small tension click at its peak. Clean and quick, no discharge, no long decay. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "cryo-chain",
+      "family": "turrets",
+      "label": "Cryo-Arc chain zap",
+      "trigger": "Mark a Cryo-Arc jump between targets.",
+      "duration_seconds": 0.98,
+      "duration_range_seconds": [0.27, 0.94],
+      "profile": "repeatable",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "Three linked short icy electric snaps spread rapidly in a descending sequence from the first direct arc. Each zap has a precise granular transient and tiny glassy frost crumble. Dry, fast, distinct from a conventional thunder sound. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "rail-charge",
+      "family": "turrets",
+      "label": "Rail Sniper charge",
+      "trigger": "Telegraph a charged Rail Sniper shot.",
+      "duration_seconds": 1.48,
+      "duration_range_seconds": [0.5, 1.44],
+      "profile": "repeatable",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "One precision sci-fi rail coil charge. A steel trigger relay clicks on, a narrow high-mid oscillation accelerates upward, and the buildup ends in a tight magnetic lock. Dry focused electronic tension, clean ending, no discharge. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "rail-crack",
+      "family": "turrets",
+      "label": "Rail Sniper crack",
+      "trigger": "Mark the Rail Sniper’s charged shot.",
+      "duration_seconds": 1.0,
+      "duration_range_seconds": [0.25, 0.95],
+      "profile": "heavy",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "One fictional hypervelocity rail pulse. An immediate razor-thin electric snap over a tight metallic white crack, followed by a brief ionized air hiss that vanishes. Singular, very fast dry onset with controlled bass, no reverb bed. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "turret-servo",
+      "family": "turrets",
+      "label": "Turret rotate servo",
+      "trigger": "Give audible feedback when a turret slews.",
+      "duration_seconds": 1.14,
+      "duration_range_seconds": [0.32, 1.09],
+      "profile": "repeatable",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "Miniature armored turret turns on a brushed titanium bearing. One short directional stepper-motor movement with layered fine teeth and soft ceramic friction, settling into a damped endpoint click. Light dry precision mechanism. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "tier-upgrade",
+      "family": "turrets",
+      "label": "Tier upgrade power-up",
+      "trigger": "Confirm a new turret tier.",
+      "duration_seconds": 1.65,
+      "duration_range_seconds": [0.49, 1.6],
+      "profile": "feedback",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A modular futuristic turret takes a tier upgrade. Two tightly synced sliding metal latches seat, then three ascending smooth resonant energy pulses rise and end with a firm electrical lock. Confident and concise, dry tactical machine feedback. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "rift-tear",
+      "family": "rift-enemies",
+      "label": "Rift tear open",
+      "trigger": "Warn that a new enemy rift has opened.",
+      "duration_seconds": 2.55,
+      "duration_range_seconds": [0.85, 2.5],
+      "profile": "heavy",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A dimensional fissure tears open in one focused gesture: dry crystalline zip, a growing electric fabric rip, then a short dark pressure bloom and fading grain. Ominous violet energy with textured mids, distinct beginning and end. One isolated cue with no dialogue, music, or background ambience.",
+      "mastering_edit": {
+        "start_s": 0.0,
+        "end_s": 1.55,
+        "why": "Keep the complete tear and shorten a near-silent tail with a late noise floor rise."
+      }
+    },
+    {
+      "id": "rift-ambient",
+      "family": "rift-enemies",
+      "label": "Rift ambient loop",
+      "trigger": "Locate an open rift by its sustained emitter.",
+      "duration_seconds": 8.0,
+      "duration_range_seconds": [7.2, 8.15],
+      "profile": "ambient",
+      "loop": true,
+      "prompt_influence": 0.65,
+      "text": "A seamless stable alien rift ambience made of soft stationary granular airflow and continuous subtle electrical shimmer, low mid hollow resonance with fine brighter texture. Nearly uniform density and level from frame to frame. No pulsing, accents, gaps, build, ending, reverb swings, voices or music.",
+      "retry_parameters": {
+        "take-02": {
+          "text": "A constant sustained rift generator texture as if heard up close through a ventilation grille. Steady broadband airflow, soft electric grain, a fixed low-mid electric resonance, consistent medium intensity for the entire clip. Seamless steady-state machine drone loop.",
+          "prompt_influence": 0.85
+        }
+      },
+      "selected_take": "take-02"
+    },
+    {
+      "id": "skitter",
+      "family": "rift-enemies",
+      "label": "Skitter hiss / death",
+      "trigger": "Mark a Skitter breaking apart on death.",
+      "duration_seconds": 1.25,
+      "duration_range_seconds": [0.37, 1.2],
+      "profile": "repeatable",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A tiny alien crawler expires: brief sharp mandibular air hiss, close dry chitin crumple and two small rapid leg scrapes that stop. Insect foley, restrained and crisp, compact near-field mono source. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "wasp",
+      "family": "rift-enemies",
+      "label": "Wasp buzz / pop",
+      "trigger": "Mark a flyer’s destruction in the air.",
+      "duration_seconds": 1.3,
+      "duration_range_seconds": [0.37, 1.26],
+      "profile": "repeatable",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A small biomechanical flying wasp has a tight strained high-mid wing buzz that abruptly cuts into one dry crisp shell pop and fine fading electrical grit. One clear short composite event, neither melodic nor piercing. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "brute",
+      "family": "rift-enemies",
+      "label": "Brute stomp / armor clang",
+      "trigger": "Mark a Brute's heavy armored footfall.",
+      "duration_seconds": 1.24,
+      "duration_range_seconds": [0.38, 1.2],
+      "profile": "heavy",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A heavy armored alien lays one broad foot down on hard flooring. Dry weighty stomp immediately followed by one blunt ceramic armor plate clang and tightly damped shell rattle. Mid-bass body, minimal room tail. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "disruptor",
+      "family": "rift-enemies",
+      "label": "Disruptor EMP",
+      "trigger": "Warn that a Disruptor has disabled nearby towers.",
+      "duration_seconds": 1.62,
+      "duration_range_seconds": [0.48, 1.57],
+      "profile": "heavy",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "One attack by a hovering biomechanical disruptor: a quick uneven electronic sputter, a sharp broad electromagnetic pop, then two dropping crackled sidebands that rapidly die. Menacing and readable, compact mids and no bass wash. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "broodlord",
+      "family": "rift-enemies",
+      "label": "Broodlord roar",
+      "trigger": "Telegraph the Apex Broodlord’s presence.",
+      "duration_seconds": 2.25,
+      "duration_range_seconds": [0.7, 2.2],
+      "profile": "heavy",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "One alien arthropod boss roar, sculpted from layered growling chitin resonance and dry stridulating plates. Swift breathy attack then a wide harsh throat-like rasp whose midrange holds briefly before an organic decay. Creature only, no human speech or scream. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "boss-collapse",
+      "family": "rift-enemies",
+      "label": "Boss death collapse",
+      "trigger": "Mark the Apex Broodlord’s destruction.",
+      "duration_seconds": 3.45,
+      "duration_range_seconds": [1.2, 3.38],
+      "profile": "heavy",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "An enormous fictional insectoid machine collapses: a low chitin crack, layered dry armor plates drop and scatter, then a residual electric hiss fizzles into a quiet tail. A single readable fall with a grounded impact, no continuous roaring. One isolated cue with no dialogue, music, or background ambience.",
+      "mastering_edit": {
+        "start_s": 1.44,
+        "end_s": 2.9,
+        "why": "Keep the continuous main collapse and its impact tail after an opening noise and 1.17 s pause."
+      }
+    },
+    {
+      "id": "wave-incoming",
+      "family": "core-waves",
+      "label": "Incoming wave horn",
+      "trigger": "Announce the start of an incoming wave.",
+      "duration_seconds": 1.85,
+      "duration_range_seconds": [0.62, 1.8],
+      "profile": "critical",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "One clear short tactical breach horn. Two compressed clean low-mid synthetic brass pulses with a slight ascending urgency, a hard defined attack and a fast natural tail. Forward and legible on small speakers; no heavy sub-bass or backing score. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "core-shield-hit",
+      "family": "core-waves",
+      "label": "Core shield hit",
+      "trigger": "Flag a successful hit on the Core shield.",
+      "duration_seconds": 1.08,
+      "duration_range_seconds": [0.3, 1.04],
+      "profile": "feedback",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "One direct hit on a compact hexagonal energy shield. A blunt close pulse under a bright glassy shield ring that ripples outward into three very fast filtered ticks, then decays. Medium-sized, defined and dry. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "core-critical",
+      "family": "core-waves",
+      "label": "Core critical alarm",
+      "trigger": "Warn that the Core’s health is critical.",
+      "duration_seconds": 1.72,
+      "duration_range_seconds": [0.61, 1.67],
+      "profile": "critical",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "A clean urgent three-pulse warning from a portable tactical battery on critical health. Distinct paired high-mid pitches with slight electronic grit, short spaces between pulses, abrupt quiet after the third. Focused and urgent without a harsh siren sweep. One isolated cue with no dialogue, music, or background ambience."
+    },
+    {
+      "id": "mission-confirm",
+      "family": "core-waves",
+      "label": "Victory / defeat confirm",
+      "trigger": "Confirm acknowledgment on either mission result screen.",
+      "duration_seconds": 1.1,
+      "duration_range_seconds": [0.34, 1.06],
+      "profile": "feedback",
+      "loop": false,
+      "prompt_influence": 0.6,
+      "text": "One neutral mission report acknowledgment from a tactical terminal. A short dry button press lands in two closely spaced warm glassy electronic tones that settle on one stable pitch. Calm, neither triumphant nor sad, fully decayed. One isolated cue with no dialogue, music, or background ambience."
+    }
+  ]
+}

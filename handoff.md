@@ -51,8 +51,10 @@
 - **Wave 4 (Owner Checkpoint #2 before P4 promotion):**
   - `P3-T7` (`01a1fb3c93b976f4850cfb761acebef9`): Combined hash-bound audit (`docs/art-review-index.md`), independent `>=80/100` visual scores, and Paul's creative sign-off.
 
-### Can Run in Parallel with Phase 3 (Unblocked Right Now!)
-- **`P4-T4`** (`01a1fadb229176818b2c3bc81999c4a6`): Produce ~28 spatialized ElevenLabs SFX cues (`eleven_text_to_sound_v2`) and a local `audition.html` review sheet. `P2-T4` is done. *(GPT-6.2 Sol)*
+### Independent Phase 4 audio review
+
+- **`P4-T4`** (`01a1fadb229176818b2c3bc81999c4a6`): 28 ElevenLabs cues are ready for owner listening on [the private audition page](http://127.0.0.1:4273/audition.html). The original 29 takes, 28 lossless masters and 56 Opus/MP3 derivatives passed hash, codec, loudness, true-peak, silence, mono and loop checks. The four negative controls rejected clipping, silence, phase cancellation and a hash mismatch. The 7.74-second rift loop used the second take. ElevenLabs reconciled 538 included credits and zero overage.
+- The [audio review instructions](assets-source/audio/sfx/README.md) explain how to restart the preview. Desktop Chrome verified both mastered formats, original playback, stop/reset and the rift repeat. Quest 3 Browser loaded all 28 cues over USB and reported support for both formats. The preview was hidden during the automatic Quest playback attempt, so Quest speaker acceptance remains open for Paul. The isolated audio stays in the private, gitignored archive under `assets-source/audio/sfx/`. The normal game build and Pages bundle exclude it. Suno mastering and in-game mixing belong to `P4-T5`.
 
 ### Remaining Phase 4 & Phase 5 Cards (10 cards)
 - **Phase 4 (`plans/phase-4-aaa-rendering-fx-and-audio.md`):**
@@ -96,7 +98,7 @@
 
 ## Unresolved Issues & Open Gates
 
-1. **Provider preflight (November 20, 2026):** Higgsfield Plus reported 1,200 credits, and Cinematic Studio 2.5 2K was estimated at two credits per image. ElevenLabs Starter was active with 60,536 included credits remaining before the SFX batch and overage disabled.
+1. **Provider balances (November 20, 2026):** Higgsfield Plus had 1,160 credits remaining after the concept batch. ElevenLabs Starter had 59,998 included credits remaining after the SFX batch, with overage disabled.
 2. **Blender live MCP add-on (`TCP 9876`):** Was not listening during the 2:34 PM PST probe; start Blender with the community "MCP for Blender" add-on (or run headless `--background --factory-startup --python-exit-code 1`) before `P3-T3`–`P3-T6c`.
 3. **Physical Quest 3 acceptance:** All IWER passes (`P0`, `P1`, `P2`) are emulator evidence only. Real room scans, live WebXR `depth-sensing` GPU cost vs `room-mesh` fallback, comfort, and sustained `≥50 delivered FPS` stay open for Phase 5 (`P5-T2`–`P5-T4`).
 4. **Suno music WAVs (`P4-T5`):** `suno-music-prompt.md` is ready for Paul to generate the 6 loops + 2 stingers on Suno Custom v6; archive his downloaded WAVs untouched under `assets-source/audio/music/raw/` when delivered.
@@ -108,7 +110,7 @@
 
 1. **Finish the first review wave:**
    - **`P3-T1`:** Paul reviews the [art bible](docs/art-bible.md), Bastion Rib board and eleven concept sheets for **Owner Checkpoint #1**.
-   - **`P4-T4` (GPT-6.2 Sol):** Generate ~28 ElevenLabs spatial SFX cues and a local `audition.html` review sheet.
+   - **`P4-T4`:** Paul listens to the [private audition](http://127.0.0.1:4273/audition.html) on Quest speakers and confirms the SFX takes.
 2. **After Paul approves `P3-T1`**, run **`P3-T2`** (Higgsfield UI icons & title key art) and **`P3-T3`** (Blender shared PBR library + KTX2 encoder + `scripts/validate_glbs.py` + `make model-check`) in parallel.
 3. **Once `P3-T2` lands**, **`P4-T6`** (Tactical Sci-Fi radial menu re-skin) unlocks in parallel with the serial Blender authoring queue (`P3-T4` → `P3-T5a/b/c` → `P3-T6a/b/c` → `P3-T7` batch audit & Owner Checkpoint #2).
 4. **Confirm with Paul** when he wants to push `main` and execute `docs/deploy-checklist.md` (`P0-T6`) to bring `https://rift-bastion.pardev.net/` live.

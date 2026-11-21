@@ -1,0 +1,39 @@
+{
+  "cue": "surface-clamp",
+  "started_at_utc": "2026-11-21T03:26:20+00:00",
+  "provider": "ElevenLabs",
+  "url": "https://api.elevenlabs.io/v1/sound-generation?output_format=mp3_44100_128",
+  "request": {
+    "text": "A compact brushed-titanium clamp snaps onto a hard surface. Immediate dry double mechanical click, a tight lower thunk as the latch seats, and a very short metal tick tail. Close-miked miniature machinery, roughly half a second of action. One isolated cue with no dialogue, music, or background ambience.",
+    "duration_seconds": 0.85,
+    "prompt_influence": 0.6,
+    "loop": false,
+    "model_id": "eleven_text_to_sound_v2"
+  },
+  "retry_reason": null,
+  "billing_preflight": {
+    "observed_at_utc": "2026-11-21T03:26:20+00:00",
+    "tier": "starter",
+    "status": "active",
+    "character_count": 8200,
+    "character_limit": 68736,
+    "next_character_count_reset_unix": 1796525464,
+    "max_credit_limit_extension": 0,
+    "can_extend_character_limit": false,
+    "overage": {
+      "amount": "0",
+      "currency": "usd"
+    }
+  },
+  "rights": {
+    "plan": "starter",
+    "account_status": "active",
+    "use": "Paid plan permits commercial incorporation into a game, subject to terms and prohibited-use policy. Private project review only for isolated clips. Standalone distribution and public sample libraries are outside this review package.",
+    "terms": [
+      "https://elevenlabs.io/terms-of-use",
+      "https://elevenlabs.io/elevenapi-terms",
+      "https://elevenlabs.io/creative-terms",
+      "https://elevenlabs.io/docs/overview/administration/billing"
+    ]
+  }
+}

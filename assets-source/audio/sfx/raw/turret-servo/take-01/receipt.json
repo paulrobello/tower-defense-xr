@@ -1,0 +1,11 @@
+{
+  "ended_at_utc": "2026-11-21T03:27:13+00:00",
+  "http_status": 200,
+  "file": "response.mp3",
+  "bytes": 18851,
+  "sha256": "600a9eba074099ac09808f6e4be68f17cb8a71584c2d47e178ce8184f0c3dbc8",
+  "response_headers": {
+    "content-type": "audio/mpeg",
+    "character-cost": "11"
+  }
+}

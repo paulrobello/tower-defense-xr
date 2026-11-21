@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101718" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Sound Audition · Rift Bastion</title>
+    <link rel="stylesheet" href="./scripts/audition/audition.css" />
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="masthead-inner">
+        <p class="project">Rift Bastion</p>
+        <p class="review-status">Private review <span>·</span> Owner approval pending</p>
+      </div>
+    </header>
+    <main>
+      <section class="introduction" aria-labelledby="title">
+        <div>
+          <h1 id="title">Sound audition</h1>
+          <p class="intro-copy">
+            Compare the original ElevenLabs takes with the mastered cues. Listen on Quest speakers
+            to check how the attacks, tails, and rift loop translate.
+          </p>
+        </div>
+        <dl class="overview" aria-label="Review catalog">
+          <div><dt>Sound effects</dt><dd id="cue-count">—</dd></div>
+          <div><dt>Suno WAVs pending</dt><dd>8</dd></div>
+        </dl>
+      </section>
+      <div class="controls">
+        <nav aria-label="Cue families">
+          <a href="#placement-ui">Placement &amp; UI</a>
+          <a href="#turrets">Turrets</a>
+          <a href="#rift-enemies">Rift &amp; enemies</a>
+          <a href="#core-waves">Core &amp; waves</a>
+          <a href="#music">Music</a>
+        </nav>
+        <button type="button" id="stop-all">Stop playback</button>
+      </div>
+      <p id="playback-status" role="status" aria-live="polite" hidden></p>
+      <p id="catalog-status" role="status">Loading the sound effects catalog…</p>
+      <div id="catalog"></div>
+      <section class="music-section" id="music" aria-labelledby="music-title">
+        <header class="section-header">
+          <h2 id="music-title">Music</h2>
+          <p>Awaiting owner-supplied Suno WAVs for P4-T5</p>
+        </header>
+        <ul class="music-list">
+          <li>Tactical Command Deck</li>
+          <li>Perimeter Scan</li>
+          <li>First Contact</li>
+          <li>Breach Protocol</li>
+          <li>Perimeter Overload</li>
+          <li>Broodlord Siege</li>
+          <li>Sector Secured</li>
+          <li>Bastion Lost</li>
+        </ul>
+      </section>
+    </main>
+    <script type="module" src="./scripts/audition/audition.ts"></script>
+  </body>
+</html>

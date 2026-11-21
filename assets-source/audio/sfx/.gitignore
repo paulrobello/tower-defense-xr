@@ -1,0 +1,6 @@
+# Isolated ElevenLabs audio is for private review and archiving.
+/raw/**/*.mp3
+/raw/**/*.bin
+/staging/*.ogg
+/staging/*.mp3
+/staging/masters/*.flac

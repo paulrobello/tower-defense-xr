@@ -1,0 +1,22 @@
+{
+  "provider": "ElevenLabs",
+  "tier": "starter",
+  "status": "active",
+  "model_id": "eleven_text_to_sound_v2",
+  "output_format": "mp3_44100_128",
+  "included_credit_limit": 68736,
+  "opening_character_count": 8200,
+  "final_character_count": 8738,
+  "final_observed_at_utc": "2026-11-21T03:33:59+00:00",
+  "max_credit_limit_extension": 0,
+  "overage": {
+    "amount": "0",
+    "currency": "usd"
+  },
+  "initial_takes": 28,
+  "initial_character_cost_sum": 458,
+  "retry_takes": 1,
+  "retry_character_cost_sum": 80,
+  "total_character_cost_sum": 538,
+  "reconciliation": "Settled final meter minus opening meter matches the sum of character-cost headers. Immediate post-request meter reads could lag."
+}
