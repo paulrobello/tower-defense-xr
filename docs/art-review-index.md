@@ -134,7 +134,7 @@ The largest assembly measures 4,068 / 2,484 triangles and two materials. Each ti
 
 ![Matched high, LOD0 and LOD1 views of Skitter's segmented carapace and six legs](../assets-source/models/skitter-crawler/review/comparison.jpg)
 
-LOD0 measures 0.34 × 0.26 × 0.18 m in its neutral pose and uses 4,340 triangles. LOD1 uses 1,836 triangles and is 1.51 mm shorter. Both use one material, four 1024 px maps and the same 23-bone rig. Each GLB re-import plays `crawl_floor`, `climb_wall`, `attack`, `hit` and `death`. At least three feet contact the support plane at every sampled locomotion pose. The wall fixture rotates the support normal and travel tangent together. Locomotion loops close with zero observed root drift. Attack and hit return to rest, and death holds a collapsed pose.
+The revised armor uses tapered overlapping shields, knee guards and recessed violet tissue. LOD0 measures 0.34 × 0.26 × 0.18 m in its neutral pose and uses 3,904 triangles. LOD1 uses 1,994 triangles and is 0.33 mm shorter. Both use one material, four 1024 px maps and the same 23-bone rig. Each GLB re-import plays `crawl_floor`, `climb_wall`, `attack`, `hit` and `death`. At least three feet contact the support plane at every sampled locomotion pose. The wall fixture rotates the support normal and travel tangent together. Locomotion loops close with zero observed root drift. Attack and hit return to rest, and death holds a collapsed pose.
 
 [Sources, hashes and re-import checks](../assets-source/models/skitter-crawler/README.md) · [Motion poses](../assets-source/models/skitter-crawler/review/motion.jpg) · [Turntable](../assets-source/models/skitter-crawler/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.
 
@@ -265,7 +265,7 @@ The 18 badges are 128 × 128 RGBA proof files in a 768 × 384 atlas. Reviewers c
 
 ## Passed revisions
 
-Forty-two of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following seven revised assets account for those results. The remaining findings are F8–F11.
+Forty-three of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following eight revised assets account for those results. The remaining findings are F9–F11.
 
 | Finding | Asset | Initial → revised | Exact proof and result |
 | --- | --- | ---: | --- |
@@ -276,5 +276,6 @@ Forty-two of 46 assets have independent visual scores of at least 80. The thirty
 | F5 | Hover Pod | 78 → 81 | [Matched underside revision](../assets-source/models/hover-pod-revision/review/underside-comparison.jpg). The bowl carries a continuous highlight and the cyan optic remains round at LOD1. The outer rim remains angular and the imported top cap has less detail. The reviewed LOD0 and LOD1 GLB hashes begin `db15e31bd646` and `c6c39de56241`. |
 | F6 | Helios T1 | 76 → 83 | [Matched revision](../assets-source/models/helios-plasma-mortar-t1/review/revision-comparison.jpg). The dark chamber and smaller bright center read at both LODs. The rear highlight is smoother, with some mottling on the low shoulder and polygon corners on its pivot cap. The reviewed GLB hashes begin `bd90a619` and `acb97ddf`. |
 | F7 | Glacier T2 | 75 → 87 | [Matched revision](../assets-source/models/glacier-cryo-arc-t2/review/revision-comparison.jpg). The long blades retain an open gap and a cyan inner channel at both LODs. The cyan is subtler head-on and the blades overlap in exact profile. The reviewed GLB hashes begin `bd46f13a` and `3572096d`. |
+| F8 | Skitter Crawler | 77 → 83 | [Matched revision](../assets-source/models/skitter-crawler/review/revision-comparison.jpg) and [floor/wall motion](../assets-source/models/skitter-crawler/review/locomotion.jpg). Tapered armor, knee guards and a sharper head and tail distinguish the crawler. The legs remain straighter than in the concept, and the eyes and shoulder detail are subtler at LOD1. The reviewed GLB hashes begin `ebc4e139` and `efa45b81`. |
 
 The exact badge proof SHA-256 is `608eea9914f08dc20961df864f55e6ae8d59e4fdd015a4dd0fe7fba348310911`. The exact revised obsidian proof SHA-256 is `5ddcceed74d963da9662c547d41dfcf7a50b9300f7a5f24af0476dc8c89b7f44`.

@@ -4812,7 +4812,7 @@
     {
       "file": "skitter-crawler/basecolor.ktx2",
       "role": "basecolor",
-      "sha256": "ba423374f495de0d78bbc23243f1514cfc855bd87819b6b45dd66c00189a5eab",
+      "sha256": "d6161043212158bf6c86f6010a6d4ad2ee58199ec1652c4f856bd9e440339a77",
       "width": 1024,
       "height": 1024,
       "samples": [
@@ -4821,9 +4821,9 @@
           "x": 112,
           "y": 691,
           "rgb": [
-            57,
-            57,
-            63
+            54,
+            54,
+            64
           ],
           "tolerance": 16
         },
@@ -4832,9 +4832,9 @@
           "x": 70,
           "y": 547,
           "rgb": [
-            43,
-            36,
-            42
+            45,
+            37,
+            44
           ],
           "tolerance": 16
         },
@@ -4843,9 +4843,9 @@
           "x": 198,
           "y": 208,
           "rgb": [
-            194,
-            136,
-            244
+            199,
+            139,
+            250
           ],
           "tolerance": 16
         },
@@ -4854,9 +4854,9 @@
           "x": 966,
           "y": 547,
           "rgb": [
-            133,
-            71,
-            174
+            161,
+            90,
+            214
           ],
           "tolerance": 16
         }
@@ -4865,7 +4865,7 @@
     {
       "file": "skitter-crawler/normal.ktx2",
       "role": "normal",
-      "sha256": "8ec24a72700c92eb555c435b4665ce95c6a6e6f834a218517fec78de5f6c5099",
+      "sha256": "3cb8ff16a3ed518b4fb926213192abc5c4397bfefb76a18393c9921448acc6a4",
       "width": 1024,
       "height": 1024,
       "samples": [
@@ -4874,9 +4874,9 @@
           "x": 112,
           "y": 691,
           "rgb": [
-            174,
-            115,
-            245
+            177,
+            111,
+            244
           ],
           "tolerance": 16
         },
@@ -4885,8 +4885,8 @@
           "x": 70,
           "y": 547,
           "rgb": [
-            135,
-            123,
+            128,
+            125,
             255
           ],
           "tolerance": 16
@@ -4896,9 +4896,9 @@
           "x": 198,
           "y": 208,
           "rgb": [
-            136,
-            132,
-            255
+            145,
+            133,
+            254
           ],
           "tolerance": 16
         },
@@ -4907,8 +4907,8 @@
           "x": 966,
           "y": 547,
           "rgb": [
-            131,
-            123,
+            125,
+            118,
             255
           ],
           "tolerance": 16
@@ -4918,7 +4918,7 @@
     {
       "file": "skitter-crawler/orm.ktx2",
       "role": "orm",
-      "sha256": "61dad20a5b42033c80c92058128dcb726b56f31a10af56c0c116ef02bdac7e07",
+      "sha256": "1b0b6c4aab6448ba4c5fc0821bfe6278a8cce95040ed412c238507672a403ff4",
       "width": 1024,
       "height": 1024,
       "samples": [
@@ -4927,9 +4927,9 @@
           "x": 112,
           "y": 691,
           "rgb": [
-            21,
-            99,
-            20
+            64,
+            101,
+            22
           ],
           "tolerance": 16
         },
@@ -4939,7 +4939,7 @@
           "y": 547,
           "rgb": [
             234,
-            141,
+            147,
             6
           ],
           "tolerance": 16
@@ -4950,7 +4950,7 @@
           "y": 208,
           "rgb": [
             0,
-            67,
+            59,
             14
           ],
           "tolerance": 16
@@ -4960,8 +4960,8 @@
           "x": 966,
           "y": 547,
           "rgb": [
-            85,
-            76,
+            0,
+            84,
             9
           ],
           "tolerance": 16
@@ -4971,7 +4971,7 @@
     {
       "file": "skitter-crawler/emissive.ktx2",
       "role": "emissive",
-      "sha256": "05832c0c42319587ed3d2a692e26b2398eb56aa9eca67c755e71469dfd04b2ef",
+      "sha256": "4ea4c61253291ffc9223bf23733b51907efad0523dc4b597657dbf7cb879f9e1",
       "width": 1024,
       "height": 1024,
       "samples": [
@@ -5002,9 +5002,9 @@
           "x": 198,
           "y": 208,
           "rgb": [
-            194,
-            136,
-            244
+            199,
+            139,
+            250
           ],
           "tolerance": 16
         },
@@ -5013,9 +5013,9 @@
           "x": 966,
           "y": 547,
           "rgb": [
-            133,
-            71,
-            174
+            161,
+            90,
+            214
           ],
           "tolerance": 16
         }
@@ -7370,7 +7370,7 @@
       "id": "skitter-crawler",
       "lod": 0,
       "file": "skitter-crawler/skitter-crawler-lod0.glb",
-      "sha256": "638360d041e6f35f60bdfdad505872301695f4d7f2038e37346800a6549b79e9",
+      "sha256": "ebc4e139f071d3957c6b7657e86b0db2024911e79d7fc761e2385440da740670",
       "limits": {
         "triangles": 4500,
         "materials": 1,
@@ -7400,7 +7400,7 @@
       "id": "skitter-crawler",
       "lod": 1,
       "file": "skitter-crawler/skitter-crawler-lod1.glb",
-      "sha256": "de68b1b8e40d39b50a8968981900af0a5a08ae96a144285646a41d844c1797a5",
+      "sha256": "efa45b81ba64766c0feac792d9cbc5961f96028c72f25d90b2ec7db70d9c370a",
       "limits": {
         "triangles": 2000,
         "materials": 1,

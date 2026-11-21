@@ -1,7 +1,7 @@
 {
   "lod0": {
-    "sha256": "638360d041e6f35f60bdfdad505872301695f4d7f2038e37346800a6549b79e9",
-    "triangles": 4340,
+    "sha256": "ebc4e139f071d3957c6b7657e86b0db2024911e79d7fc761e2385440da740670",
+    "triangles": 3904,
     "joints": [
       "root",
       "thorax",
@@ -27,27 +27,27 @@
       "mandible.L",
       "mandible.R"
     ],
-    "inverse_bind_max_matrix_error": 3.074353492997506e-07,
+    "inverse_bind_max_matrix_error": 3.618226600277108e-07,
     "influences": [
       1,
       1
     ],
     "positive_area_uv_or_coplanar_pairs": 0,
-    "mean_texels_per_meter": 1530.8776368354481,
+    "mean_texels_per_meter": 1583.3910114213684,
     "neutral_xyz_m": [
       0.25999993085861206,
-      0.34000009298324585,
-      0.18000009655952454
+      0.3399999141693115,
+      0.18000002205371857
     ],
-    "minimum_z_m": -8.252025907040661e-08,
+    "minimum_z_m": -4.0238205656351056e-08,
     "clips": {
       "crawl_floor": {
         "samples": 39,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.04066016897559166,
-        "first_last_vertex_error_m": 6.420049203370581e-08,
-        "start_rest_error_m": 0.020000040531158447,
-        "end_rest_error_m": 0.020000040531158447,
+        "max_vertex_travel_m": 0.04070964455604553,
+        "first_last_vertex_error_m": 9.163002800960385e-08,
+        "start_rest_error_m": 0.020000051707029343,
+        "end_rest_error_m": 0.020000100135803223,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 3,
         "fixture_matrix": [
@@ -74,38 +74,38 @@
         ],
         "foot_excursions_m": {
           "claw_fore.L": [
-            -2.315233723493293e-05,
-            0.02486705407500267
+            -2.2922504285816103e-05,
+            0.024867180734872818
           ],
           "claw_mid.L": [
-            -2.3597342078574002e-05,
-            0.02486681006848812
+            -2.3362019419437274e-05,
+            0.024866983294487
           ],
           "claw_hind.L": [
-            -1.3544720786740072e-05,
-            0.024881452322006226
+            -1.3299627426022198e-05,
+            0.024881448596715927
           ],
           "claw_fore.R": [
-            -2.3106838852982037e-05,
-            0.024867113679647446
+            -2.3017366402200423e-05,
+            0.024867139756679535
           ],
           "claw_mid.R": [
-            -2.3597205654368736e-05,
-            0.024866819381713867
+            -2.3351019990514033e-05,
+            0.024866949766874313
           ],
           "claw_hind.R": [
-            -1.3567012501880527e-05,
-            0.024881437420845032
+            -1.3343964383238927e-05,
+            0.024881452322006226
           ]
         }
       },
       "climb_wall": {
         "samples": 53,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.029567943885922432,
-        "first_last_vertex_error_m": 8.079592106469136e-08,
-        "start_rest_error_m": 0.014000024646520615,
-        "end_rest_error_m": 0.014000033028423786,
+        "max_vertex_travel_m": 0.029620332643389702,
+        "first_last_vertex_error_m": 6.078619207983138e-08,
+        "start_rest_error_m": 0.0140000581741333,
+        "end_rest_error_m": 0.014000028371810913,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 3,
         "fixture_matrix": [
@@ -132,63 +132,105 @@
         ],
         "foot_excursions_m": {
           "claw_fore.L": [
-            -8.182381861843169e-06,
-            0.014845192432403564
+            -8.089721632131841e-06,
+            0.01484532281756401
           ],
           "claw_mid.L": [
-            -7.93989238445647e-06,
-            0.014840842224657536
+            -7.828751222405117e-06,
+            0.014840974472463131
           ],
           "claw_hind.L": [
-            -3.904211553162895e-06,
-            0.014846529811620712
+            -3.907014161086408e-06,
+            0.014846637845039368
           ],
           "claw_fore.R": [
-            -8.151378096954431e-06,
-            0.014845222234725952
+            -8.126596185320523e-06,
+            0.014845307916402817
           ],
           "claw_mid.R": [
-            -7.90181820775615e-06,
-            0.014840858057141304
+            -7.773807737976313e-06,
+            0.014841059222817421
           ],
           "claw_hind.R": [
-            -3.854387614410371e-06,
-            0.014846563339233398
+            -3.885967544192681e-06,
+            0.01484663411974907
           ]
         }
       },
       "attack": {
         "samples": 37,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.05406094714999199,
-        "first_last_vertex_error_m": 1.666000493116826e-08,
-        "start_rest_error_m": 9.102219422629787e-08,
-        "end_rest_error_m": 9.102219422629787e-08,
+        "max_vertex_travel_m": 0.05401599779725075,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 9.627483876784027e-08,
+        "end_rest_error_m": 9.627483876784027e-08,
         "root_matrix_drift": 0
       },
       "hit": {
         "samples": 23,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.03582712262868881,
-        "first_last_vertex_error_m": 1.862645149230957e-08,
-        "start_rest_error_m": 9.102219422629787e-08,
-        "end_rest_error_m": 8.88620377281768e-08,
+        "max_vertex_travel_m": 0.035816408693790436,
+        "first_last_vertex_error_m": 2.356080486265455e-08,
+        "start_rest_error_m": 9.627483876784027e-08,
+        "end_rest_error_m": 9.627483876784027e-08,
         "root_matrix_drift": 0
       },
       "death": {
         "samples": 53,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.0852656438946724,
-        "first_last_vertex_error_m": 0.0852656438946724,
-        "start_rest_error_m": 9.102219422629787e-08,
-        "end_rest_error_m": 0.08526567369699478,
+        "max_vertex_travel_m": 0.08530514687299728,
+        "first_last_vertex_error_m": 0.08530514687299728,
+        "start_rest_error_m": 9.627483876784027e-08,
+        "end_rest_error_m": 0.08530513942241669,
         "root_matrix_drift": 0
+      }
+    },
+    "oriented_mesh": {
+      "crawl_floor": {
+        "evaluated_world_extent_m": [
+          0.25999993085861206,
+          0.3399999141693115,
+          0.18000002205371857
+        ],
+        "world_support_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "world_forward": [
+          -0.0,
+          -1.0,
+          -0.0
+        ],
+        "world_minimum_all_vertex_plane_distance_m": -2.3362019419437274e-05,
+        "minimum_supporting_feet": 3,
+        "evaluated_samples": 39
+      },
+      "climb_wall": {
+        "evaluated_world_extent_m": [
+          0.25999999046325684,
+          0.18000005185604095,
+          0.3399999737739563
+        ],
+        "world_support_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "world_forward": [
+          -0.0,
+          -0.0,
+          -1.0
+        ],
+        "world_minimum_all_vertex_plane_distance_m": -8.103985237539746e-06,
+        "minimum_supporting_feet": 3,
+        "evaluated_samples": 53
       }
     }
   },
   "lod1": {
-    "sha256": "de68b1b8e40d39b50a8968981900af0a5a08ae96a144285646a41d844c1797a5",
-    "triangles": 1836,
+    "sha256": "efa45b81ba64766c0feac792d9cbc5961f96028c72f25d90b2ec7db70d9c370a",
+    "triangles": 1994,
     "joints": [
       "root",
       "thorax",
@@ -214,27 +256,27 @@
       "mandible.L",
       "mandible.R"
     ],
-    "inverse_bind_max_matrix_error": 3.074353492997506e-07,
+    "inverse_bind_max_matrix_error": 3.618226600277108e-07,
     "influences": [
       1,
       1
     ],
     "positive_area_uv_or_coplanar_pairs": 0,
-    "mean_texels_per_meter": 1536.4241482131022,
+    "mean_texels_per_meter": 1602.9491030338907,
     "neutral_xyz_m": [
-      0.2599501311779022,
-      0.34000009298324585,
-      0.17848898470401764
+      0.2599501609802246,
+      0.3399999141693115,
+      0.17966559529304504
     ],
-    "minimum_z_m": -8.252025907040661e-08,
+    "minimum_z_m": -4.0238205656351056e-08,
     "clips": {
       "crawl_floor": {
         "samples": 39,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.04066016897559166,
-        "first_last_vertex_error_m": 6.420049203370581e-08,
-        "start_rest_error_m": 0.020000040531158447,
-        "end_rest_error_m": 0.020000040531158447,
+        "max_vertex_travel_m": 0.04070964455604553,
+        "first_last_vertex_error_m": 9.163002800960385e-08,
+        "start_rest_error_m": 0.020000051707029343,
+        "end_rest_error_m": 0.020000100135803223,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 3,
         "fixture_matrix": [
@@ -261,38 +303,38 @@
         ],
         "foot_excursions_m": {
           "claw_fore.L": [
-            -2.315233723493293e-05,
-            0.02486705407500267
+            -2.2922504285816103e-05,
+            0.024867180734872818
           ],
           "claw_mid.L": [
-            -2.3597342078574002e-05,
-            0.02486681006848812
+            -2.3362019419437274e-05,
+            0.024866983294487
           ],
           "claw_hind.L": [
-            -1.3544720786740072e-05,
-            0.024881452322006226
+            -1.3299627426022198e-05,
+            0.024881448596715927
           ],
           "claw_fore.R": [
-            -2.3106838852982037e-05,
-            0.024867113679647446
+            -2.3017366402200423e-05,
+            0.024867139756679535
           ],
           "claw_mid.R": [
-            -2.3597205654368736e-05,
-            0.024866819381713867
+            -2.3351019990514033e-05,
+            0.024866949766874313
           ],
           "claw_hind.R": [
-            -1.3567012501880527e-05,
-            0.024881437420845032
+            -1.3343964383238927e-05,
+            0.024881452322006226
           ]
         }
       },
       "climb_wall": {
         "samples": 53,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.029567943885922432,
-        "first_last_vertex_error_m": 8.06387703278233e-08,
-        "start_rest_error_m": 0.014000024646520615,
-        "end_rest_error_m": 0.014000033028423786,
+        "max_vertex_travel_m": 0.029620332643389702,
+        "first_last_vertex_error_m": 6.078619207983138e-08,
+        "start_rest_error_m": 0.0140000581741333,
+        "end_rest_error_m": 0.014000028371810913,
         "root_matrix_drift": 0,
         "minimum_simultaneous_contacts": 3,
         "fixture_matrix": [
@@ -319,105 +361,861 @@
         ],
         "foot_excursions_m": {
           "claw_fore.L": [
-            -8.182381861843169e-06,
-            0.014845192432403564
+            -8.089721632131841e-06,
+            0.01484532281756401
           ],
           "claw_mid.L": [
-            -7.93989238445647e-06,
-            0.014840842224657536
+            -7.828751222405117e-06,
+            0.014840974472463131
           ],
           "claw_hind.L": [
-            -3.904211553162895e-06,
-            0.014846529811620712
+            -3.907014161086408e-06,
+            0.014846637845039368
           ],
           "claw_fore.R": [
-            -8.151378096954431e-06,
-            0.014845222234725952
+            -8.126596185320523e-06,
+            0.014845307916402817
           ],
           "claw_mid.R": [
-            -7.90181820775615e-06,
-            0.014840858057141304
+            -7.773807737976313e-06,
+            0.014841059222817421
           ],
           "claw_hind.R": [
-            -3.854387614410371e-06,
-            0.014846563339233398
+            -3.885967544192681e-06,
+            0.01484663411974907
           ]
         }
       },
       "attack": {
         "samples": 37,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.05406094714999199,
-        "first_last_vertex_error_m": 1.666000493116826e-08,
-        "start_rest_error_m": 9.102219422629787e-08,
-        "end_rest_error_m": 9.102219422629787e-08,
+        "max_vertex_travel_m": 0.05401599779725075,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 9.610689488681601e-08,
+        "end_rest_error_m": 9.610689488681601e-08,
         "root_matrix_drift": 0
       },
       "hit": {
         "samples": 23,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.03582712262868881,
-        "first_last_vertex_error_m": 1.862645149230957e-08,
-        "start_rest_error_m": 9.102219422629787e-08,
-        "end_rest_error_m": 8.828245512404465e-08,
+        "max_vertex_travel_m": 0.035816408693790436,
+        "first_last_vertex_error_m": 2.2660056941958828e-08,
+        "start_rest_error_m": 9.610689488681601e-08,
+        "end_rest_error_m": 9.610689488681601e-08,
         "root_matrix_drift": 0
       },
       "death": {
         "samples": 53,
         "mesh_joint_and_leg_clearance_samples": 5,
-        "max_vertex_travel_m": 0.08484096825122833,
-        "first_last_vertex_error_m": 0.08484096825122833,
-        "start_rest_error_m": 9.102219422629787e-08,
-        "end_rest_error_m": 0.08484099805355072,
+        "max_vertex_travel_m": 0.08487396687269211,
+        "first_last_vertex_error_m": 0.08487396687269211,
+        "start_rest_error_m": 9.610689488681601e-08,
+        "end_rest_error_m": 0.08487395942211151,
         "root_matrix_drift": 0
+      }
+    },
+    "oriented_mesh": {
+      "crawl_floor": {
+        "evaluated_world_extent_m": [
+          0.2599501609802246,
+          0.3399999141693115,
+          0.17966559529304504
+        ],
+        "world_support_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "world_forward": [
+          -0.0,
+          -1.0,
+          -0.0
+        ],
+        "world_minimum_all_vertex_plane_distance_m": -2.3362019419437274e-05,
+        "minimum_supporting_feet": 3,
+        "evaluated_samples": 39
+      },
+      "climb_wall": {
+        "evaluated_world_extent_m": [
+          0.2599502205848694,
+          0.17966562509536743,
+          0.3399999737739563
+        ],
+        "world_support_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "world_forward": [
+          -0.0,
+          -0.0,
+          -1.0
+        ],
+        "world_minimum_all_vertex_plane_distance_m": -8.103985237539746e-06,
+        "minimum_supporting_feet": 3,
+        "evaluated_samples": 53
       }
     }
   },
   "atlas": {
     "textures": {
       "basecolor": {
-        "bytes": 520620,
+        "bytes": 493120,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 1.201
+        "level0_rmse_rgb8": 1.19
       },
       "normal": {
-        "bytes": 952657,
+        "bytes": 973818,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 1.253,
+        "level0_rmse_rgb8": 1.294,
         "decoded_unit_length_range": [
-          0.953022,
-          1.052698
+          0.944789,
+          1.05777
         ]
       },
       "orm": {
-        "bytes": 846422,
+        "bytes": 831489,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 1.711
+        "level0_rmse_rgb8": 1.695
       },
       "emissive": {
-        "bytes": 81020,
+        "bytes": 79506,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 0.385
+        "level0_rmse_rgb8": 0.405
       }
     },
-    "file_bytes": 6407344,
+    "file_bytes": 6322684,
     "primitives": 1,
-    "gltf_vertices": 1824,
-    "ktx2_bytes": 2400719,
+    "gltf_vertices": 1842,
+    "ktx2_bytes": 2377933,
     "uastc_bytes_before_zstd": 5592512
   },
   "sources": {
     "high.blend": {
-      "file_sha256": "63b42883239f6e6e434def388d2fe4a53de374b8bfccb261536e45222a7f9651",
-      "logical_geometry_hierarchy_skin_animation_sha256": "8ac2cccfadc85842ce9b934d6341758f33090d7c252f99750fc35374b7838b55"
+      "file_sha256": "151850fe7b8bb750b696dfb821e183380018466c608f851dcf815b6f0de65541",
+      "logical_geometry_hierarchy_skin_animation_sha256": "ee6bb9f72226e5cb84d449e31c1f3af366dc4ff794cbdba04ed284fb9be332fa"
     },
     "low.blend": {
-      "file_sha256": "cf5d16c3b22d7edbf831de3c7647dc8ab4f01c39f6fe9d3e92531fb25a3ae3a7",
-      "logical_geometry_hierarchy_skin_animation_sha256": "193e0846e07f71b13d7999ae724fae773fc2f22bc67fb0a70c14e1aa95c1b559"
+      "file_sha256": "288dcbcdb4d4ab75e2dbf581652c8c422a71199c5c8e53adc038c23b26388574",
+      "logical_geometry_hierarchy_skin_animation_sha256": "a1791e241f495bd960f9b1e8af8c12231642f11122cb00ce8ec7361fb4eb5e66"
     }
+  },
+  "decoded_mip_chains": {
+    "normal": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "093142bbd9bfec059dada41414dc3cf0ae2ecfe157212c54da6ccb9f8109eb9f",
+        "rgb_min": [
+          72,
+          71,
+          239
+        ],
+        "rgb_max": [
+          182,
+          203,
+          255
+        ],
+        "decoded_unit_length_range": [
+          0.9447888193190805,
+          1.0577699914742873
+        ]
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "ff63244930b5658abc0e77881d339ec2350d805897a9cf4e43427fde661f50fc",
+        "rgb_min": [
+          70,
+          66,
+          239
+        ],
+        "rgb_max": [
+          191,
+          187,
+          255
+        ],
+        "decoded_unit_length_range": [
+          0.9517300461465833,
+          1.0563733451614306
+        ]
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "004ff1924e928b9f6da13b274532ec855272802013c7d28bc841ee0a77b6f47a",
+        "rgb_min": [
+          72,
+          64,
+          239
+        ],
+        "rgb_max": [
+          193,
+          191,
+          255
+        ],
+        "decoded_unit_length_range": [
+          0.9320059765530703,
+          1.0657074695296562
+        ]
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "1f1ea94c699094e5741531d9be7436cb7d64a6d9228bba550c9e426bcf440955",
+        "rgb_min": [
+          68,
+          65,
+          236
+        ],
+        "rgb_max": [
+          184,
+          191,
+          255
+        ],
+        "decoded_unit_length_range": [
+          0.9042681484356722,
+          1.0650723379035436
+        ]
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "4407fd025811fca5fbd4c895920e56d03a72a5accf3f9f7d3915e06fae10d1fc",
+        "rgb_min": [
+          71,
+          86,
+          242
+        ],
+        "rgb_max": [
+          186,
+          173,
+          255
+        ],
+        "decoded_unit_length_range": [
+          0.966290743433791,
+          1.0650723379035436
+        ]
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "ad359b8f8c5fb530bb9e0a68bbeefcb5a5c0d975dbd240692cad5b1472228d5f",
+        "rgb_min": [
+          99,
+          97,
+          249
+        ],
+        "rgb_max": [
+          164,
+          159,
+          255
+        ],
+        "decoded_unit_length_range": [
+          0.9740895452357752,
+          1.0267846964015004
+        ]
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "b38ccf2e450494660dc4c504593b008fe4efe32bca71852ed4974143df93601d",
+        "rgb_min": [
+          121,
+          112,
+          253
+        ],
+        "rgb_max": [
+          135,
+          151,
+          255
+        ],
+        "decoded_unit_length_range": [
+          0.9939068500645077,
+          1.0094440630449826
+        ]
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "04912fc33cc925b68d233eeafd2ac1287c3c1708a1049e826a1bfa18bf90ebac",
+        "rgb_min": [
+          127,
+          123,
+          255
+        ],
+        "rgb_max": [
+          129,
+          134,
+          255
+        ],
+        "decoded_unit_length_range": [
+          1.0000153785822494,
+          1.0013677689485345
+        ]
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "182d083a839505cf071b9fa12e30bf01f6a89c025fb119688cb03aabee9ba631",
+        "rgb_min": [
+          127,
+          126,
+          255
+        ],
+        "rgb_max": [
+          129,
+          131,
+          255
+        ],
+        "decoded_unit_length_range": [
+          1.0000153785822494,
+          1.0004458829087104
+        ]
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "1eb4ede2117460b37f48f26aac1a2d9f080e0f11c987a3714e35042988c6b446",
+        "rgb_min": [
+          128,
+          128,
+          255
+        ],
+        "rgb_max": [
+          128,
+          129,
+          255
+        ],
+        "decoded_unit_length_range": [
+          1.0000153785822494,
+          1.000076890546421
+        ]
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "757ff5820b1bfc4009576ddf9723ff22e3e4f5fc6d33c3d1003d5ae6c46482ef",
+        "rgb_min": [
+          128,
+          129,
+          255
+        ],
+        "rgb_max": [
+          128,
+          129,
+          255
+        ],
+        "decoded_unit_length_range": [
+          1.000076890546421,
+          1.000076890546421
+        ]
+      }
+    ],
+    "orm": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "750c28fb7e9f19f19ba4404276649be63df2df071411cd200e43529dffaf132d",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          255,
+          184,
+          32
+        ]
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "bbd32e3b06d5b1ed4d8064acc70360f9ecd659f5cf324554ed3c9ebfb9a5c24f",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          255,
+          155,
+          33
+        ]
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "4e8852b7d73bbf5ba34199db8bdb06555f814de5d4d943cdd77513150affb7ff",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          255,
+          158,
+          32
+        ]
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "11b63d229f4aa540c81b3e5e03156cacfaecd5f66fc1d67cf32cb07e08ff0536",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          255,
+          151,
+          32
+        ]
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "b2267d96087c63808feb6b87077056c58a06c0887c6165446173014d09a7fa24",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          255,
+          147,
+          32
+        ]
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "3b8b23f70a4cc360f44384efa7dbb3a30abbe11edf6db5d0518a7964053e8337",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          255,
+          151,
+          26
+        ]
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "8a22886efce288aa5ce53e33226388d76f2e1fc4a4c653c705023e7a92b1cc45",
+        "rgb_min": [
+          1,
+          2,
+          0
+        ],
+        "rgb_max": [
+          255,
+          135,
+          25
+        ]
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "fc78d244d4a2d15f4a4776ae6bf34790da76d95b4463c60cd0a43effb7bd282c",
+        "rgb_min": [
+          73,
+          45,
+          6
+        ],
+        "rgb_max": [
+          185,
+          108,
+          23
+        ]
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "d797d8ed1a90ed1a4501558757a8919233ba4749fe5849d8a338682d6e4c203d",
+        "rgb_min": [
+          126,
+          76,
+          19
+        ],
+        "rgb_max": [
+          161,
+          100,
+          19
+        ]
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "220a75c005a27a4d359a394095dae85333e8bb3991d5b712ebbf51bddb7736fc",
+        "rgb_min": [
+          139,
+          90,
+          19
+        ],
+        "rgb_max": [
+          145,
+          94,
+          20
+        ]
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "a139c1dec58cc56b999c46ea60e0984ac43fd26e66792568f7b193e179c1a138",
+        "rgb_min": [
+          142,
+          92,
+          20
+        ],
+        "rgb_max": [
+          142,
+          92,
+          20
+        ]
+      }
+    ],
+    "basecolor": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "c792c6e9aa48e2ca87fd6442ad3b967cd1f46a2ebf7fe8c9697d1645a753c188",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          219,
+          153,
+          255
+        ]
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "1fce1b9009522aa5591a701a544035f58cf9f749cb47b2d24f47c0477f04de09",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          219,
+          153,
+          255
+        ]
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "b2fc84896dc080e49957f4d56ef4ea9633031a1ac900c2caeb249b568ad99741",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          218,
+          153,
+          255
+        ]
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "0b71a8729be808001304d39679af227ec5be5cca3785bb2438f7c286af985e0c",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          215,
+          151,
+          255
+        ]
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "f1c5263c195eae47a7e5813bae94e06964c942e6e00b4691fdd9d7086587443d",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          213,
+          149,
+          255
+        ]
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "183411e543115ff847db471eaa91d7232c57029f586e298605320fbe88043a58",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          210,
+          145,
+          255
+        ]
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "aa6aef198d7e6f70504443aa39d8b6761cbb6634dd019d70b2d4c74aaacb8479",
+        "rgb_min": [
+          1,
+          0,
+          0
+        ],
+        "rgb_max": [
+          191,
+          131,
+          243
+        ]
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "691c82e7420ab29e030906b81dbbcba7b2ed382925bf63a42df7b9fbc315815a",
+        "rgb_min": [
+          14,
+          38,
+          1
+        ],
+        "rgb_max": [
+          154,
+          102,
+          199
+        ]
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "855eb2b659884cfcebd40377584990333f41172c042c9866155765daa5966292",
+        "rgb_min": [
+          30,
+          46,
+          24
+        ],
+        "rgb_max": [
+          106,
+          74,
+          135
+        ]
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "cf1f252cf423d253a1cd8c7a6a3c6704ee1b6cb7cd5962124f02d9341b8bf13a",
+        "rgb_min": [
+          68,
+          60,
+          86
+        ],
+        "rgb_max": [
+          89,
+          70,
+          113
+        ]
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "059fb1d9d716d2bb4ed9cebe1811687d7551493d47193b1ae15b4f2b0679ec42",
+        "rgb_min": [
+          78,
+          63,
+          97
+        ],
+        "rgb_max": [
+          78,
+          63,
+          97
+        ]
+      }
+    ],
+    "emissive": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "23c6a1f73836bcec000fbd0afb9f638385602f5f584512c2b0078c074e477116",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          219,
+          153,
+          255
+        ]
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "2579b4faf318f4bd70336c3887d17113863581cef91ed36c9b336cd7cccdfea4",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          219,
+          153,
+          255
+        ]
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "be25f19a01b91cc0f20fde2a2f40fb72a473280cc588056d197574bfe81e4078",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          218,
+          153,
+          255
+        ]
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "4a36293bcfe4524e9979edd2a740078d0b65cca8e3bf155fa2112561d8ced44c",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          216,
+          151,
+          255
+        ]
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "af507918f63068d75a3400c302598b43a8064e6b3214016746e0232a49e41e15",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          211,
+          149,
+          255
+        ]
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "44aeb984fc3c05d4c2382fcb6d2b7b50995d11da1194fbecaeadf78840b41b1b",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          210,
+          145,
+          255
+        ]
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "995ec05b3bcdd9ca12460292b21b4209ce2c90cca1387978abce08e076d69350",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          196,
+          136,
+          244
+        ]
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "ef3540f006b4ba992972a19f1a3146d40158c84f974e131c412cea6f02bd0cee",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          158,
+          104,
+          197
+        ]
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "8e001d19e809a87fb01ee78d7802c04f54507e723b80d15a59c0d82ff32f7cd9",
+        "rgb_min": [
+          0,
+          0,
+          0
+        ],
+        "rgb_max": [
+          104,
+          62,
+          137
+        ]
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "c2dc3ef323add9b1c33771e6a4a20fb42eeb96533c4ed3b16a88ace1c5f78eb5",
+        "rgb_min": [
+          51,
+          27,
+          70
+        ],
+        "rgb_max": [
+          80,
+          46,
+          106
+        ]
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "8bb22178a4b782574d7dfc4537cb4a2b9b4ecd59137c808dfd7eca1193c4a127",
+        "rgb_min": [
+          65,
+          38,
+          87
+        ],
+        "rgb_max": [
+          65,
+          38,
+          87
+        ]
+      }
+    ]
   }
 }
