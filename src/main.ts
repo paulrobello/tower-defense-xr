@@ -53,6 +53,7 @@ import {
   createCalibrationPreview,
   extractHeadsetPoseFromObject,
   type HeadsetPose,
+  isCoreSupportSurface,
   type PortalAnchor,
   yawFromForward,
 } from './xr/calibration.ts';
@@ -112,6 +113,7 @@ function toOcclusionSurfaces(surfaces: readonly RoomSurface[]): OcclusionSurface
     normal: s.normal,
     polygon: s.localPolygon,
     ...(s.meshVertices ? { vertices: s.meshVertices } : {}),
+    ...(s.meshWorldMatrix ? { meshWorldMatrix: s.meshWorldMatrix } : {}),
     ...(s.meshIndices ? { indices: s.meshIndices } : {}),
     bounds: s.bounds,
   }));
@@ -214,8 +216,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
     container,
     initialMode: 'desktop',
   });
-  perfHud.xrRoot.position.set(0.55, 0.25, 0);
-  xrHudRoot.add(perfHud.xrRoot);
+  shell.xrOverlayRoot.add(perfHud.xrRoot);
 
   const domSettings = createDomSettingsPanel(settings, { container });
   const xrSettings = createXrSettingsPanel(settings, {
@@ -262,7 +263,11 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
   const syncRoomGeometryToMr = (surfaces: readonly RoomSurface[]): void => {
     const occSurfaces = toOcclusionSurfaces(surfaces);
-    occlusion.syncRoomSurfaces(occlusion.requestedMode === 'room-mesh' ? occSurfaces : []);
+    occlusion.syncRoomSurfaces(
+      occlusion.requestedMode === 'room-mesh'
+        ? occSurfaces.filter((surface) => surface.kind !== 'other')
+        : [],
+    );
     shadowCatchers.sync(occSurfaces);
   };
   syncRoomGeometryToMr(roomModel.surfaces);
@@ -283,6 +288,8 @@ export function mountApp(container: HTMLElement): AppRuntime {
     gameState: state,
     initialHeadsetPose,
     preview: calibrationPreview,
+    pickCoreSupport: (origin, direction) =>
+      placement.raycastSurface(origin, direction, isCoreSupportSurface),
   });
   calibrationPreview.setVisible(false);
 
@@ -332,6 +339,10 @@ export function mountApp(container: HTMLElement): AppRuntime {
       };
     },
     isBusy: () => xrSettings.visible || state.phase === 'calibrate',
+    getMovableWidgets: () => [
+      xrSettings.visible ? xrSettings.root : tacticalHud.xrRoot,
+      perfHud.xrRoot,
+    ],
     getPanel: () => {
       if (xrSettings.visible) return xrSettings;
       if (missionOverlay.visible) return missionOverlayPanel;
@@ -365,6 +376,16 @@ export function mountApp(container: HTMLElement): AppRuntime {
     },
   });
   shell.xrOverlayRoot.add(tacticalHud.xrRoot);
+  const recenterAuxiliaryWidgets = (): void => {
+    const { position, quaternion } = tacticalHud.xrRoot;
+    xrHudRoot.position.copy(position);
+    xrHudRoot.position.y += 0.18;
+    xrHudRoot.quaternion.copy(quaternion);
+    xrSettings.root.position.set(0, 0, 0);
+    xrSettings.root.quaternion.identity();
+    perfHud.xrRoot.position.set(0.55, 0.25, 0).applyQuaternion(quaternion).add(position);
+    perfHud.xrRoot.quaternion.copy(quaternion);
+  };
   const tacticalHudPanel = {
     root: tacticalHud.xrRoot,
     cellAt: tacticalHud.cellAt,
@@ -518,9 +539,9 @@ export function mountApp(container: HTMLElement): AppRuntime {
           });
         }
 
+        pendingXrCalibrationPose = true;
         if (state.phase === 'title') {
           state.transition('calibrate', 'xr-enter');
-          pendingXrCalibrationPose = true;
           const xrPose = extractHeadsetPoseFromObject(shell.renderer.xr.getCamera());
           calibration.beginCalibration(xrPose);
           tacticalHud.recenterToHeadset(xrPose);
@@ -586,11 +607,11 @@ export function mountApp(container: HTMLElement): AppRuntime {
   });
 
   const unsubBus = [
+    bus.on('view/recenter', () => {
+      if (shell.xr.presenting) recenterAuxiliaryWidgets();
+    }),
     bus.on('menu/open-settings', () => {
       if (shell.xr.presenting) {
-        xrHudRoot.position.copy(tacticalHud.xrRoot.position);
-        xrHudRoot.position.y += 0.18;
-        xrHudRoot.quaternion.copy(tacticalHud.xrRoot.quaternion);
         xrSettings.toggle();
         syncTacticalHud();
       } else domSettings.toggle();
@@ -754,7 +775,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
     // 1. Ingest XR spatial surfaces, radial menu, and controller placement
     if (frame && shell.xr.reference) {
-      if (pendingXrCalibrationPose && state.phase === 'calibrate') {
+      if (pendingXrCalibrationPose) {
         const viewerPose = frame.getViewerPose(shell.xr.reference);
         if (viewerPose) {
           pendingXrCalibrationPose = false;
@@ -770,8 +791,9 @@ export function mountApp(container: HTMLElement): AppRuntime {
             position: { x: t.position.x, y: t.position.y, z: t.position.z },
             yaw: yawFromForward({ x: fwd.x, y: fwd.y, z: fwd.z }),
           };
-          calibration.beginCalibration(liveXrPose);
+          if (state.phase === 'calibrate') calibration.beginCalibration(liveXrPose);
           tacticalHud.recenterToHeadset(liveXrPose);
+          recenterAuxiliaryWidgets();
           syncTacticalHud();
         }
       }

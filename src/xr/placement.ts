@@ -306,7 +306,11 @@ export interface TurretPlacementController {
   setHoverDepth(depthM: number): number;
   resnapToSurface(): void;
   toggleHoverMode(): TurretMountProfileId;
-  raycastSurface(rayOrigin: Readonly<Vec3>, rayDirection: Readonly<Vec3>): SurfaceRayHit | null;
+  raycastSurface(
+    rayOrigin: Readonly<Vec3>,
+    rayDirection: Readonly<Vec3>,
+    acceptsSurface?: (surface: RoomSurface) => boolean,
+  ): SurfaceRayHit | null;
   updateFromRay(
     rayOrigin: Readonly<Vec3>,
     rayDirection: Readonly<Vec3>,
@@ -995,6 +999,7 @@ export function createTurretPlacementController(
     rayOrigin: Readonly<Vec3>,
     rayDirection: Readonly<Vec3>,
     attachableOnly: boolean,
+    acceptsSurface?: (surface: RoomSurface) => boolean,
   ): SurfaceRayHit | null {
     const dirLen = Math.hypot(rayDirection.x, rayDirection.y, rayDirection.z);
     if (dirLen < 1e-8) return null;
@@ -1012,6 +1017,7 @@ export function createTurretPlacementController(
       if (!sid) return false;
       const surface = roomModel.getSurface(sid);
       if (!surface) return false;
+      if (acceptsSurface && !acceptsSurface(surface)) return false;
       return attachableOnly ? isAttachableSurfaceKind(surface.kind) : true;
     });
 
@@ -1042,6 +1048,7 @@ export function createTurretPlacementController(
 
     for (const surface of roomModel.surfaces) {
       if (attachableOnly && !isAttachableSurfaceKind(surface.kind)) continue;
+      if (acceptsSurface && !acceptsSurface(surface)) continue;
       if (surface.localPolygon.length < 3) continue;
 
       const nx = surface.normal.x;
@@ -1355,8 +1362,8 @@ export function createTurretPlacementController(
       }
       return mountProfile;
     },
-    raycastSurface(rayOrigin, rayDirection) {
-      return raycastSurfaceInternal(rayOrigin, rayDirection, true);
+    raycastSurface(rayOrigin, rayDirection, acceptsSurface) {
+      return raycastSurfaceInternal(rayOrigin, rayDirection, true, acceptsSurface);
     },
     updateFromRay(rayOrigin, rayDirection, rayOptions) {
       lastRayOrigin = cloneVec3(rayOrigin);

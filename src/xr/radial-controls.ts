@@ -130,6 +130,7 @@ export interface XrRadialControlsOptions {
   ) => RadialTurretTarget | null;
   readonly isBusy?: () => boolean;
   readonly getPanel?: () => XrPanelTarget | null;
+  readonly getMovableWidgets?: () => readonly THREE.Object3D[];
   readonly recenterHoldSec?: number;
   readonly stickDeadZone?: number;
   readonly renderOrder?: number;
@@ -424,6 +425,12 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   let disposed = false;
 
   const stickPressedBySource = new Map<XRInputSource, boolean>();
+  const gripPressedSources = new Set<XRInputSource>();
+  let widgetGrab: { source: XRInputSource; root: THREE.Object3D } | null = null;
+  const widgetFromGrip = new THREE.Matrix4();
+  const gripMatrix = new THREE.Matrix4();
+  const widgetMatrix = new THREE.Matrix4();
+  const inverseParentMatrix = new THREE.Matrix4();
   const rayActions = new Map<XRInputSource, RadialChoiceId>();
   const rayCells = new Map<XRInputSource, string>();
   const panelPresses = new Map<XRInputSource, { panel: XrPanelTarget; cell: string }>();
@@ -435,6 +442,48 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   >();
   // Tracks sources whose trigger was held or pressed while grip was down so release stays suppressed.
   const gripSuppressedTriggers = new Set<XRInputSource>();
+
+  function updateWidgetGrab(
+    started: XRInputSource | null,
+    frame: XRFrame,
+    referenceSpace: XRReferenceSpace,
+  ): void {
+    if (menu?.root.visible) return;
+    if (widgetGrab && (!gripPressedSources.has(widgetGrab.source) || !widgetGrab.root.visible))
+      widgetGrab = null;
+
+    const source = widgetGrab?.source ?? started;
+    if (!source) return;
+    const grip = frame.getPose(source.gripSpace ?? source.targetRaySpace, referenceSpace);
+    if (!grip) {
+      widgetGrab = null;
+      return;
+    }
+    gripMatrix.fromArray(grip.transform.matrix);
+
+    if (!widgetGrab) {
+      const aim = frame.getPose(source.targetRaySpace, referenceSpace);
+      if (!aim) return;
+      const widgets = options.getMovableWidgets?.().filter((widget) => widget.visible) ?? [];
+      for (const widget of widgets) widget.updateWorldMatrix(true, true);
+      const { position, orientation } = aim.transform;
+      aimObject.position.set(position.x, position.y, position.z);
+      aimObject.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
+      const hit = pointer.castFrom(aimObject, widgets);
+      if (!hit) return;
+      widgetGrab = { source, root: hit.root };
+      widgetFromGrip.copy(gripMatrix).invert().multiply(hit.root.matrixWorld);
+    }
+
+    const widget = widgetGrab.root;
+    widgetMatrix.multiplyMatrices(gripMatrix, widgetFromGrip);
+    if (widget.parent) {
+      widget.parent.updateWorldMatrix(true, false);
+      widgetMatrix.premultiply(inverseParentMatrix.copy(widget.parent.matrixWorld).invert());
+    }
+    widgetMatrix.decompose(widget.position, widget.quaternion, widget.scale);
+    widget.updateWorldMatrix(false, true);
+  }
 
   function updatePanelRays(
     panel: XrPanelTarget | null,
@@ -663,6 +712,8 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   function reset(): void {
     discardMenu();
     stickPressedBySource.clear();
+    gripPressedSources.clear();
+    widgetGrab = null;
     triggerStart.clear();
     gripSuppressedTriggers.clear();
     panelPresses.clear();
@@ -736,6 +787,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       const activeSet = new Set<XRInputSource>(inputSources);
 
       let gripHeld = false;
+      let gripStarted: XRInputSource | null = null;
       let sticksDown = 0;
       let openingCandidate: XRInputSource | null = null;
 
@@ -744,11 +796,14 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         const sourceGrip = isControllerGripPressed(source);
         if (sourceGrip) {
           gripHeld = true;
+          if (!gripPressedSources.has(source)) gripStarted ??= source;
+          gripPressedSources.add(source);
           if (source.gamepad.buttons[0]?.pressed) {
             gripSuppressedTriggers.add(source);
           }
-        } else if (!source.gamepad.buttons[0]?.pressed) {
-          gripSuppressedTriggers.delete(source);
+        } else {
+          gripPressedSources.delete(source);
+          if (!source.gamepad.buttons[0]?.pressed) gripSuppressedTriggers.delete(source);
         }
 
         const stickDown = isControllerStickClicked(source);
@@ -764,6 +819,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       for (const known of [...stickPressedBySource.keys()]) {
         if (!activeSet.has(known)) {
           stickPressedBySource.delete(known);
+          gripPressedSources.delete(known);
           triggerStart.delete(known);
           panelPresses.delete(known);
           gripSuppressedTriggers.delete(known);
@@ -780,6 +836,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         invalidatePendingTriggers();
         panelPresses.clear();
       }
+      updateWidgetGrab(gripStarted, frame, referenceSpace);
 
       // Both-thumbstick-click 1.0 s recovery gesture (only when neither grip is held).
       if (sticksDown >= 2 && !gripHeld) {

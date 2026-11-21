@@ -26,6 +26,7 @@ import {
   isWithinPlayArc,
   MIN_PORTAL_CLEARANCE_M,
   MIN_REQUIRED_PORTALS,
+  raycastCorePlacement,
   SEATED_HEIGHT_THRESHOLD_M,
   selectPortalAnchors,
   suggestCoreAnchor,
@@ -156,20 +157,42 @@ describe('Core Bastion auto-suggestion (table -> floor -> virtual pedestal withi
     depth: 0.85,
   });
 
-  it('prefers a comfortable table 1.2–1.8 m horizontally ahead from both seated (1.2 m) and standing (1.65 m) poses', () => {
+  it('prefers a tracked floor and retains a comfortable table as the next suggestion', () => {
     for (const headHeight of [1.2, 1.65]) {
       const headsetPose = { position: { x: 0, y: headHeight, z: 0 }, yaw: 0 };
       const core = suggestCoreAnchor(headsetPose, [floorSurface, tableSurface]);
 
-      expect(core.surfaceId).toBe('table-ahead');
-      expect(core.surfaceKind).toBe('table');
+      expect(core.surfaceId).toBe('floor-main');
+      expect(core.surfaceKind).toBe('floor');
       expect(core.radius).toBe(CORE_KEEP_OUT_RADIUS);
-      expect(core.position.y).toBeCloseTo(0.76, 5);
+      expect(core.position.y).toBeCloseTo(0, 5);
+      expect(suggestCoreAnchor(headsetPose, [tableSurface]).surfaceId).toBe('table-ahead');
 
       const horizDist = distanceXZ(core.position, headsetPose.position);
       expect(horizDist).toBeGreaterThanOrEqual(CORE_SUGGEST_MIN_DIST_M);
       expect(horizDist).toBeLessThanOrEqual(CORE_SUGGEST_MAX_DIST_M);
     }
+  });
+
+  it('uses the tracked ray contact height on a back-facing floor and keeps the anchor on a miss', () => {
+    const floor = makeRectSurface({
+      id: 'tracked-floor',
+      semanticLabel: 'floor',
+      orientation: 'horizontal',
+      center: new THREE.Vector3(0, 0, -1),
+      normal: new THREE.Vector3(0.2, -1, 0).normalize(),
+      right: new THREE.Vector3(1, 0, 0),
+      width: 4,
+      depth: 3,
+    });
+    const headset = { yaw: 0, position: { x: 0, y: 1.6, z: 0 } };
+    const aboveFloor = { x: 1, y: 1.2, z: -1 };
+    const placed = raycastCorePlacement(aboveFloor, { x: 0, y: -1, z: 0 }, [floor], headset);
+    expect(placed.surfaceId).toBe(floor.id);
+    expect(placed.position.y).toBeCloseTo(0.2, 5);
+    expect(raycastCorePlacement(aboveFloor, { x: 0, y: 1, z: 0 }, [floor], headset, placed)).toBe(
+      placed,
+    );
   });
 
   it('falls back to scanned floor 1.2–1.8 m ahead when no table is within range', () => {

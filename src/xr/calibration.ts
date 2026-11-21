@@ -150,6 +150,10 @@ export interface CalibrationControllerOptions {
   readonly initialHeadsetPose?: HeadsetPose;
   readonly playArcOverride?: PlayArc;
   readonly preview?: CalibrationPreview;
+  readonly pickCoreSupport?: (
+    origin: Readonly<Vec3>,
+    direction: Readonly<Vec3>,
+  ) => { surface: RoomSurface; point: Vec3 } | null;
 }
 
 export interface CalibrationController {
@@ -367,12 +371,18 @@ export function closestPointOnPolygonXZ(
 
 function isHorizontalSupportSurface(surface: RoomSurface, kind: 'table' | 'floor'): boolean {
   if (surface.kind !== kind) return false;
-  if (surface.normal.y < 0.7) return false;
+  if (Math.abs(surface.normal.y) < 0.7) return false;
   if (kind === 'table') {
     const y = surface.center.y;
     if (y < COMFORTABLE_TABLE_MIN_Y || y > COMFORTABLE_TABLE_MAX_Y) return false;
   }
   return surface.polygon.length >= 3;
+}
+
+export function isCoreSupportSurface(surface: RoomSurface): boolean {
+  return (
+    isHorizontalSupportSurface(surface, 'floor') || isHorizontalSupportSurface(surface, 'table')
+  );
 }
 
 interface HorizontalCandidateMatch {
@@ -461,8 +471,8 @@ function evaluateHorizontalSurfaceForSuggestion(
 
 /**
  * Auto-suggests the Core Bastion anchor `1.2–1.8 m` horizontally ahead of the player:
- * 1. Nearest scanned `table` at comfortable height (`0.45–1.15 m`) within `1.2–1.8 m` ahead
- * 2. Else nearest scanned `floor` within `1.2–1.8 m` ahead
+ * 1. Tracked floor within `1.2–1.8 m` ahead
+ * 2. Else a comfortable table, then the virtual room's floor
  * 3. Else virtual tactical pedestal at `1.45 m` ahead (`y = 0.78 m` seated / `0.92 m` standing)
  */
 export function suggestCoreAnchor(
@@ -484,16 +494,6 @@ export function suggestCoreAnchor(
       bestTable = candidate;
     }
   }
-  if (bestTable) {
-    return {
-      position: bestTable.position,
-      yaw: headsetPose.yaw,
-      surfaceId: bestTable.surface.id,
-      surfaceKind: 'table',
-      radius: CORE_KEEP_OUT_RADIUS,
-    };
-  }
-
   // 2. Fall back to floor within 1.2–1.8 m ahead
   let bestFloor: HorizontalCandidateMatch | null = null;
   for (const surface of surfaces) {
@@ -504,12 +504,14 @@ export function suggestCoreAnchor(
       bestFloor = candidate;
     }
   }
-  if (bestFloor) {
+  const support =
+    bestFloor && bestFloor.surface.source !== 'virtual' ? bestFloor : (bestTable ?? bestFloor);
+  if (support) {
     return {
-      position: bestFloor.position,
+      position: support.position,
       yaw: headsetPose.yaw,
-      surfaceId: bestFloor.surface.id,
-      surfaceKind: 'floor',
+      surfaceId: support.surface.id,
+      surfaceKind: support.surface.kind,
       radius: CORE_KEEP_OUT_RADIUS,
     };
   }
@@ -541,9 +543,7 @@ export function clampCoreToSurfaces(
   headsetPose: HeadsetPose,
   options?: MoveCoreOptions,
 ): CoreAnchor {
-  const horizontalSurfaces = surfaces.filter(
-    (s) => isHorizontalSupportSurface(s, 'table') || isHorizontalSupportSurface(s, 'floor'),
-  );
+  const horizontalSurfaces = surfaces.filter(isCoreSupportSurface);
 
   // 1. Explicit target surfaceId if valid
   if (options?.surfaceId) {
@@ -654,6 +654,7 @@ export function raycastCorePlacement(
   surfaces: readonly RoomSurface[],
   headsetPose: HeadsetPose,
   currentCore?: CoreAnchor,
+  pickCoreSupport?: CalibrationControllerOptions['pickCoreSupport'],
 ): CoreAnchor {
   const dirLen = Math.hypot(rayDirection.x, rayDirection.y, rayDirection.z);
   if (dirLen < 1e-8) {
@@ -663,12 +664,11 @@ export function raycastCorePlacement(
   const dy = rayDirection.y / dirLen;
   const dz = rayDirection.z / dirLen;
 
-  const horizontalSurfaces = surfaces.filter(
-    (s) => isHorizontalSupportSurface(s, 'table') || isHorizontalSupportSurface(s, 'floor'),
-  );
+  const horizontalSurfaces = surfaces.filter(isCoreSupportSurface);
 
   let closestHit: { surface: RoomSurface; point: Vec3; t: number } | null = null;
-  for (const surface of horizontalSurfaces) {
+  const picked = pickCoreSupport?.(rayOrigin, rayDirection);
+  for (const surface of pickCoreSupport ? [] : horizontalSurfaces) {
     const denom = dx * surface.normal.x + dy * surface.normal.y + dz * surface.normal.z;
     if (Math.abs(denom) < 1e-6) continue;
     const t =
@@ -691,18 +691,19 @@ export function raycastCorePlacement(
     }
   }
 
-  if (closestHit) {
+  const hit = picked ?? closestHit;
+  if (hit) {
     return {
-      position: {
-        x: closestHit.point.x,
-        y: closestHit.surface.center.y,
-        z: closestHit.point.z,
-      },
+      position: { ...hit.point },
       yaw: headsetPose.yaw,
-      surfaceId: closestHit.surface.id,
-      surfaceKind: closestHit.surface.kind,
+      surfaceId: hit.surface.id,
+      surfaceKind: hit.surface.kind,
       radius: CORE_KEEP_OUT_RADIUS,
     };
+  }
+
+  if (horizontalSurfaces.some((surface) => surface.source !== 'virtual')) {
+    return currentCore ?? suggestCoreAnchor(headsetPose, surfaces);
   }
 
   // Intersect fallback horizontal plane at current Core height (or default pedestal/floor height)
@@ -1565,14 +1566,17 @@ export function createCalibrationController(
     },
     moveCoreByRay(rayOrigin, rayDirection) {
       if (locked) return coreAnchor;
-      manuallyRelocated = true;
-      coreAnchor = raycastCorePlacement(
+      const next = raycastCorePlacement(
         rayOrigin,
         rayDirection,
         roomModel.surfaces,
         headsetPose,
         coreAnchor,
+        options.pickCoreSupport,
       );
+      if (next === coreAnchor) return coreAnchor;
+      manuallyRelocated = true;
+      coreAnchor = next;
       syncSurfaceAnchor();
       recomputePortals();
       updatePreviewAndNotify();
