@@ -245,7 +245,7 @@ async function createEmulatedPage(url) {
     window.__p1Helpers = {
       async pressControl(name) {
         const app = window.__riftBastionApp;
-        const control = app.shell.xrOverlayScene.getObjectByName(name);
+        const control = app.shell.xrOverlayRoot.getObjectByName(name);
         if (!control) throw new Error(`Missing XR control ${name}`);
         const target = control.getWorldPosition(control.position.clone());
         const head = window.__xrEmu.device.position;
@@ -374,6 +374,7 @@ try {
     const standingLocked = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
       const initialCore = { ...app.calibration.coreAnchor.position };
+      const initialGraph = app.nav;
       const controls = window.__p1Helpers;
       const head = window.__xrEmu.device.position;
       controls.aimController(
@@ -384,9 +385,17 @@ try {
       await window.__xrEmu.frames(3);
       await controls.pressButton('right', 'trigger', 2, 3);
       const movedCore = Math.abs(app.calibration.coreAnchor.position.x - initialCore.x) > 0.2;
+      const renderFollowedCore =
+        Math.abs(
+          app.blockouts.coreBastion.group.position.x - app.calibration.coreAnchor.position.x,
+        ) < 0.01;
+      const graphUnchangedWhileCalibrating = app.nav === initialGraph;
       await window.__p1Helpers.pressControl('tactical-hud-primary-action');
       return {
         movedCore,
+        renderFollowedCore,
+        graphUnchangedWhileCalibrating,
+        graphMatchesCore: app.nav.corePosition.x === app.calibration.coreAnchor.position.x,
         phase: app.state.phase,
         locked: app.calibration.locked,
         playArc: app.calibration.playArc,
@@ -396,6 +405,9 @@ try {
     record(
       'xr-standing-lock-core',
       standingLocked.movedCore &&
+        standingLocked.renderFollowedCore &&
+        standingLocked.graphUnchangedWhileCalibrating &&
+        standingLocked.graphMatchesCore &&
         standingLocked.phase === 'prep' &&
         standingLocked.locked === true &&
         standingLocked.playArc === 'full-360' &&
@@ -918,7 +930,8 @@ try {
       'xr-occlusion-initial-auto-depth',
       occlusionStart.xrSettingsVisible === true &&
         occlusionStart.settingMode === 'auto-depth' &&
-        occlusionStart.requestedMode === 'auto-depth',
+        occlusionStart.requestedMode === 'auto-depth' &&
+        occlusionStart.effectiveMode === 'off',
       occlusionStart,
     );
 

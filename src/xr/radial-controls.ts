@@ -120,6 +120,7 @@ interface XrPanelTarget {
 
 export interface XrRadialControlsOptions {
   readonly scene: THREE.Scene;
+  readonly overlayRoot?: THREE.Group;
   readonly actionBus: ActionBus;
   readonly placement?: TurretPlacementController;
   readonly getBuildState?: () => RadialBuildStateSnapshot;
@@ -396,10 +397,11 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   const root = new THREE.Group();
   root.name = 'rift-bastion-xr-radial-host';
   root.scale.setScalar(RADIAL_MENU_SCALE);
-  scene.add(root);
+  (options.overlayRoot ?? scene).add(root);
   const stopKeepAbove = keepAbove(root, renderOrder);
 
   const controllerRays = new PlacementRays(scene);
+  options.overlayRoot?.add(controllerRays.group);
   controllerRays.group.name = 'rift-bastion-radial-rays';
   const stopKeepRaysAbove = keepAbove(controllerRays.group, renderOrder + 1);
   const pointer: Pointer = createPointer({ far: 8 });
