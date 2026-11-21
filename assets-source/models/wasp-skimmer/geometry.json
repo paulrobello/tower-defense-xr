@@ -1,0 +1,228 @@
+{
+  "high": {
+    "triangles": 42676,
+    "extent_XYZ_m": [
+      0.41999998688697815,
+      0.3799999952316284,
+      0.22015711634594481
+    ],
+    "support_z_m": 5.668432277161628e-05
+  },
+  "bake": {
+    "normal_correspondence_texels": 810212,
+    "normal": {
+      "sha256": "fa5523fd6330f21d9abb942677320b4b506bcbf58c36601b269f119c93257312",
+      "samples": [
+        {
+          "surface": "Prismatic dorsal mantle",
+          "x": 198,
+          "y": 503,
+          "rgb": [
+            121,
+            126,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Inner airfoil dorsal.L",
+          "x": 396,
+          "y": 895,
+          "rgb": [
+            138,
+            133,
+            254
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Compound eye L",
+          "x": 838,
+          "y": 411,
+          "rgb": [
+            118,
+            127,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Perimeter ventral.R",
+          "x": 652,
+          "y": 660,
+          "rgb": [
+            141,
+            125,
+            254
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "basecolor": {
+      "sha256": "08eb08bd356afa0cda6c50508cdab5e66b2c5e95b7fbf05a615ce070851b6b20",
+      "samples": [
+        {
+          "surface": "Prismatic dorsal mantle",
+          "x": 198,
+          "y": 503,
+          "rgb": [
+            45,
+            42,
+            120
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Inner airfoil dorsal.L",
+          "x": 396,
+          "y": 895,
+          "rgb": [
+            51,
+            49,
+            67
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Compound eye L",
+          "x": 838,
+          "y": 411,
+          "rgb": [
+            84,
+            236,
+            229
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Perimeter ventral.R",
+          "x": 652,
+          "y": 660,
+          "rgb": [
+            135,
+            130,
+            149
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "orm": {
+      "sha256": "6397ba7a3c753dd0fa0b7bf7b4ce495a9c4f93dff176d48caa64e59fea216656",
+      "samples": [
+        {
+          "surface": "Prismatic dorsal mantle",
+          "x": 198,
+          "y": 503,
+          "rgb": [
+            0,
+            103,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Inner airfoil dorsal.L",
+          "x": 396,
+          "y": 895,
+          "rgb": [
+            0,
+            110,
+            54
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Compound eye L",
+          "x": 838,
+          "y": 411,
+          "rgb": [
+            21,
+            58,
+            10
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Perimeter ventral.R",
+          "x": 652,
+          "y": 660,
+          "rgb": [
+            255,
+            85,
+            163
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "emissive": {
+      "sha256": "4de81457440ec34009fbae1d9b3f6d2ca45f7d29a857df2497c148ed259c56bd",
+      "samples": [
+        {
+          "surface": "Prismatic dorsal mantle",
+          "x": 198,
+          "y": 503,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Inner airfoil dorsal.L",
+          "x": 396,
+          "y": 895,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Compound eye L",
+          "x": 838,
+          "y": 411,
+          "rgb": [
+            84,
+            236,
+            229
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Perimeter ventral.R",
+          "x": 652,
+          "y": 660,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        }
+      ]
+    }
+  },
+  "lod0": {
+    "triangles": 5976,
+    "extent_XYZ_m": [
+      0.41999998688697815,
+      0.3799999952316284,
+      0.2199999988079071
+    ],
+    "support_z_m": 0.0
+  },
+  "lod1": {
+    "triangles": 2116,
+    "extent_XYZ_m": [
+      0.41999998688697815,
+      0.3799999952316284,
+      0.21898739645985188
+    ],
+    "support_z_m": 0.00011969496699748561
+  }
+}

@@ -1,0 +1,349 @@
+{
+  "lod0": {
+    "sha256": "0581b3bfc9163ce467680ba41fe2c32e6a68beb36c0d4b5be7d1d4d4a1be220a",
+    "triangles": 5976,
+    "joints": [
+      "root",
+      "thorax",
+      "abdomen",
+      "dorsal.L",
+      "dorsal.R",
+      "stylet.L",
+      "stylet.R",
+      "ventral.L",
+      "ventral.R"
+    ],
+    "inverse_bind_max_matrix_error": 3.794292173786573e-07,
+    "influences": [
+      1,
+      1
+    ],
+    "positive_area_uv_or_coplanar_pairs": 0,
+    "mean_texels_per_meter": 1456.6016974895945,
+    "neutral_xyz_m": [
+      0.4200000762939453,
+      0.3800000548362732,
+      0.22000005841255188
+    ],
+    "minimum_z_m": -6.338646585390961e-08,
+    "clips": {
+      "hover_fly": {
+        "samples": 49,
+        "triangle_contact_and_clearance_samples": 25,
+        "max_vertex_travel_m": 0.040872909128665924,
+        "maximum_thorax_roll_deg": 2.2792763987847406,
+        "thorax_vertical_excursion_m": 0.006593644618988037,
+        "wing_peak_vertex_travel_m": {
+          "dorsal.L": 0.02759109064936638,
+          "ventral.L": 0.029350843280553818,
+          "dorsal.R": 0.040872909128665924,
+          "ventral.R": 0.037806227803230286
+        },
+        "peak_wing_articulation_relative_to_thorax_deg": {
+          "dorsal.L": 7.364764170687554,
+          "ventral.L": 6.593743815759365,
+          "dorsal.R": 7.364764170687554,
+          "ventral.R": 6.593743815759365
+        },
+        "root_matrix_drift": 0.0,
+        "maximum_z_m": 0.22685277462005615,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 6.5172621077636e-08,
+        "end_rest_error_m": 6.5172621077636e-08
+      },
+      "bank_turn": {
+        "samples": 53,
+        "triangle_contact_and_clearance_samples": 27,
+        "max_vertex_travel_m": 0.18424654006958008,
+        "maximum_thorax_roll_deg": 34.3774800963346,
+        "thorax_vertical_excursion_m": 0.01800861954689026,
+        "wing_peak_vertex_travel_m": {
+          "dorsal.L": 0.15300090610980988,
+          "ventral.L": 0.18424654006958008,
+          "dorsal.R": 0.13972404599189758,
+          "ventral.R": 0.16009235382080078
+        },
+        "peak_wing_articulation_relative_to_thorax_deg": {
+          "dorsal.L": 7.562471680176389,
+          "ventral.L": 7.562471680176389,
+          "dorsal.R": 7.562471680176389,
+          "ventral.R": 7.562471680176389
+        },
+        "root_matrix_drift": 0.0,
+        "maximum_z_m": 0.3018623888492584,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 6.5172621077636e-08,
+        "end_rest_error_m": 6.5172621077636e-08
+      },
+      "attack": {
+        "samples": 33,
+        "triangle_contact_and_clearance_samples": 17,
+        "max_vertex_travel_m": 0.05989433452486992,
+        "maximum_thorax_roll_deg": 4.4755324686283905e-08,
+        "thorax_vertical_excursion_m": 0.010830238461494446,
+        "wing_peak_vertex_travel_m": {
+          "dorsal.L": 0.04784625023603439,
+          "ventral.L": 0.05989428609609604,
+          "dorsal.R": 0.04784628376364708,
+          "ventral.R": 0.05989433452486992
+        },
+        "peak_wing_articulation_relative_to_thorax_deg": {
+          "dorsal.L": 8.94765368064884,
+          "ventral.L": 8.94765368064884,
+          "dorsal.R": 8.94765368064884,
+          "ventral.R": 8.94765368064884
+        },
+        "root_matrix_drift": 0.0,
+        "maximum_z_m": 0.22077707946300507,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 6.5172621077636e-08,
+        "end_rest_error_m": 6.5172621077636e-08
+      },
+      "hit": {
+        "samples": 23,
+        "triangle_contact_and_clearance_samples": 12,
+        "max_vertex_travel_m": 0.10956230014562607,
+        "maximum_thorax_roll_deg": 18.334657806509234,
+        "thorax_vertical_excursion_m": 0.004282176494598389,
+        "wing_peak_vertex_travel_m": {
+          "dorsal.L": 0.06782451272010803,
+          "ventral.L": 0.06984603404998779,
+          "dorsal.R": 0.07199574261903763,
+          "ventral.R": 0.10956230014562607
+        },
+        "peak_wing_articulation_relative_to_thorax_deg": {
+          "dorsal.L": 9.854800986395851,
+          "ventral.L": 9.854800986395851,
+          "dorsal.R": 9.854800986395851,
+          "ventral.R": 9.854800986395851
+        },
+        "root_matrix_drift": 0.0,
+        "maximum_z_m": 0.24453140795230865,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 6.5172621077636e-08,
+        "end_rest_error_m": 6.5172621077636e-08
+      },
+      "death": {
+        "samples": 55,
+        "triangle_contact_and_clearance_samples": 28,
+        "max_vertex_travel_m": 0.26376616954803467,
+        "maximum_thorax_roll_deg": 64.17128596294062,
+        "thorax_vertical_excursion_m": 0.06114710122346878,
+        "wing_peak_vertex_travel_m": {
+          "dorsal.L": 0.19330881536006927,
+          "ventral.L": 0.23672644793987274,
+          "dorsal.R": 0.26376616954803467,
+          "ventral.R": 0.22730445861816406
+        },
+        "peak_wing_articulation_relative_to_thorax_deg": {
+          "dorsal.L": 27.89225739092619,
+          "ventral.L": 26.270369208351422,
+          "dorsal.R": 27.89228471168287,
+          "ventral.R": 26.270369208351422
+        },
+        "root_matrix_drift": 0.0,
+        "maximum_z_m": 0.2818969190120697,
+        "first_last_vertex_error_m": 0.26376616954803467,
+        "start_rest_error_m": 6.5172621077636e-08,
+        "end_rest_error_m": 0.26376616954803467
+      }
+    }
+  },
+  "lod1": {
+    "sha256": "8bb923b3631b9a1ed59419bc11642311eb1ed1305190c01a09e8129fe31e45a4",
+    "triangles": 2116,
+    "joints": [
+      "root",
+      "thorax",
+      "abdomen",
+      "dorsal.L",
+      "dorsal.R",
+      "stylet.L",
+      "stylet.R",
+      "ventral.L",
+      "ventral.R"
+    ],
+    "inverse_bind_max_matrix_error": 3.794292173786573e-07,
+    "influences": [
+      1,
+      1
+    ],
+    "positive_area_uv_or_coplanar_pairs": 0,
+    "mean_texels_per_meter": 1436.7179293525576,
+    "neutral_xyz_m": [
+      0.4200000762939453,
+      0.3800000548362732,
+      0.21898746490478516
+    ],
+    "minimum_z_m": 0.00011962995631620288,
+    "clips": {
+      "hover_fly": {
+        "samples": 49,
+        "triangle_contact_and_clearance_samples": 25,
+        "max_vertex_travel_m": 0.040872909128665924,
+        "maximum_thorax_roll_deg": 2.2792763987847406,
+        "thorax_vertical_excursion_m": 0.006518423557281494,
+        "wing_peak_vertex_travel_m": {
+          "dorsal.L": 0.02759109064936638,
+          "ventral.L": 0.029350843280553818,
+          "dorsal.R": 0.040872909128665924,
+          "ventral.R": 0.037806227803230286
+        },
+        "peak_wing_articulation_relative_to_thorax_deg": {
+          "dorsal.L": 7.364764170687554,
+          "ventral.L": 6.593743815759365,
+          "dorsal.R": 7.364764170687554,
+          "ventral.R": 6.593743815759365
+        },
+        "root_matrix_drift": 0.0,
+        "maximum_z_m": 0.22504043579101562,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 6.506106586812166e-08,
+        "end_rest_error_m": 6.506106586812166e-08
+      },
+      "bank_turn": {
+        "samples": 53,
+        "triangle_contact_and_clearance_samples": 27,
+        "max_vertex_travel_m": 0.18424654006958008,
+        "maximum_thorax_roll_deg": 34.3774800963346,
+        "thorax_vertical_excursion_m": 0.018073827028274536,
+        "wing_peak_vertex_travel_m": {
+          "dorsal.L": 0.15300090610980988,
+          "ventral.L": 0.18424654006958008,
+          "dorsal.R": 0.13972404599189758,
+          "ventral.R": 0.16009235382080078
+        },
+        "peak_wing_articulation_relative_to_thorax_deg": {
+          "dorsal.L": 7.562471680176389,
+          "ventral.L": 7.562471680176389,
+          "dorsal.R": 7.562471680176389,
+          "ventral.R": 7.562471680176389
+        },
+        "root_matrix_drift": 0.0,
+        "maximum_z_m": 0.3018623888492584,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 6.506106586812166e-08,
+        "end_rest_error_m": 6.506106586812166e-08
+      },
+      "attack": {
+        "samples": 33,
+        "triangle_contact_and_clearance_samples": 17,
+        "max_vertex_travel_m": 0.05989433452486992,
+        "maximum_thorax_roll_deg": 4.4755324686283905e-08,
+        "thorax_vertical_excursion_m": 0.01100844144821167,
+        "wing_peak_vertex_travel_m": {
+          "dorsal.L": 0.04784625023603439,
+          "ventral.L": 0.05989428609609604,
+          "dorsal.R": 0.04784628376364708,
+          "ventral.R": 0.05989433452486992
+        },
+        "peak_wing_articulation_relative_to_thorax_deg": {
+          "dorsal.L": 8.94765368064884,
+          "ventral.L": 8.94765368064884,
+          "dorsal.R": 8.94765368064884,
+          "ventral.R": 8.94765368064884
+        },
+        "root_matrix_drift": 0.0,
+        "maximum_z_m": 0.2204398214817047,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 6.506106586812166e-08,
+        "end_rest_error_m": 6.506106586812166e-08
+      },
+      "hit": {
+        "samples": 23,
+        "triangle_contact_and_clearance_samples": 12,
+        "max_vertex_travel_m": 0.10956230014562607,
+        "maximum_thorax_roll_deg": 18.334657806509234,
+        "thorax_vertical_excursion_m": 0.004218503832817078,
+        "wing_peak_vertex_travel_m": {
+          "dorsal.L": 0.06782451272010803,
+          "ventral.L": 0.06984603404998779,
+          "dorsal.R": 0.07199574261903763,
+          "ventral.R": 0.10956230014562607
+        },
+        "peak_wing_articulation_relative_to_thorax_deg": {
+          "dorsal.L": 9.854800986395851,
+          "ventral.L": 9.854800986395851,
+          "dorsal.R": 9.854800986395851,
+          "ventral.R": 9.854800986395851
+        },
+        "root_matrix_drift": 0.0,
+        "maximum_z_m": 0.24189095199108124,
+        "first_last_vertex_error_m": 0.0,
+        "start_rest_error_m": 6.506106586812166e-08,
+        "end_rest_error_m": 6.506106586812166e-08
+      },
+      "death": {
+        "samples": 55,
+        "triangle_contact_and_clearance_samples": 28,
+        "max_vertex_travel_m": 0.26376616954803467,
+        "maximum_thorax_roll_deg": 64.17128596294062,
+        "thorax_vertical_excursion_m": 0.06102973222732544,
+        "wing_peak_vertex_travel_m": {
+          "dorsal.L": 0.19292868673801422,
+          "ventral.L": 0.23672644793987274,
+          "dorsal.R": 0.26376616954803467,
+          "ventral.R": 0.22730445861816406
+        },
+        "peak_wing_articulation_relative_to_thorax_deg": {
+          "dorsal.L": 27.89225739092619,
+          "ventral.L": 26.270369208351422,
+          "dorsal.R": 27.89228471168287,
+          "ventral.R": 26.270369208351422
+        },
+        "root_matrix_drift": 0.0,
+        "maximum_z_m": 0.2818969190120697,
+        "first_last_vertex_error_m": 0.26376616954803467,
+        "start_rest_error_m": 6.506106586812166e-08,
+        "end_rest_error_m": 0.26376616954803467
+      }
+    }
+  },
+  "atlas": {
+    "textures": {
+      "basecolor": {
+        "bytes": 587454,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 1.388
+      },
+      "normal": {
+        "bytes": 946459,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 1.226,
+        "decoded_unit_length_range": [
+          0.953022,
+          1.060558
+        ]
+      },
+      "orm": {
+        "bytes": 727705,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 1.618
+      },
+      "emissive": {
+        "bytes": 151055,
+        "mip_levels": 11,
+        "uastc_mip_bytes_before_zstd": 1398128,
+        "level0_rmse_rgb8": 0.739
+      }
+    },
+    "file_bytes": 6336196,
+    "primitives": 1,
+    "gltf_vertices": 1816,
+    "ktx2_bytes": 2412673,
+    "uastc_bytes_before_zstd": 5592512
+  },
+  "sources": {
+    "high.blend": {
+      "file_sha256": "261bb41d35c708e0ee466456b850bc8337db52957c672f927970d8a956182e69",
+      "logical_geometry_hierarchy_skin_animation_sha256": "34e26d32470f5c7974793560f2a6b86d54f15f02fda2a78715d557e5d285e72e"
+    },
+    "low.blend": {
+      "file_sha256": "8d8e64ebf723c5395e9a6a93c196da01558f0c4c9464a48b8c5505b155209d9a",
+      "logical_geometry_hierarchy_skin_animation_sha256": "e3c6d125a32e98800e2af410e6c94d077464e8585ddad604a2364af8d94b9aa7"
+    }
+  }
+}

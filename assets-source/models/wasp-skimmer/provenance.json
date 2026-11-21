@@ -1,0 +1,165 @@
+{
+  "piece": "wasp-skimmer",
+  "stage": "P3-T6a staged animated character",
+  "authoring_date": "2026-11-21",
+  "authoring": {
+    "model": "GPT-6.2 Astra",
+    "reasoning_effort": "high",
+    "tools": ["Blender 5.2.2 LTS, d13f752e3b9c", "KTX-Software 4.4.2"],
+    "source": "Original parametric fuselage, swept stacked airfoils, bilateral stylets, eight deforming cuticle regions and in-place flight animation."
+  },
+  "reference": {
+    "approved_direction": "Bastion Rib",
+    "concept_approved": "2026-11-20",
+    "path": "assets-source/concepts/sheets/wasp-skimmer.png",
+    "sha256": "45760d8479e82dd424be47442258d671f95a7e6dcc05f6c04e0b71b306bbf533",
+    "rights_inventory": "assets-source/concepts/provenance.json"
+  },
+  "rights": {
+    "geometry_animation_textures": "Original project-authored geometry, original baked FK motion and procedural material fields.",
+    "license": "MIT (package.json)"
+  },
+  "frame": {
+    "root": "Wasp",
+    "root_at_entity_local_origin_m": [0, 0, 0],
+    "axes": "Blender +Z up / -Y forward; glTF +Y up / +Z forward",
+    "runtime_owner": "Entity translation, world altitude, tangent and surface-normal basis, health bar and collision",
+    "collision_radius_m": 0.16,
+    "health_bar_local_y_m": 0.32,
+    "target_lod_switch_m": 6
+  },
+  "production": {
+    "lod0_ceiling_triangles": 6500,
+    "ceiling_joints": 24,
+    "ceiling_materials": 2,
+    "triangles": {
+      "lod0": 5976,
+      "lod1": 2116
+    },
+    "joints_per_lod": 9,
+    "draw_primitives_per_lod": 1,
+    "materials_per_lod": 1,
+    "weighting": "One normalized rigid influence per vertex. The rigid overlapping cuticle geometry pivots at nested hinge roots. Each wing carries two spars, a leading rim, dark inner airfoil and teal channels on both surfaces.",
+    "fps": 30,
+    "loop_clips": ["hover_fly"],
+    "one_shots": ["bank_turn", "attack", "hit", "death"],
+    "atlas": "Four shared 1024 px maps from an assembled rest-pose Cycles CPU bake. Base color and emission use sRGB. ORM packs 12-ray ambient occlusion, procedural roughness and authored metalness. A Mikk tangent-frame correction transfers high surface normals to the low receiver. The portable images are 11-mip top-left UASTC KTX2 with embedded PNG fallbacks.",
+    "review": "EEVEE Metal with identical cameras and lighting for high, decoded LOD0 and decoded LOD1. Four matched angles include the underside, with 24 orbit frames and three key poses per clip."
+  },
+  "failed_attempts_and_corrections": [
+    "The first LOD0 had 9,332 triangles. Lower longitudinal and circumferential tessellation retained the independent wing sections and reduced the receiver to 5,976 triangles.",
+    "The first reimport showed the left stylet detached from the nose in hover. Both mirrored stylet roots and pivots moved into the forward keel. Every sampled appendage now maintains chest contact across the five clips at both LODs.",
+    "The initial packed bank peaked at 0.336855 m above the local entity origin and crossed the 0.32 m health-bar anchor. The bank now lowers the thorax, rolls 34.4 degrees and articulates each wing independently. The corrected LOD0 peak is 0.301862 m. Both corrected sources were rebuilt on Linux. The four independently encoded texture sets from the unchanged rest pose were reused after byte-exact comparison of all four corrected PNGs and geometry.json in each run."
+  ],
+  "clean_repeat": {
+    "platform": "Linux x86_64 with Blender 5.2.2 and KTX 4.4.2. Maximum three aggregate CPU workers.",
+    "products_match_sha256": {
+      "basecolor.ktx2": "e9e56d282c6fc2afef3e8027710ee0f9a5233628390d279a1d12c68675f88928",
+      "basecolor.png": "08eb08bd356afa0cda6c50508cdab5e66b2c5e95b7fbf05a615ce070851b6b20",
+      "emissive.ktx2": "be20492419536b5b413ce898843a20bf4a2a5cc5264742f4b5a664a400019925",
+      "emissive.png": "4de81457440ec34009fbae1d9b3f6d2ca45f7d29a857df2497c148ed259c56bd",
+      "geometry.json": "77ed1b7b7463c979a99db9a709c53a5f88fcc06d5873d779ee3e8c8577f4c852",
+      "normal.ktx2": "9be4b1246bb5e6886405364b0067fd9762dbe056a2887c1750d274e177453f13",
+      "normal.png": "fa5523fd6330f21d9abb942677320b4b506bcbf58c36601b269f119c93257312",
+      "orm.ktx2": "1208856724b4f074561f2b8b69fb5ccf84d9b9e75caf4221bd87bc0e5c04d80c",
+      "orm.png": "6397ba7a3c753dd0fa0b7bf7b4ce495a9c4f93dff176d48caa64e59fea216656",
+      "wasp-skimmer-lod0.glb": "0581b3bfc9163ce467680ba41fe2c32e6a68beb36c0d4b5be7d1d4d4a1be220a",
+      "wasp-skimmer-lod1.glb": "8bb923b3631b9a1ed59419bc11642311eb1ed1305190c01a09e8129fe31e45a4"
+    },
+    "stage_a_editable": {
+      "high.blend": {
+        "file_sha256": "261bb41d35c708e0ee466456b850bc8337db52957c672f927970d8a956182e69",
+        "logical_geometry_hierarchy_skin_animation_sha256": "34e26d32470f5c7974793560f2a6b86d54f15f02fda2a78715d557e5d285e72e"
+      },
+      "low.blend": {
+        "file_sha256": "8d8e64ebf723c5395e9a6a93c196da01558f0c4c9464a48b8c5505b155209d9a",
+        "logical_geometry_hierarchy_skin_animation_sha256": "e3c6d125a32e98800e2af410e6c94d077464e8585ddad604a2364af8d94b9aa7"
+      }
+    },
+    "stage_b_editable": {
+      "high.blend": {
+        "file_sha256": "b385ed914df565b85db15643e7fa7954d27044fe7774beab8b4005610e6b2c9c",
+        "logical_geometry_hierarchy_skin_animation_sha256": "34e26d32470f5c7974793560f2a6b86d54f15f02fda2a78715d557e5d285e72e"
+      },
+      "low.blend": {
+        "file_sha256": "ae5a006cc133ec9c67ea046a773d63583063b95c01dbf387eee31ee90871d8c9",
+        "logical_geometry_hierarchy_skin_animation_sha256": "e3c6d125a32e98800e2af410e6c94d077464e8585ddad604a2364af8d94b9aa7"
+      }
+    },
+    "comparison": "All GLB, PNG, KTX2 and geometry metadata bytes match across independent runs. Both reimports yielded identical geometry, motion, skin and decoded-atlas reports. Logical editable hashes cover hierarchy, mesh, joint rest matrices, skin, UV, material assignment and action curves."
+  },
+  "checks": {
+    "report": "reimport.json",
+    "candidate_verifier": "blender/verify_wasp.py",
+    "geometry": "Measured neutral bounds, vertex influence normalization, inverse binds, root identity, joint hierarchy, clip names, 3D coplanar surface overlap and UV area overlap at both LODs. The reimport samples skinned vertex and bone poses through every clip, tests all six pairs of wing meshes for collision, and checks that all seven appendages intersect the thorax. All sampled vertices remain below the local health-bar anchor."
+  },
+  "reproduction": {
+    "generate": "\"$BLENDER\" -b -t 3 --factory-startup --python-exit-code 1 --python blender/wasp_skimmer.py -- --out \"$STAGE\"",
+    "package": "python3 blender/package_wasp.py --stage \"$STAGE\" --models \"$MODELS\" --ktx \"$KTX\"",
+    "validate": "python3 scripts/validate_glbs.py --manifest \"$MODELS/manifest.json\" --ktx \"$KTX\"",
+    "reimport": "\"$BLENDER\" -b -t 3 --factory-startup --python-exit-code 1 --python blender/verify_wasp.py -- --piece \"$MODELS/wasp-skimmer\" --ktx \"$KTX\"",
+    "review": "\"$BLENDER\" -b -t 3 --factory-startup --python-exit-code 1 --python blender/review_wasp.py -- --piece \"$MODELS/wasp-skimmer\" --ktx \"$KTX\""
+  },
+  "acceptance": {
+    "creative_owner": "Pending complete asset batch review at P3-T7",
+    "runtime": "Staged candidate for P4",
+    "independent_visual_score": "Tracked by phase review owner"
+  },
+  "source_sha256": {
+    "blender/build_materials.py": "fe5cdb5cf12c11ee931e685def2423812d1d5b64742d188ea669cffbd42772b7",
+    "blender/core_bastion.py": "26bd7b5a221c5f4fc7d17c58f53feeb57290e3e36d66e7b895ac56fea41a1a19",
+    "blender/package_core_bastion.py": "de2f82079aadef748e3ecdea5f65b3358e6bd3e1c5c2e2b6503f850c41d52d64",
+    "blender/package_surface_clamp.py": "899980dc7ef0196aca30beb612e9062fa8d19f14f7e3a965901d87b6a3a68e59",
+    "blender/package_wasp.py": "4e18a74d59bff753ff8ad7f69c2a2149ba22eb5f2f0297e2150bd39703c245e5",
+    "blender/review_core_bastion.py": "98d142618897bef956bc7aa7049a29a6827a403b1b96e4e573138cab9f3f87fe",
+    "blender/review_materials.py": "ab7558febaef274294546e7e34a25ebfa35aaa7467f95f9d5887e402e768e23d",
+    "blender/review_skitter.py": "74458aba08fe2c3d7c411b78c1043c8fc6405bfb8d43225dbabdfd02c9277725",
+    "blender/review_surface_clamp.py": "abb3401b4cc859f9e429cb25ebf5dd59fcd0e73fbb95572f5b30e089441928bb",
+    "blender/review_wasp.py": "b0ed921c5d91e3a152abd24201bef790f607660d5895bd77d6194b9928a691da",
+    "blender/skitter_bake.py": "72105c7d0b0e0e1ed3067cd13c7af445f15179ee0bd3f75906ca3585c76ca1e9",
+    "blender/skitter_rig.py": "81de625dc85fb9b8a5f538bdf68a62753d8024547602af9f3d3bf83ea1208c97",
+    "blender/skitter_shape.py": "88eecd38654845d5fc536555a01752b3f42312c78f9d3eed329571fa37a294db",
+    "blender/verify_core_bastion.py": "eee345536ef0c8f5f7ead150f48073f3bb4b3dec0546048359036b97edf5e1ab",
+    "blender/verify_skitter.py": "c6f27e424c1e03c764b44705ffdb1057653ee0e9931bfe0c434b8ac873f0fba5",
+    "blender/verify_wasp.py": "a04a8da443e6caeb6b39c6a07f8dcedd0770314d8b8ad38fd43105302f5996f5",
+    "blender/wasp_bake.py": "0fa96127a404ae4eadb065e338aa14829c9e5e2d4bc97430970e0af924c41cc0",
+    "blender/wasp_rig.py": "363ec1312f745d822bbfd543a8e1ef5f24945b08d775713eb5a3254d9cf491e6",
+    "blender/wasp_shape.py": "ae9d65d1819bc2b46d406829b1460d088cec2299eb36c1aaec5e3789886d82a3",
+    "blender/wasp_skimmer.py": "811e82a1ef0ca95b1fcdcf574e4e38a20cf9ede8c0e25ce32814a2c9d92ab2d5",
+    "scripts/assets/encode_ktx2.py": "ef7c2b27f936bab9cc0f02f27492cea4fd7c151045923f0308504c4867873515",
+    "scripts/assets/ktx2.py": "ad0fe05d66f62b1bb51f93997c35982ea9df2a5072c9f30d0bef9cb948321966",
+    "scripts/validate_glbs.py": "b1cce7201143a05202dd35ecc61827807991f228f18ac7249169ea3da2eb87c1"
+  },
+  "artifact_sha256": {
+    "basecolor.ktx2": "e9e56d282c6fc2afef3e8027710ee0f9a5233628390d279a1d12c68675f88928",
+    "basecolor.png": "08eb08bd356afa0cda6c50508cdab5e66b2c5e95b7fbf05a615ce070851b6b20",
+    "emissive.ktx2": "be20492419536b5b413ce898843a20bf4a2a5cc5264742f4b5a664a400019925",
+    "emissive.png": "4de81457440ec34009fbae1d9b3f6d2ca45f7d29a857df2497c148ed259c56bd",
+    "geometry.json": "77ed1b7b7463c979a99db9a709c53a5f88fcc06d5873d779ee3e8c8577f4c852",
+    "high.blend": "261bb41d35c708e0ee466456b850bc8337db52957c672f927970d8a956182e69",
+    "low.blend": "8d8e64ebf723c5395e9a6a93c196da01558f0c4c9464a48b8c5505b155209d9a",
+    "normal.ktx2": "9be4b1246bb5e6886405364b0067fd9762dbe056a2887c1750d274e177453f13",
+    "normal.png": "fa5523fd6330f21d9abb942677320b4b506bcbf58c36601b269f119c93257312",
+    "orm.ktx2": "1208856724b4f074561f2b8b69fb5ccf84d9b9e75caf4221bd87bc0e5c04d80c",
+    "orm.png": "6397ba7a3c753dd0fa0b7bf7b4ce495a9c4f93dff176d48caa64e59fea216656",
+    "reimport.json": "fc74d05be87830f8cc8686f8c7aedf1e1728db8c860507e2342a39b7829505d9",
+    "review/cameras.json": "ce25c14073de58c9fe0a782a3888e1dcf1a2422abcebcc2d0611fdc9611b081d",
+    "review/comparison.jpg": "8e7ed2e4e8695435105c398208576cc82803b6cb4d3fc3a67e1bd19dbd3c9177",
+    "review/high-flank.png": "0f2d7f4e3136c67fccbf8d5c67360c3283c88b00924f739caee16a8a56447745",
+    "review/high-oblique.png": "2a2a4dc3f5e4d7e5dcf63b6e940ce637beed12554b2781db67fbe4f63a6c58fb",
+    "review/high-top.png": "40e3ef6a1d120f219f0c8131ef3620334abe8f096c1ceeb5cf9c197fe102063e",
+    "review/high-underside.png": "a3020f1d60b7d584bc8069b6a79a91aa4a4f3a187d2b49dfef9de381b54b4a48",
+    "review/lod0-flank.png": "e6285a1a399bf391384c3e06f8277b79f73633a9ed474c3839e1079f519ddf6b",
+    "review/lod0-oblique.png": "fed168f2f7a8a92009c7932694ffe79917f36df4727496d3d66baad9374a1667",
+    "review/lod0-top.png": "6b54a012de130f05d41b6736003cf8161cbbcd74fcf5a3b1d52581504d17faa2",
+    "review/lod0-underside.png": "04145bd28ec51bcfe52ad68cd3e808a74086834e452143f13283096b9b6f3f70",
+    "review/lod1-flank.png": "2d13eaba57350dd3cdd888d02d421628afb31e1860f08f17a9c8c2d88b7eb918",
+    "review/lod1-oblique.png": "3970eda97d1e4bc4e3d5a2126d5b278ef64b7d3e4a0d88840836eabae0458190",
+    "review/lod1-top.png": "1dcca081a3b34e959d7ab6e52b9a36be58a145c210887cba01815a13a41d8fac",
+    "review/lod1-underside.png": "9bf50195d77f4ae1ec88a005bef6298e072944db30b832aa20c00a30a647ef66",
+    "review/motion.jpg": "ad7078868b46ba0a9c6f09900d1ab7994589688d8c545d8ca9b5c8b6de5fc68d",
+    "review/turntable.mp4": "0a7ea24df694c9987693409c268ced63d6570e3105d209a75bbcbe87323b4740",
+    "wasp-skimmer-lod0.glb": "0581b3bfc9163ce467680ba41fe2c32e6a68beb36c0d4b5be7d1d4d4a1be220a",
+    "wasp-skimmer-lod1.glb": "8bb923b3631b9a1ed59419bc11642311eb1ed1305190c01a09e8129fe31e45a4"
+  }
+}

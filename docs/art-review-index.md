@@ -131,3 +131,11 @@ The largest assembly measures 4,068 / 2,484 triangles and two materials. Each ti
 LOD0 measures 0.34 × 0.26 × 0.18 m in its neutral pose and uses 4,340 triangles. LOD1 uses 1,836 triangles and is 1.51 mm shorter. Both use one material, four 1024 px maps and the same 23-bone rig. Each GLB re-import plays `crawl_floor`, `climb_wall`, `attack`, `hit` and `death`. At least three feet contact the support plane at every sampled locomotion pose. The wall fixture rotates the support normal and travel tangent together. Locomotion loops close with zero observed root drift. Attack and hit return to rest, and death holds a collapsed pose.
 
 [Sources, hashes and re-import checks](../assets-source/models/skitter-crawler/README.md) · [Motion poses](../assets-source/models/skitter-crawler/review/motion.jpg) · [Turntable](../assets-source/models/skitter-crawler/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.
+
+## Wasp Skimmer
+
+![Matched high, LOD0 and LOD1 views of Wasp's swept upper and lower wings](../assets-source/models/wasp-skimmer/review/comparison.jpg)
+
+The indigo dart uses four independent swept wings with teal insets and dark undersides. LOD0 measures 0.38 × 0.42 × 0.22 m and uses 5,976 triangles. LOD1 uses 2,116 triangles. Both share one material, four 1024 px maps and nine bones. Each GLB re-import plays `hover_fly`, `bank_turn`, `attack`, `hit` and `death`. Sampled poses preserve the wing gaps and all seven appendage attachments. The revised bank rolls to about 34° while keeping the upper wing roughly 18 mm below the health-bar anchor.
+
+[Sources, hashes and re-import checks](../assets-source/models/wasp-skimmer/README.md) · [Motion poses](../assets-source/models/wasp-skimmer/review/motion.jpg) · [Turntable](../assets-source/models/wasp-skimmer/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.

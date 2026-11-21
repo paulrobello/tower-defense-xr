@@ -4976,6 +4976,218 @@
           "tolerance": 16
         }
       ]
+    },
+    {
+      "file": "wasp-skimmer/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "e9e56d282c6fc2afef3e8027710ee0f9a5233628390d279a1d12c68675f88928",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Prismatic dorsal mantle",
+          "x": 198,
+          "y": 503,
+          "rgb": [
+            45,
+            42,
+            120
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Inner airfoil dorsal.L",
+          "x": 396,
+          "y": 895,
+          "rgb": [
+            51,
+            49,
+            67
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Compound eye L",
+          "x": 838,
+          "y": 411,
+          "rgb": [
+            84,
+            236,
+            229
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Perimeter ventral.R",
+          "x": 652,
+          "y": 660,
+          "rgb": [
+            135,
+            130,
+            149
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "wasp-skimmer/normal.ktx2",
+      "role": "normal",
+      "sha256": "9be4b1246bb5e6886405364b0067fd9762dbe056a2887c1750d274e177453f13",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Prismatic dorsal mantle",
+          "x": 198,
+          "y": 503,
+          "rgb": [
+            121,
+            126,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Inner airfoil dorsal.L",
+          "x": 396,
+          "y": 895,
+          "rgb": [
+            138,
+            133,
+            254
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Compound eye L",
+          "x": 838,
+          "y": 411,
+          "rgb": [
+            118,
+            127,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Perimeter ventral.R",
+          "x": 652,
+          "y": 660,
+          "rgb": [
+            141,
+            125,
+            254
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "wasp-skimmer/orm.ktx2",
+      "role": "orm",
+      "sha256": "1208856724b4f074561f2b8b69fb5ccf84d9b9e75caf4221bd87bc0e5c04d80c",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Prismatic dorsal mantle",
+          "x": 198,
+          "y": 503,
+          "rgb": [
+            0,
+            103,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Inner airfoil dorsal.L",
+          "x": 396,
+          "y": 895,
+          "rgb": [
+            0,
+            110,
+            54
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Compound eye L",
+          "x": 838,
+          "y": 411,
+          "rgb": [
+            21,
+            58,
+            10
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Perimeter ventral.R",
+          "x": 652,
+          "y": 660,
+          "rgb": [
+            255,
+            85,
+            163
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "wasp-skimmer/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "be20492419536b5b413ce898843a20bf4a2a5cc5264742f4b5a664a400019925",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Prismatic dorsal mantle",
+          "x": 198,
+          "y": 503,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Inner airfoil dorsal.L",
+          "x": 396,
+          "y": 895,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Compound eye L",
+          "x": 838,
+          "y": 411,
+          "rgb": [
+            84,
+            236,
+            229
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Perimeter ventral.R",
+          "x": 652,
+          "y": 660,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        }
+      ]
     }
   ],
   "models": [
@@ -6558,6 +6770,66 @@
           "normal": "skitter-crawler/normal.ktx2",
           "orm": "skitter-crawler/orm.ktx2",
           "emissive": "skitter-crawler/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "wasp-skimmer",
+      "lod": 0,
+      "file": "wasp-skimmer/wasp-skimmer-lod0.glb",
+      "sha256": "0581b3bfc9163ce467680ba41fe2c32e6a68beb36c0d4b5be7d1d4d4a1be220a",
+      "limits": {
+        "triangles": 6500,
+        "materials": 1,
+        "bones": 24,
+        "sockets": 0,
+        "texture_size": 1024
+      },
+      "sockets": {},
+      "animations": [
+        "hover_fly",
+        "bank_turn",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Wasp indigo cuticle": {
+          "basecolor": "wasp-skimmer/basecolor.ktx2",
+          "normal": "wasp-skimmer/normal.ktx2",
+          "orm": "wasp-skimmer/orm.ktx2",
+          "emissive": "wasp-skimmer/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "wasp-skimmer",
+      "lod": 1,
+      "file": "wasp-skimmer/wasp-skimmer-lod1.glb",
+      "sha256": "8bb923b3631b9a1ed59419bc11642311eb1ed1305190c01a09e8129fe31e45a4",
+      "limits": {
+        "triangles": 2800,
+        "materials": 1,
+        "bones": 24,
+        "sockets": 0,
+        "texture_size": 1024
+      },
+      "sockets": {},
+      "animations": [
+        "hover_fly",
+        "bank_turn",
+        "attack",
+        "hit",
+        "death"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Wasp indigo cuticle": {
+          "basecolor": "wasp-skimmer/basecolor.ktx2",
+          "normal": "wasp-skimmer/normal.ktx2",
+          "orm": "wasp-skimmer/orm.ktx2",
+          "emissive": "wasp-skimmer/emissive.ktx2"
         }
       }
     }
