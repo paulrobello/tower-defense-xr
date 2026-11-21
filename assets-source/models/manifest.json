@@ -5612,6 +5612,249 @@
           "tolerance": 16
         }
       ]
+    },
+    {
+      "file": "apex-broodlord/basecolor.ktx2",
+      "role": "basecolor",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "2823bad401bdffbe1a62d90a0ac5f94bc61ebec587addbd7cfa800c2d063b1c1",
+      "samples": [
+        {
+          "surface": "Swept crest L",
+          "x": 281,
+          "y": 1368,
+          "rgb": [
+            36,
+            36,
+            44
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 224,
+          "y": 1190,
+          "rgb": [
+            36,
+            31,
+            43
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye L",
+          "x": 1262,
+          "y": 357,
+          "rgb": [
+            233,
+            75,
+            161
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Crest vein L",
+          "x": 352,
+          "y": 357,
+          "rgb": [
+            227,
+            69,
+            147
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "apex-broodlord/normal.ktx2",
+      "role": "normal",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "5961433f02c327d56600a9a71632b9794d605110c34f9fc3de9f65b3b5b9050a",
+      "samples": [
+        {
+          "surface": "Swept crest L",
+          "x": 281,
+          "y": 1368,
+          "rgb": [
+            131,
+            133,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 224,
+          "y": 1190,
+          "rgb": [
+            130,
+            125,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye L",
+          "x": 1262,
+          "y": 357,
+          "rgb": [
+            137,
+            135,
+            254
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Crest vein L",
+          "x": 352,
+          "y": 357,
+          "rgb": [
+            132,
+            134,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "apex-broodlord/orm.ktx2",
+      "role": "orm",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "26d522027b4219df6613c49df1469fa2ce78bab4edc18abae73f34ae7904324e",
+      "samples": [
+        {
+          "surface": "Swept crest L",
+          "x": 281,
+          "y": 1368,
+          "rgb": [
+            191,
+            104,
+            20
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 224,
+          "y": 1190,
+          "rgb": [
+            255,
+            131,
+            8
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye L",
+          "x": 1262,
+          "y": 357,
+          "rgb": [
+            170,
+            72,
+            5
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Crest vein L",
+          "x": 352,
+          "y": 357,
+          "rgb": [
+            234,
+            91,
+            10
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "apex-broodlord/emissive.ktx2",
+      "role": "emissive",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "419aad824157f4ee75b68dc32e9f1ab61ad1bec73355069e412c7868de00a58a",
+      "samples": [
+        {
+          "surface": "Swept crest L",
+          "x": 281,
+          "y": 1368,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Ventral thorax",
+          "x": 224,
+          "y": 1190,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Eye L",
+          "x": 1262,
+          "y": 357,
+          "rgb": [
+            233,
+            75,
+            161
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Crest vein L",
+          "x": 352,
+          "y": 357,
+          "rgb": [
+            227,
+            69,
+            147
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "apex-broodlord/phase2-cracks.ktx2",
+      "role": "emissive",
+      "width": 2048,
+      "height": 2048,
+      "sha256": "a44c49d989d3223e29377158b08f4d5e9254062256e36a18216e3cfdc3f53c65",
+      "samples": [
+        {
+          "surface": "crest fracture trunk",
+          "x": 89,
+          "y": 1378,
+          "rgb": [
+            255,
+            255,
+            255
+          ],
+          "tolerance": 19
+        },
+        {
+          "surface": "intact crest",
+          "x": 230,
+          "y": 1381,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 8
+        }
+      ]
     }
   ],
   "models": [
@@ -7372,6 +7615,68 @@
           "normal": "rift-disruptor/normal.ktx2",
           "orm": "rift-disruptor/orm.ktx2",
           "emissive": "rift-disruptor/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "apex-broodlord",
+      "lod": 0,
+      "file": "apex-broodlord/apex-broodlord-lod0.glb",
+      "sha256": "710b3a149dc7cccc2b33db9fb0aef6716bc6933e5242c7e63df93541e3974a19",
+      "limits": {
+        "triangles": 28000,
+        "materials": 3,
+        "bones": 48,
+        "sockets": 0,
+        "texture_size": 2048
+      },
+      "sockets": {},
+      "animations": [
+        "boss_march",
+        "spawn_adds",
+        "emp_roar",
+        "phase2_shift",
+        "hit",
+        "death"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Broodlord obsidian chitin": {
+          "basecolor": "apex-broodlord/basecolor.ktx2",
+          "normal": "apex-broodlord/normal.ktx2",
+          "orm": "apex-broodlord/orm.ktx2",
+          "emissive": "apex-broodlord/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "apex-broodlord",
+      "lod": 1,
+      "file": "apex-broodlord/apex-broodlord-lod1.glb",
+      "sha256": "a144705052f7ba303ee89e09623126a103148888a7440d971c1278368187cf43",
+      "limits": {
+        "triangles": 14000,
+        "materials": 3,
+        "bones": 48,
+        "sockets": 0,
+        "texture_size": 2048
+      },
+      "sockets": {},
+      "animations": [
+        "boss_march",
+        "spawn_adds",
+        "emp_roar",
+        "phase2_shift",
+        "hit",
+        "death"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Broodlord obsidian chitin": {
+          "basecolor": "apex-broodlord/basecolor.ktx2",
+          "normal": "apex-broodlord/normal.ktx2",
+          "orm": "apex-broodlord/orm.ktx2",
+          "emissive": "apex-broodlord/emissive.ktx2"
         }
       }
     }

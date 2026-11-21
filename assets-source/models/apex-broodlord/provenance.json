@@ -1,0 +1,253 @@
+{
+  "piece": "apex-broodlord",
+  "stage": "P3-T6c staged animated boss",
+  "authoring_date": "2026-11-21",
+  "authoring": {
+    "model": "GPT-6.2 Astra",
+    "reasoning_effort": "high",
+    "tools": ["Blender 5.2.2 LTS d13f752e3b9c", "KTX-Software 4.4.2"],
+    "source": "Original four-stilt matriarch with articulated foreclaws, swept split casque, overlapping posterior shingles, six in-place actions and a hand-parameterized branching fracture mask."
+  },
+  "reference": {
+    "approved_direction": "Bastion Rib",
+    "concept_approved": "2026-11-20",
+    "path": "assets-source/concepts/sheets/apex-broodlord.png",
+    "sha256": "68a0e22b744d59196df9b4d3f8ce0ba80b4123d6e89c09c266fb19c49b5ac226",
+    "rights_inventory": "assets-source/concepts/provenance.json"
+  },
+  "rights": {
+    "geometry_animation_textures": "Original project-authored geometry, animation and procedural textures.",
+    "license": "MIT as declared in package.json."
+  },
+  "game_contract": {
+    "content_and_alignment_source_sha256": {
+      "src/content/enemies.ts": "992945c2257c3363f8d78a548143cb27bb0d6167c22c676add2874ef0d8ea402",
+      "src/render/blockouts.ts": "c8df989851de8906227ef60d3af30095ebfebbabc8d08550cadd41dc2da3328c"
+    },
+    "neutral_length_width_height_m": [0.92, 0.78, 0.84],
+    "collision_radius_m": 0.42,
+    "health_bar_m": 1.02,
+    "lod_swap_m": 8,
+    "origin": "Neutral support plane, glTF +Y up, +Z forward. Simulation owns movement and facing on the support surface, collision, health-bar placement, add spawning, EMP suppression and the 50% HP phase trigger."
+  },
+  "production": {
+    "high_triangles": 80016,
+    "lod0_triangles": 23480,
+    "lod1_triangles": 7840,
+    "materials_per_receiver": 1,
+    "draws": 1,
+    "skeleton": [
+      "root",
+      "thorax",
+      "abdomen",
+      "brachium.L",
+      "forearm.L",
+      "palm.L",
+      "brachium.R",
+      "forearm.R",
+      "palm.R",
+      "coxa_fore.L",
+      "femur_fore.L",
+      "tibia_fore.L",
+      "blade_fore.L",
+      "coxa_fore.R",
+      "femur_fore.R",
+      "tibia_fore.R",
+      "blade_fore.R",
+      "coxa_hind.L",
+      "femur_hind.L",
+      "tibia_hind.L",
+      "blade_hind.L",
+      "coxa_hind.R",
+      "femur_hind.R",
+      "tibia_hind.R",
+      "blade_hind.R",
+      "head",
+      "crest.L",
+      "crest.R"
+    ],
+    "weights": "One rigid normalized influence per vertex.",
+    "clips_fps": 30,
+    "loop_clips": ["boss_march"],
+    "one_shots": ["spawn_adds", "emp_roar", "phase2_shift", "hit", "death"],
+    "maps": "Four 2048px UASTC maps with twelve mips and embedded PNG fallback. Cycles CPU bakes high rest-surface base color, tangent normal, native magenta emission and AO/roughness/metallic. A bounded 24-degree normal correction transfers the high tangent field to LOD0. The standalone 2048px phase2-cracks map stores linear coverage encoded with the sRGB transfer function, including antialias texels. A single UV0 sample decoded as sRGB multiplies linear #ff4d00 and adds to native emission when enabled. The phase scalar is zero in Phase 1.",
+    "review": "EEVEE Metal, fixed oblique, front, flank and underside. Both GLBs use decoded KTX2 maps and the same studio cameras. The phase comparison reuses each mesh and camera, changing only the additive fissure factor. Neutral orbit and six performed clips."
+  },
+  "failed_attempts_and_corrections": [
+    "Neutral triangle connectivity exposed two free outer fingers. Seated each proximal knuckle farther into its palm and added a thorax-owned pelvic socket to bridge the rear coxa throughout abdominal motion.",
+    "The initial front projection separated the crest halves too far along their mid-length. Widened the paired armor plates, narrowed their center gap and introduced a second branching magenta seam on each.",
+    "The first summon pose swept the palm into the front blade. Raised the brachia during the summon and shortened their outward arc. The revised posed reimports pass foreclaw-leg separation.",
+    "The initial all-mip verifier reused its texture path variable for a surface label at mip zero. Kept independent texture and probe variables and reran both complete reimport reports.",
+    "The first Metal underside framing clipped a toe. Recentered that single matched camera and expanded its orthographic width from 1.19 to 1.30 m. Per-view projected vertex margins in review/cameras.json cover all tips on the high source and both reimports.",
+    "The first death collapse pushed a front femur below the support plane. Reduced the thorax drop to 140 mm, eased its pitch and folded the crest while settling. Both LODs hold the terminal pose on four feet."
+  ],
+  "clean_repeat": {
+    "platform": "Two independent empty Linux x86_64 stages and packages A and B.",
+    "products_match_sha256": {
+      "apex-broodlord-lod0.glb": "710b3a149dc7cccc2b33db9fb0aef6716bc6933e5242c7e63df93541e3974a19",
+      "apex-broodlord-lod1.glb": "a144705052f7ba303ee89e09623126a103148888a7440d971c1278368187cf43",
+      "basecolor.ktx2": "2823bad401bdffbe1a62d90a0ac5f94bc61ebec587addbd7cfa800c2d063b1c1",
+      "basecolor.png": "8b9689bbe16f044f3d02a412fc79c4e55e26f03f53877c209b2c3f2cbec2e278",
+      "emissive.ktx2": "419aad824157f4ee75b68dc32e9f1ab61ad1bec73355069e412c7868de00a58a",
+      "emissive.png": "8f0191d2ba40d64870b3d9ce42b0ed774a1bc4c3b399ca54be996d7369035729",
+      "normal.ktx2": "5961433f02c327d56600a9a71632b9794d605110c34f9fc3de9f65b3b5b9050a",
+      "normal.png": "e1448f1d15775f918fae0e1d9d2a23d582e7f4af66f6d383e4757e5c48ac880a",
+      "orm.ktx2": "26d522027b4219df6613c49df1469fa2ce78bab4edc18abae73f34ae7904324e",
+      "orm.png": "87b7224c999fa3f0b5b550446b5ebd96f55f1975ccb56da11314d3c779a4c1d4",
+      "phase2-cracks.ktx2": "a44c49d989d3223e29377158b08f4d5e9254062256e36a18216e3cfdc3f53c65",
+      "phase2-cracks.png": "5f989c361c33b1c52964be97e2d0bfd2ffd95fce587fe695a37740f3a14d1746"
+    },
+    "final_verifier_sha256": "1f34d44d09d1646cd5bf1c26184f3483b709c06a99302dde088c1662db43df7b",
+    "clean_reimport_report_sha256": {
+      "A": "c8564f0f954f2b5feffb01d4e34a7e9630fe81723aaa270bc841b22c331e86a0",
+      "B": "5dfa84ebfa5df0fed052b063071cae713c3bd68ac664ac627863c5303c986cb1"
+    },
+    "verification_environment": "Linux x86_64 Blender 5.2.2 / KTX 4.4.2, OPENBLAS_NUM_THREADS=1, OMP_NUM_THREADS=1, PYTHONHASHSEED=0. Each final report ran in a separate one-core process.",
+    "stage_a_editable": {
+      "high.blend": {
+        "file_sha256": "8efe4ab606d1c297be9bfb3e34e80a2b790079000e6cae22c5dfc40c7af0c26a",
+        "logical_geometry_hierarchy_skin_animation_sha256": "b13dfd6f057bd48e877b17243bc7eba2b7aa8cb77c70da9aacf40b221613697a",
+        "editable_material_graphs_sha256": "b385b493cab547ae3e585cae845ca5915c6878c5feda9ad0b6b8438914ee3fb7",
+        "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+        "clips_sha256": {
+          "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
+          "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
+          "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
+          "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
+          "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
+          "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+        }
+      },
+      "low.blend": {
+        "file_sha256": "1a7a93756023430edb333e22993e0c44491e0537379fa66e0be6d69c8cdb5c02",
+        "logical_geometry_hierarchy_skin_animation_sha256": "871fb8808dd1a97a853fc89039c26ccb7043162535fb41c8f8ff8b90f17a8005",
+        "editable_material_graphs_sha256": "5a340d86e4e98660f8efc96d12bf2dd30cfc2225d69432cde17277f94e8d9d35",
+        "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+        "clips_sha256": {
+          "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
+          "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
+          "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
+          "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
+          "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
+          "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+        }
+      }
+    },
+    "stage_b_editable": {
+      "high.blend": {
+        "file_sha256": "457a20c5773b5a6be912608d3f4fc4a8073f2931862ee660006b3cfed7a8e75c",
+        "logical_geometry_hierarchy_skin_animation_sha256": "b13dfd6f057bd48e877b17243bc7eba2b7aa8cb77c70da9aacf40b221613697a",
+        "editable_material_graphs_sha256": "b385b493cab547ae3e585cae845ca5915c6878c5feda9ad0b6b8438914ee3fb7",
+        "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+        "clips_sha256": {
+          "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
+          "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
+          "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
+          "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
+          "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
+          "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+        }
+      },
+      "low.blend": {
+        "file_sha256": "978f25cbb4b20a4bb3ae59da2a1b21a8f05379c504f8125ec42295a8c51aa434",
+        "logical_geometry_hierarchy_skin_animation_sha256": "871fb8808dd1a97a853fc89039c26ccb7043162535fb41c8f8ff8b90f17a8005",
+        "editable_material_graphs_sha256": "5a340d86e4e98660f8efc96d12bf2dd30cfc2225d69432cde17277f94e8d9d35",
+        "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+        "clips_sha256": {
+          "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
+          "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
+          "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
+          "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
+          "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
+          "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+        }
+      }
+    },
+    "comparison": "GLBs, PNGs and KTX2 are byte-identical. Geometry measurements, skeleton, weights, topology, UVs and animation fingerprints match across repeats."
+  },
+  "checks": {
+    "reimport": "reimport.json",
+    "candidate_verifier": "blender/verify_broodlord.py",
+    "continuity": "Rest-pose triangle BVHs connect all 98 anatomical patches into one graph. Posed triangle BVHs test adjacent control-chain contacts, foreclaw clearance, and inter-leg separation at seven poses per clip per LOD. All authored half-frames are measured for root drift, blade contact, health-bar clearance, principal articulation travel and endpoints. Additional tests rotate the march to a vertical support surface, measure distal crest separation in head-transverse space and exercise three interrupted/recovery blends at five interpolation weights each.",
+    "texture": "Vendor RGBA8 decoded and checked on every mip of all five maps. Decoded mip-zero atlas compared against lossless bake. Color and scalar semantic probes recorded in geometry.json."
+  },
+  "acceptance": {
+    "creative_owner": "pending combined P3-T7 review",
+    "runtime": "pending P4 integration",
+    "independent_visual_score": "tracked by the phase review owner"
+  },
+  "source_sha256": {
+    "blender/apex_broodlord.py": "b674f25165bbe4ffc3ceaa07d75c555f0ca11134e7c65c278cac1caca8015c58",
+    "blender/broodlord_bake.py": "aa785ae36cff9515f5f15ef7179e2826d3bcfa8d4b4dbc6d2aaf4157940eab21",
+    "blender/broodlord_cracks.py": "f9c1420a8bc775f5cee5d5d85c58f3a74145c940d0d5d75a2ea874f13256aef8",
+    "blender/broodlord_rig.py": "2d99674ac887b8081d3e29f730d3ccbc27a14084789f6aebd64401b1e75e77d8",
+    "blender/broodlord_shape.py": "ae8a6e53671c24afaa0e65d44830d4b13c44b639209a1edabdbadde03e4e734b",
+    "blender/brute_rig.py": "da7efb03b1b54f018ea1d204c18d5ac29791478af1df999b6a105648e625f81f",
+    "blender/brute_shape.py": "833aaadb604842ff8ccab94140e9f6626cdc3ccba0fb0bf7a15a357cb8586540",
+    "blender/build_materials.py": "fe5cdb5cf12c11ee931e685def2423812d1d5b64742d188ea669cffbd42772b7",
+    "blender/core_bastion.py": "26bd7b5a221c5f4fc7d17c58f53feeb57290e3e36d66e7b895ac56fea41a1a19",
+    "blender/core_bastion_shape.py": "c1b6df3d5bd80e695dbb28150183224bf808313b7c79e1af43a58de4ac1b6182",
+    "blender/document_broodlord.py": "1ea844268f4b40507cad4e5cf96dfa0dbfeb18c567f8bdb8d37da705c1d062c7",
+    "blender/materials.py": "fb2219a20eb700a15b76bdcfb7d9be5c7ceb4bf199f7e31204852c5fa6681eb3",
+    "blender/package_broodlord.py": "f613058caf93d39bec108749b0172192fa112112f60f161554229290679194c3",
+    "blender/package_core_bastion.py": "de2f82079aadef748e3ecdea5f65b3358e6bd3e1c5c2e2b6503f850c41d52d64",
+    "blender/package_surface_clamp.py": "899980dc7ef0196aca30beb612e9062fa8d19f14f7e3a965901d87b6a3a68e59",
+    "blender/review_broodlord.py": "41c8406e1f29a13ce2c87d446c9350dbe60228f3cc0772226c35ff79f2e990c1",
+    "blender/review_core_bastion.py": "98d142618897bef956bc7aa7049a29a6827a403b1b96e4e573138cab9f3f87fe",
+    "blender/review_materials.py": "ab7558febaef274294546e7e34a25ebfa35aaa7467f95f9d5887e402e768e23d",
+    "blender/review_skitter.py": "74458aba08fe2c3d7c411b78c1043c8fc6405bfb8d43225dbabdfd02c9277725",
+    "blender/review_surface_clamp.py": "abb3401b4cc859f9e429cb25ebf5dd59fcd0e73fbb95572f5b30e089441928bb",
+    "blender/skitter_rig.py": "81de625dc85fb9b8a5f538bdf68a62753d8024547602af9f3d3bf83ea1208c97",
+    "blender/skitter_shape.py": "88eecd38654845d5fc536555a01752b3f42312c78f9d3eed329571fa37a294db",
+    "blender/surface_fields.py": "a2408130a5f39b9dfd625fa388b585b9ee239ed3bbd02bc2b89278f7eca5651e",
+    "blender/verify_broodlord.py": "1f34d44d09d1646cd5bf1c26184f3483b709c06a99302dde088c1662db43df7b",
+    "blender/verify_core_bastion.py": "eee345536ef0c8f5f7ead150f48073f3bb4b3dec0546048359036b97edf5e1ab",
+    "blender/verify_skitter.py": "c6f27e424c1e03c764b44705ffdb1057653ee0e9931bfe0c434b8ac873f0fba5",
+    "scripts/assets/encode_ktx2.py": "ef7c2b27f936bab9cc0f02f27492cea4fd7c151045923f0308504c4867873515",
+    "scripts/assets/ktx2.py": "ad0fe05d66f62b1bb51f93997c35982ea9df2a5072c9f30d0bef9cb948321966",
+    "scripts/validate_glbs.py": "b1cce7201143a05202dd35ecc61827807991f228f18ac7249169ea3da2eb87c1"
+  },
+  "files": {
+    "README.md": "075c897628e65d4383b9b677a83cc4577a8b8f9e187aa236c54ac15c8b3d1bba",
+    "apex-broodlord-lod0.glb": "710b3a149dc7cccc2b33db9fb0aef6716bc6933e5242c7e63df93541e3974a19",
+    "apex-broodlord-lod1.glb": "a144705052f7ba303ee89e09623126a103148888a7440d971c1278368187cf43",
+    "basecolor.ktx2": "2823bad401bdffbe1a62d90a0ac5f94bc61ebec587addbd7cfa800c2d063b1c1",
+    "basecolor.png": "8b9689bbe16f044f3d02a412fc79c4e55e26f03f53877c209b2c3f2cbec2e278",
+    "emissive.ktx2": "419aad824157f4ee75b68dc32e9f1ab61ad1bec73355069e412c7868de00a58a",
+    "emissive.png": "8f0191d2ba40d64870b3d9ce42b0ed774a1bc4c3b399ca54be996d7369035729",
+    "geometry.json": "0897b66f9eb3de3fce86f57d5ed1e8ccae3167d379ec5b35078ab434806e0973",
+    "high.blend": "8efe4ab606d1c297be9bfb3e34e80a2b790079000e6cae22c5dfc40c7af0c26a",
+    "low.blend": "1a7a93756023430edb333e22993e0c44491e0537379fa66e0be6d69c8cdb5c02",
+    "normal.ktx2": "5961433f02c327d56600a9a71632b9794d605110c34f9fc3de9f65b3b5b9050a",
+    "normal.png": "e1448f1d15775f918fae0e1d9d2a23d582e7f4af66f6d383e4757e5c48ac880a",
+    "orm.ktx2": "26d522027b4219df6613c49df1469fa2ce78bab4edc18abae73f34ae7904324e",
+    "orm.png": "87b7224c999fa3f0b5b550446b5ebd96f55f1975ccb56da11314d3c779a4c1d4",
+    "phase2-cracks.ktx2": "a44c49d989d3223e29377158b08f4d5e9254062256e36a18216e3cfdc3f53c65",
+    "phase2-cracks.png": "5f989c361c33b1c52964be97e2d0bfd2ffd95fce587fe695a37740f3a14d1746",
+    "reimport.json": "c8564f0f954f2b5feffb01d4e34a7e9630fe81723aaa270bc841b22c331e86a0",
+    "review/cameras.json": "6197934ca0166bd2cadf1688c0426abd56436e430795f998d398d92dc6b3f966",
+    "review/comparison.jpg": "8f7fece38a985dda7d3b363a458ca13f8a2087bf6d83c3287f37e6767d73a061",
+    "review/high-flank.png": "eda9037a062478570a8f7c6a34c16fc6b8a4fe095b181fff012259fe4b57272e",
+    "review/high-front.png": "c92d824d95c6676edccb5b3d46789b507df6fa63a04daa6014b5860cd11908fe",
+    "review/high-oblique.png": "3baf4416ab6761a8df75386e0dfe6012d65248a80ed15f0f4bfc4a81ff0b2ff1",
+    "review/high-underside.png": "e20f92dc18643d10d503f1f6924f54c51dcffd03ab4f60b22f9708c254958d0c",
+    "review/lod0-flank.png": "a0e8163f36bf78f9576d305faa4ec35dd58d7d46d1fa7d5cf0825df877adc3b1",
+    "review/lod0-front.png": "43ec37623d551a37ed69bf6a8152b1b34ab631d31f83c9ab8b617dcdadbd136a",
+    "review/lod0-oblique.png": "7cee1cf9de95a0ae14fd1638f6d6ddb8c09bcf60ac6fcdb2957a4433f5d5551a",
+    "review/lod0-phase2-flank.png": "0fc88600bfe904628081337a815e8d25f436a8b8fd97e975ce3ec26c54c41e09",
+    "review/lod0-phase2-front.png": "2aab1659474aeb7fd9c15b7663ca0e42c8fbd1f20654b6606ae9ff20c5f1009c",
+    "review/lod0-phase2-oblique.png": "1542d73bb8fd6daec87e52f22d4bb0842d8e26356eeab4a0e3a3fd0f12a6fd6d",
+    "review/lod0-underside.png": "5ecd073bbc9ec5d7484e2a650ea16745d620a49454325a777a58af3194da9102",
+    "review/lod1-flank.png": "1dd1f43a9d60f96fabd0ed757c0a7c816a3224a4cb4bbf9f8d0d9a885243cd7e",
+    "review/lod1-front.png": "f1b5272c160338dfa0cb11691a2e9e2d1aa070d6ebeff2c468601944485196e5",
+    "review/lod1-oblique.png": "00cb51c29d5b66d52075b956946a12a9a15699580527d0da0b3740bd6960ab36",
+    "review/lod1-phase2-flank.png": "a914a8c0793c0a701c0672df3eaf9e9b39a1f0749917141bb08c0fca03e5c699",
+    "review/lod1-phase2-front.png": "e9a45b4536b54f307fd2408674f0cdbd230e5093f890094f2c9767ef0eb1955a",
+    "review/lod1-phase2-oblique.png": "5a76d99a21d4f9eb2c755e5c689cd9701438f0784eb97df47cbedb22edc5c269",
+    "review/lod1-underside.png": "8f8d1aa48ed8df8554c105cfaee3370e2218d7aa9faeecee65fd115e454af2ab",
+    "review/motion.jpg": "fc78c0a466fe103ad35bc32d5638db28cea89069b01e1ae1e7314788f91adaf4",
+    "review/motion.mp4": "c28a2867712fa61999922bc8ddea28ea5d28c55ef655d5c60670aa6724f4b90b",
+    "review/phases.jpg": "8ce28be262456e08b7c32726e55b09d1bd0e6198b151bcdfcb8d3dd1bd41631b",
+    "review/turntable.mp4": "08183df96df0c3988e7c239b7851e96141c5305cfe667ba252b6c60c82c91886"
+  }
+}

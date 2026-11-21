@@ -1,0 +1,1344 @@
+{
+  "lod0": {
+    "sha256": "710b3a149dc7cccc2b33db9fb0aef6716bc6933e5242c7e63df93541e3974a19",
+    "triangles": 23480,
+    "joints": [
+      "root",
+      "thorax",
+      "abdomen",
+      "brachium.L",
+      "forearm.L",
+      "palm.L",
+      "brachium.R",
+      "forearm.R",
+      "palm.R",
+      "coxa_fore.L",
+      "femur_fore.L",
+      "tibia_fore.L",
+      "blade_fore.L",
+      "coxa_fore.R",
+      "femur_fore.R",
+      "tibia_fore.R",
+      "blade_fore.R",
+      "coxa_hind.L",
+      "femur_hind.L",
+      "tibia_hind.L",
+      "blade_hind.L",
+      "coxa_hind.R",
+      "femur_hind.R",
+      "tibia_hind.R",
+      "blade_hind.R",
+      "head",
+      "crest.L",
+      "crest.R"
+    ],
+    "inverse_bind_max_matrix_error": 3.853402821274443e-07,
+    "head_forward_of_thorax_gltf_z_m": 0.1133524395338521,
+    "influences": [
+      1,
+      1
+    ],
+    "positive_area_uv_or_coplanar_pairs": 0,
+    "mean_texels_per_meter": 835.1605623357041,
+    "neutral_width_length_height_m": [
+      0.7800000309944153,
+      0.9200000166893005,
+      0.8400000929832458
+    ],
+    "neutral_min_z_m": -1.2300880314342066e-07,
+    "anatomical_parts": 98,
+    "atlas": "Reimported UV0 bounds match every authored patch within 2e-6 UV at both LODs.",
+    "clips": {
+      "boss_march": {
+        "half_frame_samples": 109,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 2,
+        "foot_min_max_m": [
+          [
+            -4.688860371970804e-06,
+            0.04999975487589836
+          ],
+          [
+            -3.609514578784001e-06,
+            0.0499999076128006
+          ],
+          [
+            -4.646012712328229e-06,
+            0.049999918788671494
+          ],
+          [
+            -3.6755197925231187e-06,
+            0.049999967217445374
+          ]
+        ],
+        "bounds_z_range_m": [
+          -4.688860371970804e-06,
+          0.840046226978302
+        ],
+        "peak_vertex_travel_m": 0.07799983024597168,
+        "endpoint_delta_m": 1.5485740334497677e-07,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.04349391907453537,
+        "wall_basis_skin_max_error_m": 1.1920928955078125e-07,
+        "prominent_region": "blade tips",
+        "prominent_region_peak_travel_m": 0.049999967217445374,
+        "terminal_hold_error_m": 0.0
+      },
+      "spawn_adds": {
+        "half_frame_samples": 93,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 4,
+        "foot_min_max_m": [
+          [
+            -1.631023451409419e-06,
+            2.668272145456285e-07
+          ],
+          [
+            -1.1010986327164574e-06,
+            1.4763135425255314e-07
+          ],
+          [
+            -1.5817956864339067e-06,
+            2.4753697402957187e-07
+          ],
+          [
+            -1.0351319588153274e-06,
+            2.2249972175814037e-07
+          ]
+        ],
+        "bounds_z_range_m": [
+          -1.631023451409419e-06,
+          0.8610334992408752
+        ],
+        "peak_vertex_travel_m": 0.1257619708776474,
+        "endpoint_delta_m": 0.0,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.043493933975696564,
+        "wall_basis_skin_max_error_m": null,
+        "prominent_region": "abdomen",
+        "prominent_region_peak_travel_m": 0.125761941075325,
+        "terminal_hold_error_m": 0.0
+      },
+      "emp_roar": {
+        "half_frame_samples": 85,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 4,
+        "foot_min_max_m": [
+          [
+            -5.257219527265988e-06,
+            1.8122157996458554e-07
+          ],
+          [
+            -6.209842013049638e-06,
+            1.5900762662113266e-07
+          ],
+          [
+            -4.99894031236181e-06,
+            2.4035824708334985e-07
+          ],
+          [
+            -6.407479759218404e-06,
+            2.605413271794532e-07
+          ]
+        ],
+        "bounds_z_range_m": [
+          -6.407479759218404e-06,
+          0.839999794960022
+        ],
+        "peak_vertex_travel_m": 0.2349763959646225,
+        "endpoint_delta_m": 0.0,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.04349394887685776,
+        "wall_basis_skin_max_error_m": null,
+        "prominent_region": "palm.L",
+        "prominent_region_peak_travel_m": 0.23497623205184937,
+        "terminal_hold_error_m": 0.0
+      },
+      "phase2_shift": {
+        "half_frame_samples": 97,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 4,
+        "foot_min_max_m": [
+          [
+            -3.337730163366359e-07,
+            1.7541135832743748e-07
+          ],
+          [
+            -1.5453696278200368e-07,
+            2.0062364569639612e-07
+          ],
+          [
+            -2.0995375393795257e-07,
+            1.569238889942426e-07
+          ],
+          [
+            -1.224763792606609e-07,
+            4.0575002913101343e-07
+          ]
+        ],
+        "bounds_z_range_m": [
+          -3.337730163366359e-07,
+          0.8400672078132629
+        ],
+        "peak_vertex_travel_m": 0.05091971158981323,
+        "endpoint_delta_m": 0.0,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.04349394887685776,
+        "wall_basis_skin_max_error_m": null,
+        "prominent_region": "crest.L",
+        "prominent_region_peak_travel_m": 0.02546185441315174,
+        "terminal_hold_error_m": 0.0
+      },
+      "hit": {
+        "half_frame_samples": 41,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 4,
+        "foot_min_max_m": [
+          [
+            -6.5619869928923436e-06,
+            1.4008890047989553e-07
+          ],
+          [
+            -6.596775619982509e-06,
+            2.0246179133209807e-07
+          ],
+          [
+            -5.3337885219661985e-06,
+            2.4525166963940137e-07
+          ],
+          [
+            -5.217358193476684e-06,
+            1.1257060350544634e-07
+          ]
+        ],
+        "bounds_z_range_m": [
+          -6.596775619982509e-06,
+          0.9101687669754028
+        ],
+        "peak_vertex_travel_m": 0.12022095173597336,
+        "endpoint_delta_m": 7.129569157271476e-11,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.04349391907453537,
+        "wall_basis_skin_max_error_m": null,
+        "prominent_region": "head",
+        "prominent_region_peak_travel_m": 0.07197818905115128,
+        "terminal_hold_error_m": 0.0
+      },
+      "death": {
+        "half_frame_samples": 105,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 4,
+        "foot_min_max_m": [
+          [
+            -1.3577738172898535e-05,
+            1.8879600816035236e-07
+          ],
+          [
+            -8.412605893681757e-06,
+            2.018561531258456e-07
+          ],
+          [
+            -6.024170943419449e-06,
+            2.1658772197952203e-07
+          ],
+          [
+            -2.248685177619336e-06,
+            2.73487728463806e-07
+          ]
+        ],
+        "bounds_z_range_m": [
+          -1.3577738172898535e-05,
+          0.839999794960022
+        ],
+        "peak_vertex_travel_m": 0.3304230868816376,
+        "endpoint_delta_m": 0.3304230868816376,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.043493885546922684,
+        "wall_basis_skin_max_error_m": null,
+        "prominent_region": "thorax",
+        "prominent_region_peak_travel_m": 0.1807273030281067,
+        "terminal_hold_error_m": 1.8431718729061686e-07
+      }
+    },
+    "transition_previews": {
+      "boss_march_to_spawn_adds": {
+        "normalized_clip_times": [
+          0.31,
+          0.1
+        ],
+        "blend_samples": 5,
+        "minimum_z_m": -2.2806301785749383e-05,
+        "maximum_z_m": 0.8420466780662537,
+        "root_drift": 0.0
+      },
+      "emp_roar_to_hit": {
+        "normalized_clip_times": [
+          0.35,
+          0.3
+        ],
+        "blend_samples": 5,
+        "minimum_z_m": -0.0006212673615664244,
+        "maximum_z_m": 0.8853665590286255,
+        "root_drift": 0.0
+      },
+      "phase2_shift_to_death": {
+        "normalized_clip_times": [
+          0.42,
+          0.17
+        ],
+        "blend_samples": 5,
+        "minimum_z_m": -5.7493336498737335e-05,
+        "maximum_z_m": 0.839646577835083,
+        "root_drift": 0.0
+      }
+    }
+  },
+  "lod1": {
+    "sha256": "a144705052f7ba303ee89e09623126a103148888a7440d971c1278368187cf43",
+    "triangles": 7840,
+    "joints": [
+      "root",
+      "thorax",
+      "abdomen",
+      "brachium.L",
+      "forearm.L",
+      "palm.L",
+      "brachium.R",
+      "forearm.R",
+      "palm.R",
+      "coxa_fore.L",
+      "femur_fore.L",
+      "tibia_fore.L",
+      "blade_fore.L",
+      "coxa_fore.R",
+      "femur_fore.R",
+      "tibia_fore.R",
+      "blade_fore.R",
+      "coxa_hind.L",
+      "femur_hind.L",
+      "tibia_hind.L",
+      "blade_hind.L",
+      "coxa_hind.R",
+      "femur_hind.R",
+      "tibia_hind.R",
+      "blade_hind.R",
+      "head",
+      "crest.L",
+      "crest.R"
+    ],
+    "inverse_bind_max_matrix_error": 3.853402821274443e-07,
+    "head_forward_of_thorax_gltf_z_m": 0.1133524395338521,
+    "influences": [
+      1,
+      1
+    ],
+    "positive_area_uv_or_coplanar_pairs": 0,
+    "mean_texels_per_meter": 818.8593114303965,
+    "neutral_width_length_height_m": [
+      0.779819905757904,
+      0.9200000166893005,
+      0.8399745225906372
+    ],
+    "neutral_min_z_m": -1.2300880314342066e-07,
+    "anatomical_parts": 98,
+    "atlas": "Reimported UV0 bounds match every authored patch within 2e-6 UV at both LODs.",
+    "clips": {
+      "boss_march": {
+        "half_frame_samples": 109,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 2,
+        "foot_min_max_m": [
+          [
+            -4.688860371970804e-06,
+            0.04999975487589836
+          ],
+          [
+            -3.609514578784001e-06,
+            0.0499999076128006
+          ],
+          [
+            -4.646012712328229e-06,
+            0.049999918788671494
+          ],
+          [
+            -3.6755197925231187e-06,
+            0.049999967217445374
+          ]
+        ],
+        "bounds_z_range_m": [
+          -4.688860371970804e-06,
+          0.8400252461433411
+        ],
+        "peak_vertex_travel_m": 0.07799983024597168,
+        "endpoint_delta_m": 1.2287812012345967e-07,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.04349391907453537,
+        "wall_basis_skin_max_error_m": 1.1920928955078125e-07,
+        "prominent_region": "blade tips",
+        "prominent_region_peak_travel_m": 0.049999967217445374,
+        "terminal_hold_error_m": 0.0
+      },
+      "spawn_adds": {
+        "half_frame_samples": 93,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 4,
+        "foot_min_max_m": [
+          [
+            -1.631023451409419e-06,
+            2.668272145456285e-07
+          ],
+          [
+            -1.1010986327164574e-06,
+            1.4763135425255314e-07
+          ],
+          [
+            -1.5817956864339067e-06,
+            2.4753697402957187e-07
+          ],
+          [
+            -1.0351319588153274e-06,
+            2.2249972175814037e-07
+          ]
+        ],
+        "bounds_z_range_m": [
+          -1.631023451409419e-06,
+          0.8610334992408752
+        ],
+        "peak_vertex_travel_m": 0.12514792382717133,
+        "endpoint_delta_m": 0.0,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.043493933975696564,
+        "wall_basis_skin_max_error_m": null,
+        "prominent_region": "abdomen",
+        "prominent_region_peak_travel_m": 0.12514789402484894,
+        "terminal_hold_error_m": 0.0
+      },
+      "emp_roar": {
+        "half_frame_samples": 85,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 4,
+        "foot_min_max_m": [
+          [
+            -5.257219527265988e-06,
+            1.8122157996458554e-07
+          ],
+          [
+            -6.209842013049638e-06,
+            1.5900762662113266e-07
+          ],
+          [
+            -4.99894031236181e-06,
+            2.4035824708334985e-07
+          ],
+          [
+            -6.407479759218404e-06,
+            2.605413271794532e-07
+          ]
+        ],
+        "bounds_z_range_m": [
+          -6.407479759218404e-06,
+          0.8399742245674133
+        ],
+        "peak_vertex_travel_m": 0.2349763959646225,
+        "endpoint_delta_m": 0.0,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.04349394887685776,
+        "wall_basis_skin_max_error_m": null,
+        "prominent_region": "palm.L",
+        "prominent_region_peak_travel_m": 0.23497623205184937,
+        "terminal_hold_error_m": 0.0
+      },
+      "phase2_shift": {
+        "half_frame_samples": 97,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 4,
+        "foot_min_max_m": [
+          [
+            -3.337730163366359e-07,
+            1.7541135832743748e-07
+          ],
+          [
+            -1.5453696278200368e-07,
+            2.0062364569639612e-07
+          ],
+          [
+            -2.0995375393795257e-07,
+            1.569238889942426e-07
+          ],
+          [
+            -1.224763792606609e-07,
+            4.0575002913101343e-07
+          ]
+        ],
+        "bounds_z_range_m": [
+          -3.337730163366359e-07,
+          0.8399742245674133
+        ],
+        "peak_vertex_travel_m": 0.05091971158981323,
+        "endpoint_delta_m": 0.0,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.04349394887685776,
+        "wall_basis_skin_max_error_m": null,
+        "prominent_region": "crest.L",
+        "prominent_region_peak_travel_m": 0.025356557220220566,
+        "terminal_hold_error_m": 0.0
+      },
+      "hit": {
+        "half_frame_samples": 41,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 4,
+        "foot_min_max_m": [
+          [
+            -6.5619869928923436e-06,
+            1.4008890047989553e-07
+          ],
+          [
+            -6.596775619982509e-06,
+            2.0246179133209807e-07
+          ],
+          [
+            -5.3337885219661985e-06,
+            2.4525166963940137e-07
+          ],
+          [
+            -5.217358193476684e-06,
+            1.1257060350544634e-07
+          ]
+        ],
+        "bounds_z_range_m": [
+          -6.596775619982509e-06,
+          0.9101687669754028
+        ],
+        "peak_vertex_travel_m": 0.12022095173597336,
+        "endpoint_delta_m": 7.12515393908042e-11,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.04349391907453537,
+        "wall_basis_skin_max_error_m": null,
+        "prominent_region": "head",
+        "prominent_region_peak_travel_m": 0.07206118851900101,
+        "terminal_hold_error_m": 0.0
+      },
+      "death": {
+        "half_frame_samples": 105,
+        "mesh_clearance_and_connectivity_samples": 7,
+        "min_supports": 4,
+        "foot_min_max_m": [
+          [
+            -1.3577738172898535e-05,
+            1.8879600816035236e-07
+          ],
+          [
+            -8.412605893681757e-06,
+            2.018561531258456e-07
+          ],
+          [
+            -6.024170943419449e-06,
+            2.1658772197952203e-07
+          ],
+          [
+            -2.248685177619336e-06,
+            2.73487728463806e-07
+          ]
+        ],
+        "bounds_z_range_m": [
+          -1.3577738172898535e-05,
+          0.8399742245674133
+        ],
+        "peak_vertex_travel_m": 0.3304230868816376,
+        "endpoint_delta_m": 0.3304230868816376,
+        "root_matrix_drift": 0.0,
+        "distal_crest_minimum_separating_gap_m": 0.043493885546922684,
+        "wall_basis_skin_max_error_m": null,
+        "prominent_region": "thorax",
+        "prominent_region_peak_travel_m": 0.1806000918149948,
+        "terminal_hold_error_m": 1.884864389012364e-07
+      }
+    },
+    "transition_previews": {
+      "boss_march_to_spawn_adds": {
+        "normalized_clip_times": [
+          0.31,
+          0.1
+        ],
+        "blend_samples": 5,
+        "minimum_z_m": -2.2806301785749383e-05,
+        "maximum_z_m": 0.8420915603637695,
+        "root_drift": 0.0
+      },
+      "emp_roar_to_hit": {
+        "normalized_clip_times": [
+          0.35,
+          0.3
+        ],
+        "blend_samples": 5,
+        "minimum_z_m": -0.0006212673615664244,
+        "maximum_z_m": 0.8850194215774536,
+        "root_drift": 0.0
+      },
+      "phase2_shift_to_death": {
+        "normalized_clip_times": [
+          0.42,
+          0.17
+        ],
+        "blend_samples": 5,
+        "minimum_z_m": -5.7493336498737335e-05,
+        "maximum_z_m": 0.8393301367759705,
+        "root_drift": 0.0
+      }
+    }
+  },
+  "atlas": {
+    "textures": {
+      "basecolor": {
+        "bytes": 1480299,
+        "mip_levels": 12,
+        "uastc_mip_bytes_before_zstd": 5592432,
+        "level0_rmse_rgb8": 1.2
+      },
+      "normal": {
+        "bytes": 2891191,
+        "mip_levels": 12,
+        "uastc_mip_bytes_before_zstd": 5592432,
+        "level0_rmse_rgb8": 0.922,
+        "decoded_unit_length_range": [
+          0.953022,
+          1.079073
+        ]
+      },
+      "orm": {
+        "bytes": 2798098,
+        "mip_levels": 12,
+        "uastc_mip_bytes_before_zstd": 5592432,
+        "level0_rmse_rgb8": 1.569
+      },
+      "emissive": {
+        "bytes": 168391,
+        "mip_levels": 12,
+        "uastc_mip_bytes_before_zstd": 5592432,
+        "level0_rmse_rgb8": 0.391
+      }
+    },
+    "file_bytes": 19545632,
+    "primitives": 1,
+    "gltf_vertices": 6044,
+    "ktx2_bytes": 7337979,
+    "uastc_bytes_before_zstd": 22369728
+  },
+  "sources": {
+    "high.blend": {
+      "file_sha256": "8efe4ab606d1c297be9bfb3e34e80a2b790079000e6cae22c5dfc40c7af0c26a",
+      "logical_geometry_hierarchy_skin_animation_sha256": "b13dfd6f057bd48e877b17243bc7eba2b7aa8cb77c70da9aacf40b221613697a",
+      "editable_material_graphs_sha256": "b385b493cab547ae3e585cae845ca5915c6878c5feda9ad0b6b8438914ee3fb7",
+      "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+      "clips_sha256": {
+        "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
+        "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
+        "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
+        "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
+        "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
+        "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+      }
+    },
+    "low.blend": {
+      "file_sha256": "1a7a93756023430edb333e22993e0c44491e0537379fa66e0be6d69c8cdb5c02",
+      "logical_geometry_hierarchy_skin_animation_sha256": "871fb8808dd1a97a853fc89039c26ccb7043162535fb41c8f8ff8b90f17a8005",
+      "editable_material_graphs_sha256": "5a340d86e4e98660f8efc96d12bf2dd30cfc2225d69432cde17277f94e8d9d35",
+      "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+      "clips_sha256": {
+        "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
+        "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
+        "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
+        "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
+        "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
+        "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+      }
+    }
+  },
+  "decoded_mips": {
+    "basecolor": [
+      {
+        "level": 0,
+        "decoded_rgba8_texels": 4194304,
+        "alpha": [
+          255,
+          255
+        ],
+        "source_recipe_probes": [
+          {
+            "surface": "Swept crest L",
+            "source_finish": "shell",
+            "decoded_rgb8": [
+              34,
+              34,
+              42
+            ]
+          },
+          {
+            "surface": "Ventral thorax",
+            "source_finish": "tissue",
+            "decoded_rgb8": [
+              36,
+              30,
+              42
+            ]
+          },
+          {
+            "surface": "Eye L",
+            "source_finish": "eye",
+            "decoded_rgb8": [
+              233,
+              75,
+              162
+            ]
+          },
+          {
+            "surface": "Crest vein L",
+            "source_finish": "spine",
+            "decoded_rgb8": [
+              231,
+              69,
+              149
+            ]
+          }
+        ]
+      },
+      {
+        "level": 1,
+        "decoded_rgba8_texels": 1048576,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 2,
+        "decoded_rgba8_texels": 262144,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 3,
+        "decoded_rgba8_texels": 65536,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 4,
+        "decoded_rgba8_texels": 16384,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 5,
+        "decoded_rgba8_texels": 4096,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 6,
+        "decoded_rgba8_texels": 1024,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 7,
+        "decoded_rgba8_texels": 256,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 8,
+        "decoded_rgba8_texels": 64,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 9,
+        "decoded_rgba8_texels": 16,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 10,
+        "decoded_rgba8_texels": 4,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 11,
+        "decoded_rgba8_texels": 1,
+        "alpha": [
+          255,
+          255
+        ]
+      }
+    ],
+    "normal": [
+      {
+        "level": 0,
+        "decoded_rgba8_texels": 4194304,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          0.9530218839645386,
+          1.0790729522705078
+        ]
+      },
+      {
+        "level": 1,
+        "decoded_rgba8_texels": 1048576,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          0.930817186832428,
+          1.040236234664917
+        ]
+      },
+      {
+        "level": 2,
+        "decoded_rgba8_texels": 262144,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          0.9806979894638062,
+          1.0233640670776367
+        ]
+      },
+      {
+        "level": 3,
+        "decoded_rgba8_texels": 65536,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          0.985640823841095,
+          1.0250457525253296
+        ]
+      },
+      {
+        "level": 4,
+        "decoded_rgba8_texels": 16384,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          0.9890052676200867,
+          1.0133366584777832
+        ]
+      },
+      {
+        "level": 5,
+        "decoded_rgba8_texels": 4096,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          0.993659257888794,
+          1.0065146684646606
+        ]
+      },
+      {
+        "level": 6,
+        "decoded_rgba8_texels": 1024,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          1.000015377998352,
+          1.0023502111434937
+        ]
+      },
+      {
+        "level": 7,
+        "decoded_rgba8_texels": 256,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          1.000015377998352,
+          1.00044584274292
+        ]
+      },
+      {
+        "level": 8,
+        "decoded_rgba8_texels": 64,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          1.000015377998352,
+          1.000015377998352
+        ]
+      },
+      {
+        "level": 9,
+        "decoded_rgba8_texels": 16,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          1.000015377998352,
+          1.000015377998352
+        ]
+      },
+      {
+        "level": 10,
+        "decoded_rgba8_texels": 4,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          1.000015377998352,
+          1.000015377998352
+        ]
+      },
+      {
+        "level": 11,
+        "decoded_rgba8_texels": 1,
+        "alpha": [
+          255,
+          255
+        ],
+        "normal_length_range": [
+          1.000015377998352,
+          1.000015377998352
+        ]
+      }
+    ],
+    "orm": [
+      {
+        "level": 0,
+        "decoded_rgba8_texels": 4194304,
+        "alpha": [
+          255,
+          255
+        ],
+        "source_recipe_probes": [
+          {
+            "surface": "Swept crest L",
+            "source_finish": "shell",
+            "decoded_rgb8": [
+              191,
+              104,
+              20
+            ]
+          },
+          {
+            "surface": "Ventral thorax",
+            "source_finish": "tissue",
+            "decoded_rgb8": [
+              255,
+              131,
+              8
+            ]
+          },
+          {
+            "surface": "Eye L",
+            "source_finish": "eye",
+            "decoded_rgb8": [
+              168,
+              71,
+              5
+            ]
+          },
+          {
+            "surface": "Crest vein L",
+            "source_finish": "spine",
+            "decoded_rgb8": [
+              234,
+              97,
+              10
+            ]
+          }
+        ]
+      },
+      {
+        "level": 1,
+        "decoded_rgba8_texels": 1048576,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 2,
+        "decoded_rgba8_texels": 262144,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 3,
+        "decoded_rgba8_texels": 65536,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 4,
+        "decoded_rgba8_texels": 16384,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 5,
+        "decoded_rgba8_texels": 4096,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 6,
+        "decoded_rgba8_texels": 1024,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 7,
+        "decoded_rgba8_texels": 256,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 8,
+        "decoded_rgba8_texels": 64,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 9,
+        "decoded_rgba8_texels": 16,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 10,
+        "decoded_rgba8_texels": 4,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 11,
+        "decoded_rgba8_texels": 1,
+        "alpha": [
+          255,
+          255
+        ]
+      }
+    ],
+    "emissive": [
+      {
+        "level": 0,
+        "decoded_rgba8_texels": 4194304,
+        "alpha": [
+          255,
+          255
+        ],
+        "source_recipe_probes": [
+          {
+            "surface": "Swept crest L",
+            "source_finish": "shell",
+            "decoded_rgb8": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "surface": "Ventral thorax",
+            "source_finish": "tissue",
+            "decoded_rgb8": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "surface": "Eye L",
+            "source_finish": "eye",
+            "decoded_rgb8": [
+              233,
+              75,
+              162
+            ]
+          },
+          {
+            "surface": "Crest vein L",
+            "source_finish": "spine",
+            "decoded_rgb8": [
+              231,
+              69,
+              149
+            ]
+          }
+        ]
+      },
+      {
+        "level": 1,
+        "decoded_rgba8_texels": 1048576,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 2,
+        "decoded_rgba8_texels": 262144,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 3,
+        "decoded_rgba8_texels": 65536,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 4,
+        "decoded_rgba8_texels": 16384,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 5,
+        "decoded_rgba8_texels": 4096,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 6,
+        "decoded_rgba8_texels": 1024,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 7,
+        "decoded_rgba8_texels": 256,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 8,
+        "decoded_rgba8_texels": 64,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 9,
+        "decoded_rgba8_texels": 16,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 10,
+        "decoded_rgba8_texels": 4,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 11,
+        "decoded_rgba8_texels": 1,
+        "alpha": [
+          255,
+          255
+        ]
+      }
+    ],
+    "phase2-cracks": [
+      {
+        "level": 0,
+        "decoded_rgba8_texels": 4194304,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 1,
+        "decoded_rgba8_texels": 1048576,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 2,
+        "decoded_rgba8_texels": 262144,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 3,
+        "decoded_rgba8_texels": 65536,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 4,
+        "decoded_rgba8_texels": 16384,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 5,
+        "decoded_rgba8_texels": 4096,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 6,
+        "decoded_rgba8_texels": 1024,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 7,
+        "decoded_rgba8_texels": 256,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 8,
+        "decoded_rgba8_texels": 64,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 9,
+        "decoded_rgba8_texels": 16,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 10,
+        "decoded_rgba8_texels": 4,
+        "alpha": [
+          255,
+          255
+        ]
+      },
+      {
+        "level": 11,
+        "decoded_rgba8_texels": 1,
+        "alpha": [
+          255,
+          255
+        ]
+      }
+    ]
+  },
+  "phase2_cracks": {
+    "sha256": "a44c49d989d3223e29377158b08f4d5e9254062256e36a18216e3cfdc3f53c65",
+    "decoded_rgba_bytes": 16777216,
+    "intact_and_bright_probes": [
+      {
+        "surface": "crest fracture trunk",
+        "x": 89,
+        "y": 1378,
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "tolerance": 19
+      },
+      {
+        "surface": "intact crest",
+        "x": 230,
+        "y": 1381,
+        "rgb": [
+          0,
+          0,
+          0
+        ],
+        "tolerance": 8
+      }
+    ],
+    "alpha_range": [
+      255,
+      255
+    ],
+    "srgb": true
+  }
+}

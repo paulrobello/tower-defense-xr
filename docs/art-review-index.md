@@ -155,3 +155,13 @@ The broad slate shell carries a recessed orange vent, a swept frontal shield and
 The faceted violet hull and luminous equatorial ring are independently rigged. Both LODs preserve the 0.42 × 0.44 × 0.32 m neutral envelope and share one material, three bones and four portable 1024 px maps. LOD0 uses 4,152 triangles and LOD1 uses 2,424. At 320 sampled poses per imported LOD, the hull and ring stayed at least 6 mm apart. Hover completes a full turn, the pulse and hit recover to neutral, and death holds the lowered hull and tilted ring. The revised 184 × 184 polar UV charts preserve the smooth outline in the matched Metal review.
 
 [Sources, hashes and re-import checks](../assets-source/models/rift-disruptor/README.md) · [Polar well comparison](../assets-source/models/rift-disruptor/review/polar-well-comparison.jpg) · [Motion poses](../assets-source/models/rift-disruptor/review/motion.jpg) · [Four-clip reel](../assets-source/models/rift-disruptor/review/motion.mp4) · [Turntable](../assets-source/models/rift-disruptor/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.
+
+## Apex Broodlord
+
+![Both phases on the same imported LOD0 and LOD1 models under matched lighting](../assets-source/models/apex-broodlord/review/phases.jpg)
+
+The Wave 12 boss has a swept split crest, overlapping obsidian armor, raised claws and four blade legs. LOD0 measures 0.92 × 0.78 × 0.84 m and uses 23,480 triangles. LOD1 uses 7,840 triangles. Both share one material, a 28-bone skeleton and four 2048 px material maps. A separate 2048 px grayscale emissive mask supplies the orange cracks in Phase 2. The matched renderer applies the mask to both imported LODs using the same UVs and leaves the magenta Phase 1 seams visible. Runtime blending belongs to Phase 4.
+
+Both re-imported LODs play `boss_march`, `spawn_adds`, `emp_roar`, `phase2_shift`, `hit` and `death`. The march alternates supporting diagonal pairs. Summon, roar, phase shift and hit recover to rest, and death holds the collapsed pose. The distal crest halves maintain at least 43.5 mm of separation through the sampled movement. The tested interrupted roar-to-hit blend dips 0.62 mm below the support plane. Check that transition in the live mixer in Phase 4.
+
+[Sources, hashes and re-import checks](../assets-source/models/apex-broodlord/README.md) · [Matched geometry views](../assets-source/models/apex-broodlord/review/comparison.jpg) · [Motion poses](../assets-source/models/apex-broodlord/review/motion.jpg) · [Six-clip reel](../assets-source/models/apex-broodlord/review/motion.mp4) · [Turntable](../assets-source/models/apex-broodlord/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.
