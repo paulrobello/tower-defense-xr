@@ -1,32 +1,40 @@
 # Helios Plasma Mortar T1
 
-The tier 1 head has one broad orange crucible. The bright rim tracks the inclination of the orange plasma surface. Its central effect socket retains the game's neutral forward direction. [Approved sheet](../../concepts/sheets/plasma-mortar.png) · [Matched views](review/comparison.jpg) · [Surface clamp](review/mounted-surface-clamp.png) · [Hover pod](review/mounted-hover-pod.png)
+The revised single-chamber head retains its orange lip around a dark 10 mm-deep well. A small plasma emitter sits at the bottom. The lip and core remain distinct in the front, axial and three-quarter views of both exported levels. The original LOD1 filled the center with a peach disk. [Approved concept](../../concepts/sheets/plasma-mortar.png) · [Original and revised](review/revision-comparison.jpg) · [Matched high, LOD0 and LOD1](review/comparison.jpg) · [Surface clamp](review/mounted-surface-clamp.png) · [Active hover pod](review/mounted-hover-pod.png)
 
-| Mesh | Head triangles | With surface clamp | With hover pod |
+| Mesh | Head triangles | With surface clamp | With active hover pod |
 | --- | ---: | ---: | ---: |
-| LOD0 | 2,380 | 4,808 | 4,744 |
-| LOD1 | 876 | 2,024 | 2,024 |
+| LOD0 | 3,020 | 5,448 | 5,448 |
+| LOD1 | 1,300 | 2,448 | 2,432 |
 
-Both levels use one 1024-pixel square atlas with embedded base color, tangent normal, packed ORM and emissive maps. The assembled turret takes two materials. Both mounts accept the identity head root. Runtime yaw, pitch and recoil drive separate nodes. The muzzle faces glTF +Z at rest. LOD1 begins beyond four meters.
+Both levels share one material with 1024 × 1024 base color, tangent normal, packed ORM and emissive maps. Each assembly uses two materials. The head is 0.18 m wide, 0.16 m tall and 0.20 m long. Its neutral effect socket faces glTF +Z at (0, 0.25, 0.16) m. LOD1 begins beyond four meters.
 
-[Re-import checks](reimport.json) measure each chamber rim, mount alignment, face finish and glow, and UV overlap. The neutral pitching assembly clears the clamp by 55.0 mm and the hover pod by 40.0 mm. Three scripted poses exercise the exported yaw, pitch and recoil controls. [Bake measurements](geometry.json) record UV coverage and density, projection repairs and source pixel samples. [Repeat build](determinism.json) compares two complete CPU bakes and KTX2 encodes. A third clean run of the final generator also matched both uncompressed geometry exports, all four PNGs and the bake measurements. [Provenance](provenance.json) binds the exact staged files and review images. Owner review and in-game Quest acceptance remain pending.
+The original clamp and revised hover pod both accept the identity head root. [Reimport evidence](reimport.json) records mounted yaw, pitch and recoil, neutral clearance, material coverage, planar and curved corner normals, zero positive-area UV overlap, physical mouth samples and the decoded RGBA8 hash of each complete mip chain. [Repeat evidence](determinism.json) records two independent Linux builds and editable-source fingerprints. [Provenance](provenance.json) identifies the model inputs and outputs. The [prior receipt](review/prior-reimport.json.orig) preserves the original T1 reimport evidence used by the hover-pod compatibility report. Independent visual review scored this revision 83/100. The reviewer noted gray mottling on the LOD1 shell and visible pivot corners. Owner approval and in-game Quest acceptance are pending.
 
 ## Rebuild
 
-From the repository root, choose a new stage and model directory for each run. Use Blender 5.2.2 LTS and KTX-Software 4.4.2.
+Use Blender 5.2.2 LTS (d13f752e3b9c), KTX-Software 4.4.2 and two fresh staging paths. Export the baseline review package from the stated commit. Run the EEVEE review on a Metal GPU. The Linux bake uses two CPU threads and each encoder uses one.
 
 ```sh
-tier=1
+root=".local/helios-t1-revision"
+id="helios-plasma-mortar-t1"
+mkdir -p "$root/original"
+git archive 4f18f1fee8c46f934bc4f980e4bf9b816b652e88 "assets-source/models/$id" | tar -x -C "$root/original"
+old="$root/original/assets-source/models/$id"
 for run in 1 2; do
-  stage=".local/helios-stage/$run/$tier"
-  models=".local/helios-models/$run"
-  "$BLENDER" -b -t 2 --factory-startup --python-exit-code 1 -P blender/helios_mortar.py -- --tier "$tier" --out "$stage"
-  python3 -B blender/package_helios.py --tier "$tier" --stage "$stage" --models "$models" --ktx "$KTX"
+  "$BLENDER" -b -t 2 --factory-startup --python-exit-code 1 -P blender/helios_t1_revision.py -- --tier 1 --out "$root/stage/$run"
+  python3 -B blender/package_helios_t1_revision.py --stage "$root/stage/$run" --models "$root/packages/$run" --ktx "$KTX"
 done
-piece=".local/helios-models/1/helios-plasma-mortar-t1"
-"$BLENDER" -b -t 3 --factory-startup --python-exit-code 1 -P blender/verify_helios.py -- --piece "$piece" --ktx "$KTX" --repeat-stage ".local/helios-stage/2/$tier"
-RIFT_MODEL_CHECK_KTX="$KTX" make model-check MODEL_CHECK_ARGS="--manifest .local/helios-models/1/manifest.json --ktx $KTX"
-"$BLENDER" -b -t 3 --factory-startup --python-exit-code 1 -P blender/review_helios.py -- --piece "$piece" --ktx "$KTX"
-"$BLENDER" -b -t 2 --factory-startup --python-exit-code 1 -P blender/helios_mortar.py -- --tier "$tier" --out ".local/helios-stage/final/$tier"
-python3 -B blender/document_helios.py --piece "$piece" --source-replay ".local/helios-stage/final/$tier" --stages ".local/helios-stage/1/$tier" ".local/helios-stage/2/$tier" --packages "$piece" ".local/helios-models/2/helios-plasma-mortar-t1"
+piece="$root/packages/1/$id"
+"$BLENDER" -b -t 2 --factory-startup --python-exit-code 1 -P blender/verify_helios_t1_revision.py -- --piece "$piece" --repeat "$root/packages/2/$id" --ktx "$KTX"
+python3 -B scripts/validate_glbs.py --manifest "$root/packages/1/manifest.json" --ktx "$KTX"
+"$BLENDER" -b -t 3 --factory-startup --python-exit-code 1 -P blender/review_helios_t1_revision.py -- --piece "$piece" --original "$old" --ktx "$KTX"
+```
+
+Copy the candidate package into its tracked directory, format determinism.json using the project Biome formatter, then rebuild the receipt and format provenance.json.
+
+```sh
+piece="assets-source/models/$id"
+python3 -B blender/document_helios_t1_revision.py --piece "$piece" --original "$old"
+bunx biome format --write "$piece/provenance.json"
 ```

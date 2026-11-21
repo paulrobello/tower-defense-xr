@@ -1,29 +1,35 @@
 {
-  "blender": "5.2.2 LTS (d13f752e3b9c)",
-  "ktx_software": "4.4.2",
-  "architecture": "Linux x86_64 CPU",
-  "blender_threads": 2,
-  "encode_threads": 1,
+  "platform": "Linux x86_64, Blender 5.2.2 LTS (d13f752e3b9c), Cycles CPU 2 threads, KTX-Software 4.4.2",
   "independent_builds": 2,
-  "matching_sha256": {
-    "stage/geometry.json": "49ad406cd1f4a5732e9a66c64425bef484eb569e9f29340e48441a309812daac",
-    "stage/basecolor.png": "0d2eb1f05271cba6acdcd22017f26293393d5888e66d3724ddff8afdfbe1b0cf",
-    "stage/normal.png": "243987806642a94d958df8d04aa0bbddf3172b67bbabcb049c5a70068c773d74",
-    "stage/orm.png": "14b172d8e034309aa89b24079c3b3ea1c46d2aeb4bcddbff4a0b658e3ab4999c",
-    "stage/emissive.png": "2934e549e9e52815f2eea323021c141b9a17350d9753413a6ff4ae2e2b28de34",
-    "stage/lod0/source.bin": "3d7963d9ccda7ae4ec746e1e4dc20ef0f9c67c6c121010cbdba83a1b744a2e58",
-    "stage/lod0/source.gltf": "44b065f8f360ebad6001799ec68a03248c02568b3388ac9ee478277463a3fb09",
-    "stage/lod1/source.bin": "9429f96a79d0d550319a7e47707582ad07b1558688346e1f99d9e72cd6138a25",
-    "stage/lod1/source.gltf": "85dbbafe444390b86e2699bafb69a4b144ad0de9880cf431143308da2079f5e1",
-    "models/basecolor.ktx2": "b0328420bbae8cba8a39088c1454b049c02900ee3055ec5a4b7007dd9893ce93",
-    "models/normal.ktx2": "e6a15fd8af708f0acf9be4112462d7d2e3a66827987ec8887d953a5cfbdea9ac",
-    "models/orm.ktx2": "5330e5d5e4e9ec3804a6b81b3c220af97793b75aac7ba72113c7a6b27c5e3c72",
-    "models/emissive.ktx2": "ee26784976298147b2c59f79a592ca155ced694ebfee4d78739f6f7c9fefed61",
-    "models/helios-plasma-mortar-t1-lod0.glb": "43ae973b67218f1bbf5e0c5f26d1ea8c30411d3657b2628b48371210d00fd079",
-    "models/helios-plasma-mortar-t1-lod1.glb": "180d1713b4cb8d3da33792db84d47e58acdec7272f579c954667e898d339d27a"
+  "independent_portable_output_hashes": {
+    "geometry.json": "72ad9b83f7881f4b00f2282642d7c44acfa066ecd19a69f779cb2fc0236b9a1c",
+    "basecolor.png": "c8e4938e58be64f4f752eededa8308cede37553cf3300509b3607d0df686f221",
+    "basecolor.ktx2": "92b60d826657c0adc95ffc90fdb0ab69bf092804bdb514f3f1b7d5918debc483",
+    "normal.png": "b84662a7fe5c9a1894315cf5ad4d5045c3cb24ba015ff5e085b32ee10a276958",
+    "normal.ktx2": "68d4b2f3af4af49edd86ec8af4721d3a5353d71bc8cc620f34009a55e1d6d023",
+    "orm.png": "bd741d839f92b153fb1590ce6b97254cc1868645dc8b8515d08c8a33c5b4d300",
+    "orm.ktx2": "071291d597c5758137f0fc347a32b9750c760554f1ae8458d0f946ede9653cb8",
+    "emissive.png": "3424049de0d5348b492731b0d2f45990321f58db9fd86d99a6f86f7a4e73e837",
+    "emissive.ktx2": "fe14eade7ac25289b37c25dadce232b8ddb6bb6b97a9e1d25aed70b58d6d802e",
+    "helios-plasma-mortar-t1-lod0.glb": "bd90a619dabd3e48157e64b0a20bb78c33fb04cf2992bbd5c02c631d95e0f7c5",
+    "helios-plasma-mortar-t1-lod1.glb": "acb97ddf626e3f1b7f7e155a89165c6d3041f756b0fb66434e35b66f319b042d"
   },
-  "final_source_replay_sha256": {
-    "blender/helios_mortar.py": "1a45331d42aad613515856d52277de5b745ee1a0ea21acba4f04920ea572c069",
-    "blender/helios_shape.py": "312d2a2fc5239f1eb9a5ceb25c1f25140131280ee4bb980d62af720df620e01a"
+  "editable_sources": {
+    "high": {
+      "sha256": "0da93cdb0646166b142808c2131c5161775da58a2d4d1c38ec71d0f3dab3cb23",
+      "triangles": 8164,
+      "embedded_source_images": 9,
+      "geometry_uv_hierarchy_material_slots_sha256": "1854318dece23b5823a7bb0af8823d112e563d0f1930ddce840e1e73dafaaf79",
+      "geometry_slots_uv_hierarchy_corner_normals_packed_textures_sha256": "bd2faf357d3776ba27ef7cc03f9acd31318dbe43a8ddad73be82020cea9d0884",
+      "repeat_archive_sha256": "499555a121f71f3922c6505373c0aa06881a6b61be88014897d3a254e34383e6"
+    },
+    "low": {
+      "sha256": "9378235c429cac9e453af90ff8c5f280b66fb2306d31761b6b3255ed550280f0",
+      "triangles": 3020,
+      "embedded_source_images": 4,
+      "geometry_uv_hierarchy_material_slots_sha256": "20ef6c21e23ddfc2d00c3f94fea128b89858e81b62371e162c38a25f9dd78402",
+      "geometry_slots_uv_hierarchy_corner_normals_packed_textures_sha256": "ca5a543d2a3fed961787d7eb15cecb8a0ba570652c15f67096c311da1f8e809b",
+      "repeat_archive_sha256": "6d0fdb583cbc5ea056a2ebdac4eacf03b99311c27fba54b9999d27386f02e2a0"
+    }
   }
 }

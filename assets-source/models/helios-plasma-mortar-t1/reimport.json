@@ -1,22 +1,22 @@
 {
   "editable_sources": {
     "high": {
-      "sha256": "de297fe4e888e4e42a031ef1b4656fe3d67b8dde88eb90f5b49208c91f47fb8d",
-      "triangles": 7076,
+      "sha256": "0da93cdb0646166b142808c2131c5161775da58a2d4d1c38ec71d0f3dab3cb23",
+      "triangles": 8164,
       "embedded_source_images": 9,
-      "geometry_uv_hierarchy_material_slots_sha256": "7cec9d46ca9b8a437ead25be0320101f84782b5a48df7ada8ca5f02a964b8d02",
-      "repeat_archive_sha256": "5a0a0f5b8f7eb00a3accc4e7571ed56f77180b7747d0a078a014fbcde5458571"
+      "geometry_uv_hierarchy_material_slots_sha256": "1854318dece23b5823a7bb0af8823d112e563d0f1930ddce840e1e73dafaaf79",
+      "repeat_archive_sha256": "499555a121f71f3922c6505373c0aa06881a6b61be88014897d3a254e34383e6"
     },
     "low": {
-      "sha256": "ff2cd881831d82325206238364bea59bd3b0f72c4fc328cef9a49b942b7dc67b",
-      "triangles": 2380,
+      "sha256": "9378235c429cac9e453af90ff8c5f280b66fb2306d31761b6b3255ed550280f0",
+      "triangles": 3020,
       "embedded_source_images": 4,
-      "geometry_uv_hierarchy_material_slots_sha256": "15770069051dd1500bd16bde09844a3f65efcee588d7aa2e33760667fa5459d7",
-      "repeat_archive_sha256": "87ba0859bd2dace22267cf9c2cf30d02483e8430cbaf92f398e47f163ff8d6af"
+      "geometry_uv_hierarchy_material_slots_sha256": "20ef6c21e23ddfc2d00c3f94fea128b89858e81b62371e162c38a25f9dd78402",
+      "repeat_archive_sha256": "6d0fdb583cbc5ea056a2ebdac4eacf03b99311c27fba54b9999d27386f02e2a0"
     }
   },
   "lod0": {
-    "sha256": "43ae973b67218f1bbf5e0c5f26d1ea8c30411d3657b2628b48371210d00fd079",
+    "sha256": "bd90a619dabd3e48157e64b0a20bb78c33fb04cf2992bbd5c02c631d95e0f7c5",
     "head_dimensions_blender_m": [
       0.18000000715255737,
       0.20000000298023224,
@@ -95,12 +95,78 @@
       "surface-clamp": {
         "mount_sha256": "01283900c728110a9d733d9f266ce5bfbdb09d9b672e00ae113bc8c85760a0ff",
         "origin_alignment_on_rotated_anchor": true,
+        "path": "assets-source/models/surface-clamp/surface-clamp-lod0.glb",
+        "mounted_poses": [
+          {
+            "yaw_rad": 0.7,
+            "pitch_rad": -0.42,
+            "recoil_m": 0.012,
+            "muzzle_blender_world_m": [
+              0.5204554200172424,
+              -0.5700905919075012,
+              0.9811224341392517
+            ]
+          },
+          {
+            "yaw_rad": -1.13,
+            "pitch_rad": 0.32,
+            "recoil_m": 0.008,
+            "muzzle_blender_world_m": [
+              0.3296164572238922,
+              -0.6469074487686157,
+              0.8511642217636108
+            ]
+          },
+          {
+            "yaw_rad": 0,
+            "pitch_rad": 0,
+            "recoil_m": 0,
+            "muzzle_blender_world_m": [
+              0.5104617476463318,
+              -0.6253343224525452,
+              0.877593994140625
+            ]
+          }
+        ],
         "mount_top_m": 0.054999999701976776,
         "neutral_moving_clearance_m": 0.054999999701976776
       },
       "hover-pod": {
-        "mount_sha256": "d013afe0e2ec5627428db1b683adee6d6a0a47cf2906c5d55ba6a2c151dd2a49",
+        "mount_sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
         "origin_alignment_on_rotated_anchor": true,
+        "path": "assets-source/models/hover-pod-revision/hover-pod-lod0.glb",
+        "mounted_poses": [
+          {
+            "yaw_rad": 0.7,
+            "pitch_rad": -0.42,
+            "recoil_m": 0.012,
+            "muzzle_blender_world_m": [
+              0.5204554200172424,
+              -0.5700905919075012,
+              0.9811224341392517
+            ]
+          },
+          {
+            "yaw_rad": -1.13,
+            "pitch_rad": 0.32,
+            "recoil_m": 0.008,
+            "muzzle_blender_world_m": [
+              0.3296164572238922,
+              -0.6469074487686157,
+              0.8511642217636108
+            ]
+          },
+          {
+            "yaw_rad": 0,
+            "pitch_rad": 0,
+            "recoil_m": 0,
+            "muzzle_blender_world_m": [
+              0.5104617476463318,
+              -0.6253343224525452,
+              0.877593994140625
+            ]
+          }
+        ],
         "mount_top_m": 0.07000000029802322,
         "neutral_moving_clearance_m": 0.03999999910593033
       }
@@ -119,51 +185,128 @@
         "Helios incandescent heart": 1.0
       },
       "unlit_probes": {
-        "interior_samples": 9520,
-        "minimum_peak_rgb8": 35,
+        "interior_samples": 12080,
+        "minimum_peak_rgb8": 36,
         "black_samples": 0
+      },
+      "chamber_optics": {
+        "orange_lip": {
+          "radii_fraction": [
+            0.82,
+            0.91
+          ],
+          "sample_count": 32,
+          "depth_range_mm": [
+            -0.0,
+            0.0
+          ],
+          "decoded_emissive_rgb8_range": [
+            [
+              255,
+              87,
+              34
+            ],
+            [
+              255,
+              87,
+              34
+            ]
+          ]
+        },
+        "dark_throat": {
+          "radii_fraction": [
+            0.4,
+            0.51,
+            0.57
+          ],
+          "sample_count": 48,
+          "depth_range_mm": [
+            10.091,
+            10.661
+          ],
+          "decoded_emissive_rgb8_range": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ]
+        },
+        "plasma_center": {
+          "radii_fraction": [
+            0.06,
+            0.15
+          ],
+          "sample_count": 32,
+          "depth_range_mm": [
+            9.5,
+            9.5
+          ],
+          "decoded_emissive_rgb8_range": [
+            [
+              255,
+              181,
+              74
+            ],
+            [
+              255,
+              181,
+              74
+            ]
+          ]
+        }
+      },
+      "normals": {
+        "planar_corners": 948,
+        "max_planar_error_degrees": 0.0,
+        "curved_head_corners_over_one_degree": 4224
       }
     },
     "atlas": {
       "textures": {
         "basecolor": {
-          "bytes": 488268,
+          "bytes": 504709,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 1.278
+          "level0_rmse_rgb8": 1.279
         },
         "normal": {
-          "bytes": 542586,
+          "bytes": 480390,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 0.969,
+          "level0_rmse_rgb8": 0.95,
           "decoded_unit_length_range": [
-            0.966291,
-            1.023905
+            0.976486,
+            1.02174
           ]
         },
         "orm": {
-          "bytes": 886064,
+          "bytes": 895572,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 1.699
+          "level0_rmse_rgb8": 1.727
         },
         "emissive": {
-          "bytes": 11032,
+          "bytes": 9153,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 0.069
+          "level0_rmse_rgb8": 0.081
         }
       },
-      "file_bytes": 4955264,
+      "file_bytes": 4880724,
       "primitives": 3,
-      "gltf_vertices": 4693,
-      "ktx2_bytes": 1927950,
+      "gltf_vertices": 3172,
+      "ktx2_bytes": 1889824,
       "uastc_bytes_before_zstd": 5592512
     }
   },
   "lod1": {
-    "sha256": "180d1713b4cb8d3da33792db84d47e58acdec7272f579c954667e898d339d27a",
+    "sha256": "acb97ddf626e3f1b7f7e155a89165c6d3041f756b0fb66434e35b66f319b042d",
     "head_dimensions_blender_m": [
       0.18000000715255737,
       0.20000000298023224,
@@ -242,12 +385,78 @@
       "surface-clamp": {
         "mount_sha256": "ce09b7647d734d5d98dd994e89142fcbc53715d4ea6735ed1070acef754bf791",
         "origin_alignment_on_rotated_anchor": true,
+        "path": "assets-source/models/surface-clamp/surface-clamp-lod1.glb",
+        "mounted_poses": [
+          {
+            "yaw_rad": 0.7,
+            "pitch_rad": -0.42,
+            "recoil_m": 0.012,
+            "muzzle_blender_world_m": [
+              0.5204554200172424,
+              -0.5700905919075012,
+              0.9811224341392517
+            ]
+          },
+          {
+            "yaw_rad": -1.13,
+            "pitch_rad": 0.32,
+            "recoil_m": 0.008,
+            "muzzle_blender_world_m": [
+              0.3296164572238922,
+              -0.6469074487686157,
+              0.8511642217636108
+            ]
+          },
+          {
+            "yaw_rad": 0,
+            "pitch_rad": 0,
+            "recoil_m": 0,
+            "muzzle_blender_world_m": [
+              0.5104617476463318,
+              -0.6253343224525452,
+              0.877593994140625
+            ]
+          }
+        ],
         "mount_top_m": 0.054999999701976776,
         "neutral_moving_clearance_m": 0.054999999701976776
       },
       "hover-pod": {
-        "mount_sha256": "469079788569d5940f6b3deb04c70044ad913a947430fde6425249637d93df96",
+        "mount_sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
         "origin_alignment_on_rotated_anchor": true,
+        "path": "assets-source/models/hover-pod-revision/hover-pod-lod1.glb",
+        "mounted_poses": [
+          {
+            "yaw_rad": 0.7,
+            "pitch_rad": -0.42,
+            "recoil_m": 0.012,
+            "muzzle_blender_world_m": [
+              0.5204554200172424,
+              -0.5700905919075012,
+              0.9811224341392517
+            ]
+          },
+          {
+            "yaw_rad": -1.13,
+            "pitch_rad": 0.32,
+            "recoil_m": 0.008,
+            "muzzle_blender_world_m": [
+              0.3296164572238922,
+              -0.6469074487686157,
+              0.8511642217636108
+            ]
+          },
+          {
+            "yaw_rad": 0,
+            "pitch_rad": 0,
+            "recoil_m": 0,
+            "muzzle_blender_world_m": [
+              0.5104617476463318,
+              -0.6253343224525452,
+              0.877593994140625
+            ]
+          }
+        ],
         "mount_top_m": 0.07000000029802322,
         "neutral_moving_clearance_m": 0.03999999910593033
       }
@@ -266,48 +475,143 @@
         "Helios incandescent heart": 1.0
       },
       "unlit_probes": {
-        "interior_samples": 3504,
-        "minimum_peak_rgb8": 35,
+        "interior_samples": 5200,
+        "minimum_peak_rgb8": 36,
         "black_samples": 0
+      },
+      "chamber_optics": {
+        "orange_lip": {
+          "radii_fraction": [
+            0.82,
+            0.91
+          ],
+          "sample_count": 32,
+          "depth_range_mm": [
+            -0.0,
+            0.0
+          ],
+          "decoded_emissive_rgb8_range": [
+            [
+              255,
+              87,
+              34
+            ],
+            [
+              255,
+              87,
+              34
+            ]
+          ]
+        },
+        "dark_throat": {
+          "radii_fraction": [
+            0.4,
+            0.51,
+            0.57
+          ],
+          "sample_count": 48,
+          "depth_range_mm": [
+            10.068,
+            10.644
+          ],
+          "decoded_emissive_rgb8_range": [
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ]
+        },
+        "plasma_center": {
+          "radii_fraction": [
+            0.06,
+            0.15
+          ],
+          "sample_count": 32,
+          "depth_range_mm": [
+            9.5,
+            9.5
+          ],
+          "decoded_emissive_rgb8_range": [
+            [
+              255,
+              181,
+              74
+            ],
+            [
+              255,
+              181,
+              74
+            ]
+          ]
+        }
+      },
+      "normals": {
+        "planar_corners": 636,
+        "max_planar_error_degrees": 0.0,
+        "curved_head_corners_over_one_degree": 1536
       }
     },
     "atlas": {
       "textures": {
         "basecolor": {
-          "bytes": 488268,
+          "bytes": 504709,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 1.278
+          "level0_rmse_rgb8": 1.279
         },
         "normal": {
-          "bytes": 542586,
+          "bytes": 480390,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 0.969,
+          "level0_rmse_rgb8": 0.95,
           "decoded_unit_length_range": [
-            0.966291,
-            1.023905
+            0.976486,
+            1.02174
           ]
         },
         "orm": {
-          "bytes": 886064,
+          "bytes": 895572,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 1.699
+          "level0_rmse_rgb8": 1.727
         },
         "emissive": {
-          "bytes": 11032,
+          "bytes": 9153,
           "mip_levels": 11,
           "uastc_mip_bytes_before_zstd": 1398128,
-          "level0_rmse_rgb8": 0.069
+          "level0_rmse_rgb8": 0.081
         }
       },
-      "file_bytes": 4806000,
+      "file_bytes": 4794828,
       "primitives": 3,
-      "gltf_vertices": 1772,
-      "ktx2_bytes": 1927950,
+      "gltf_vertices": 1598,
+      "ktx2_bytes": 1889824,
       "uastc_bytes_before_zstd": 5592512
     }
   },
-  "combined_positive_area_uv_overlaps": 0
+  "combined_positive_area_uv_overlaps": 0,
+  "decoded_mip_chains": {
+    "basecolor": {
+      "levels_decoded": 11,
+      "rgba8_chain_sha256": "2e364cd5411738084001ef0e080289dfd26616aaf9930b0270b548b01cacf83f"
+    },
+    "normal": {
+      "levels_decoded": 11,
+      "rgba8_chain_sha256": "5978ccba9cbb895b329861f76b80bba7125f8652acd623da14d662e73dd15912"
+    },
+    "orm": {
+      "levels_decoded": 11,
+      "rgba8_chain_sha256": "a6d302ce2b5c6647c7812e13bdcd7edeb7ab465526916d6ca0fbd25820ced6a3"
+    },
+    "emissive": {
+      "levels_decoded": 11,
+      "rgba8_chain_sha256": "fdf0594f4ec4d6d8c53be4bcac444096d690edffe2e61004d94f175ae88cf05d"
+    }
+  }
 }
