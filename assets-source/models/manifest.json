@@ -3052,6 +3052,818 @@
           "tolerance": 12
         }
       ]
+    },
+    {
+      "file": "glacier-cryo-arc-t1/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "e97dd8fa70c0c3c749072e048c777a75ad3df84f7c09f4e58db6496889f38e72",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 162,
+          "y": 25,
+          "rgb": [
+            10,
+            103,
+            127
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 544,
+          "y": 618,
+          "rgb": [
+            188,
+            192,
+            196
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 593,
+          "y": 332,
+          "rgb": [
+            24,
+            27,
+            37
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 544,
+          "y": 475,
+          "rgb": [
+            77,
+            85,
+            94
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 320,
+          "y": 858,
+          "rgb": [
+            66,
+            75,
+            86
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "glacier-cryo-arc-t1/normal.ktx2",
+      "role": "normal",
+      "sha256": "825be3d021735d92563a29cb49b52f875f6c8c5292cf904a0a9458a8970c3828",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 162,
+          "y": 25,
+          "rgb": [
+            131,
+            153,
+            252
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 544,
+          "y": 618,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 593,
+          "y": 332,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 544,
+          "y": 475,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 320,
+          "y": 858,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "glacier-cryo-arc-t1/orm.ktx2",
+      "role": "orm",
+      "sha256": "b706518fbe3d9ad663410ee530ce964d89d04c673f8607727f196d7865daaed8",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 162,
+          "y": 25,
+          "rgb": [
+            212,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 544,
+          "y": 618,
+          "rgb": [
+            254,
+            82,
+            245
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 593,
+          "y": 332,
+          "rgb": [
+            255,
+            148,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 544,
+          "y": 475,
+          "rgb": [
+            127,
+            94,
+            232
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 320,
+          "y": 858,
+          "rgb": [
+            255,
+            163,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "glacier-cryo-arc-t1/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "e2c8bd19ef2733711967176ebfb3908119b5906f65dc18d6073b21819f5a400c",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 162,
+          "y": 25,
+          "rgb": [
+            6,
+            182,
+            212
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 544,
+          "y": 618,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 593,
+          "y": 332,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 544,
+          "y": 475,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 320,
+          "y": 858,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "glacier-cryo-arc-t2/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "c4469fcd84cc7b768c7a215f54442e75a86d9b887c76ad686dcc65d0de7a9a75",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 974,
+          "y": 83,
+          "rgb": [
+            10,
+            103,
+            127
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 301,
+          "y": 175,
+          "rgb": [
+            192,
+            196,
+            199
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 915,
+          "y": 404,
+          "rgb": [
+            26,
+            30,
+            40
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 301,
+          "y": 23,
+          "rgb": [
+            81,
+            89,
+            98
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 204,
+          "y": 870,
+          "rgb": [
+            61,
+            70,
+            81
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "glacier-cryo-arc-t2/normal.ktx2",
+      "role": "normal",
+      "sha256": "f746a630d1b18f6a47de1fa9d977086bfeb2918227317a77f2f23318efc0bf50",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 974,
+          "y": 83,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 301,
+          "y": 175,
+          "rgb": [
+            128,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 915,
+          "y": 404,
+          "rgb": [
+            129,
+            126,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 301,
+          "y": 23,
+          "rgb": [
+            129,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 204,
+          "y": 870,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "glacier-cryo-arc-t2/orm.ktx2",
+      "role": "orm",
+      "sha256": "267c0f077740d2ba5e8875ac83d2ec14af841aca9e121b6a56a95188c072376a",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 974,
+          "y": 83,
+          "rgb": [
+            255,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 301,
+          "y": 175,
+          "rgb": [
+            234,
+            85,
+            247
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 915,
+          "y": 404,
+          "rgb": [
+            255,
+            164,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 301,
+          "y": 23,
+          "rgb": [
+            127,
+            98,
+            233
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 204,
+          "y": 870,
+          "rgb": [
+            255,
+            169,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "glacier-cryo-arc-t2/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "49cdb0765d0161bf59926e668aa09a67f4a00cafe2ae4e9d914d47836222a4e9",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 974,
+          "y": 83,
+          "rgb": [
+            6,
+            182,
+            212
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 301,
+          "y": 175,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 915,
+          "y": 404,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 301,
+          "y": 23,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 204,
+          "y": 870,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "glacier-cryo-arc-t3/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "117a1c0d16c54f186c4edc2adb635c511c2ccca40ca214435dd5469f038ba12b",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 836,
+          "y": 148,
+          "rgb": [
+            10,
+            103,
+            127
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Glacier ice facet",
+          "x": 997,
+          "y": 198,
+          "rgb": [
+            118,
+            201,
+            219
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 16,
+          "y": 114,
+          "rgb": [
+            188,
+            193,
+            196
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 848,
+          "y": 563,
+          "rgb": [
+            26,
+            30,
+            40
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 16,
+          "y": 15,
+          "rgb": [
+            81,
+            88,
+            97
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 200,
+          "y": 888,
+          "rgb": [
+            63,
+            71,
+            82
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "glacier-cryo-arc-t3/normal.ktx2",
+      "role": "normal",
+      "sha256": "500ec1a38c164e98d88205670205e57751898411d18fa2717496d2f35bc72ee9",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 836,
+          "y": 148,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Glacier ice facet",
+          "x": 997,
+          "y": 198,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 16,
+          "y": 114,
+          "rgb": [
+            128,
+            128,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 848,
+          "y": 563,
+          "rgb": [
+            128,
+            126,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 16,
+          "y": 15,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 200,
+          "y": 888,
+          "rgb": [
+            127,
+            128,
+            255
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "glacier-cryo-arc-t3/orm.ktx2",
+      "role": "orm",
+      "sha256": "a6963174fd2d2b3eb4fe87d650ef96e45a8fca223263905150aa97c6b05ff016",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 836,
+          "y": 148,
+          "rgb": [
+            255,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Glacier ice facet",
+          "x": 997,
+          "y": 198,
+          "rgb": [
+            0,
+            82,
+            51
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 16,
+          "y": 114,
+          "rgb": [
+            255,
+            80,
+            246
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 848,
+          "y": 563,
+          "rgb": [
+            255,
+            156,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 16,
+          "y": 15,
+          "rgb": [
+            191,
+            97,
+            233
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 200,
+          "y": 888,
+          "rgb": [
+            255,
+            165,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
+    },
+    {
+      "file": "glacier-cryo-arc-t3/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "e5a2b3aaea5fe52e776a29b96acaa91c59097b27921a0eba2679342591ff55b4",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Glacier arc cyan",
+          "x": 836,
+          "y": 148,
+          "rgb": [
+            6,
+            182,
+            212
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Glacier ice facet",
+          "x": 997,
+          "y": 198,
+          "rgb": [
+            121,
+            219,
+            236
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.brushed-titanium",
+          "x": 16,
+          "y": 114,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "Core carbon inserts",
+          "x": 848,
+          "y": 563,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.dark-gunmetal",
+          "x": 16,
+          "y": 15,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        },
+        {
+          "surface": "RB.tactical-ceramic",
+          "x": 200,
+          "y": 888,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 12
+        }
+      ]
     }
   ],
   "models": [
@@ -3974,6 +4786,306 @@
           "normal": "helios-plasma-mortar-t3/normal.ktx2",
           "orm": "helios-plasma-mortar-t3/orm.ktx2",
           "emissive": "helios-plasma-mortar-t3/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "glacier-cryo-arc-t1",
+      "lod": 0,
+      "file": "glacier-cryo-arc-t1/glacier-cryo-arc-t1-lod0.glb",
+      "sha256": "24fc3d2d54cce1b68cab5225410ad812830ad9c481d068feea3f6251fd2094e5",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.24,
+            0.14
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Glacier T1 satin armor": {
+          "basecolor": "glacier-cryo-arc-t1/basecolor.ktx2",
+          "normal": "glacier-cryo-arc-t1/normal.ktx2",
+          "orm": "glacier-cryo-arc-t1/orm.ktx2",
+          "emissive": "glacier-cryo-arc-t1/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "glacier-cryo-arc-t1",
+      "lod": 1,
+      "file": "glacier-cryo-arc-t1/glacier-cryo-arc-t1-lod1.glb",
+      "sha256": "5af5705104840914939987c6ba95de0e591b0e5fabb8335c0a03cc1fa975d9e3",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.24,
+            0.14
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Glacier T1 satin armor": {
+          "basecolor": "glacier-cryo-arc-t1/basecolor.ktx2",
+          "normal": "glacier-cryo-arc-t1/normal.ktx2",
+          "orm": "glacier-cryo-arc-t1/orm.ktx2",
+          "emissive": "glacier-cryo-arc-t1/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "glacier-cryo-arc-t2",
+      "lod": 0,
+      "file": "glacier-cryo-arc-t2/glacier-cryo-arc-t2-lod0.glb",
+      "sha256": "d87caa88f3d725c95260f92cb2fc2a99a71afe421017627db060e5756e0240ed",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.26,
+            0.16
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Glacier T2 satin armor": {
+          "basecolor": "glacier-cryo-arc-t2/basecolor.ktx2",
+          "normal": "glacier-cryo-arc-t2/normal.ktx2",
+          "orm": "glacier-cryo-arc-t2/orm.ktx2",
+          "emissive": "glacier-cryo-arc-t2/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "glacier-cryo-arc-t2",
+      "lod": 1,
+      "file": "glacier-cryo-arc-t2/glacier-cryo-arc-t2-lod1.glb",
+      "sha256": "d11001f3812f529f4242c384f699b2dfad30fdb4f96dd37c28d075f7663c1d09",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.26,
+            0.16
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Glacier T2 satin armor": {
+          "basecolor": "glacier-cryo-arc-t2/basecolor.ktx2",
+          "normal": "glacier-cryo-arc-t2/normal.ktx2",
+          "orm": "glacier-cryo-arc-t2/orm.ktx2",
+          "emissive": "glacier-cryo-arc-t2/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "glacier-cryo-arc-t3",
+      "lod": 0,
+      "file": "glacier-cryo-arc-t3/glacier-cryo-arc-t3-lod0.glb",
+      "sha256": "c049268de20d996143558d19a5d64e1c084369d2b74475ba6bcb0b47433e7c89",
+      "limits": {
+        "triangles": 4072,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.28,
+            0.18
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Glacier T3 satin armor": {
+          "basecolor": "glacier-cryo-arc-t3/basecolor.ktx2",
+          "normal": "glacier-cryo-arc-t3/normal.ktx2",
+          "orm": "glacier-cryo-arc-t3/orm.ktx2",
+          "emissive": "glacier-cryo-arc-t3/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "glacier-cryo-arc-t3",
+      "lod": 1,
+      "file": "glacier-cryo-arc-t3/glacier-cryo-arc-t3-lod1.glb",
+      "sha256": "976bfe5e4b8b07112be6dc926531fe0f5f2d2ff0d647b76f843ac2272a4f1964",
+      "limits": {
+        "triangles": 1352,
+        "materials": 1,
+        "bones": 0,
+        "sockets": 1,
+        "texture_size": 1024
+      },
+      "sockets": {
+        "muzzleSocket": {
+          "parent": "recoilGroup",
+          "position": [
+            0.0,
+            0.28,
+            0.18
+          ],
+          "tolerance": 2e-06
+        }
+      },
+      "animations": [],
+      "planar_primitives": [
+        {
+          "node": "forward-assembly",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "turret-head",
+          "primitive": 0,
+          "max_degrees": 1
+        },
+        {
+          "node": "yaw-bearing",
+          "primitive": 0,
+          "max_degrees": 1
+        }
+      ],
+      "material_textures": {
+        "Glacier T3 satin armor": {
+          "basecolor": "glacier-cryo-arc-t3/basecolor.ktx2",
+          "normal": "glacier-cryo-arc-t3/normal.ktx2",
+          "orm": "glacier-cryo-arc-t3/orm.ktx2",
+          "emissive": "glacier-cryo-arc-t3/emissive.ktx2"
         }
       }
     }

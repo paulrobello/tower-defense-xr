@@ -1,0 +1,30 @@
+{
+  "blender": "5.2.2 LTS (d13f752e3b9c)",
+  "ktx_software": "4.4.2",
+  "architecture": "Linux x86_64 CPU",
+  "blender_threads": 2,
+  "encode_threads": 1,
+  "independent_builds": 2,
+  "final_source_replay": true,
+  "matching_sha256": {
+    "stage/geometry.json": "81230ff8fdd765d94a866ce95d093b04d39ddb5ec794a35bb0973562b747a964",
+    "stage/basecolor.png": "84f2fffdd3d687b6541674fe2b44a0cbe2984e83a742802e7b62442d3156ded6",
+    "stage/normal.png": "1760462cd53b3f4fa465a04bf526411f586d968a65099e6a3b94bb8c29195bac",
+    "stage/orm.png": "1049b18bd3defe2184e4701fb2a311d581995694e9873f6f138cb777b58f3d8f",
+    "stage/emissive.png": "476c0e2b1c024493ad74adf97c43b7f9b02398bead4e25ba2afca18354136739",
+    "stage/lod0/source.bin": "61e7cb06047e87a143a26bd8a0098bdfd62869a3272566aa2536e73c4d3bbb2c",
+    "stage/lod0/source.gltf": "ec44ffd097f8e08ab2edca0d09fb7601cfead0cf9496587157dd46531c27066b",
+    "stage/lod1/source.bin": "d2fe980f76a807ba00e65aa50be27e02b65cc91c8ee5fcc05953405c0cd3e408",
+    "stage/lod1/source.gltf": "2cd4b96bd8849a5b63a62565ff7532ddf4635f4539a1bb52dac0d664d6575685",
+    "models/basecolor.ktx2": "117a1c0d16c54f186c4edc2adb635c511c2ccca40ca214435dd5469f038ba12b",
+    "models/normal.ktx2": "500ec1a38c164e98d88205670205e57751898411d18fa2717496d2f35bc72ee9",
+    "models/orm.ktx2": "a6963174fd2d2b3eb4fe87d650ef96e45a8fca223263905150aa97c6b05ff016",
+    "models/emissive.ktx2": "e5a2b3aaea5fe52e776a29b96acaa91c59097b27921a0eba2679342591ff55b4",
+    "models/glacier-cryo-arc-t3-lod0.glb": "c049268de20d996143558d19a5d64e1c084369d2b74475ba6bcb0b47433e7c89",
+    "models/glacier-cryo-arc-t3-lod1.glb": "976bfe5e4b8b07112be6dc926531fe0f5f2d2ff0d647b76f843ac2272a4f1964"
+  },
+  "generator_sha256": {
+    "blender/glacier_cryo.py": "80df1282d472bab2302d0db3c14ce2775270de1bdbfcc3e15c75b46001baea3b",
+    "blender/glacier_shape.py": "1d31ab53fff3e449bbf76c740dfffe89e67313e627e20c1e23c5fd7c5865c701"
+  }
+}

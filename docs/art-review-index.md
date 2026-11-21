@@ -99,3 +99,15 @@ The staged heads use a single orange chamber at T1, a bridged pair at T2 and bro
 | T3 siege | 4,024 / 1,352 | [Source, proofs and hashes](../assets-source/models/helios-plasma-mortar-t3/README.md) |
 
 The T3 assembly with the larger clamp is 6,452 / 2,500 triangles and two materials. Each tier uses 1024 px portable maps and an editable high/low Blender pair. These are review candidates for P3-T7.
+
+## Glacier Cryo-Arc
+
+The staged heads progress from a recessed single coil to a fork and a three-pylon conduit around a separate cyan crystal. Re-import verified the neutral muzzle, yaw, pitch, recoil, both mounts and each tier's decoded finish regions. The 42 EEVEE renders include matched high/low and both mounted views.
+
+| Tier | Head LOD0 / LOD1 triangles | Review |
+| --- | ---: | --- |
+| T1 coil | 2,604 / 1,276 | [Source, proofs and hashes](../assets-source/models/glacier-cryo-arc-t1/README.md) |
+| T2 fork | 1,640 / 936 | [Source, proofs and hashes](../assets-source/models/glacier-cryo-arc-t2/README.md) |
+| T3 conduit | 2,712 / 1,320 | [Source, proofs and hashes](../assets-source/models/glacier-cryo-arc-t3/README.md) |
+
+The largest assembly measures 5,140 / 2,468 triangles with two materials. LOD1 retains the casing profiles that define the material boundaries. Each tier has four 1024 px maps and an editable Blender pair. The T1 ORM map uses UASTC quality 3 with RDO disabled to preserve the brushed-titanium ambient occlusion sample within the existing tolerance. That map grew by 165,986 bytes. Independent scoring and owner approval remain P3-T7 work.
