@@ -191,9 +191,10 @@ export function mountApp(container: HTMLElement): AppRuntime {
     xr: {
       framebufferScale: initial.framebufferScale,
       foveation: initial.fixedFoveation,
+      depthSensing: null,
     },
   });
-  shell.xrOverlayScene.add(xrHudRoot);
+  shell.xrOverlayRoot.add(xrHudRoot);
 
   // Hide static bootstrap placeholder core crystal so BlockoutRenderer's Core Bastion owns the pedestal
   const placeholderCore = shell.room.getObjectByName('core-placeholder');
@@ -252,6 +253,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
   const occlusion = createOcclusionController({
     initialMode: initial.roomOcclusion,
+    missingDepthFallback: 'off',
   });
   shell.scene.add(occlusion.root);
 
@@ -260,7 +262,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
   const syncRoomGeometryToMr = (surfaces: readonly RoomSurface[]): void => {
     const occSurfaces = toOcclusionSurfaces(surfaces);
-    occlusion.syncRoomSurfaces(occSurfaces);
+    occlusion.syncRoomSurfaces(occlusion.requestedMode === 'room-mesh' ? occSurfaces : []);
     shadowCatchers.sync(occSurfaces);
   };
   syncRoomGeometryToMr(roomModel.surfaces);
@@ -315,7 +317,8 @@ export function mountApp(container: HTMLElement): AppRuntime {
   placement.placedTurretsGroup.visible = false;
 
   const radialControls = createXrRadialControls({
-    scene: shell.xrOverlayScene,
+    scene: shell.scene,
+    overlayRoot: shell.xrOverlayRoot,
     actionBus: bus,
     placement,
     getBuildState: () => {
@@ -361,7 +364,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
       mountMode: placement.mountMode,
     },
   });
-  shell.xrOverlayScene.add(tacticalHud.xrRoot);
+  shell.xrOverlayRoot.add(tacticalHud.xrRoot);
   const tacticalHudPanel = {
     root: tacticalHud.xrRoot,
     cellAt: tacticalHud.cellAt,
@@ -374,7 +377,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
     initialMode: 'desktop',
     initialVisible: true,
   });
-  shell.xrOverlayScene.add(threatChevrons.xrRoot);
+  shell.xrOverlayRoot.add(threatChevrons.xrRoot);
 
   const missionOverlay = createMissionOverlay({
     persistStore: persist,
@@ -469,16 +472,6 @@ export function mountApp(container: HTMLElement): AppRuntime {
   blockouts.syncFromSim(currentSim.getState(), currentSim.drainEvents(), 0);
 
   const unsubCalibration = calibration.subscribe(() => {
-    occlusion.setPortals(toPortalApertures(calibration.portalAnchors));
-    if (state.phase === 'calibrate' || state.phase === 'title') {
-      currentNavGraph = buildNavigationGraph({
-        roomModel,
-        coreAnchor: calibration.coreAnchor,
-        portalAnchors: calibration.portalAnchors,
-      });
-      currentSim.setNavigationGraph(currentNavGraph);
-      blockouts.syncFromSim(currentSim.getState(), [], 0);
-    }
     syncTacticalHud();
   });
 
@@ -558,10 +551,13 @@ export function mountApp(container: HTMLElement): AppRuntime {
     }
   });
 
-  const unsubSettings = settings.subscribe((next) => {
+  const unsubSettings = settings.subscribe((next, previous) => {
     shell.xr.setFoveation(next.fixedFoveation);
     shell.xr.setFramebufferScale(next.framebufferScale);
-    occlusion.setMode(next.roomOcclusion);
+    if (next.roomOcclusion !== previous.roomOcclusion) {
+      occlusion.setMode(next.roomOcclusion);
+      syncRoomGeometryToMr(roomModel.surfaces);
+    }
     syncXrStatus();
   });
 
@@ -756,7 +752,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
       ? shell.renderer.xr.getCamera()
       : shell.camera;
 
-    // 1. Ingest XR spatial surfaces, depth-sensing, radial menu, and controller placement
+    // 1. Ingest XR spatial surfaces, radial menu, and controller placement
     if (frame && shell.xr.reference) {
       if (pendingXrCalibrationPose && state.phase === 'calibrate') {
         const viewerPose = frame.getViewerPose(shell.xr.reference);
@@ -788,11 +784,6 @@ export function mountApp(container: HTMLElement): AppRuntime {
       );
 
       roomModel.updateFromFrame(frame, shell.xr.reference, { nowMs: timeMs, resumeLiveScan: true });
-      occlusion.updateFromXrFrame(frame, shell.xr.reference);
-      occlusion.bindCamera(
-        activeCamera,
-        shell.renderer.xr.getCamera() as unknown as { cameras?: readonly THREE.Camera[] },
-      );
 
       if (state.phase === 'prep' || state.phase === 'wave' || state.phase === 'intermission') {
         placement.updateFromXrFrame(
@@ -827,7 +818,23 @@ export function mountApp(container: HTMLElement): AppRuntime {
       }
       syncTacticalHud();
     } else if (state.phase === 'calibrate') {
-      blockouts.syncFromSim(currentSim.getState(), [], dt);
+      blockouts.syncFromSim(
+        {
+          ...currentSim.getState(),
+          corePosition: calibration.coreAnchor.position,
+          portals: calibration.portalAnchors.map((portal, portalIndex) => ({
+            id: portal.id,
+            portalIndex,
+            position: portal.position,
+            normal: portal.normal,
+            hostKind: portal.hostKind,
+            isOpen: false,
+            openedAtTick: null,
+          })),
+        },
+        [],
+        dt,
+      );
     }
 
     // 3. Record 1-second monotonic performance buckets

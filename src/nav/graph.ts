@@ -92,6 +92,7 @@ export interface NavObstacle {
   readonly kind: NavSurfaceKind;
   /** Raw 2D footprint polygon in world XZ (CCW convex hull / surface polygon). */
   readonly polygonXZ: readonly Point2D[];
+  readonly boundsXZ: { minX: number; maxX: number; minZ: number; maxZ: number };
   /** Clearance-inflated 2D polygon in world XZ used for pathfinding margin. */
   readonly expandedPolygonXZ: readonly Point2D[];
   readonly minY: number;
@@ -1027,12 +1028,25 @@ function extractFloorObstacles(
     }
 
     const expandedPolygonXZ = expandPolygonXZ(polygonXZ, clearanceM);
+    const boundsXZ = {
+      minX: Number.POSITIVE_INFINITY,
+      maxX: Number.NEGATIVE_INFINITY,
+      minZ: Number.POSITIVE_INFINITY,
+      maxZ: Number.NEGATIVE_INFINITY,
+    };
+    for (const { x, z } of polygonXZ) {
+      boundsXZ.minX = Math.min(boundsXZ.minX, x);
+      boundsXZ.maxX = Math.max(boundsXZ.maxX, x);
+      boundsXZ.minZ = Math.min(boundsXZ.minZ, z);
+      boundsXZ.maxZ = Math.max(boundsXZ.maxZ, z);
+    }
 
     obstacles.push({
       id: `obstacle-${surface.id}`,
       surfaceId: surface.id,
       kind: surface.kind,
       polygonXZ,
+      boundsXZ,
       expandedPolygonXZ,
       minY,
       maxY: Math.max(floorY + 0.35, maxY),
@@ -1050,7 +1064,10 @@ function isPointClearOfObstacles(
   obstacles: readonly NavObstacle[],
   marginM: number,
 ): boolean {
+  const pad = Math.max(marginM, 1e-4);
   for (const obs of obstacles) {
+    const { minX, maxX, minZ, maxZ } = obs.boundsXZ;
+    if (x < minX - pad || x > maxX + pad || z < minZ - pad || z > maxZ + pad) continue;
     if (marginM <= 0) {
       if (isPointInPolygon2D(x, z, obs.polygonXZ, 1e-4)) return false;
     } else if (pointToPolygonSignedDistance2D(x, z, obs.polygonXZ) < marginM - 1e-5) {
@@ -1066,7 +1083,13 @@ function isSegmentClearOfObstacles(
   obstacles: readonly NavObstacle[],
   marginM: number,
 ): boolean {
+  const segMinX = Math.min(a.x, b.x) - marginM;
+  const segMaxX = Math.max(a.x, b.x) + marginM;
+  const segMinZ = Math.min(a.z, b.z) - marginM;
+  const segMaxZ = Math.max(a.z, b.z) + marginM;
   for (const obs of obstacles) {
+    const { minX, maxX, minZ, maxZ } = obs.boundsXZ;
+    if (segMaxX < minX || segMinX > maxX || segMaxZ < minZ || segMinZ > maxZ) continue;
     if (segmentIntersectsPolygonInterior2D(a, b, obs.polygonXZ, marginM)) {
       return false;
     }

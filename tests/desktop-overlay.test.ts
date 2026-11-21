@@ -1,4 +1,4 @@
-import type * as THREE from 'three';
+import * as THREE from 'three';
 import { describe, expect, it, vi } from 'vitest';
 import { createActionBus, type GameAction } from '../src/core/action-bus.ts';
 import {
@@ -165,15 +165,10 @@ function createMockRenderer() {
     xr,
     toneMapping: 0,
     outputColorSpace: '',
-    autoClearColor: true,
-    autoClearDepth: true,
-    info: { autoReset: true, reset: vi.fn() },
     setPixelRatio: vi.fn(),
     setClearColor: vi.fn(),
     setSize: vi.fn(),
-    render: vi.fn(function (this: THREE.WebGLRenderer, _scene: THREE.Scene) {
-      return { clearColor: this.autoClearColor, clearDepth: this.autoClearDepth };
-    }),
+    render: vi.fn(),
     setAnimationLoop: vi.fn((fn: ((time: number, frame?: XRFrame) => void) | null) => {
       loop = fn;
     }),
@@ -235,13 +230,17 @@ describe('desktop bootstrap shell', () => {
     mock.tick(16, frame);
     expect(mock.xr.setFoveation).toHaveBeenCalledWith(1);
     expect(onFrame).toHaveBeenCalledWith(0, 16, frame);
-    expect(mock.renderer.info.reset).toHaveBeenCalledTimes(1);
-    const render = vi.mocked(mock.renderer.render);
-    expect(render.mock.calls.map(([scene]) => scene)).toEqual([shell.scene, shell.xrOverlayScene]);
-    expect(render.mock.results.map(({ value }) => value)).toEqual([
-      { clearColor: true, clearDepth: true },
-      { clearColor: false, clearDepth: true },
-    ]);
+    expect(mock.renderer.render).toHaveBeenCalledExactlyOnceWith(shell.scene, shell.camera);
+    expect(shell.xrOverlayRoot.visible).toBe(true);
+    const panel = new THREE.Group();
+    shell.xrOverlayRoot.add(panel);
+    const control = new THREE.Mesh(new THREE.PlaneGeometry(), new THREE.MeshBasicMaterial());
+    panel.add(control);
+    expect(control.material).toMatchObject({
+      depthWrite: false,
+      depthTest: false,
+      transparent: true,
+    });
     offFrame();
 
     // Exiting XR restores virtual room and desktop mode.
@@ -249,6 +248,7 @@ describe('desktop bootstrap shell', () => {
     await vi.waitFor(() => expect(shell.xr.presenting).toBe(false));
     expect(shell.mode).toBe('desktop');
     expect(shell.room.visible).toBe(true);
+    expect(shell.xrOverlayRoot.visible).toBe(false);
     expect(shell.scene.background).not.toBeNull();
 
     shell.dispose();

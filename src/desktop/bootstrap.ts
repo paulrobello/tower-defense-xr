@@ -10,6 +10,7 @@
  */
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { Text } from 'troika-three-text';
 import type { ActionBus } from '../core/action-bus.ts';
 import { configureFonts } from '../ui/fonts.ts';
 import {
@@ -371,7 +372,7 @@ export interface DesktopShellOptions {
 export interface DesktopShell {
   readonly renderer: THREE.WebGLRenderer;
   readonly scene: THREE.Scene;
-  readonly xrOverlayScene: THREE.Scene;
+  readonly xrOverlayRoot: THREE.Group;
   readonly camera: THREE.PerspectiveCamera;
   readonly controls: OrbitControls;
   readonly room: THREE.Group;
@@ -397,6 +398,36 @@ function disposeObject(root: THREE.Object3D): void {
   for (const material of materials) material.dispose();
 }
 
+function configureSpatialOverlay(root: THREE.Group): () => void {
+  const onAdded = ({ child }: { child: THREE.Object3D }): void => child.traverse(observe);
+  const onRemoved = ({ child }: { child: THREE.Object3D }): void => child.traverse(unobserve);
+
+  function observe(node: THREE.Object3D): void {
+    node.addEventListener('childadded', onAdded);
+    node.addEventListener('childremoved', onRemoved);
+    if (!(node instanceof THREE.Mesh)) return;
+    // Transparent panels must draw their backplates before labels even when their bounds sort differently.
+    if (node instanceof Text) node.renderOrder = Math.max(node.renderOrder, 2);
+    else if (node.userData.labelTextObject) node.renderOrder = Math.max(node.renderOrder, 1);
+    for (const material of Array.isArray(node.material) ? node.material : [node.material]) {
+      material.depthTest = false;
+      material.depthWrite = false;
+      if (!material.transparent) {
+        material.transparent = true;
+        material.needsUpdate = true;
+      }
+    }
+  }
+
+  function unobserve(node: THREE.Object3D): void {
+    node.removeEventListener('childadded', onAdded);
+    node.removeEventListener('childremoved', onRemoved);
+  }
+
+  root.traverse(observe);
+  return () => root.traverse(unobserve);
+}
+
 export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
   const { container, bus } = options;
   configureFonts();
@@ -408,7 +439,6 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
   renderer.setClearColor(0x000000, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.info.autoReset = false;
   renderer.domElement.dataset.control = 'game-canvas';
   applyStyle(renderer.domElement, { display: 'block', width: '100%', height: '100%' });
   const position = getComputedStyle(container).position;
@@ -418,7 +448,11 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
   container.append(renderer.domElement);
 
   const scene = new THREE.Scene();
-  const xrOverlayScene = new THREE.Scene();
+  const xrOverlayRoot = new THREE.Group();
+  xrOverlayRoot.name = 'spatial-overlay';
+  xrOverlayRoot.visible = false;
+  const stopOverlay = configureSpatialOverlay(xrOverlayRoot);
+  scene.add(xrOverlayRoot);
   const desktopBackground = new THREE.Color(PALETTE.background);
   scene.background = desktopBackground;
   const { room, core } = createTestRoom();
@@ -468,12 +502,14 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
       // Passthrough: no background and no virtual room; the real room replaces the test room.
       scene.background = null;
       room.visible = false;
+      xrOverlayRoot.visible = true;
       controls.enabled = false;
       overlay.hide();
       return;
     }
     scene.background = desktopBackground;
     room.visible = true;
+    xrOverlayRoot.visible = false;
     mode = desktopPlaying ? 'desktop' : 'launch';
     controls.enabled = desktopPlaying;
     if (desktopPlaying) overlay.hide();
@@ -513,17 +549,7 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
     else if (controls.enabled) controls.update();
     core.rotation.y += delta * 0.6;
     for (const callback of [...frameCallbacks]) callback(delta, time, frame);
-    renderer.info.reset();
     renderer.render(scene, camera);
-    if (frame && xr.presenting) {
-      // Keep the world color and start the spatial UI pass with its own depth buffer.
-      renderer.autoClearColor = false;
-      try {
-        renderer.render(xrOverlayScene, camera);
-      } finally {
-        renderer.autoClearColor = true;
-      }
-    }
   });
 
   const onResize = (): void => resize();
@@ -535,7 +561,7 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
   return {
     renderer,
     scene,
-    xrOverlayScene,
+    xrOverlayRoot,
     camera,
     controls,
     room,
@@ -562,8 +588,8 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
       xr.dispose();
       overlay.dispose();
       controls.dispose();
+      stopOverlay();
       disposeObject(scene);
-      disposeObject(xrOverlayScene);
       renderer.dispose();
       renderer.domElement.remove();
     },

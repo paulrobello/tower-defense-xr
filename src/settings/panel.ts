@@ -99,7 +99,7 @@ function formatPlayArcXr(value: PlayArcOption): string {
 function formatRoomOcclusion(value: RoomOcclusionOption): string {
   switch (value) {
     case 'auto-depth':
-      return 'Auto Depth';
+      return 'Auto (Off)';
     case 'room-mesh':
       return 'Room Mesh';
     case 'off':

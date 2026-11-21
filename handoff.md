@@ -8,7 +8,7 @@
 
 - **Updated:** November 21, 2026 (Pacific time)
 - **Repo:** `/Users/probello/Repos/tower-defense-xr`, branch `main`. The existing local formatting edit in the Phase 4 plan is separate from this handoff.
-- **Public build:** [GitHub](https://github.com/paulrobello/tower-defense-xr) and [live test build](https://rift-bastion.pardev.net/). The Quest calibration hotfix was deployed at commit `a32c892`, build `443a1533c24c`, on November 21, 2026. GitHub Actions passed the Linux gate and Pages deploy. The live manifest matched the verified build and content hash. The local backup branch `codex/rift-pre-publication-history` retains the original history. [Deployment run](https://github.com/paulrobello/tower-defense-xr/actions/runs/44939389047)
+- **Public build:** [GitHub](https://github.com/paulrobello/tower-defense-xr) and [live test build](https://rift-bastion.pardev.net/). The Quest recovery build was deployed at commit `cb9973e`, build `e6c5dd826115`, on November 21, 2026. GitHub Actions passed the Linux gate and Pages deploy. The live manifest matched the verified build and content hash. The local backup branch `codex/rift-pre-publication-history` retains the original history. [Deployment run](https://github.com/paulrobello/tower-defense-xr/actions/runs/44941927917)
 - **Completed work (30 kanban cards `done`):**
   - **Phase 0 complete:** `P0-T1`–`P0-T6` closed. The local gates, 14/14 IWER smoke and build A→B Reload checks passed. [GitHub Actions](https://github.com/paulrobello/tower-defense-xr/actions/runs/44874742012) passed the pinned Linux gate and Pages deployment. The live manifest matched the verified build and Quest Browser rendered desktop calibration on its Adreno GPU. Immersive play and physical performance remain Phase 5 work.
   - **Phase 1 (100% complete):** `P1-T1`–`P1-T6` closed. `bun scripts/xr-emu/walk-p1.mjs` passes **19/19** checks (seated `1.2 m` `front-180` + standing `1.65 m` `full-360` calibration, floor/table/wall surface-clamp + thumbstick hover-pod `0.8–5.0 m`, `TOO_CLOSE` & `CAP 14/14` SDF labels, `auto-depth → room-mesh → off` cutouts).
@@ -31,9 +31,10 @@
 
 ### Quest calibration hotfix (physical retest pending)
 
-- Paul reported fragmented outlines, stutter, missing menus and unresponsive controls in immersive AR on the first public build. The hotfix draws the spatial UI over a fresh depth buffer, routes trigger selection to calibration and settings controls, preserves stable room surfaces through transient scan errors, and requests CPU depth with room-geometry fallback. This prevents Three.js from activating its separate GPU depth pass.
-- The Linux `make checkall-ci` passed all 218 tests. The Metal-backed IWER smoke, calibration and placement walk, and combat walk passed 14/14, 19/19 and 8/8 with zero console errors. Emulated WebXR trigger events moved and locked the Core, opened, paged through and closed Settings, cycled room occlusion and placed turrets. Stereo captures show the full calibration HUD and readable Settings in both eyes.
-- Card `01a1ff7656077486ab8170491b772b37` awaits a physical Quest check of the live hotfix. Reload the site in Quest Browser, enter Mixed Reality, open Settings and lock the Core with the controller trigger, then click a thumbstick and build a turret. Observe visibility and pacing while looking around. Phase 5 still owns instrumented frame pacing and both-posture acceptance.
+- The first hotfix restored some menu elements. The 11:25 AM PST retest showed a clipped HUD and an invisible Core, and the matching headset trace averaged 1.9 FPS over 34 complete calibration seconds. The production navigation rebuild took 1.16–1.40 seconds on the 68 tracked room surfaces.
+- Build `e6c5dd826115` defers navigation to **Lock Core** and displays the live Core and portal suggestions independently. On the same Quest and room data, the revised path checks took 116–193 ms with identical navigation grids and routes. The new single-pass renderer gives HUD text precedence over button and panel backgrounds. The default **Auto (Off)** keeps scanned geometry for placement while bypassing room-depth masking. **Room Mesh** remains selectable in Settings.
+- The pinned Linux `make checkall-ci` passed all 218 tests. Metal-backed IWER passed 14/14 smoke, 19/19 calibration and placement, and 8/8 combat checks. The controller walk confirmed the rendered Core followed its proposed position while the navigation graph stayed steady, and confirmed that locking rebuilt the graph at the selected position. Both eyes show readable HUD and Settings in the emulator captures.
+- Card `01a1ff7656077486ab8170491b772b37` awaits the new physical Quest retest. Look around in calibration with **Auto (Off)** for several seconds, verify the Core and full HUD, then lock the Core and build a turret. Pull a fresh trace for build `e6c5dd826115`. Phase 5 still owns instrumented frame pacing and both-posture acceptance.
 
 ### Next Up — Phase 3: Art Direction & Blender AAA Assets (2 open cards, `plans/phase-3-art-direction-and-blender-assets.md`)
 - **Wave 1 complete.**
@@ -111,5 +112,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Collect the Quest retest** on build `443a1533c24c`. Record whether the HUD is visible, the trigger works, and motion is smooth during calibration and placement.
+1. **Collect the Quest retest** on build `e6c5dd826115`. Record whether the Core and full HUD are visible, the trigger works, and motion is smooth during calibration and placement.
 2. **Obtain approval at Owner Checkpoint 2.** Paul’s approval of the exact batch recorded in the art review closes the remaining creative criteria on `P3-T6` and `P3-T7`. `P4-T1` then promotes the approved package. The private radial theme candidate remains ready for its later transplant.

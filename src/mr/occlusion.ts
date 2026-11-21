@@ -152,6 +152,7 @@ export type OcclusionListener = (state: Readonly<OcclusionState>) => void;
 
 export interface OcclusionControllerOptions {
   initialMode?: RoomOcclusionOption;
+  missingDepthFallback?: 'room-mesh' | 'off';
   cutOptions?: CutPortalAperturesOptions;
   /** Max views buffered (default 2 for stereo XR). */
   maxViews?: number;
@@ -1357,7 +1358,7 @@ export function createOcclusionController(
   function resolveEffectiveMode(): EffectiveOcclusionMode {
     if (requestedMode === 'off') return 'off';
     if (requestedMode === 'room-mesh') return 'room-mesh';
-    return depthAvailable ? 'depth-sensing' : 'room-mesh';
+    return depthAvailable ? 'depth-sensing' : (options.missingDepthFallback ?? 'room-mesh');
   }
 
   function snapshotState(): Readonly<OcclusionState> {
