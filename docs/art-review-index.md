@@ -142,7 +142,7 @@ The revised armor uses tapered overlapping shields, knee guards and recessed vio
 
 ![Matched high, LOD0 and LOD1 views of Wasp's swept upper and lower wings](../assets-source/models/wasp-skimmer/review/comparison.jpg)
 
-The indigo dart uses four independent swept wings with teal insets and dark undersides. LOD0 measures 0.38 × 0.42 × 0.22 m and uses 5,976 triangles. LOD1 uses 2,116 triangles. Both share one material, four 1024 px maps and nine bones. Each GLB re-import plays `hover_fly`, `bank_turn`, `attack`, `hit` and `death`. Sampled poses preserve the wing gaps and all seven appendage attachments. The revised bank rolls to about 34° while keeping the upper wing roughly 18 mm below the health-bar anchor.
+The revised indigo dart uses four broader swept wings, deeper wing roots and layered nose armor. LOD0 measures 0.38 × 0.42 × 0.22 m and uses 6,208 triangles. LOD1 uses 2,204 triangles. Both share one material, four 1024 px maps and nine bones. Each GLB re-import plays `hover_fly`, `bank_turn`, `attack`, `hit` and `death`. The 265 sampled poses per LOD preserve the wing gaps and all seven appendage attachments. With the existing 25 mm flight-bob offset added, the measured clearance below the health-bar anchor is at least 6.55 mm. The dorsal teal spot is absent in both imported LODs.
 
 [Sources, hashes and re-import checks](../assets-source/models/wasp-skimmer/README.md) · [Motion poses](../assets-source/models/wasp-skimmer/review/motion.jpg) · [Turntable](../assets-source/models/wasp-skimmer/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.
 
@@ -265,7 +265,7 @@ The 18 badges are 128 × 128 RGBA proof files in a 768 × 384 atlas. Reviewers c
 
 ## Passed revisions
 
-Forty-three of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following eight revised assets account for those results. The remaining findings are F9–F11.
+Forty-four of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following nine revised assets account for those results. The remaining findings are F10 and F11.
 
 | Finding | Asset | Initial → revised | Exact proof and result |
 | --- | --- | ---: | --- |
@@ -277,5 +277,6 @@ Forty-three of 46 assets have independent visual scores of at least 80. The thir
 | F6 | Helios T1 | 76 → 83 | [Matched revision](../assets-source/models/helios-plasma-mortar-t1/review/revision-comparison.jpg). The dark chamber and smaller bright center read at both LODs. The rear highlight is smoother, with some mottling on the low shoulder and polygon corners on its pivot cap. The reviewed GLB hashes begin `bd90a619` and `acb97ddf`. |
 | F7 | Glacier T2 | 75 → 87 | [Matched revision](../assets-source/models/glacier-cryo-arc-t2/review/revision-comparison.jpg). The long blades retain an open gap and a cyan inner channel at both LODs. The cyan is subtler head-on and the blades overlap in exact profile. The reviewed GLB hashes begin `bd46f13a` and `3572096d`. |
 | F8 | Skitter Crawler | 77 → 83 | [Matched revision](../assets-source/models/skitter-crawler/review/revision-comparison.jpg) and [floor/wall motion](../assets-source/models/skitter-crawler/review/locomotion.jpg). Tapered armor, knee guards and a sharper head and tail distinguish the crawler. The legs remain straighter than in the concept, and the eyes and shoulder detail are subtler at LOD1. The reviewed GLB hashes begin `ebc4e139` and `efa45b81`. |
+| F9 | Wasp Skimmer | 77 → 84 | [Matched revision](../assets-source/models/wasp-skimmer/review/revision-comparison.jpg) and [underside bank](../assets-source/models/wasp-skimmer/review/bank.jpg). The broader panels and nose armor read at both LODs, and the dorsal teal patch is gone. The hull remains thicker than the concept, with flat teal near the roots and angular tips at LOD1. The reviewed GLB hashes begin `e842938a` and `fdfad8f7`. |
 
 The exact badge proof SHA-256 is `608eea9914f08dc20961df864f55e6ae8d59e4fdd015a4dd0fe7fba348310911`. The exact revised obsidian proof SHA-256 is `5ddcceed74d963da9662c547d41dfcf7a50b9300f7a5f24af0476dc8c89b7f44`.

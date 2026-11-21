@@ -1,12 +1,20 @@
 {
   "piece": "wasp-skimmer",
-  "stage": "P3-T6a staged animated character",
-  "authoring_date": "2026-11-21",
+  "stage": "P3-T7 F9 staged revision",
   "authoring": {
+    "date": "2026-11-21",
     "model": "GPT-6.2 Astra",
     "reasoning_effort": "high",
-    "tools": ["Blender 5.2.2 LTS, d13f752e3b9c", "KTX-Software 4.4.2"],
-    "source": "Original parametric fuselage, swept stacked airfoils, bilateral stylets, eight deforming cuticle regions and in-place flight animation."
+    "tools": ["Blender 5.2.2 LTS, d13f752e3b9c", "KTX-Software 4.4.2"]
+  },
+  "revision_of": {
+    "git_commit": "e80efd5d81134743c691656cbbc262ebd9be5fdf",
+    "initial_visual_score": 77,
+    "original_provenance_sha256": "5b795da468ab619167cf3cb797f561db7198d7032b9c3f834ccef540cac14adc",
+    "glb_sha256": {
+      "lod0": "0581b3bfc9163ce467680ba41fe2c32e6a68beb36c0d4b5be7d1d4d4a1be220a",
+      "lod1": "8bb923b3631b9a1ed59419bc11642311eb1ed1305190c01a09e8129fe31e45a4"
+    }
   },
   "reference": {
     "approved_direction": "Bastion Rib",
@@ -28,86 +36,96 @@
     "health_bar_local_y_m": 0.32,
     "target_lod_switch_m": 6
   },
-  "production": {
-    "lod0_ceiling_triangles": 6500,
-    "ceiling_joints": 24,
-    "ceiling_materials": 2,
-    "triangles": {
-      "lod0": 5976,
-      "lod1": 2116
-    },
-    "joints_per_lod": 9,
-    "draw_primitives_per_lod": 1,
-    "materials_per_lod": 1,
-    "weighting": "One normalized rigid influence per vertex. The rigid overlapping cuticle geometry pivots at nested hinge roots. Each wing carries two spars, a leading rim, dark inner airfoil and teal channels on both surfaces.",
-    "fps": 30,
-    "loop_clips": ["hover_fly"],
-    "one_shots": ["bank_turn", "attack", "hit", "death"],
-    "atlas": "Four shared 1024 px maps from an assembled rest-pose Cycles CPU bake. Base color and emission use sRGB. ORM packs 12-ray ambient occlusion, procedural roughness and authored metalness. A Mikk tangent-frame correction transfers high surface normals to the low receiver. The portable images are 11-mip top-left UASTC KTX2 with embedded PNG fallbacks.",
-    "review": "EEVEE Metal with identical cameras and lighting for high, decoded LOD0 and decoded LOD1. Four matched angles include the underside, with 24 orbit frames and three key poses per clip."
-  },
-  "failed_attempts_and_corrections": [
-    "The first LOD0 had 9,332 triangles. Lower longitudinal and circumferential tessellation retained the independent wing sections and reduced the receiver to 5,976 triangles.",
-    "The first reimport showed the left stylet detached from the nose in hover. Both mirrored stylet roots and pivots moved into the forward keel. Every sampled appendage now maintains chest contact across the five clips at both LODs.",
-    "The initial packed bank peaked at 0.336855 m above the local entity origin and crossed the 0.32 m health-bar anchor. The bank now lowers the thorax, rolls 34.4 degrees and articulates each wing independently. The corrected LOD0 peak is 0.301862 m. Both corrected sources were rebuilt on Linux. The four independently encoded texture sets from the unchanged rest pose were reused after byte-exact comparison of all four corrected PNGs and geometry.json in each run."
+  "changes": [
+    "Four wider clipped airfoils begin at the inner gussets. Independent planform, rib and channel surfaces share the same analytic chord positions.",
+    "A forward clypeus and two overlapping brow plates layer the nose. Removing the old intersecting crown gem restores a dark central seam. Indigo skin variation is reduced to preserve the silhouette.",
+    "The bank lowers its visual thorax another 14 mm at mid-clip, and the hover adds 4 mm to its oscillation. Gameplay facing, health bar and root position remain code-owned."
   ],
+  "production": {
+    "high_triangles": 44280,
+    "receiver_triangles": {
+      "lod0": 6208,
+      "lod1": 2204
+    },
+    "joints": 9,
+    "materials": 1,
+    "rig": "One normalized influence per vertex, five original clip names and timing.",
+    "portable_maps": "Four 1024 px UASTC KTX2s with all eleven mips and embedded PNG fallbacks. Cycles CPU rest-pose bake.",
+    "review": "EEVEE Metal. Matched high and decoded LOD0/LOD1 stills, underside bank at 50%, 24-frame turntable, 15 keyframes and five-clip decoded LOD0 playback."
+  },
   "clean_repeat": {
-    "platform": "Linux x86_64 with Blender 5.2.2 and KTX 4.4.2. Maximum three aggregate CPU workers.",
+    "platform": "Two separate Linux x86_64 Blender 5.2.2 and KTX 4.4.2 builds with three allocated CPU cores.",
     "products_match_sha256": {
-      "basecolor.ktx2": "e9e56d282c6fc2afef3e8027710ee0f9a5233628390d279a1d12c68675f88928",
-      "basecolor.png": "08eb08bd356afa0cda6c50508cdab5e66b2c5e95b7fbf05a615ce070851b6b20",
-      "emissive.ktx2": "be20492419536b5b413ce898843a20bf4a2a5cc5264742f4b5a664a400019925",
-      "emissive.png": "4de81457440ec34009fbae1d9b3f6d2ca45f7d29a857df2497c148ed259c56bd",
-      "geometry.json": "77ed1b7b7463c979a99db9a709c53a5f88fcc06d5873d779ee3e8c8577f4c852",
-      "normal.ktx2": "9be4b1246bb5e6886405364b0067fd9762dbe056a2887c1750d274e177453f13",
-      "normal.png": "fa5523fd6330f21d9abb942677320b4b506bcbf58c36601b269f119c93257312",
-      "orm.ktx2": "1208856724b4f074561f2b8b69fb5ccf84d9b9e75caf4221bd87bc0e5c04d80c",
-      "orm.png": "6397ba7a3c753dd0fa0b7bf7b4ce495a9c4f93dff176d48caa64e59fea216656",
-      "wasp-skimmer-lod0.glb": "0581b3bfc9163ce467680ba41fe2c32e6a68beb36c0d4b5be7d1d4d4a1be220a",
-      "wasp-skimmer-lod1.glb": "8bb923b3631b9a1ed59419bc11642311eb1ed1305190c01a09e8129fe31e45a4"
+      "geometry.json": "d510b74c584fed8aed52a9d9789dce546a31b0e2268e9538bfb8b930ee93bfd8",
+      "basecolor.png": "d17a9037a22fccaf05e74ef3163b3bdd7c35baaba9188262bd6b7cd0c3a81e3e",
+      "basecolor.ktx2": "ce50bd90746126237626af45bf64689074381e37829d2226d26145ad1ab4f31d",
+      "normal.png": "11290c3dcdd9461b52ceefa1187b17a713450be48c8f668685abe8668ed654ff",
+      "normal.ktx2": "115a53f5df491c33031a4105fc3d0d42de204c04d1e6b19d50c1a54c43316a91",
+      "orm.png": "8137315d17c845910fdba7954121bd0044f696c92ab435fcb958a0dd39b8cfdb",
+      "orm.ktx2": "880d6414b38a85350705b31993d6befcda6d3c525c36c994976f28ffc13e6816",
+      "emissive.png": "7512ffca3ce3a7472083f2f7cc1cc3cadb900aee7383d74b54aa9ed1c9bb60bf",
+      "emissive.ktx2": "ebad3cc616c851a070f4ef2d541244755abb270f6cfdba40dd33a95f0098b7d1",
+      "wasp-skimmer-lod0.glb": "e842938ade4ca80383b509c704a4cf3cb9772b09a35b250ac02fc29dd7bddacb",
+      "wasp-skimmer-lod1.glb": "fdfad8f771f27acd627a71afab3c0acd76f2773f10b8baecae42c7881857050a"
     },
     "stage_a_editable": {
       "high.blend": {
-        "file_sha256": "261bb41d35c708e0ee466456b850bc8337db52957c672f927970d8a956182e69",
-        "logical_geometry_hierarchy_skin_animation_sha256": "34e26d32470f5c7974793560f2a6b86d54f15f02fda2a78715d557e5d285e72e"
+        "file_sha256": "5aec5b5803e414b3bd9f227c9d711637cdf375c43648c4f7a275d880842ef3af",
+        "logical_geometry_hierarchy_skin_animation_sha256": "2c7396c892fe92ea43e98442cc72169d6d8bd227e9bedebfe716e5c7250009dc"
       },
       "low.blend": {
-        "file_sha256": "8d8e64ebf723c5395e9a6a93c196da01558f0c4c9464a48b8c5505b155209d9a",
-        "logical_geometry_hierarchy_skin_animation_sha256": "e3c6d125a32e98800e2af410e6c94d077464e8585ddad604a2364af8d94b9aa7"
+        "file_sha256": "821087951eeecbc964449ea245784534bed6b22bdc32285704dab065a9db0097",
+        "logical_geometry_hierarchy_skin_animation_sha256": "8f70d2e5a9b46a1345e2a7fb13369ae686f9d82044a14623a3750f360b10be25"
       }
     },
     "stage_b_editable": {
       "high.blend": {
-        "file_sha256": "b385ed914df565b85db15643e7fa7954d27044fe7774beab8b4005610e6b2c9c",
-        "logical_geometry_hierarchy_skin_animation_sha256": "34e26d32470f5c7974793560f2a6b86d54f15f02fda2a78715d557e5d285e72e"
+        "file_sha256": "eb17b3cea9c7757cd944e821d642c01aef52c390816ee39f5ecf844f5b7d14ef",
+        "logical_geometry_hierarchy_skin_animation_sha256": "2c7396c892fe92ea43e98442cc72169d6d8bd227e9bedebfe716e5c7250009dc"
       },
       "low.blend": {
-        "file_sha256": "ae5a006cc133ec9c67ea046a773d63583063b95c01dbf387eee31ee90871d8c9",
-        "logical_geometry_hierarchy_skin_animation_sha256": "e3c6d125a32e98800e2af410e6c94d077464e8585ddad604a2364af8d94b9aa7"
+        "file_sha256": "d0619ccc6141a097165eb09c26b877db29d6f0467a6b06e2b47eeaab5b5c5779",
+        "logical_geometry_hierarchy_skin_animation_sha256": "8f70d2e5a9b46a1345e2a7fb13369ae686f9d82044a14623a3750f360b10be25"
       }
     },
-    "comparison": "All GLB, PNG, KTX2 and geometry metadata bytes match across independent runs. Both reimports yielded identical geometry, motion, skin and decoded-atlas reports. Logical editable hashes cover hierarchy, mesh, joint rest matrices, skin, UV, material assignment and action curves."
+    "exact_decoded_reimport_except_editable_container_hashes": true
   },
   "checks": {
     "report": "reimport.json",
-    "candidate_verifier": "blender/verify_wasp.py",
-    "geometry": "Measured neutral bounds, vertex influence normalization, inverse binds, root identity, joint hierarchy, clip names, 3D coplanar surface overlap and UV area overlap at both LODs. The reimport samples skinned vertex and bone poses through every clip, tests all six pairs of wing meshes for collision, and checks that all seven appendages intersect the thorax. All sampled vertices remain below the local health-bar anchor."
+    "cameras": "review/cameras.json",
+    "portable": "Both independent GLB packages passed validate_glbs.py with the KTX RGBA8 decoder.",
+    "posed_samples": "Six independent wing pairs checked for intersections, and all seven appendages for thorax contact, at twice the authored 30 Hz including both endpoints. Peak vertex bounds and fixed root verified at half-frame intervals. All clip maxima also fit below the health bar including 25 mm runtime air bob.",
+    "seam": "Top-surface rays compare exact bound emissive and basecolor texels with the original at both LODs. Bilateral positive controls land on native cyan and the original LOD1 exposes the rejected patch."
   },
   "reproduction": {
-    "generate": "\"$BLENDER\" -b -t 3 --factory-startup --python-exit-code 1 --python blender/wasp_skimmer.py -- --out \"$STAGE\"",
+    "original": "Extract assets-source/models/wasp-skimmer from the pinned revision_of git commit into $ORIGINAL.",
+    "generate": "$BLENDER -b -t 3 --factory-startup --python-exit-code 1 -P blender/wasp_skimmer_revision.py -- --out $STAGE",
     "package": "python3 blender/package_wasp.py --stage \"$STAGE\" --models \"$MODELS\" --ktx \"$KTX\"",
     "validate": "python3 scripts/validate_glbs.py --manifest \"$MODELS/manifest.json\" --ktx \"$KTX\"",
     "reimport": "\"$BLENDER\" -b -t 3 --factory-startup --python-exit-code 1 --python blender/verify_wasp.py -- --piece \"$MODELS/wasp-skimmer\" --ktx \"$KTX\"",
-    "review": "\"$BLENDER\" -b -t 3 --factory-startup --python-exit-code 1 --python blender/review_wasp.py -- --piece \"$MODELS/wasp-skimmer\" --ktx \"$KTX\""
+    "revision_check": "$BLENDER -b -t 3 --factory-startup --python-exit-code 1 -P blender/verify_wasp_revision.py -- --piece $PIECE --original $ORIGINAL --ktx $KTX",
+    "metal_review": "$BLENDER -b -t 3 --factory-startup --python-exit-code 1 -P blender/review_wasp_revision.py -- --piece $PIECE --original $ORIGINAL --ktx $KTX",
+    "receipt": "python3 blender/document_wasp_revision.py --piece $PIECE --first $FIRST --second $SECOND --original $ORIGINAL && node_modules/.bin/biome format --write $PIECE/provenance.json"
+  },
+  "creative_score": 84,
+  "independent_visual_review": {
+    "date": "2026-11-21",
+    "score_out_of_100": 84,
+    "reviewed_glbs": {
+      "lod0": "e842938ade4ca80383b509c704a4cf3cb9772b09a35b250ac02fc29dd7bddacb",
+      "lod1": "fdfad8f771f27acd627a71afab3c0acd76f2773f10b8baecae42c7881857050a"
+    },
+    "observations": "The hull remains thicker and simpler than the approved sheet, the teal reads flat near the roots, and the LOD1 tips retain some angularity."
   },
   "acceptance": {
-    "creative_owner": "Pending complete asset batch review at P3-T7",
-    "runtime": "Staged candidate for P4",
-    "independent_visual_score": "Tracked by phase review owner"
+    "independent_visual_score": 84,
+    "creative_owner": "pending complete batch review",
+    "runtime": "P4 integration and physical Quest acceptance pending"
   },
   "source_sha256": {
     "blender/build_materials.py": "fe5cdb5cf12c11ee931e685def2423812d1d5b64742d188ea669cffbd42772b7",
     "blender/core_bastion.py": "26bd7b5a221c5f4fc7d17c58f53feeb57290e3e36d66e7b895ac56fea41a1a19",
+    "blender/document_wasp_revision.py": "960f30743b4cf200cf30697b09d9a5747615554c8ba5c0ee7b0d2f9a23dcc4b6",
     "blender/package_core_bastion.py": "de2f82079aadef748e3ecdea5f65b3358e6bd3e1c5c2e2b6503f850c41d52d64",
     "blender/package_surface_clamp.py": "899980dc7ef0196aca30beb612e9062fa8d19f14f7e3a965901d87b6a3a68e59",
     "blender/package_wasp.py": "4e18a74d59bff753ff8ad7f69c2a2149ba22eb5f2f0297e2150bd39703c245e5",
@@ -116,50 +134,59 @@
     "blender/review_skitter.py": "74458aba08fe2c3d7c411b78c1043c8fc6405bfb8d43225dbabdfd02c9277725",
     "blender/review_surface_clamp.py": "abb3401b4cc859f9e429cb25ebf5dd59fcd0e73fbb95572f5b30e089441928bb",
     "blender/review_wasp.py": "b0ed921c5d91e3a152abd24201bef790f607660d5895bd77d6194b9928a691da",
+    "blender/review_wasp_revision.py": "5c7dedd908eebfecbc2e8f1f77dd3fdec1dd278147aa1ae31064153b082ebcc4",
     "blender/skitter_bake.py": "72105c7d0b0e0e1ed3067cd13c7af445f15179ee0bd3f75906ca3585c76ca1e9",
     "blender/skitter_rig.py": "81de625dc85fb9b8a5f538bdf68a62753d8024547602af9f3d3bf83ea1208c97",
     "blender/skitter_shape.py": "88eecd38654845d5fc536555a01752b3f42312c78f9d3eed329571fa37a294db",
     "blender/verify_core_bastion.py": "eee345536ef0c8f5f7ead150f48073f3bb4b3dec0546048359036b97edf5e1ab",
     "blender/verify_skitter.py": "c6f27e424c1e03c764b44705ffdb1057653ee0e9931bfe0c434b8ac873f0fba5",
     "blender/verify_wasp.py": "a04a8da443e6caeb6b39c6a07f8dcedd0770314d8b8ad38fd43105302f5996f5",
+    "blender/verify_wasp_revision.py": "cc27d0ef13b90eca27651f4706f5a2f4c39e8ba48e8926364df81f9afedb070d",
     "blender/wasp_bake.py": "0fa96127a404ae4eadb065e338aa14829c9e5e2d4bc97430970e0af924c41cc0",
     "blender/wasp_rig.py": "363ec1312f745d822bbfd543a8e1ef5f24945b08d775713eb5a3254d9cf491e6",
     "blender/wasp_shape.py": "ae9d65d1819bc2b46d406829b1460d088cec2299eb36c1aaec5e3789886d82a3",
     "blender/wasp_skimmer.py": "811e82a1ef0ca95b1fcdcf574e4e38a20cf9ede8c0e25ce32814a2c9d92ab2d5",
+    "blender/wasp_skimmer_revision.py": "bb5c508a65bae1ea15367b07781436e6377f4e00f1ac07f4886103c754f424e1",
     "scripts/assets/encode_ktx2.py": "ef7c2b27f936bab9cc0f02f27492cea4fd7c151045923f0308504c4867873515",
     "scripts/assets/ktx2.py": "ad0fe05d66f62b1bb51f93997c35982ea9df2a5072c9f30d0bef9cb948321966",
     "scripts/validate_glbs.py": "b1cce7201143a05202dd35ecc61827807991f228f18ac7249169ea3da2eb87c1"
   },
   "artifact_sha256": {
-    "basecolor.ktx2": "e9e56d282c6fc2afef3e8027710ee0f9a5233628390d279a1d12c68675f88928",
-    "basecolor.png": "08eb08bd356afa0cda6c50508cdab5e66b2c5e95b7fbf05a615ce070851b6b20",
-    "emissive.ktx2": "be20492419536b5b413ce898843a20bf4a2a5cc5264742f4b5a664a400019925",
-    "emissive.png": "4de81457440ec34009fbae1d9b3f6d2ca45f7d29a857df2497c148ed259c56bd",
-    "geometry.json": "77ed1b7b7463c979a99db9a709c53a5f88fcc06d5873d779ee3e8c8577f4c852",
-    "high.blend": "261bb41d35c708e0ee466456b850bc8337db52957c672f927970d8a956182e69",
-    "low.blend": "8d8e64ebf723c5395e9a6a93c196da01558f0c4c9464a48b8c5505b155209d9a",
-    "normal.ktx2": "9be4b1246bb5e6886405364b0067fd9762dbe056a2887c1750d274e177453f13",
-    "normal.png": "fa5523fd6330f21d9abb942677320b4b506bcbf58c36601b269f119c93257312",
-    "orm.ktx2": "1208856724b4f074561f2b8b69fb5ccf84d9b9e75caf4221bd87bc0e5c04d80c",
-    "orm.png": "6397ba7a3c753dd0fa0b7bf7b4ce495a9c4f93dff176d48caa64e59fea216656",
-    "reimport.json": "fc74d05be87830f8cc8686f8c7aedf1e1728db8c860507e2342a39b7829505d9",
-    "review/cameras.json": "ce25c14073de58c9fe0a782a3888e1dcf1a2422abcebcc2d0611fdc9611b081d",
-    "review/comparison.jpg": "8e7ed2e4e8695435105c398208576cc82803b6cb4d3fc3a67e1bd19dbd3c9177",
-    "review/high-flank.png": "0f2d7f4e3136c67fccbf8d5c67360c3283c88b00924f739caee16a8a56447745",
-    "review/high-oblique.png": "2a2a4dc3f5e4d7e5dcf63b6e940ce637beed12554b2781db67fbe4f63a6c58fb",
-    "review/high-top.png": "40e3ef6a1d120f219f0c8131ef3620334abe8f096c1ceeb5cf9c197fe102063e",
-    "review/high-underside.png": "a3020f1d60b7d584bc8069b6a79a91aa4a4f3a187d2b49dfef9de381b54b4a48",
-    "review/lod0-flank.png": "e6285a1a399bf391384c3e06f8277b79f73633a9ed474c3839e1079f519ddf6b",
-    "review/lod0-oblique.png": "fed168f2f7a8a92009c7932694ffe79917f36df4727496d3d66baad9374a1667",
-    "review/lod0-top.png": "6b54a012de130f05d41b6736003cf8161cbbcd74fcf5a3b1d52581504d17faa2",
-    "review/lod0-underside.png": "04145bd28ec51bcfe52ad68cd3e808a74086834e452143f13283096b9b6f3f70",
-    "review/lod1-flank.png": "2d13eaba57350dd3cdd888d02d421628afb31e1860f08f17a9c8c2d88b7eb918",
-    "review/lod1-oblique.png": "3970eda97d1e4bc4e3d5a2126d5b278ef64b7d3e4a0d88840836eabae0458190",
-    "review/lod1-top.png": "1dcca081a3b34e959d7ab6e52b9a36be58a145c210887cba01815a13a41d8fac",
-    "review/lod1-underside.png": "9bf50195d77f4ae1ec88a005bef6298e072944db30b832aa20c00a30a647ef66",
-    "review/motion.jpg": "ad7078868b46ba0a9c6f09900d1ab7994589688d8c545d8ca9b5c8b6de5fc68d",
-    "review/turntable.mp4": "0a7ea24df694c9987693409c268ced63d6570e3105d209a75bbcbe87323b4740",
-    "wasp-skimmer-lod0.glb": "0581b3bfc9163ce467680ba41fe2c32e6a68beb36c0d4b5be7d1d4d4a1be220a",
-    "wasp-skimmer-lod1.glb": "8bb923b3631b9a1ed59419bc11642311eb1ed1305190c01a09e8129fe31e45a4"
+    "basecolor.ktx2": "ce50bd90746126237626af45bf64689074381e37829d2226d26145ad1ab4f31d",
+    "basecolor.png": "d17a9037a22fccaf05e74ef3163b3bdd7c35baaba9188262bd6b7cd0c3a81e3e",
+    "emissive.ktx2": "ebad3cc616c851a070f4ef2d541244755abb270f6cfdba40dd33a95f0098b7d1",
+    "emissive.png": "7512ffca3ce3a7472083f2f7cc1cc3cadb900aee7383d74b54aa9ed1c9bb60bf",
+    "geometry.json": "d510b74c584fed8aed52a9d9789dce546a31b0e2268e9538bfb8b930ee93bfd8",
+    "high.blend": "5aec5b5803e414b3bd9f227c9d711637cdf375c43648c4f7a275d880842ef3af",
+    "low.blend": "821087951eeecbc964449ea245784534bed6b22bdc32285704dab065a9db0097",
+    "normal.ktx2": "115a53f5df491c33031a4105fc3d0d42de204c04d1e6b19d50c1a54c43316a91",
+    "normal.png": "11290c3dcdd9461b52ceefa1187b17a713450be48c8f668685abe8668ed654ff",
+    "orm.ktx2": "880d6414b38a85350705b31993d6befcda6d3c525c36c994976f28ffc13e6816",
+    "orm.png": "8137315d17c845910fdba7954121bd0044f696c92ab435fcb958a0dd39b8cfdb",
+    "reimport.json": "78feedd315d5e910aa61ef044a546d19bb0a98948547524c4e4b52792bebcc3a",
+    "review/bank.jpg": "9a2d8c04c81b7d1ed53515f1aaa6c990aef8f173c546a09c701c467672b5eb1b",
+    "review/cameras.json": "3ca324664f069b160fd5a6b07a927da4c641ec8c743c57b533acce37c1531c3b",
+    "review/comparison.jpg": "c5ba304eff9e77e777b86f49d3da73e2241f30f383baeca546a13e45820bb5fc",
+    "review/flight-clips.mp4": "86b3dff71ae12f9ab0ddfcbcc5a956ac642d6cdf82b025cfbc0d2746d6cd9bb6",
+    "review/high-bank.png": "edb19ebcafb934784e4a9fb60f421c02d123a18464387d9091f6b9b1be62901f",
+    "review/high-flank.png": "3bdc3840bb11cdc403e09201509e7d775b8cb0aee4f1a86c554f1bcbb6e22fdf",
+    "review/high-oblique.png": "40c29e6016d5119b11d989ff98e07fb8e4671db78554269a7f91dce1b3592fcf",
+    "review/high-top.png": "e0cbaf049438ce14c20b212f2d618d382bda4e2fdf2d9603fc59859f15d3c367",
+    "review/high-underside.png": "805edc27c6bbfd153ce1a8051e251f069249653e6250e8c5c437a3ad58fc3c24",
+    "review/lod0-bank.png": "e4e5c4c496652c014beafdd583bd395ba944601983925b37da8e97022255e62d",
+    "review/lod0-flank.png": "1de7cf671f924187eeb5b8794162afff00e8da684642d1cd815aca166e74c448",
+    "review/lod0-oblique.png": "03c7245d11cb7aa03b6d813c241fcc5be2863251e77f9c9516bcdeb0b56ffa8c",
+    "review/lod0-top.png": "1a9a08b6da1349a61d11f1a126bd40f028b9210363de8741c7dde562657e7425",
+    "review/lod0-underside.png": "2d91693e090a4834af1609dc197d7e195b2791c6d9c8a322c5a25031a112629f",
+    "review/lod1-bank.png": "d742f0a4f53023201a2e67340b992a398caa04da6dd64daded964c8ad4eed271",
+    "review/lod1-flank.png": "c04fab5f7bc24cd99991b05f56405784b7f84a9df0fee9b738928c914206e92e",
+    "review/lod1-oblique.png": "d80c5f74ce6e0e55a1e975455bf53456587f73f005f3ac994c66580eeabceed7",
+    "review/lod1-top.png": "1f3cf1d29165a34c398aed9ce70d5bee1f9cf2ed346a693d1e18469950488708",
+    "review/lod1-underside.png": "b0852eab8ad3033a28c85b5ef2bd55e8fbff34f30970a823193fc37007e32c9f",
+    "review/motion.jpg": "b8cd7c3469f2fd7f35393127dbdfd32a67e18cfc8067f3eae96afbb122d6e199",
+    "review/revision-comparison.jpg": "ce126684fcf79e1d0264a64f2d1dbadb7830b7487e511d1865c465aff62a0c17",
+    "review/turntable.mp4": "14541032bb1d2415d1ef848af5e3adad4e289b398cc85e2b6cd062747752d1e9",
+    "wasp-skimmer-lod0.glb": "e842938ade4ca80383b509c704a4cf3cb9772b09a35b250ac02fc29dd7bddacb",
+    "wasp-skimmer-lod1.glb": "fdfad8f771f27acd627a71afab3c0acd76f2773f10b8baecae42c7881857050a"
   }
 }

@@ -1,17 +1,17 @@
 {
   "high": {
-    "triangles": 42676,
+    "triangles": 44280,
     "extent_XYZ_m": [
       0.41999998688697815,
       0.3799999952316284,
-      0.22015711634594481
+      0.22021391987800598
     ],
-    "support_z_m": 5.668432277161628e-05
+    "support_z_m": 0.0
   },
   "bake": {
-    "normal_correspondence_texels": 810212,
+    "normal_correspondence_texels": 828744,
     "normal": {
-      "sha256": "fa5523fd6330f21d9abb942677320b4b506bcbf58c36601b269f119c93257312",
+      "sha256": "11290c3dcdd9461b52ceefa1187b17a713450be48c8f668685abe8668ed654ff",
       "samples": [
         {
           "surface": "Prismatic dorsal mantle",
@@ -19,57 +19,57 @@
           "y": 503,
           "rgb": [
             121,
-            126,
-            255
-          ],
-          "tolerance": 16
-        },
-        {
-          "surface": "Inner airfoil dorsal.L",
-          "x": 396,
-          "y": 895,
-          "rgb": [
-            138,
-            133,
-            254
-          ],
-          "tolerance": 16
-        },
-        {
-          "surface": "Compound eye L",
-          "x": 838,
-          "y": 411,
-          "rgb": [
-            118,
             127,
             255
           ],
           "tolerance": 16
         },
         {
+          "surface": "Inner airfoil dorsal.L",
+          "x": 396,
+          "y": 895,
+          "rgb": [
+            143,
+            127,
+            254
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Compound eye L",
+          "x": 710,
+          "y": 411,
+          "rgb": [
+            134,
+            129,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
           "surface": "Perimeter ventral.R",
           "x": 652,
           "y": 660,
           "rgb": [
-            141,
-            125,
-            254
+            153,
+            114,
+            252
           ],
           "tolerance": 16
         }
       ]
     },
     "basecolor": {
-      "sha256": "08eb08bd356afa0cda6c50508cdab5e66b2c5e95b7fbf05a615ce070851b6b20",
+      "sha256": "d17a9037a22fccaf05e74ef3163b3bdd7c35baaba9188262bd6b7cd0c3a81e3e",
       "samples": [
         {
           "surface": "Prismatic dorsal mantle",
           "x": 198,
           "y": 503,
           "rgb": [
+            47,
             45,
-            42,
-            120
+            126
           ],
           "tolerance": 16
         },
@@ -78,20 +78,20 @@
           "x": 396,
           "y": 895,
           "rgb": [
-            51,
-            49,
-            67
+            54,
+            52,
+            71
           ],
           "tolerance": 16
         },
         {
           "surface": "Compound eye L",
-          "x": 838,
+          "x": 710,
           "y": 411,
           "rgb": [
-            84,
-            236,
-            229
+            81,
+            227,
+            220
           ],
           "tolerance": 16
         },
@@ -100,16 +100,16 @@
           "x": 652,
           "y": 660,
           "rgb": [
-            135,
-            130,
-            149
+            133,
+            128,
+            146
           ],
           "tolerance": 16
         }
       ]
     },
     "orm": {
-      "sha256": "6397ba7a3c753dd0fa0b7bf7b4ce495a9c4f93dff176d48caa64e59fea216656",
+      "sha256": "8137315d17c845910fdba7954121bd0044f696c92ab435fcb958a0dd39b8cfdb",
       "samples": [
         {
           "surface": "Prismatic dorsal mantle",
@@ -135,11 +135,11 @@
         },
         {
           "surface": "Compound eye L",
-          "x": 838,
+          "x": 710,
           "y": 411,
           "rgb": [
             21,
-            58,
+            59,
             10
           ],
           "tolerance": 16
@@ -150,7 +150,7 @@
           "y": 660,
           "rgb": [
             255,
-            85,
+            87,
             163
           ],
           "tolerance": 16
@@ -158,7 +158,7 @@
       ]
     },
     "emissive": {
-      "sha256": "4de81457440ec34009fbae1d9b3f6d2ca45f7d29a857df2497c148ed259c56bd",
+      "sha256": "7512ffca3ce3a7472083f2f7cc1cc3cadb900aee7383d74b54aa9ed1c9bb60bf",
       "samples": [
         {
           "surface": "Prismatic dorsal mantle",
@@ -184,12 +184,12 @@
         },
         {
           "surface": "Compound eye L",
-          "x": 838,
+          "x": 710,
           "y": 411,
           "rgb": [
-            84,
-            236,
-            229
+            81,
+            227,
+            220
           ],
           "tolerance": 16
         },
@@ -208,7 +208,7 @@
     }
   },
   "lod0": {
-    "triangles": 5976,
+    "triangles": 6208,
     "extent_XYZ_m": [
       0.41999998688697815,
       0.3799999952316284,
@@ -217,12 +217,12 @@
     "support_z_m": 0.0
   },
   "lod1": {
-    "triangles": 2116,
+    "triangles": 2204,
     "extent_XYZ_m": [
       0.41999998688697815,
       0.3799999952316284,
-      0.21898739645985188
+      0.21910659968852997
     ],
-    "support_z_m": 0.00011969496699748561
+    "support_z_m": 0.0
   }
 }

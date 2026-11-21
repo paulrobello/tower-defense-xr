@@ -5024,7 +5024,7 @@
     {
       "file": "wasp-skimmer/basecolor.ktx2",
       "role": "basecolor",
-      "sha256": "e9e56d282c6fc2afef3e8027710ee0f9a5233628390d279a1d12c68675f88928",
+      "sha256": "ce50bd90746126237626af45bf64689074381e37829d2226d26145ad1ab4f31d",
       "width": 1024,
       "height": 1024,
       "samples": [
@@ -5033,9 +5033,9 @@
           "x": 198,
           "y": 503,
           "rgb": [
+            47,
             45,
-            42,
-            120
+            126
           ],
           "tolerance": 16
         },
@@ -5044,20 +5044,20 @@
           "x": 396,
           "y": 895,
           "rgb": [
-            51,
-            49,
-            67
+            54,
+            52,
+            71
           ],
           "tolerance": 16
         },
         {
           "surface": "Compound eye L",
-          "x": 838,
+          "x": 710,
           "y": 411,
           "rgb": [
-            84,
-            236,
-            229
+            81,
+            227,
+            220
           ],
           "tolerance": 16
         },
@@ -5066,9 +5066,9 @@
           "x": 652,
           "y": 660,
           "rgb": [
-            135,
-            130,
-            149
+            133,
+            128,
+            146
           ],
           "tolerance": 16
         }
@@ -5077,7 +5077,7 @@
     {
       "file": "wasp-skimmer/normal.ktx2",
       "role": "normal",
-      "sha256": "9be4b1246bb5e6886405364b0067fd9762dbe056a2887c1750d274e177453f13",
+      "sha256": "115a53f5df491c33031a4105fc3d0d42de204c04d1e6b19d50c1a54c43316a91",
       "width": 1024,
       "height": 1024,
       "samples": [
@@ -5087,7 +5087,7 @@
           "y": 503,
           "rgb": [
             121,
-            126,
+            127,
             255
           ],
           "tolerance": 16
@@ -5097,19 +5097,19 @@
           "x": 396,
           "y": 895,
           "rgb": [
-            138,
-            133,
+            143,
+            127,
             254
           ],
           "tolerance": 16
         },
         {
           "surface": "Compound eye L",
-          "x": 838,
+          "x": 710,
           "y": 411,
           "rgb": [
-            118,
-            127,
+            134,
+            129,
             255
           ],
           "tolerance": 16
@@ -5119,9 +5119,9 @@
           "x": 652,
           "y": 660,
           "rgb": [
-            141,
-            125,
-            254
+            153,
+            114,
+            252
           ],
           "tolerance": 16
         }
@@ -5130,7 +5130,7 @@
     {
       "file": "wasp-skimmer/orm.ktx2",
       "role": "orm",
-      "sha256": "1208856724b4f074561f2b8b69fb5ccf84d9b9e75caf4221bd87bc0e5c04d80c",
+      "sha256": "880d6414b38a85350705b31993d6befcda6d3c525c36c994976f28ffc13e6816",
       "width": 1024,
       "height": 1024,
       "samples": [
@@ -5158,11 +5158,11 @@
         },
         {
           "surface": "Compound eye L",
-          "x": 838,
+          "x": 710,
           "y": 411,
           "rgb": [
             21,
-            58,
+            59,
             10
           ],
           "tolerance": 16
@@ -5173,7 +5173,7 @@
           "y": 660,
           "rgb": [
             255,
-            85,
+            87,
             163
           ],
           "tolerance": 16
@@ -5183,7 +5183,7 @@
     {
       "file": "wasp-skimmer/emissive.ktx2",
       "role": "emissive",
-      "sha256": "be20492419536b5b413ce898843a20bf4a2a5cc5264742f4b5a664a400019925",
+      "sha256": "ebad3cc616c851a070f4ef2d541244755abb270f6cfdba40dd33a95f0098b7d1",
       "width": 1024,
       "height": 1024,
       "samples": [
@@ -5211,12 +5211,12 @@
         },
         {
           "surface": "Compound eye L",
-          "x": 838,
+          "x": 710,
           "y": 411,
           "rgb": [
-            84,
-            236,
-            229
+            81,
+            227,
+            220
           ],
           "tolerance": 16
         },
@@ -7430,7 +7430,7 @@
       "id": "wasp-skimmer",
       "lod": 0,
       "file": "wasp-skimmer/wasp-skimmer-lod0.glb",
-      "sha256": "0581b3bfc9163ce467680ba41fe2c32e6a68beb36c0d4b5be7d1d4d4a1be220a",
+      "sha256": "e842938ade4ca80383b509c704a4cf3cb9772b09a35b250ac02fc29dd7bddacb",
       "limits": {
         "triangles": 6500,
         "materials": 1,
@@ -7460,7 +7460,7 @@
       "id": "wasp-skimmer",
       "lod": 1,
       "file": "wasp-skimmer/wasp-skimmer-lod1.glb",
-      "sha256": "8bb923b3631b9a1ed59419bc11642311eb1ed1305190c01a09e8129fe31e45a4",
+      "sha256": "fdfad8f771f27acd627a71afab3c0acd76f2773f10b8baecae42c7881857050a",
       "limits": {
         "triangles": 2800,
         "materials": 1,

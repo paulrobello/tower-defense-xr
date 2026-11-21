@@ -1,7 +1,7 @@
 {
   "lod0": {
-    "sha256": "0581b3bfc9163ce467680ba41fe2c32e6a68beb36c0d4b5be7d1d4d4a1be220a",
-    "triangles": 5976,
+    "sha256": "e842938ade4ca80383b509c704a4cf3cb9772b09a35b250ac02fc29dd7bddacb",
+    "triangles": 6208,
     "joints": [
       "root",
       "thorax",
@@ -13,55 +13,55 @@
       "ventral.L",
       "ventral.R"
     ],
-    "inverse_bind_max_matrix_error": 3.794292173786573e-07,
+    "inverse_bind_max_matrix_error": 2.861334569281837e-07,
     "influences": [
       1,
       1
     ],
     "positive_area_uv_or_coplanar_pairs": 0,
-    "mean_texels_per_meter": 1456.6016974895945,
+    "mean_texels_per_meter": 1294.6296857691486,
     "neutral_xyz_m": [
       0.4200000762939453,
-      0.3800000548362732,
-      0.22000005841255188
+      0.37999987602233887,
+      0.22000007331371307
     ],
-    "minimum_z_m": -6.338646585390961e-08,
+    "minimum_z_m": -7.563303228153018e-08,
     "clips": {
       "hover_fly": {
         "samples": 49,
         "triangle_contact_and_clearance_samples": 25,
-        "max_vertex_travel_m": 0.040872909128665924,
-        "maximum_thorax_roll_deg": 2.2792763987847406,
-        "thorax_vertical_excursion_m": 0.006593644618988037,
+        "max_vertex_travel_m": 0.04451540485024452,
+        "maximum_thorax_roll_deg": 2.2792751191374996,
+        "thorax_vertical_excursion_m": 0.01391109824180603,
         "wing_peak_vertex_travel_m": {
-          "dorsal.L": 0.02759109064936638,
-          "ventral.L": 0.029350843280553818,
-          "dorsal.R": 0.040872909128665924,
-          "ventral.R": 0.037806227803230286
+          "dorsal.L": 0.030874695628881454,
+          "ventral.L": 0.02799311652779579,
+          "dorsal.R": 0.04451540485024452,
+          "ventral.R": 0.040554843842983246
         },
         "peak_wing_articulation_relative_to_thorax_deg": {
           "dorsal.L": 7.364764170687554,
           "ventral.L": 6.593743815759365,
-          "dorsal.R": 7.364764170687554,
+          "dorsal.R": 7.364657448981773,
           "ventral.R": 6.593743815759365
         },
         "root_matrix_drift": 0.0,
-        "maximum_z_m": 0.22685277462005615,
+        "maximum_z_m": 0.23079146444797516,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 6.5172621077636e-08,
-        "end_rest_error_m": 6.5172621077636e-08
+        "start_rest_error_m": 8.05903539458086e-08,
+        "end_rest_error_m": 8.05903539458086e-08
       },
       "bank_turn": {
         "samples": 53,
         "triangle_contact_and_clearance_samples": 27,
-        "max_vertex_travel_m": 0.18424654006958008,
-        "maximum_thorax_roll_deg": 34.3774800963346,
-        "thorax_vertical_excursion_m": 0.01800861954689026,
+        "max_vertex_travel_m": 0.1922391802072525,
+        "maximum_thorax_roll_deg": 34.37749732421094,
+        "thorax_vertical_excursion_m": 0.03266890347003937,
         "wing_peak_vertex_travel_m": {
-          "dorsal.L": 0.15300090610980988,
-          "ventral.L": 0.18424654006958008,
-          "dorsal.R": 0.13972404599189758,
-          "ventral.R": 0.16009235382080078
+          "dorsal.L": 0.1657382845878601,
+          "ventral.L": 0.1922391802072525,
+          "dorsal.R": 0.12808960676193237,
+          "ventral.R": 0.14683493971824646
         },
         "peak_wing_articulation_relative_to_thorax_deg": {
           "dorsal.L": 7.562471680176389,
@@ -70,22 +70,22 @@
           "ventral.R": 7.562471680176389
         },
         "root_matrix_drift": 0.0,
-        "maximum_z_m": 0.3018623888492584,
+        "maximum_z_m": 0.2884455919265747,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 6.5172621077636e-08,
-        "end_rest_error_m": 6.5172621077636e-08
+        "start_rest_error_m": 8.05903539458086e-08,
+        "end_rest_error_m": 8.05903539458086e-08
       },
       "attack": {
         "samples": 33,
         "triangle_contact_and_clearance_samples": 17,
-        "max_vertex_travel_m": 0.05989433452486992,
-        "maximum_thorax_roll_deg": 4.4755324686283905e-08,
-        "thorax_vertical_excursion_m": 0.010830238461494446,
+        "max_vertex_travel_m": 0.05962727218866348,
+        "maximum_thorax_roll_deg": 4.476267812870745e-08,
+        "thorax_vertical_excursion_m": 0.012934580445289612,
         "wing_peak_vertex_travel_m": {
-          "dorsal.L": 0.04784625023603439,
-          "ventral.L": 0.05989428609609604,
-          "dorsal.R": 0.04784628376364708,
-          "ventral.R": 0.05989433452486992
+          "dorsal.L": 0.04876737296581268,
+          "ventral.L": 0.05962727218866348,
+          "dorsal.R": 0.048767272382974625,
+          "ventral.R": 0.059627268463373184
         },
         "peak_wing_articulation_relative_to_thorax_deg": {
           "dorsal.L": 8.94765368064884,
@@ -94,22 +94,22 @@
           "ventral.R": 8.94765368064884
         },
         "root_matrix_drift": 0.0,
-        "maximum_z_m": 0.22077707946300507,
+        "maximum_z_m": 0.22080478072166443,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 6.5172621077636e-08,
-        "end_rest_error_m": 6.5172621077636e-08
+        "start_rest_error_m": 8.05903539458086e-08,
+        "end_rest_error_m": 8.05903539458086e-08
       },
       "hit": {
         "samples": 23,
         "triangle_contact_and_clearance_samples": 12,
-        "max_vertex_travel_m": 0.10956230014562607,
-        "maximum_thorax_roll_deg": 18.334657806509234,
-        "thorax_vertical_excursion_m": 0.004282176494598389,
+        "max_vertex_travel_m": 0.10982442647218704,
+        "maximum_thorax_roll_deg": 18.3346594273735,
+        "thorax_vertical_excursion_m": 0.005032360553741455,
         "wing_peak_vertex_travel_m": {
-          "dorsal.L": 0.06782451272010803,
-          "ventral.L": 0.06984603404998779,
-          "dorsal.R": 0.07199574261903763,
-          "ventral.R": 0.10956230014562607
+          "dorsal.L": 0.06841815263032913,
+          "ventral.L": 0.07012319564819336,
+          "dorsal.R": 0.07172717154026031,
+          "ventral.R": 0.10982442647218704
         },
         "peak_wing_articulation_relative_to_thorax_deg": {
           "dorsal.L": 9.854800986395851,
@@ -118,40 +118,153 @@
           "ventral.R": 9.854800986395851
         },
         "root_matrix_drift": 0.0,
-        "maximum_z_m": 0.24453140795230865,
+        "maximum_z_m": 0.2455369383096695,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 6.5172621077636e-08,
-        "end_rest_error_m": 6.5172621077636e-08
+        "start_rest_error_m": 8.05903539458086e-08,
+        "end_rest_error_m": 8.05903539458086e-08
       },
       "death": {
         "samples": 55,
         "triangle_contact_and_clearance_samples": 28,
-        "max_vertex_travel_m": 0.26376616954803467,
-        "maximum_thorax_roll_deg": 64.17128596294062,
-        "thorax_vertical_excursion_m": 0.06114710122346878,
+        "max_vertex_travel_m": 0.2662666440010071,
+        "maximum_thorax_roll_deg": 64.17128283994442,
+        "thorax_vertical_excursion_m": 0.06267909705638885,
         "wing_peak_vertex_travel_m": {
-          "dorsal.L": 0.19330881536006927,
-          "ventral.L": 0.23672644793987274,
-          "dorsal.R": 0.26376616954803467,
-          "ventral.R": 0.22730445861816406
+          "dorsal.L": 0.1950521022081375,
+          "ventral.L": 0.24135737121105194,
+          "dorsal.R": 0.2662666440010071,
+          "ventral.R": 0.22859428822994232
         },
         "peak_wing_articulation_relative_to_thorax_deg": {
-          "dorsal.L": 27.89225739092619,
-          "ventral.L": 26.270369208351422,
-          "dorsal.R": 27.89228471168287,
+          "dorsal.L": 27.89228471168287,
+          "ventral.L": 26.270338472500157,
+          "dorsal.R": 27.89225739092619,
           "ventral.R": 26.270369208351422
         },
         "root_matrix_drift": 0.0,
-        "maximum_z_m": 0.2818969190120697,
-        "first_last_vertex_error_m": 0.26376616954803467,
-        "start_rest_error_m": 6.5172621077636e-08,
-        "end_rest_error_m": 0.26376616954803467
+        "maximum_z_m": 0.28240418434143066,
+        "first_last_vertex_error_m": 0.2662666440010071,
+        "start_rest_error_m": 8.05903539458086e-08,
+        "end_rest_error_m": 0.26626673340797424
+      }
+    },
+    "revision": {
+      "authored_pose_contacts": {
+        "hover_fly": {
+          "poses_at_60hz_including_endpoints": 61,
+          "wing_pair_tests": 366,
+          "attachment_tests": 427,
+          "minimum_clearance_after_25mm_air_bob_m": 0.06420853555202483
+        },
+        "bank_turn": {
+          "poses_at_60hz_including_endpoints": 65,
+          "wing_pair_tests": 390,
+          "attachment_tests": 455,
+          "minimum_clearance_after_25mm_air_bob_m": 0.006554408073425277
+        },
+        "attack": {
+          "poses_at_60hz_including_endpoints": 41,
+          "wing_pair_tests": 246,
+          "attachment_tests": 287,
+          "minimum_clearance_after_25mm_air_bob_m": 0.07383920073509215
+        },
+        "hit": {
+          "poses_at_60hz_including_endpoints": 29,
+          "wing_pair_tests": 174,
+          "attachment_tests": 203,
+          "minimum_clearance_after_25mm_air_bob_m": 0.04946306169033049
+        },
+        "death": {
+          "poses_at_60hz_including_endpoints": 69,
+          "wing_pair_tests": 414,
+          "attachment_tests": 483,
+          "minimum_clearance_after_25mm_air_bob_m": 0.012578023672103866
+        }
+      },
+      "original": {
+        "sha256": "0581b3bfc9163ce467680ba41fe2c32e6a68beb36c0d4b5be7d1d4d4a1be220a",
+        "dorsal_and_flank_samples": {
+          "dorsal": 1911,
+          "left": 2205,
+          "right": 2160
+        },
+        "cyan_dorsal_and_flank_samples": {
+          "dorsal": 4,
+          "left": 108,
+          "right": 98
+        },
+        "dorsal_peak_emission_rgb8": 227,
+        "wing_chord_at_105_145_178mm_span_m": {
+          "dorsal.L": [
+            0.07506942003965378,
+            0.05499338172376156,
+            0.033075056970119476
+          ],
+          "ventral.L": [
+            0.07620931975543499,
+            0.05240012798458338,
+            0.028209567070007324
+          ],
+          "dorsal.R": [
+            0.07506941631436348,
+            0.05499335937201977,
+            0.03307501971721649
+          ],
+          "ventral.R": [
+            0.07620934396982193,
+            0.05240011983551085,
+            0.02820955216884613
+          ]
+        }
+      },
+      "revised": {
+        "sha256": "e842938ade4ca80383b509c704a4cf3cb9772b09a35b250ac02fc29dd7bddacb",
+        "dorsal_and_flank_samples": {
+          "dorsal": 1911,
+          "left": 2437,
+          "right": 2414
+        },
+        "cyan_dorsal_and_flank_samples": {
+          "dorsal": 0,
+          "left": 141,
+          "right": 129
+        },
+        "dorsal_peak_emission_rgb8": 0,
+        "wing_chord_at_105_145_178mm_span_m": {
+          "dorsal.L": [
+            0.08859471697360277,
+            0.0845341719686985,
+            0.06678175181150436
+          ],
+          "ventral.L": [
+            0.0889507383108139,
+            0.08288514986634254,
+            0.06090119853615761
+          ],
+          "dorsal.R": [
+            0.08859469462186098,
+            0.08453413099050522,
+            0.06678173691034317
+          ],
+          "ventral.R": [
+            0.0889507308602333,
+            0.0828851405531168,
+            0.06090117618441582
+          ]
+        }
+      },
+      "clearance_with_runtime_air_bob_m": {
+        "hover_fly": 0.06420853555202483,
+        "bank_turn": 0.006554408073425277,
+        "attack": 0.07419521927833556,
+        "hit": 0.04946306169033049,
+        "death": 0.01259581565856932
       }
     }
   },
   "lod1": {
-    "sha256": "8bb923b3631b9a1ed59419bc11642311eb1ed1305190c01a09e8129fe31e45a4",
-    "triangles": 2116,
+    "sha256": "fdfad8f771f27acd627a71afab3c0acd76f2773f10b8baecae42c7881857050a",
+    "triangles": 2204,
     "joints": [
       "root",
       "thorax",
@@ -163,55 +276,55 @@
       "ventral.L",
       "ventral.R"
     ],
-    "inverse_bind_max_matrix_error": 3.794292173786573e-07,
+    "inverse_bind_max_matrix_error": 2.861334569281837e-07,
     "influences": [
       1,
       1
     ],
     "positive_area_uv_or_coplanar_pairs": 0,
-    "mean_texels_per_meter": 1436.7179293525576,
+    "mean_texels_per_meter": 1277.6545502661481,
     "neutral_xyz_m": [
       0.4200000762939453,
-      0.3800000548362732,
-      0.21898746490478516
+      0.37999987602233887,
+      0.21910667419433594
     ],
-    "minimum_z_m": 0.00011962995631620288,
+    "minimum_z_m": -7.563303228153018e-08,
     "clips": {
       "hover_fly": {
         "samples": 49,
         "triangle_contact_and_clearance_samples": 25,
-        "max_vertex_travel_m": 0.040872909128665924,
-        "maximum_thorax_roll_deg": 2.2792763987847406,
-        "thorax_vertical_excursion_m": 0.006518423557281494,
+        "max_vertex_travel_m": 0.04451540485024452,
+        "maximum_thorax_roll_deg": 2.2792751191374996,
+        "thorax_vertical_excursion_m": 0.013769850134849548,
         "wing_peak_vertex_travel_m": {
-          "dorsal.L": 0.02759109064936638,
-          "ventral.L": 0.029350843280553818,
-          "dorsal.R": 0.040872909128665924,
-          "ventral.R": 0.037806227803230286
+          "dorsal.L": 0.030713694170117378,
+          "ventral.L": 0.02799311652779579,
+          "dorsal.R": 0.04451540485024452,
+          "ventral.R": 0.040554843842983246
         },
         "peak_wing_articulation_relative_to_thorax_deg": {
           "dorsal.L": 7.364764170687554,
           "ventral.L": 6.593743815759365,
-          "dorsal.R": 7.364764170687554,
+          "dorsal.R": 7.364657448981773,
           "ventral.R": 6.593743815759365
         },
         "root_matrix_drift": 0.0,
-        "maximum_z_m": 0.22504043579101562,
+        "maximum_z_m": 0.23018085956573486,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 6.506106586812166e-08,
-        "end_rest_error_m": 6.506106586812166e-08
+        "start_rest_error_m": 8.05903539458086e-08,
+        "end_rest_error_m": 8.05903539458086e-08
       },
       "bank_turn": {
         "samples": 53,
         "triangle_contact_and_clearance_samples": 27,
-        "max_vertex_travel_m": 0.18424654006958008,
-        "maximum_thorax_roll_deg": 34.3774800963346,
-        "thorax_vertical_excursion_m": 0.018073827028274536,
+        "max_vertex_travel_m": 0.1922391802072525,
+        "maximum_thorax_roll_deg": 34.37749732421094,
+        "thorax_vertical_excursion_m": 0.03278467059135437,
         "wing_peak_vertex_travel_m": {
-          "dorsal.L": 0.15300090610980988,
-          "ventral.L": 0.18424654006958008,
-          "dorsal.R": 0.13972404599189758,
-          "ventral.R": 0.16009235382080078
+          "dorsal.L": 0.1657382845878601,
+          "ventral.L": 0.1922391802072525,
+          "dorsal.R": 0.12808960676193237,
+          "ventral.R": 0.14683493971824646
         },
         "peak_wing_articulation_relative_to_thorax_deg": {
           "dorsal.L": 7.562471680176389,
@@ -220,22 +333,22 @@
           "ventral.R": 7.562471680176389
         },
         "root_matrix_drift": 0.0,
-        "maximum_z_m": 0.3018623888492584,
+        "maximum_z_m": 0.28805017471313477,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 6.506106586812166e-08,
-        "end_rest_error_m": 6.506106586812166e-08
+        "start_rest_error_m": 8.05903539458086e-08,
+        "end_rest_error_m": 8.05903539458086e-08
       },
       "attack": {
         "samples": 33,
         "triangle_contact_and_clearance_samples": 17,
-        "max_vertex_travel_m": 0.05989433452486992,
-        "maximum_thorax_roll_deg": 4.4755324686283905e-08,
-        "thorax_vertical_excursion_m": 0.01100844144821167,
+        "max_vertex_travel_m": 0.05962727218866348,
+        "maximum_thorax_roll_deg": 4.476267812870745e-08,
+        "thorax_vertical_excursion_m": 0.013336226344108582,
         "wing_peak_vertex_travel_m": {
-          "dorsal.L": 0.04784625023603439,
-          "ventral.L": 0.05989428609609604,
-          "dorsal.R": 0.04784628376364708,
-          "ventral.R": 0.05989433452486992
+          "dorsal.L": 0.048303745687007904,
+          "ventral.L": 0.05962727218866348,
+          "dorsal.R": 0.04830365628004074,
+          "ventral.R": 0.059627268463373184
         },
         "peak_wing_articulation_relative_to_thorax_deg": {
           "dorsal.L": 8.94765368064884,
@@ -244,22 +357,22 @@
           "ventral.R": 8.94765368064884
         },
         "root_matrix_drift": 0.0,
-        "maximum_z_m": 0.2204398214817047,
+        "maximum_z_m": 0.22043859958648682,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 6.506106586812166e-08,
-        "end_rest_error_m": 6.506106586812166e-08
+        "start_rest_error_m": 8.05903539458086e-08,
+        "end_rest_error_m": 8.05903539458086e-08
       },
       "hit": {
         "samples": 23,
         "triangle_contact_and_clearance_samples": 12,
-        "max_vertex_travel_m": 0.10956230014562607,
-        "maximum_thorax_roll_deg": 18.334657806509234,
-        "thorax_vertical_excursion_m": 0.004218503832817078,
+        "max_vertex_travel_m": 0.10982442647218704,
+        "maximum_thorax_roll_deg": 18.3346594273735,
+        "thorax_vertical_excursion_m": 0.005053222179412842,
         "wing_peak_vertex_travel_m": {
-          "dorsal.L": 0.06782451272010803,
-          "ventral.L": 0.06984603404998779,
-          "dorsal.R": 0.07199574261903763,
-          "ventral.R": 0.10956230014562607
+          "dorsal.L": 0.06841815263032913,
+          "ventral.L": 0.07012319564819336,
+          "dorsal.R": 0.07147178798913956,
+          "ventral.R": 0.10982442647218704
         },
         "peak_wing_articulation_relative_to_thorax_deg": {
           "dorsal.L": 9.854800986395851,
@@ -268,82 +381,469 @@
           "ventral.R": 9.854800986395851
         },
         "root_matrix_drift": 0.0,
-        "maximum_z_m": 0.24189095199108124,
+        "maximum_z_m": 0.24462057650089264,
         "first_last_vertex_error_m": 0.0,
-        "start_rest_error_m": 6.506106586812166e-08,
-        "end_rest_error_m": 6.506106586812166e-08
+        "start_rest_error_m": 8.05903539458086e-08,
+        "end_rest_error_m": 8.05903539458086e-08
       },
       "death": {
         "samples": 55,
         "triangle_contact_and_clearance_samples": 28,
-        "max_vertex_travel_m": 0.26376616954803467,
-        "maximum_thorax_roll_deg": 64.17128596294062,
-        "thorax_vertical_excursion_m": 0.06102973222732544,
+        "max_vertex_travel_m": 0.2662666440010071,
+        "maximum_thorax_roll_deg": 64.17128283994442,
+        "thorax_vertical_excursion_m": 0.06267982721328735,
         "wing_peak_vertex_travel_m": {
-          "dorsal.L": 0.19292868673801422,
-          "ventral.L": 0.23672644793987274,
-          "dorsal.R": 0.26376616954803467,
-          "ventral.R": 0.22730445861816406
+          "dorsal.L": 0.19472330808639526,
+          "ventral.L": 0.24135737121105194,
+          "dorsal.R": 0.2662666440010071,
+          "ventral.R": 0.22859428822994232
         },
         "peak_wing_articulation_relative_to_thorax_deg": {
-          "dorsal.L": 27.89225739092619,
-          "ventral.L": 26.270369208351422,
-          "dorsal.R": 27.89228471168287,
+          "dorsal.L": 27.89228471168287,
+          "ventral.L": 26.270338472500157,
+          "dorsal.R": 27.89225739092619,
           "ventral.R": 26.270369208351422
         },
         "root_matrix_drift": 0.0,
-        "maximum_z_m": 0.2818969190120697,
-        "first_last_vertex_error_m": 0.26376616954803467,
-        "start_rest_error_m": 6.506106586812166e-08,
-        "end_rest_error_m": 0.26376616954803467
+        "maximum_z_m": 0.28192979097366333,
+        "first_last_vertex_error_m": 0.2662666440010071,
+        "start_rest_error_m": 8.05903539458086e-08,
+        "end_rest_error_m": 0.26626673340797424
+      }
+    },
+    "revision": {
+      "authored_pose_contacts": {
+        "hover_fly": {
+          "poses_at_60hz_including_endpoints": 61,
+          "wing_pair_tests": 366,
+          "attachment_tests": 427,
+          "minimum_clearance_after_25mm_air_bob_m": 0.06481914043426512
+        },
+        "bank_turn": {
+          "poses_at_60hz_including_endpoints": 65,
+          "wing_pair_tests": 390,
+          "attachment_tests": 455,
+          "minimum_clearance_after_25mm_air_bob_m": 0.006949825286865219
+        },
+        "attack": {
+          "poses_at_60hz_including_endpoints": 41,
+          "wing_pair_tests": 246,
+          "attachment_tests": 287,
+          "minimum_clearance_after_25mm_air_bob_m": 0.0745552611351013
+        },
+        "hit": {
+          "poses_at_60hz_including_endpoints": 29,
+          "wing_pair_tests": 174,
+          "attachment_tests": 203,
+          "minimum_clearance_after_25mm_air_bob_m": 0.050379423499107345
+        },
+        "death": {
+          "poses_at_60hz_including_endpoints": 69,
+          "wing_pair_tests": 414,
+          "attachment_tests": 483,
+          "minimum_clearance_after_25mm_air_bob_m": 0.013072384595870956
+        }
+      },
+      "original": {
+        "sha256": "8bb923b3631b9a1ed59419bc11642311eb1ed1305190c01a09e8129fe31e45a4",
+        "dorsal_and_flank_samples": {
+          "dorsal": 1911,
+          "left": 2152,
+          "right": 2033
+        },
+        "cyan_dorsal_and_flank_samples": {
+          "dorsal": 85,
+          "left": 106,
+          "right": 97
+        },
+        "dorsal_peak_emission_rgb8": 232,
+        "wing_chord_at_105_145_178mm_span_m": {
+          "dorsal.L": [
+            0.07736944407224655,
+            0.05655963718891144,
+            0.03397871553897858
+          ],
+          "ventral.L": [
+            0.07643088325858116,
+            0.0537420678883791,
+            0.02882472425699234
+          ],
+          "dorsal.R": [
+            0.07736944407224655,
+            0.05655960738658905,
+            0.033978670835494995
+          ],
+          "ventral.R": [
+            0.07643088884651661,
+            0.05374205904081464,
+            0.028824687004089355
+          ]
+        }
+      },
+      "revised": {
+        "sha256": "fdfad8f771f27acd627a71afab3c0acd76f2773f10b8baecae42c7881857050a",
+        "dorsal_and_flank_samples": {
+          "dorsal": 1911,
+          "left": 2370,
+          "right": 2276
+        },
+        "cyan_dorsal_and_flank_samples": {
+          "dorsal": 0,
+          "left": 134,
+          "right": 123
+        },
+        "dorsal_peak_emission_rgb8": 0,
+        "wing_chord_at_105_145_178mm_span_m": {
+          "dorsal.L": [
+            0.09002593462355435,
+            0.08727597445249557,
+            0.06803228706121445
+          ],
+          "ventral.L": [
+            0.0902620181441307,
+            0.0852238992229104,
+            0.0624135285615921
+          ],
+          "dorsal.R": [
+            0.09002591925673187,
+            0.08727594465017319,
+            0.06803225725889206
+          ],
+          "ventral.R": [
+            0.09026201069355011,
+            0.08522389736026525,
+            0.06241350620985031
+          ]
+        }
+      },
+      "clearance_with_runtime_air_bob_m": {
+        "hover_fly": 0.06481914043426512,
+        "bank_turn": 0.006949825286865219,
+        "attack": 0.07456140041351317,
+        "hit": 0.050379423499107345,
+        "death": 0.013070209026336654
       }
     }
   },
   "atlas": {
     "textures": {
       "basecolor": {
-        "bytes": 587454,
+        "bytes": 388526,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 1.388
+        "level0_rmse_rgb8": 0.958
       },
       "normal": {
-        "bytes": 946459,
+        "bytes": 963234,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 1.226,
+        "level0_rmse_rgb8": 1.213,
         "decoded_unit_length_range": [
           0.953022,
-          1.060558
+          1.065015
         ]
       },
       "orm": {
-        "bytes": 727705,
+        "bytes": 747948,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 1.618
+        "level0_rmse_rgb8": 1.658
       },
       "emissive": {
-        "bytes": 151055,
+        "bytes": 98143,
         "mip_levels": 11,
         "uastc_mip_bytes_before_zstd": 1398128,
-        "level0_rmse_rgb8": 0.739
+        "level0_rmse_rgb8": 0.485
       }
     },
-    "file_bytes": 6336196,
+    "file_bytes": 5790568,
     "primitives": 1,
-    "gltf_vertices": 1816,
-    "ktx2_bytes": 2412673,
+    "gltf_vertices": 1893,
+    "ktx2_bytes": 2197851,
     "uastc_bytes_before_zstd": 5592512
   },
   "sources": {
     "high.blend": {
-      "file_sha256": "261bb41d35c708e0ee466456b850bc8337db52957c672f927970d8a956182e69",
-      "logical_geometry_hierarchy_skin_animation_sha256": "34e26d32470f5c7974793560f2a6b86d54f15f02fda2a78715d557e5d285e72e"
+      "file_sha256": "5aec5b5803e414b3bd9f227c9d711637cdf375c43648c4f7a275d880842ef3af",
+      "logical_geometry_hierarchy_skin_animation_sha256": "2c7396c892fe92ea43e98442cc72169d6d8bd227e9bedebfe716e5c7250009dc"
     },
     "low.blend": {
-      "file_sha256": "8d8e64ebf723c5395e9a6a93c196da01558f0c4c9464a48b8c5505b155209d9a",
-      "logical_geometry_hierarchy_skin_animation_sha256": "e3c6d125a32e98800e2af410e6c94d077464e8585ddad604a2364af8d94b9aa7"
+      "file_sha256": "821087951eeecbc964449ea245784534bed6b22bdc32285704dab065a9db0097",
+      "logical_geometry_hierarchy_skin_animation_sha256": "8f70d2e5a9b46a1345e2a7fb13369ae686f9d82044a14623a3750f360b10be25"
     }
+  },
+  "decoded_mip_chains": {
+    "normal": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "99bfdc2c225cccbee34fd489f56cbb46e415a5bb56b9460ba23bd1813d6ff60a",
+        "decoded_unit_length_range": [
+          0.9530218637671157,
+          1.0650145798829806
+        ]
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "939af02bfb076dce8445914ee7bdf7889825c278baeae9eb40e78e7045c9abe7",
+        "decoded_unit_length_range": [
+          0.9614403522538179,
+          1.0414773761114262
+        ]
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "12014b711cb2a59e478250069155ce5110822163b0b6ee315b1e2ad3ce940ca4",
+        "decoded_unit_length_range": [
+          0.9694051018236663,
+          1.0495380796806426
+        ]
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "a36d65160dc5fae8f0d4a50df54bc80fbf8ae59648b0f1f0f6e10605f5a8ade2",
+        "decoded_unit_length_range": [
+          0.9709268571513078,
+          1.0517044623123333
+        ]
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "c1a515ebf1296dad35036474f57df35265702745641ee802bb56745b3f53f99b",
+        "decoded_unit_length_range": [
+          0.9747839595426375,
+          1.027024308952965
+        ]
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "c9be0939b93008af5c67f24f46c18da8fad579cc069d88393650e40b0014fbf1",
+        "decoded_unit_length_range": [
+          0.9840168289055813,
+          1.0171539097523872
+        ]
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "b3213e507732a638e6011ea9babe1afdeb35850dd97a5a81735e983535c9b657",
+        "decoded_unit_length_range": [
+          0.9950202809375919,
+          1.0081025072525098
+        ]
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "3c32f406a1458fe748cdffdf6ad927a0c74b51bf6805586d9e68f0f0bd03514b",
+        "decoded_unit_length_range": [
+          1.0000153785822494,
+          1.0017362858122674
+        ]
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "aa29c5b60dd1032d1529ba591109e3b013b4eab4e89d25ad6dd26902247134c0",
+        "decoded_unit_length_range": [
+          1.0000153785822494,
+          1.0006918022273306
+        ]
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "109c3ae0148ca21f06037c589f4b087e69f48916c8e8fe4960b621e2e8a4678d",
+        "decoded_unit_length_range": [
+          1.0000153785822494,
+          1.0001999031258677
+        ]
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "029893893ed77bcbc6794518e4a48928f0a4b966f147c9e5f0dd105de7cb9c05",
+        "decoded_unit_length_range": [
+          1.000076890546421,
+          1.000076890546421
+        ]
+      }
+    ],
+    "basecolor": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "c9e4f37728972962df8667a5cf5ae70e63f866504b6a246b53ba63ab8a1130e7"
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "4642cc4f6215b77a4eeda202d18ab970ba38d2ac6db52f69d2341712fa496cfe"
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "56cd922156305e3ad5c9e5d5fac482ed3443c8974f3fd5d5efdd01137cead3fd"
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "d43097ad325c05a90b5f0e8bc23cea9be74c5cf61472658cb333d3c2aed88df3"
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "0e83dda3c01a53c5d898e43116ac9df5c06452273e96478eadc407aa086c08e0"
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "3f9817d9743d3830bb9dcf6f66bed2e3ce147c5f6c8e93dd3243796931bcfeee"
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "9e98ee8d9493dc99a343fd067c94d2994f233397fffc18e2ecd9fec5a8495406"
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "f785e9d2714cc5eb38d4ad0e9d237603a57c434a8ee4ff8c7428fe2bbf4fb538"
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "e09d1fec9a57c5de0d1955f1beeb1b494e038fa544951a4f6ee329a9f79fcb5e"
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "fbad15caf2e424031845c16936b6d8da0a41e0a81967292bdddc21803bb88743"
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "a4c8866d107c997ec77df49acef8468e06c504dffa2a69fa25c11dbc43f08607"
+      }
+    ],
+    "emissive": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "deff4ef65228ace35b0135c9822ef586b8cca120fd1206df7559b5208fddbbd3"
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "dfe6049eab613f270b9ff90ac0f2f65ffd22f1dcdc9a0a9e1293d7142fd203aa"
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "05e53dbe2276d23b9bd7f0a6bc3c1578d9c1a71db500c4105e2b98c6253a21d0"
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "b06473278ea1b2d9f7150f123252337c98f21cb994927d3cd9ca46c0112e423e"
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "7cfa718eb8977578316bcdfac8927f48c9ca1617222ab803b0a212fb80e993b0"
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "b0505b025e1d1da502d401070a32e0267ff0274d2c9f91a266ee4976be95a9fd"
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "9e02aacd2d64a3d53d87bb534bbf716aa63ea1c1ec7cdf31ff3eebfe49dd6260"
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "e193ef76a4e916ed726635cc1984c2fa3f365010bb7dedd580062762ebe887cd"
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "31715c456b70349a0fec7afe8f63bb0e3f10c062f647c1e47a55e4d7cb979d90"
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "7c7da129da560042b6cebe5940b3debb8a96fd8ce8ce87bf3d7d47e3330a1db1"
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "7ad87edd97e66f56d732f685babd125ac363a3b2c8ebd407dbb096b3c71c79f5"
+      }
+    ],
+    "orm": [
+      {
+        "level": 0,
+        "edge": 1024,
+        "rgba_sha256": "f74c41557cface6b5edc53dc3821a5975c6db533671e93e86bec5042f36b681e"
+      },
+      {
+        "level": 1,
+        "edge": 512,
+        "rgba_sha256": "89b9f14190aa9614e19bd309dc7aa954f9c69b47d7b957c8b100d1b4d196d0d6"
+      },
+      {
+        "level": 2,
+        "edge": 256,
+        "rgba_sha256": "916fca0fa4d1d2dad0091b4c0a32e07dca9b5709e4b02806d5418ed3fefa574a"
+      },
+      {
+        "level": 3,
+        "edge": 128,
+        "rgba_sha256": "88a994656c36f31dd7efcdb849fe9a64516adf8c137a0f0a3cde124975d130fe"
+      },
+      {
+        "level": 4,
+        "edge": 64,
+        "rgba_sha256": "6a0797d30754652b7fe6090813a1b5586f7ad6153cc58743ae0f6b89f40f2288"
+      },
+      {
+        "level": 5,
+        "edge": 32,
+        "rgba_sha256": "d65348452b377131acd7231ff4decac19db49edbcf0c4619fefe0f15f00122e3"
+      },
+      {
+        "level": 6,
+        "edge": 16,
+        "rgba_sha256": "4022e495fbafa95b779845c7734f5cfa3a3d39b79a8a5df2236bfe1faf45c7c0"
+      },
+      {
+        "level": 7,
+        "edge": 8,
+        "rgba_sha256": "c06296cdf1b9154df4b47518fa8723615f3493e9579f2d45a7dbe0c4927844b9"
+      },
+      {
+        "level": 8,
+        "edge": 4,
+        "rgba_sha256": "0945118cec7fe7d041ca7b877d0fe3c077b9ee2630f2246fe2477d89dd9c6d4e"
+      },
+      {
+        "level": 9,
+        "edge": 2,
+        "rgba_sha256": "b51dd0cfd31ce7b7de7882fb83a3cc6dea76cea97443107907a50eabdaef1d76"
+      },
+      {
+        "level": 10,
+        "edge": 1,
+        "rgba_sha256": "0130183690cd78e3cecdcaba03b8deddc40e8e014095ccdab69471f7bf4016b8"
+      }
+    ]
   }
 }
