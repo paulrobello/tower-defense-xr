@@ -8,8 +8,8 @@
 
 - **Updated:** November 21, 2026 (Pacific time)
 - **Repo:** `/Users/probello/Repos/tower-defense-xr`, branch `main`. The existing local formatting edit in the Phase 4 plan is separate from this handoff.
-- **Public build:** [GitHub](https://github.com/paulrobello/tower-defense-xr) and [live test build](https://rift-bastion.pardev.net/). The Quest recovery build was deployed at commit `cb9973e`, build `e6c5dd826115`, on November 21, 2026. GitHub Actions passed the Linux gate and Pages deploy. The live manifest matched the verified build and content hash. The local backup branch `codex/rift-pre-publication-history` retains the original history. [Deployment run](https://github.com/paulrobello/tower-defense-xr/actions/runs/44941927917)
-- **Completed work (30 kanban cards `done`):**
+- **Public build:** [GitHub](https://github.com/paulrobello/tower-defense-xr) and [live test build](https://rift-bastion.pardev.net/). The Quest widget and room geometry update was deployed at commit `2e75df0`, build `c3fc3a3dc21b`, on November 21, 2026. GitHub Actions passed Linux parity and Pages deploy. The live manifest matched the verified content hash. The local backup branch `codex/rift-pre-publication-history` retains the original history. [Deployment run](https://github.com/paulrobello/tower-defense-xr/actions/runs/44944025679)
+- **Completed work:**
   - **Phase 0 complete:** `P0-T1`–`P0-T6` closed. The local gates, 14/14 IWER smoke and build A→B Reload checks passed. [GitHub Actions](https://github.com/paulrobello/tower-defense-xr/actions/runs/44874742012) passed the pinned Linux gate and Pages deployment. The live manifest matched the verified build and Quest Browser rendered desktop calibration on its Adreno GPU. Immersive play and physical performance remain Phase 5 work.
   - **Phase 1 (100% complete):** `P1-T1`–`P1-T6` closed. `bun scripts/xr-emu/walk-p1.mjs` passes **19/19** checks (seated `1.2 m` `front-180` + standing `1.65 m` `full-360` calibration, floor/table/wall surface-clamp + thumbstick hover-pod `0.8–5.0 m`, `TOO_CLOSE` & `CAP 14/14` SDF labels, `auto-depth → room-mesh → off` cutouts).
   - **Phase 2 (100% complete):** `P2-T1`–`P2-T6` closed. **218/218 Vitest tests** pass; `bun scripts/check-desktop-campaign.ts` passes **12/12** checks (full 12-wave + Wave 12 Apex Broodlord Boss Phase 2 → Victory `3/3` stars → IndexedDB reload + JSON backup); `bun scripts/xr-emu/walk-p2.mjs` passes **8/8** checks (`150 ≤ 200` draws, `12,080` tris, zero console errors).
@@ -29,12 +29,14 @@
 
 ## Remaining Work (Kanban Project: `tower-defense-xr`)
 
-### Quest calibration hotfix (physical retest pending)
+### Quest calibration recovery and follow-up
 
 - The first hotfix restored some menu elements. The 11:25 AM PST retest showed a clipped HUD and an invisible Core, and the matching headset trace averaged 1.9 FPS over 34 complete calibration seconds. The production navigation rebuild took 1.16–1.40 seconds on the 68 tracked room surfaces.
 - Build `e6c5dd826115` defers navigation to **Lock Core** and displays the live Core and portal suggestions independently. On the same Quest and room data, the revised path checks took 116–193 ms with identical navigation grids and routes. The new single-pass renderer gives HUD text precedence over button and panel backgrounds. The default **Auto (Off)** keeps scanned geometry for placement while bypassing room-depth masking. **Room Mesh** remains selectable in Settings.
 - The pinned Linux `make checkall-ci` passed all 218 tests. Metal-backed IWER passed 14/14 smoke, 19/19 calibration and placement, and 8/8 combat checks. The controller walk confirmed the rendered Core followed its proposed position while the navigation graph stayed steady, and confirmed that locking rebuilt the graph at the selected position. Both eyes show readable HUD and Settings in the emulator captures.
-- Card `01a1ff7656077486ab8170491b772b37` awaits the new physical Quest retest. Look around in calibration with **Auto (Off)** for several seconds, verify the Core and full HUD, then lock the Core and build a turret. Pull a fresh trace for build `e6c5dd826115`. Phase 5 still owns instrumented frame pacing and both-posture acceptance.
+- The physical retest of build `e6c5dd826115` showed the full HUD and Core in **Auto (Off)**. The controller opened Settings and placed floor turrets. The 141-second trace averaged 69.6 FPS during 72 Hz calibration with a 64 FPS minimum. The single 90 Hz startup second recorded 42 FPS. The initial recovery card `01a1ff7656077486ab8170491b772b37` is complete. The same captures showed an elevated Core and rifts disappearing with **Room Mesh** enabled.
+- Build `c3fc3a3dc21b` adds controller grip dragging to the HUD, Settings, and FPS display. Holding both thumbsticks for a second recenters them. The Core starts on a suitable tracked floor and uses the turret surface picker for manual placement. Room Mesh uses each classified scan mesh's original pose. Unclassified scan geometry stays outside the depth pass.
+- Linux parity passed 219 tests and Metal IWER passed 14/14 smoke, 20/20 calibration and placement, and 8/8 combat checks. Regression fixtures verify the Core's contact height for a flipped, tilted floor, separate mesh and fitted surface transforms for portal openings, and trigger suppression while moving all three widgets. Follow-up card `01a1ffabf1cd74fb930edf36f01a6b49` awaits a physical check of grip moves, floor placement, and **Room Mesh** visibility. Phase 5 still owns instrumented pacing and both-posture acceptance.
 
 ### Next Up — Phase 3: Art Direction & Blender AAA Assets (2 open cards, `plans/phase-3-art-direction-and-blender-assets.md`)
 - **Wave 1 complete.**
@@ -112,5 +114,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Collect the Quest retest** on build `e6c5dd826115`. Record whether the Core and full HUD are visible, the trigger works, and motion is smooth during calibration and placement.
+1. **Collect the Quest retest** on build `c3fc3a3dc21b`. Grip-move the HUD, Settings, and FPS display, re-place the Core on the floor, then enable Room Mesh and verify the Core and rifts remain visible.
 2. **Obtain approval at Owner Checkpoint 2.** Paul’s approval of the exact batch recorded in the art review closes the remaining creative criteria on `P3-T6` and `P3-T7`. `P4-T1` then promotes the approved package. The private radial theme candidate remains ready for its later transplant.

@@ -52,6 +52,8 @@ export interface OcclusionSurface {
   readonly polygon?: readonly LocalPolygonPoint[];
   /** Triangle mesh vertices in surface-local xyz triplets (matches `XRMesh.vertices`). */
   readonly vertices?: Float32Array | readonly number[];
+  /** Raw mesh-local vertex transform when it differs from the fitted polygon basis. */
+  readonly meshWorldMatrix?: THREE.Matrix4;
   /** Triangle indices into `vertices` (matches `XRMesh.indices`). */
   readonly indices?: Uint32Array | Uint16Array | readonly number[];
   /** Optional world-space bounding box. */
@@ -456,7 +458,8 @@ function extractSurfaceWorldTriangles(surface: OcclusionSurface): Triangle3[] {
   const triangles: Triangle3[] = [];
 
   if (surface.vertices && surface.indices && surface.indices.length >= 3) {
-    const { vertices, indices, worldMatrix } = surface;
+    const { vertices, indices } = surface;
+    const worldMatrix = surface.meshWorldMatrix ?? surface.worldMatrix;
     for (let i = 0; i + 2 < indices.length; i += 3) {
       const ia = (indices[i] as number) * 3;
       const ib = (indices[i + 1] as number) * 3;

@@ -49,6 +49,8 @@ export interface RoomSurface {
   readonly bounds: THREE.Box3;
   /** Raw mesh-local vertex positions when `source === 'mesh'`. */
   readonly meshVertices?: Float32Array;
+  /** Raw XRMesh local-to-world transform, independent of the fitted placement plane. */
+  readonly meshWorldMatrix?: THREE.Matrix4;
   /** Raw triangle indices when `source === 'mesh'`. */
   readonly meshIndices?: Uint32Array;
 }
@@ -282,6 +284,7 @@ export interface BuildRoomSurfaceParams {
   readonly localPolygon: readonly LocalPolygonPoint[];
   readonly extraBoundsPoints?: readonly THREE.Vector3[];
   readonly meshVertices?: Float32Array;
+  readonly meshWorldMatrix?: THREE.Matrix4;
   readonly meshIndices?: Uint32Array;
 }
 
@@ -316,6 +319,7 @@ export function buildRoomSurfaceFromLocalPolygon(params: BuildRoomSurfaceParams)
     localPolygon,
     polygon,
     bounds,
+    ...(params.meshWorldMatrix ? { meshWorldMatrix: params.meshWorldMatrix } : {}),
     ...(params.meshVertices ? { meshVertices: params.meshVertices } : {}),
     ...(params.meshIndices ? { meshIndices: params.meshIndices } : {}),
   };
@@ -1023,6 +1027,7 @@ export function createRoomSurfaceModel(options: RoomSurfaceModelOptions = {}): R
               localPolygon: extracted.localPolygon,
               extraBoundsPoints,
               meshVertices: mesh.vertices,
+              meshWorldMatrix: meshPoseMatrix,
               meshIndices: mesh.indices,
             }),
           );

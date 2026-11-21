@@ -243,6 +243,33 @@ async function createEmulatedPage(url) {
     }
 
     window.__p1Helpers = {
+      async dragWidget(widget, handleName) {
+        const handle = widget.getObjectByName(handleName);
+        if (!handle) throw new Error(`Missing grab handle ${handleName}`);
+        const controller = window.__xrEmu.device.controllers.right;
+        const head = window.__xrEmu.device.position;
+        const target = handle.getWorldPosition(handle.position.clone());
+        const start = widget.getWorldPosition(widget.position.clone());
+        this.aimController('right', { x: head.x + 0.2, y: head.y - 0.23, z: head.z }, target);
+        await window.__xrEmu.frames(3);
+        controller.updateButtonValue('squeeze', 1);
+        await window.__xrEmu.frames(3);
+        controller.position.x += 0.18;
+        controller.position.y += 0.13;
+        await window.__xrEmu.frames(3);
+        await this.pressButton('right', 'trigger');
+        const moved = widget.getWorldPosition(widget.position.clone());
+        controller.updateButtonValue('squeeze', 0);
+        await window.__xrEmu.frames(3);
+        controller.position.x += 0.15;
+        await window.__xrEmu.frames(3);
+        const released = widget.getWorldPosition(widget.position.clone());
+        return (
+          Math.abs(moved.x - start.x - 0.18) < 0.02 &&
+          Math.abs(moved.y - start.y - 0.13) < 0.02 &&
+          released.distanceTo(moved) < 0.005
+        );
+      },
       async pressControl(name) {
         const app = window.__riftBastionApp;
         const control = app.shell.xrOverlayRoot.getObjectByName(name);
@@ -511,6 +538,42 @@ try {
           surfaceId: p.surfaceId,
         })),
       },
+    );
+
+    const widgetDrag = await page.evaluate(async () => {
+      const app = window.__riftBastionApp;
+      const controls = window.__p1Helpers;
+      app.settings.set('showFps', true);
+      await window.__xrEmu.frames(4);
+      const startingCore = app.calibration.coreAnchor;
+      const hudMoved = await controls.dragWidget(app.tacticalHud.xrRoot, 'tactical-hud-settings');
+      const settingsStayedClosed = !app.xrSettings.visible;
+      await controls.pressControl('tactical-hud-settings');
+      const settingsMoved = await controls.dragWidget(app.xrSettings.root, 'settings-close');
+      const settingsStayedOpen = app.xrSettings.visible;
+      await controls.pressControl('settings-close');
+      const fpsMoved = await controls.dragWidget(app.perfHud.xrRoot, 'perf-hud-details');
+      app.settings.set('showFps', false);
+      return {
+        hudMoved,
+        settingsMoved,
+        fpsMoved,
+        settingsStayedClosed,
+        settingsStayedOpen,
+        coreStayedPut: app.calibration.coreAnchor === startingCore,
+        turretCount: app.placement.placedTurrets.length,
+      };
+    });
+    record(
+      'xr-grip-moves-widgets-without-trigger-actions',
+      widgetDrag.hudMoved &&
+        widgetDrag.settingsMoved &&
+        widgetDrag.fpsMoved &&
+        widgetDrag.settingsStayedClosed &&
+        widgetDrag.settingsStayedOpen &&
+        widgetDrag.coreStayedPut &&
+        widgetDrag.turretCount === 0,
+      widgetDrag,
     );
 
     const seatedLocked = await page.evaluate(async () => {

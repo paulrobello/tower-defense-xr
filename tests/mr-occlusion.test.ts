@@ -684,7 +684,11 @@ describe('MR Occlusion — dual plane + offset mesh host portal aperture cutouts
 
     const wallPlane = makeWallPlaneSurface('wall-plane-north', -2.0);
     // Offset room mesh sits 6 cm behind the detected plane on the exact same physical wall.
-    const wallMesh = makeWallMeshSurface('wall-mesh-north', -2.06);
+    const wallMesh = {
+      ...makeWallMeshSurface('wall-mesh-north', 0),
+      worldMatrix: new THREE.Matrix4().makeRotationX(Math.PI / 2).setPosition(0, 1.4, -2.06),
+      meshWorldMatrix: new THREE.Matrix4().makeTranslation(0, 0, -2.06),
+    };
     // Nearby fixture crate/partition 40 cm in front of the wall — MUST remain solid!
     const nearbyFixture = makeWallMeshSurface('nearby-fixture', -1.6, 0.8, 0.9, 1, 'table');
 
