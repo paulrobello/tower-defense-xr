@@ -5662,16 +5662,16 @@
       "role": "basecolor",
       "width": 2048,
       "height": 2048,
-      "sha256": "2823bad401bdffbe1a62d90a0ac5f94bc61ebec587addbd7cfa800c2d063b1c1",
+      "sha256": "dce4a778d482d1b591a2acaedc6d5f196bb097174c8a427fe2613727a719aacf",
       "samples": [
         {
           "surface": "Swept crest L",
           "x": 281,
           "y": 1368,
           "rgb": [
-            36,
-            36,
-            44
+            33,
+            33,
+            40
           ],
           "tolerance": 16
         },
@@ -5680,9 +5680,9 @@
           "x": 224,
           "y": 1190,
           "rgb": [
-            36,
-            31,
-            43
+            26,
+            21,
+            31
           ],
           "tolerance": 16
         },
@@ -5691,7 +5691,7 @@
           "x": 1262,
           "y": 357,
           "rgb": [
-            233,
+            232,
             75,
             161
           ],
@@ -5702,9 +5702,9 @@
           "x": 352,
           "y": 357,
           "rgb": [
-            227,
-            69,
-            147
+            255,
+            79,
+            166
           ],
           "tolerance": 16
         }
@@ -5715,15 +5715,15 @@
       "role": "normal",
       "width": 2048,
       "height": 2048,
-      "sha256": "5961433f02c327d56600a9a71632b9794d605110c34f9fc3de9f65b3b5b9050a",
+      "sha256": "2bfdaacbdd8bf19ac21e0af275837b8356eeda5b0b15d07ed1869dbb05cd1b78",
       "samples": [
         {
           "surface": "Swept crest L",
           "x": 281,
           "y": 1368,
           "rgb": [
-            131,
-            133,
+            137,
+            123,
             255
           ],
           "tolerance": 16
@@ -5733,8 +5733,8 @@
           "x": 224,
           "y": 1190,
           "rgb": [
-            130,
-            125,
+            127,
+            126,
             255
           ],
           "tolerance": 16
@@ -5744,9 +5744,9 @@
           "x": 1262,
           "y": 357,
           "rgb": [
-            137,
-            135,
-            254
+            136,
+            134,
+            255
           ],
           "tolerance": 16
         },
@@ -5755,8 +5755,8 @@
           "x": 352,
           "y": 357,
           "rgb": [
-            132,
-            134,
+            135,
+            136,
             255
           ],
           "tolerance": 16
@@ -5768,15 +5768,15 @@
       "role": "orm",
       "width": 2048,
       "height": 2048,
-      "sha256": "26d522027b4219df6613c49df1469fa2ce78bab4edc18abae73f34ae7904324e",
+      "sha256": "af9e85a32ad171da6213c3038c8b73b696c58da3a42fe46b8001e6a7d664c8ac",
       "samples": [
         {
           "surface": "Swept crest L",
           "x": 281,
           "y": 1368,
           "rgb": [
-            191,
-            104,
+            85,
+            99,
             20
           ],
           "tolerance": 16
@@ -5787,7 +5787,7 @@
           "y": 1190,
           "rgb": [
             255,
-            131,
+            134,
             8
           ],
           "tolerance": 16
@@ -5797,8 +5797,8 @@
           "x": 1262,
           "y": 357,
           "rgb": [
-            170,
-            72,
+            0,
+            75,
             5
           ],
           "tolerance": 16
@@ -5808,8 +5808,8 @@
           "x": 352,
           "y": 357,
           "rgb": [
-            234,
-            91,
+            212,
+            94,
             10
           ],
           "tolerance": 16
@@ -5821,7 +5821,7 @@
       "role": "emissive",
       "width": 2048,
       "height": 2048,
-      "sha256": "419aad824157f4ee75b68dc32e9f1ab61ad1bec73355069e412c7868de00a58a",
+      "sha256": "f828329bcb5434a526d8c7bfe80eac51a304ff4bd1e378f8d008f8a592d9fef7",
       "samples": [
         {
           "surface": "Swept crest L",
@@ -5850,7 +5850,7 @@
           "x": 1262,
           "y": 357,
           "rgb": [
-            233,
+            232,
             75,
             161
           ],
@@ -5861,9 +5861,9 @@
           "x": 352,
           "y": 357,
           "rgb": [
-            227,
-            69,
-            147
+            255,
+            79,
+            166
           ],
           "tolerance": 16
         }
@@ -7608,7 +7608,7 @@
       "id": "apex-broodlord",
       "lod": 0,
       "file": "apex-broodlord/apex-broodlord-lod0.glb",
-      "sha256": "710b3a149dc7cccc2b33db9fb0aef6716bc6933e5242c7e63df93541e3974a19",
+      "sha256": "05d806d99cd9993454b6a98c7c6b7cb0947e32acaaf4660eda48cdf529f98657",
       "limits": {
         "triangles": 28000,
         "materials": 3,
@@ -7639,7 +7639,7 @@
       "id": "apex-broodlord",
       "lod": 1,
       "file": "apex-broodlord/apex-broodlord-lod1.glb",
-      "sha256": "a144705052f7ba303ee89e09623126a103148888a7440d971c1278368187cf43",
+      "sha256": "ba25b69e835fc8c5de4ea5cbcbfcca5e1ea1d9f8627c912890d0056657212e2d",
       "limits": {
         "triangles": 14000,
         "materials": 3,

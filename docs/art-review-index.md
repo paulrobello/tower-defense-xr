@@ -1,6 +1,6 @@
 # Rift Bastion art review
 
-See the [initial independent audit](#initial-independent-audit) for the measured budgets, scores and revision findings.
+The complete batch is ready for [Owner Checkpoint 2](#owner-checkpoint-2). The [initial independent audit](#initial-independent-audit) records the first budgets, scores and revision findings.
 
 ## Tactical icons and launch art
 
@@ -144,7 +144,7 @@ The revised armor uses tapered overlapping shields, knee guards and recessed vio
 
 The revised indigo dart uses four broader swept wings, deeper wing roots and layered nose armor. LOD0 measures 0.38 × 0.42 × 0.22 m and uses 6,208 triangles. LOD1 uses 2,204 triangles. Both share one material, four 1024 px maps and nine bones. Each GLB re-import plays `hover_fly`, `bank_turn`, `attack`, `hit` and `death`. The 265 sampled poses per LOD preserve the wing gaps and all seven appendage attachments. With the existing 25 mm flight-bob offset added, the measured clearance below the health-bar anchor is at least 6.55 mm. The dorsal teal spot is absent in both imported LODs.
 
-[Sources, hashes and re-import checks](../assets-source/models/wasp-skimmer/README.md) · [Motion poses](../assets-source/models/wasp-skimmer/review/motion.jpg) · [Turntable](../assets-source/models/wasp-skimmer/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.
+[Source hashes and reproduction commands](../assets-source/models/wasp-skimmer/provenance.json) · [Re-import checks](../assets-source/models/wasp-skimmer/reimport.json) · [Motion poses](../assets-source/models/wasp-skimmer/review/motion.jpg) · [Turntable](../assets-source/models/wasp-skimmer/review/turntable.mp4).
 
 ## Carapace Brute
 
@@ -166,9 +166,9 @@ The faceted violet hull and luminous equatorial ring are independently rigged. B
 
 ![Both phases on the same imported LOD0 and LOD1 models under matched lighting](../assets-source/models/apex-broodlord/review/phases.jpg)
 
-The Wave 12 boss has a swept split crest, overlapping obsidian armor, raised claws and four blade legs. LOD0 measures 0.92 × 0.78 × 0.84 m and uses 23,480 triangles. LOD1 uses 7,840 triangles. Both share one material, a 28-bone skeleton and four 2048 px material maps. A separate 2048 px grayscale emissive mask supplies the orange cracks in Phase 2. The matched renderer applies the mask to both imported LODs using the same UVs and leaves the magenta Phase 1 seams visible. Runtime blending belongs to Phase 4.
+The revised Wave 12 boss has a broad angled brow, a central magenta ridge, hooked jaws and overlapping abdominal plates under the split crest. LOD0 measures 0.92 × 0.78 × 0.84 m and uses 23,480 triangles. LOD1 uses 7,840 triangles. Both share one material, a 28-bone skeleton and four 2048 px material maps. A separate 2048 px grayscale emissive mask supplies the orange cracks in Phase 2. The matched renderer applies the mask to both imported LODs using the same UVs and leaves the magenta Phase 1 seams visible. Runtime blending belongs to Phase 4.
 
-Both re-imported LODs play `boss_march`, `spawn_adds`, `emp_roar`, `phase2_shift`, `hit` and `death`. The march alternates supporting diagonal pairs. Summon, roar, phase shift and hit recover to rest, and death holds the collapsed pose. The distal crest halves maintain at least 43.5 mm of separation through the sampled movement. The tested interrupted roar-to-hit blend dips 0.62 mm below the support plane. Check that transition in the live mixer in Phase 4.
+Both re-imported LODs play `boss_march`, `spawn_adds`, `emp_roar`, `phase2_shift`, `hit` and `death`. The march alternates supporting diagonal pairs. Summon, roar, phase shift and hit recover to rest, and death holds the collapsed pose. The distal crest halves remain at least 81.92 mm apart and stay at least 43.42 mm from the head through the sampled motion. The envelope fit shifts the farthest neutral joint 15.85 mm while preserving the fixed root and six clip timings. The tested interrupted roar-to-hit blend dips 0.613 mm below the support plane. Check that transition in the live mixer in Phase 4.
 
 [Sources, hashes and re-import checks](../assets-source/models/apex-broodlord/README.md) · [Matched geometry views](../assets-source/models/apex-broodlord/review/comparison.jpg) · [Motion poses](../assets-source/models/apex-broodlord/review/motion.jpg) · [Six-clip reel](../assets-source/models/apex-broodlord/review/motion.mp4) · [Turntable](../assets-source/models/apex-broodlord/review/turntable.mp4). Independent scoring and owner approval remain P3-T7 work.
 
@@ -267,7 +267,7 @@ The 18 badges are 128 × 128 RGBA proof files in a 768 × 384 atlas. Reviewers c
 
 ## Passed revisions
 
-Forty-five of 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following ten revised assets account for those results. The remaining finding is F11.
+All 46 assets have independent visual scores of at least 80. The thirty-five passing assets from the first audit and the following eleven revised assets account for those results.
 
 | Finding | Asset | Initial → revised | Exact proof and result |
 | --- | --- | ---: | --- |
@@ -281,5 +281,35 @@ Forty-five of 46 assets have independent visual scores of at least 80. The thirt
 | F8 | Skitter Crawler | 77 → 83 | [Matched revision](../assets-source/models/skitter-crawler/review/revision-comparison.jpg) and [floor/wall motion](../assets-source/models/skitter-crawler/review/locomotion.jpg). Tapered armor, knee guards and a sharper head and tail distinguish the crawler. The legs remain straighter than in the concept, and the eyes and shoulder detail are subtler at LOD1. The reviewed GLB hashes begin `ebc4e139` and `efa45b81`. |
 | F9 | Wasp Skimmer | 77 → 84 | [Matched revision](../assets-source/models/wasp-skimmer/review/revision-comparison.jpg) and [underside bank](../assets-source/models/wasp-skimmer/review/bank.jpg). The broader panels and nose armor read at both LODs, and the dorsal teal patch is gone. The hull remains thicker than the concept, with flat teal near the roots and angular tips at LOD1. The reviewed GLB hashes begin `e842938a` and `fdfad8f7`. |
 | F10 | Carapace Brute | 79 → 85 | [Matched revision](../assets-source/models/carapace-brute/review/revision-comparison.jpg) and [brace sequence](../assets-source/models/carapace-brute/review/brace.jpg). The layered shield, open grille and wider armored feet read at both LODs. The hips and rear shells remain more rounded than the concept. The reviewed GLB hashes begin `ef598117` and `af05ccab`. |
+| F11 | Apex Broodlord | 75 → 82 | [Matched revision](../assets-source/models/apex-broodlord/review/revision-comparison.jpg) and [both phases](../assets-source/models/apex-broodlord/review/phases.jpg). The brow and central ridge unify the crest, with angled eyes and layered rear plates. The crest tips remain tall, and the jaws and crack relief are subtle at tabletop scale. The reviewed GLB hashes begin `05d806d9` and `ba25b69e`. |
 
 The exact badge proof SHA-256 is `608eea9914f08dc20961df864f55e6ae8d59e4fdd015a4dd0fe7fba348310911`. The exact revised obsidian proof SHA-256 is `5ddcceed74d963da9662c547d41dfcf7a50b9300f7a5f24af0476dc8c89b7f44`.
+
+## Owner Checkpoint 2
+
+**Awaiting Paul’s approval for runtime promotion.** All 46 staged assets scored 80–97/100 after the eleven revisions. The [initial audit](#initial-independent-audit) and [passed revisions](#passed-revisions) identify the exact reviewed evidence and remaining visual trade-offs.
+
+The batch SHA-256 is `fef4524a7d46821336beecb348e36ecfed3aee20fbac82c27ff7b29a6e7eac09`. This binds the 901 tracked files in the four Phase 3 asset directories using the same path-ordered digest described in the initial audit. The runtime model and texture selections and the icon atlas also carry these exact hashes.
+
+| Active file | SHA-256 |
+| --- | --- |
+| [Model manifest](../assets-source/models/manifest.json) | `da437529578322d5e8ec4627b13bda591c75a5cb03ad901eca58128cff4760ca` |
+| [Material manifest](../assets-source/materials/manifest.json) | `f0d2a74cd2944d3ce01e883a9c516d43cfa5807fa09e9e73748ccf2e2c6c27ab` |
+| [Tactical atlas](../assets-source/ui/candidates/tactical-atlas.png) | `79da6a4431cb9478d4b30473291a852d13206a7e29f2ed5d08a91e09160bb66e` |
+
+### Final export budgets for revised models
+
+| Model | Triangles LOD0 / LOD1 | Bones | Materials | Maps | KTX2 / RGBA8 mip MiB |
+| --- | ---: | ---: | ---: | --- | ---: |
+| [Core Bastion](../assets-source/models/core-bastion/provenance.json) | 6,858 / — | 0 | 3 | 4 × 2048 px | 3.63 / 85.33 |
+| [Hover Pod](../assets-source/models/hover-pod-revision/provenance.json) | 2,428 / 1,132 | 0 | 1 | 4 × 1024 px | 1.48 / 21.33 |
+| [Helios T1](../assets-source/models/helios-plasma-mortar-t1/provenance.json) | 3,020 / 1,300 | 0 | 1 | 4 × 1024 px | 1.80 / 21.33 |
+| [Glacier T2](../assets-source/models/glacier-cryo-arc-t2/provenance.json) | 1,312 / 1,088 | 0 | 1 | 4 × 1024 px | 1.75 / 21.33 |
+| [Skitter Crawler](../assets-source/models/skitter-crawler/provenance.json) | 3,904 / 1,994 | 23 | 1 | 4 × 1024 px | 2.27 / 21.33 |
+| [Wasp Skimmer](../assets-source/models/wasp-skimmer/provenance.json) | 6,208 / 2,204 | 9 | 1 | 4 × 1024 px | 2.10 / 21.33 |
+| [Carapace Brute](../assets-source/models/carapace-brute/provenance.json) | 8,904 / 4,448 | 24 | 1 | 4 × 1024 px | 2.02 / 21.33 |
+| [Apex Broodlord](../assets-source/models/apex-broodlord/provenance.json) | 23,480 / 7,840 | 28 | 1 | 5 × 2048 px | 7.19 / 106.67 |
+
+All 48 current turret and mount combinations fit the 6,500 / 2,500 triangle limits with at most two materials. Their largest counts are 6,452 and 2,500 triangles. The pinned Linux full gate passed 40 GLBs, 102 KTX2 textures and all 218 project tests. The asset audit also checked 1,933 model source and output hashes, 53 material hashes and 28 UI hashes.
+
+Approval authorizes Phase 4 runtime integration of this exact staging batch. Gameplay appearance, animation transitions and physical Quest frame timing are tested during integration and Phase 5.

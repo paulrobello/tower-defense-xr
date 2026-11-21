@@ -1,6 +1,6 @@
 {
   "lod0": {
-    "sha256": "710b3a149dc7cccc2b33db9fb0aef6716bc6933e5242c7e63df93541e3974a19",
+    "sha256": "05d806d99cd9993454b6a98c7c6b7cb0947e32acaaf4660eda48cdf529f98657",
     "triangles": 23480,
     "joints": [
       "root",
@@ -32,20 +32,20 @@
       "crest.L",
       "crest.R"
     ],
-    "inverse_bind_max_matrix_error": 3.853402821274443e-07,
-    "head_forward_of_thorax_gltf_z_m": 0.1133524395338521,
+    "inverse_bind_max_matrix_error": 3.6974651629329003e-07,
+    "head_forward_of_thorax_gltf_z_m": 0.11127986037717556,
     "influences": [
       1,
       1
     ],
     "positive_area_uv_or_coplanar_pairs": 0,
-    "mean_texels_per_meter": 835.1605623357041,
+    "mean_texels_per_meter": 913.893164539518,
     "neutral_width_length_height_m": [
-      0.7800000309944153,
-      0.9200000166893005,
-      0.8400000929832458
+      0.7799996733665466,
+      0.9200003743171692,
+      0.8399999141693115
     ],
-    "neutral_min_z_m": -1.2300880314342066e-07,
+    "neutral_min_z_m": -2.5280934323745896e-07,
     "anatomical_parts": 98,
     "atlas": "Reimported UV0 bounds match every authored patch within 2e-6 UV at both LODs.",
     "clips": {
@@ -55,33 +55,33 @@
         "min_supports": 2,
         "foot_min_max_m": [
           [
-            -4.688860371970804e-06,
-            0.04999975487589836
+            -4.73216459795367e-06,
+            0.049999725073575974
           ],
           [
-            -3.609514578784001e-06,
-            0.0499999076128006
+            -3.826653482974507e-06,
+            0.049999840557575226
           ],
           [
-            -4.646012712328229e-06,
-            0.049999918788671494
+            -4.622520918928785e-06,
+            0.04999997839331627
           ],
           [
-            -3.6755197925231187e-06,
-            0.049999967217445374
+            -3.758259026653832e-06,
+            0.04999985918402672
           ]
         ],
         "bounds_z_range_m": [
-          -4.688860371970804e-06,
-          0.840046226978302
+          -4.73216459795367e-06,
+          0.8403441905975342
         ],
-        "peak_vertex_travel_m": 0.07799983024597168,
-        "endpoint_delta_m": 1.5485740334497677e-07,
+        "peak_vertex_travel_m": 0.078000009059906,
+        "endpoint_delta_m": 2.1696418173178245e-07,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.04349391907453537,
-        "wall_basis_skin_max_error_m": 1.1920928955078125e-07,
+        "distal_crest_minimum_separating_gap_m": 0.08233550190925598,
+        "wall_basis_skin_max_error_m": 1.4901161193847656e-07,
         "prominent_region": "blade tips",
-        "prominent_region_peak_travel_m": 0.049999967217445374,
+        "prominent_region_peak_travel_m": 0.04999997839331627,
         "terminal_hold_error_m": 0.0
       },
       "spawn_adds": {
@@ -90,33 +90,33 @@
         "min_supports": 4,
         "foot_min_max_m": [
           [
-            -1.631023451409419e-06,
-            2.668272145456285e-07
+            -1.7784445844881702e-06,
+            5.6106756574081373e-08
           ],
           [
-            -1.1010986327164574e-06,
-            1.4763135425255314e-07
+            -1.10394967123284e-06,
+            1.8630692011356587e-07
           ],
           [
-            -1.5817956864339067e-06,
-            2.4753697402957187e-07
+            -1.666720891080331e-06,
+            2.228314315289026e-07
           ],
           [
-            -1.0351319588153274e-06,
-            2.2249972175814037e-07
+            -9.27515429793857e-07,
+            2.589139285191777e-07
           ]
         ],
         "bounds_z_range_m": [
-          -1.631023451409419e-06,
-          0.8610334992408752
+          -1.7784445844881702e-06,
+          0.8667217493057251
         ],
-        "peak_vertex_travel_m": 0.1257619708776474,
+        "peak_vertex_travel_m": 0.12269358336925507,
         "endpoint_delta_m": 0.0,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.043493933975696564,
+        "distal_crest_minimum_separating_gap_m": 0.08233550935983658,
         "wall_basis_skin_max_error_m": null,
         "prominent_region": "abdomen",
-        "prominent_region_peak_travel_m": 0.125761941075325,
+        "prominent_region_peak_travel_m": 0.12269370257854462,
         "terminal_hold_error_m": 0.0
       },
       "emp_roar": {
@@ -125,33 +125,33 @@
         "min_supports": 4,
         "foot_min_max_m": [
           [
-            -5.257219527265988e-06,
-            1.8122157996458554e-07
+            -5.148679520061705e-06,
+            9.389138710957923e-08
           ],
           [
-            -6.209842013049638e-06,
-            1.5900762662113266e-07
+            -6.411482445400907e-06,
+            1.9388699001865461e-07
           ],
           [
-            -4.99894031236181e-06,
-            2.4035824708334985e-07
+            -5.168635652808007e-06,
+            2.833554901826574e-07
           ],
           [
-            -6.407479759218404e-06,
-            2.605413271794532e-07
+            -6.276917247305391e-06,
+            2.694220313514961e-07
           ]
         ],
         "bounds_z_range_m": [
-          -6.407479759218404e-06,
-          0.839999794960022
+          -6.411482445400907e-06,
+          0.8399998545646667
         ],
-        "peak_vertex_travel_m": 0.2349763959646225,
+        "peak_vertex_travel_m": 0.23125328123569489,
         "endpoint_delta_m": 0.0,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.04349394887685776,
+        "distal_crest_minimum_separating_gap_m": 0.08233550935983658,
         "wall_basis_skin_max_error_m": null,
         "prominent_region": "palm.L",
-        "prominent_region_peak_travel_m": 0.23497623205184937,
+        "prominent_region_peak_travel_m": 0.23125314712524414,
         "terminal_hold_error_m": 0.0
       },
       "phase2_shift": {
@@ -160,33 +160,33 @@
         "min_supports": 4,
         "foot_min_max_m": [
           [
-            -3.337730163366359e-07,
-            1.7541135832743748e-07
+            -3.051582666557806e-07,
+            1.8258889156186342e-07
           ],
           [
-            -1.5453696278200368e-07,
-            2.0062364569639612e-07
+            -2.6665478003451426e-07,
+            2.2497459895021166e-07
           ],
           [
-            -2.0995375393795257e-07,
-            1.569238889942426e-07
+            -2.1867234067940444e-07,
+            2.011967410453508e-07
           ],
           [
-            -1.224763792606609e-07,
-            4.0575002913101343e-07
+            -7.246839572871977e-08,
+            3.3813671507232357e-07
           ]
         ],
         "bounds_z_range_m": [
-          -3.337730163366359e-07,
-          0.8400672078132629
+          -3.051582666557806e-07,
+          0.8399998545646667
         ],
-        "peak_vertex_travel_m": 0.05091971158981323,
+        "peak_vertex_travel_m": 0.05028733238577843,
         "endpoint_delta_m": 0.0,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.04349394887685776,
+        "distal_crest_minimum_separating_gap_m": 0.08233550935983658,
         "wall_basis_skin_max_error_m": null,
         "prominent_region": "crest.L",
-        "prominent_region_peak_travel_m": 0.02546185441315174,
+        "prominent_region_peak_travel_m": 0.027376607060432434,
         "terminal_hold_error_m": 0.0
       },
       "hit": {
@@ -195,33 +195,33 @@
         "min_supports": 4,
         "foot_min_max_m": [
           [
-            -6.5619869928923436e-06,
-            1.4008890047989553e-07
+            -6.601445420528762e-06,
+            1.0448839304899593e-07
           ],
           [
-            -6.596775619982509e-06,
-            2.0246179133209807e-07
+            -6.470642802014481e-06,
+            2.2437714619627513e-07
           ],
           [
-            -5.3337885219661985e-06,
-            2.4525166963940137e-07
+            -5.3520047913480084e-06,
+            1.864679290974891e-07
           ],
           [
-            -5.217358193476684e-06,
-            1.1257060350544634e-07
+            -4.990113211533753e-06,
+            1.9210560253668518e-07
           ]
         ],
         "bounds_z_range_m": [
-          -6.596775619982509e-06,
-          0.9101687669754028
+          -6.601445420528762e-06,
+          0.9186517000198364
         ],
-        "peak_vertex_travel_m": 0.12022095173597336,
-        "endpoint_delta_m": 7.129569157271476e-11,
+        "peak_vertex_travel_m": 0.12185529619455338,
+        "endpoint_delta_m": 4.440892098500626e-16,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.04349391907453537,
+        "distal_crest_minimum_separating_gap_m": 0.082335464656353,
         "wall_basis_skin_max_error_m": null,
         "prominent_region": "head",
-        "prominent_region_peak_travel_m": 0.07197818905115128,
+        "prominent_region_peak_travel_m": 0.06911658495664597,
         "terminal_hold_error_m": 0.0
       },
       "death": {
@@ -230,34 +230,34 @@
         "min_supports": 4,
         "foot_min_max_m": [
           [
-            -1.3577738172898535e-05,
-            1.8879600816035236e-07
+            -1.3541544831241481e-05,
+            2.1739968758538453e-07
           ],
           [
-            -8.412605893681757e-06,
-            2.018561531258456e-07
+            -8.537908797734417e-06,
+            2.444355118313979e-07
           ],
           [
-            -6.024170943419449e-06,
-            2.1658772197952203e-07
+            -5.908046205149731e-06,
+            4.483252666886983e-07
           ],
           [
-            -2.248685177619336e-06,
-            2.73487728463806e-07
+            -2.392312580923317e-06,
+            1.9725669631043274e-07
           ]
         ],
         "bounds_z_range_m": [
-          -1.3577738172898535e-05,
-          0.839999794960022
+          -1.3541544831241481e-05,
+          0.8399998545646667
         ],
-        "peak_vertex_travel_m": 0.3304230868816376,
-        "endpoint_delta_m": 0.3304230868816376,
+        "peak_vertex_travel_m": 0.3270881772041321,
+        "endpoint_delta_m": 0.32708799839019775,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.043493885546922684,
+        "distal_crest_minimum_separating_gap_m": 0.08233550935983658,
         "wall_basis_skin_max_error_m": null,
         "prominent_region": "thorax",
-        "prominent_region_peak_travel_m": 0.1807273030281067,
-        "terminal_hold_error_m": 1.8431718729061686e-07
+        "prominent_region_peak_travel_m": 0.18116948008537292,
+        "terminal_hold_error_m": 3.4890680922217143e-07
       }
     },
     "transition_previews": {
@@ -267,8 +267,8 @@
           0.1
         ],
         "blend_samples": 5,
-        "minimum_z_m": -2.2806301785749383e-05,
-        "maximum_z_m": 0.8420466780662537,
+        "minimum_z_m": -2.2720039851265028e-05,
+        "maximum_z_m": 0.8430830240249634,
         "root_drift": 0.0
       },
       "emp_roar_to_hit": {
@@ -277,8 +277,8 @@
           0.3
         ],
         "blend_samples": 5,
-        "minimum_z_m": -0.0006212673615664244,
-        "maximum_z_m": 0.8853665590286255,
+        "minimum_z_m": -0.0006133343558758497,
+        "maximum_z_m": 0.8936350345611572,
         "root_drift": 0.0
       },
       "phase2_shift_to_death": {
@@ -287,14 +287,156 @@
           0.17
         ],
         "blend_samples": 5,
-        "minimum_z_m": -5.7493336498737335e-05,
-        "maximum_z_m": 0.839646577835083,
+        "minimum_z_m": -5.740717824664898e-05,
+        "maximum_z_m": 0.8352596759796143,
         "root_drift": 0.0
+      }
+    },
+    "continuous_clearance": {
+      "sha256": "05d806d99cd9993454b6a98c7c6b7cb0947e32acaaf4660eda48cdf529f98657",
+      "clips": {
+        "boss_march": {
+          "half_frame_samples": 109,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08230340108275414,
+            "distal-valve-to-head": 0.0441560372710228,
+            "leg-to-leg": 0.1362028382718563,
+            "palm-to-other-palm": 0.384145587682724,
+            "palm-to-shell": 0.12585916136761066,
+            "palm-to-legs": 0.02269527713299474,
+            "distal-legs-to-thorax": 0.09955206263627031
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "spawn_adds": {
+          "half_frame_samples": 93,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08233550935983658,
+            "distal-valve-to-head": 0.044008000262476366,
+            "leg-to-leg": 0.13627325743436813,
+            "palm-to-other-palm": 0.38522616028785706,
+            "palm-to-shell": 0.09533955888459139,
+            "palm-to-legs": 0.046895761880958786,
+            "distal-legs-to-thorax": 0.11958949628189527
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "emp_roar": {
+          "half_frame_samples": 85,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08233550935983658,
+            "distal-valve-to-head": 0.04415606940165162,
+            "leg-to-leg": 0.13627325743436813,
+            "palm-to-other-palm": 0.38522616028785706,
+            "palm-to-shell": 0.08872785852926476,
+            "palm-to-legs": 0.046895761880958786,
+            "distal-legs-to-thorax": 0.1568855691672614
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "phase2_shift": {
+          "half_frame_samples": 97,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08233550935983658,
+            "distal-valve-to-head": 0.04405661688592555,
+            "leg-to-leg": 0.13627326488494873,
+            "palm-to-other-palm": 0.38522616028785706,
+            "palm-to-shell": 0.13915482727228157,
+            "palm-to-legs": 0.013589239777973439,
+            "distal-legs-to-thorax": 0.1451349118985907
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "hit": {
+          "half_frame_samples": 41,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.0819241926074028,
+            "distal-valve-to-head": 0.04402490705251694,
+            "leg-to-leg": 0.135592520236969,
+            "palm-to-other-palm": 0.38330158591270447,
+            "palm-to-shell": 0.09129349830603795,
+            "palm-to-legs": 0.024353418246755798,
+            "distal-legs-to-thorax": 0.12992709089218518
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "death": {
+          "half_frame_samples": 105,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08200228586792946,
+            "distal-valve-to-head": 0.04347785388940212,
+            "leg-to-leg": 0.13564620912075043,
+            "palm-to-other-palm": 0.3828590661287308,
+            "palm-to-shell": 0.13915482727228157,
+            "palm-to-legs": 0.0002599933717515601,
+            "distal-legs-to-thorax": 0.03512053685893074
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        }
+      },
+      "transitions": {
+        "boss_march_to_spawn_adds": {
+          "sampled_weights": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.0823077354580164,
+            "distal-valve-to-head": 0.044307029913581264,
+            "leg-to-leg": 0.13622620701789856,
+            "palm-to-other-palm": 0.38429123163223267,
+            "palm-to-shell": 0.12681736733432786,
+            "palm-to-legs": 0.02415164040986445,
+            "distal-legs-to-thorax": 0.10188195095866465
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "emp_roar_to_hit": {
+          "sampled_weights": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08215926215052605,
+            "distal-valve-to-head": 0.045692574232816696,
+            "leg-to-leg": 0.1359815150499344,
+            "palm-to-other-palm": 0.38440124690532684,
+            "palm-to-shell": 0.09118699419493734,
+            "palm-to-legs": 0.03206414721491363,
+            "distal-legs-to-thorax": 0.13910528365185704
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "phase2_shift_to_death": {
+          "sampled_weights": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08233104646205902,
+            "distal-valve-to-head": 0.04530222751624485,
+            "leg-to-leg": 0.1362648457288742,
+            "palm-to-other-palm": 0.3851928859949112,
+            "palm-to-shell": 0.14161895857553922,
+            "palm-to-legs": 0.014489011773408333,
+            "distal-legs-to-thorax": 0.1394479322618945
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        }
       }
     }
   },
   "lod1": {
-    "sha256": "a144705052f7ba303ee89e09623126a103148888a7440d971c1278368187cf43",
+    "sha256": "ba25b69e835fc8c5de4ea5cbcbfcca5e1ea1d9f8627c912890d0056657212e2d",
     "triangles": 7840,
     "joints": [
       "root",
@@ -326,20 +468,20 @@
       "crest.L",
       "crest.R"
     ],
-    "inverse_bind_max_matrix_error": 3.853402821274443e-07,
-    "head_forward_of_thorax_gltf_z_m": 0.1133524395338521,
+    "inverse_bind_max_matrix_error": 3.6974651629329003e-07,
+    "head_forward_of_thorax_gltf_z_m": 0.11127986037717556,
     "influences": [
       1,
       1
     ],
     "positive_area_uv_or_coplanar_pairs": 0,
-    "mean_texels_per_meter": 818.8593114303965,
+    "mean_texels_per_meter": 894.6423418872403,
     "neutral_width_length_height_m": [
-      0.779819905757904,
-      0.9200000166893005,
-      0.8399745225906372
+      0.7798196077346802,
+      0.9200003743171692,
+      0.8399999141693115
     ],
-    "neutral_min_z_m": -1.2300880314342066e-07,
+    "neutral_min_z_m": -2.5280934323745896e-07,
     "anatomical_parts": 98,
     "atlas": "Reimported UV0 bounds match every authored patch within 2e-6 UV at both LODs.",
     "clips": {
@@ -349,33 +491,33 @@
         "min_supports": 2,
         "foot_min_max_m": [
           [
-            -4.688860371970804e-06,
-            0.04999975487589836
+            -4.73216459795367e-06,
+            0.049999725073575974
           ],
           [
-            -3.609514578784001e-06,
-            0.0499999076128006
+            -3.826653482974507e-06,
+            0.049999840557575226
           ],
           [
-            -4.646012712328229e-06,
-            0.049999918788671494
+            -4.622520918928785e-06,
+            0.04999997839331627
           ],
           [
-            -3.6755197925231187e-06,
-            0.049999967217445374
+            -3.758259026653832e-06,
+            0.04999985918402672
           ]
         ],
         "bounds_z_range_m": [
-          -4.688860371970804e-06,
-          0.8400252461433411
+          -4.73216459795367e-06,
+          0.8403441905975342
         ],
-        "peak_vertex_travel_m": 0.07799983024597168,
-        "endpoint_delta_m": 1.2287812012345967e-07,
+        "peak_vertex_travel_m": 0.078000009059906,
+        "endpoint_delta_m": 2.1270885497415293e-07,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.04349391907453537,
-        "wall_basis_skin_max_error_m": 1.1920928955078125e-07,
+        "distal_crest_minimum_separating_gap_m": 0.08233550190925598,
+        "wall_basis_skin_max_error_m": 1.4901161193847656e-07,
         "prominent_region": "blade tips",
-        "prominent_region_peak_travel_m": 0.049999967217445374,
+        "prominent_region_peak_travel_m": 0.04999997839331627,
         "terminal_hold_error_m": 0.0
       },
       "spawn_adds": {
@@ -384,33 +526,33 @@
         "min_supports": 4,
         "foot_min_max_m": [
           [
-            -1.631023451409419e-06,
-            2.668272145456285e-07
+            -1.7784445844881702e-06,
+            5.6106756574081373e-08
           ],
           [
-            -1.1010986327164574e-06,
-            1.4763135425255314e-07
+            -1.10394967123284e-06,
+            1.8630692011356587e-07
           ],
           [
-            -1.5817956864339067e-06,
-            2.4753697402957187e-07
+            -1.666720891080331e-06,
+            2.228314315289026e-07
           ],
           [
-            -1.0351319588153274e-06,
-            2.2249972175814037e-07
+            -9.27515429793857e-07,
+            2.589139285191777e-07
           ]
         ],
         "bounds_z_range_m": [
-          -1.631023451409419e-06,
-          0.8610334992408752
+          -1.7784445844881702e-06,
+          0.8667217493057251
         ],
-        "peak_vertex_travel_m": 0.12514792382717133,
+        "peak_vertex_travel_m": 0.12269358336925507,
         "endpoint_delta_m": 0.0,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.043493933975696564,
+        "distal_crest_minimum_separating_gap_m": 0.08233550935983658,
         "wall_basis_skin_max_error_m": null,
         "prominent_region": "abdomen",
-        "prominent_region_peak_travel_m": 0.12514789402484894,
+        "prominent_region_peak_travel_m": 0.12269370257854462,
         "terminal_hold_error_m": 0.0
       },
       "emp_roar": {
@@ -419,33 +561,33 @@
         "min_supports": 4,
         "foot_min_max_m": [
           [
-            -5.257219527265988e-06,
-            1.8122157996458554e-07
+            -5.148679520061705e-06,
+            9.389138710957923e-08
           ],
           [
-            -6.209842013049638e-06,
-            1.5900762662113266e-07
+            -6.411482445400907e-06,
+            1.9388699001865461e-07
           ],
           [
-            -4.99894031236181e-06,
-            2.4035824708334985e-07
+            -5.168635652808007e-06,
+            2.833554901826574e-07
           ],
           [
-            -6.407479759218404e-06,
-            2.605413271794532e-07
+            -6.276917247305391e-06,
+            2.694220313514961e-07
           ]
         ],
         "bounds_z_range_m": [
-          -6.407479759218404e-06,
-          0.8399742245674133
+          -6.411482445400907e-06,
+          0.8399998545646667
         ],
-        "peak_vertex_travel_m": 0.2349763959646225,
+        "peak_vertex_travel_m": 0.23125328123569489,
         "endpoint_delta_m": 0.0,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.04349394887685776,
+        "distal_crest_minimum_separating_gap_m": 0.08233550935983658,
         "wall_basis_skin_max_error_m": null,
         "prominent_region": "palm.L",
-        "prominent_region_peak_travel_m": 0.23497623205184937,
+        "prominent_region_peak_travel_m": 0.23125314712524414,
         "terminal_hold_error_m": 0.0
       },
       "phase2_shift": {
@@ -454,33 +596,33 @@
         "min_supports": 4,
         "foot_min_max_m": [
           [
-            -3.337730163366359e-07,
-            1.7541135832743748e-07
+            -3.051582666557806e-07,
+            1.8258889156186342e-07
           ],
           [
-            -1.5453696278200368e-07,
-            2.0062364569639612e-07
+            -2.6665478003451426e-07,
+            2.2497459895021166e-07
           ],
           [
-            -2.0995375393795257e-07,
-            1.569238889942426e-07
+            -2.1867234067940444e-07,
+            2.011967410453508e-07
           ],
           [
-            -1.224763792606609e-07,
-            4.0575002913101343e-07
+            -7.246839572871977e-08,
+            3.3813671507232357e-07
           ]
         ],
         "bounds_z_range_m": [
-          -3.337730163366359e-07,
-          0.8399742245674133
+          -3.051582666557806e-07,
+          0.8399998545646667
         ],
-        "peak_vertex_travel_m": 0.05091971158981323,
+        "peak_vertex_travel_m": 0.05028733238577843,
         "endpoint_delta_m": 0.0,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.04349394887685776,
+        "distal_crest_minimum_separating_gap_m": 0.08233550935983658,
         "wall_basis_skin_max_error_m": null,
         "prominent_region": "crest.L",
-        "prominent_region_peak_travel_m": 0.025356557220220566,
+        "prominent_region_peak_travel_m": 0.027215389534831047,
         "terminal_hold_error_m": 0.0
       },
       "hit": {
@@ -489,33 +631,33 @@
         "min_supports": 4,
         "foot_min_max_m": [
           [
-            -6.5619869928923436e-06,
-            1.4008890047989553e-07
+            -6.601445420528762e-06,
+            1.0448839304899593e-07
           ],
           [
-            -6.596775619982509e-06,
-            2.0246179133209807e-07
+            -6.470642802014481e-06,
+            2.2437714619627513e-07
           ],
           [
-            -5.3337885219661985e-06,
-            2.4525166963940137e-07
+            -5.3520047913480084e-06,
+            1.864679290974891e-07
           ],
           [
-            -5.217358193476684e-06,
-            1.1257060350544634e-07
+            -4.990113211533753e-06,
+            1.9210560253668518e-07
           ]
         ],
         "bounds_z_range_m": [
-          -6.596775619982509e-06,
-          0.9101687669754028
+          -6.601445420528762e-06,
+          0.9186517000198364
         ],
-        "peak_vertex_travel_m": 0.12022095173597336,
-        "endpoint_delta_m": 7.12515393908042e-11,
+        "peak_vertex_travel_m": 0.12185529619455338,
+        "endpoint_delta_m": 4.440892098500626e-16,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.04349391907453537,
+        "distal_crest_minimum_separating_gap_m": 0.082335464656353,
         "wall_basis_skin_max_error_m": null,
         "prominent_region": "head",
-        "prominent_region_peak_travel_m": 0.07206118851900101,
+        "prominent_region_peak_travel_m": 0.06911658495664597,
         "terminal_hold_error_m": 0.0
       },
       "death": {
@@ -524,34 +666,34 @@
         "min_supports": 4,
         "foot_min_max_m": [
           [
-            -1.3577738172898535e-05,
-            1.8879600816035236e-07
+            -1.3541544831241481e-05,
+            2.1739968758538453e-07
           ],
           [
-            -8.412605893681757e-06,
-            2.018561531258456e-07
+            -8.537908797734417e-06,
+            2.444355118313979e-07
           ],
           [
-            -6.024170943419449e-06,
-            2.1658772197952203e-07
+            -5.908046205149731e-06,
+            4.483252666886983e-07
           ],
           [
-            -2.248685177619336e-06,
-            2.73487728463806e-07
+            -2.392312580923317e-06,
+            1.9725669631043274e-07
           ]
         ],
         "bounds_z_range_m": [
-          -1.3577738172898535e-05,
-          0.8399742245674133
+          -1.3541544831241481e-05,
+          0.8399998545646667
         ],
-        "peak_vertex_travel_m": 0.3304230868816376,
-        "endpoint_delta_m": 0.3304230868816376,
+        "peak_vertex_travel_m": 0.3270881772041321,
+        "endpoint_delta_m": 0.32708799839019775,
         "root_matrix_drift": 0.0,
-        "distal_crest_minimum_separating_gap_m": 0.043493885546922684,
+        "distal_crest_minimum_separating_gap_m": 0.08233550935983658,
         "wall_basis_skin_max_error_m": null,
         "prominent_region": "thorax",
-        "prominent_region_peak_travel_m": 0.1806000918149948,
-        "terminal_hold_error_m": 1.884864389012364e-07
+        "prominent_region_peak_travel_m": 0.18116948008537292,
+        "terminal_hold_error_m": 3.4727719366856036e-07
       }
     },
     "transition_previews": {
@@ -561,8 +703,8 @@
           0.1
         ],
         "blend_samples": 5,
-        "minimum_z_m": -2.2806301785749383e-05,
-        "maximum_z_m": 0.8420915603637695,
+        "minimum_z_m": -2.2720039851265028e-05,
+        "maximum_z_m": 0.8430830240249634,
         "root_drift": 0.0
       },
       "emp_roar_to_hit": {
@@ -571,8 +713,8 @@
           0.3
         ],
         "blend_samples": 5,
-        "minimum_z_m": -0.0006212673615664244,
-        "maximum_z_m": 0.8850194215774536,
+        "minimum_z_m": -0.0006133343558758497,
+        "maximum_z_m": 0.8936350345611572,
         "root_drift": 0.0
       },
       "phase2_shift_to_death": {
@@ -581,76 +723,218 @@
           0.17
         ],
         "blend_samples": 5,
-        "minimum_z_m": -5.7493336498737335e-05,
-        "maximum_z_m": 0.8393301367759705,
+        "minimum_z_m": -5.740717824664898e-05,
+        "maximum_z_m": 0.8352596759796143,
         "root_drift": 0.0
+      }
+    },
+    "continuous_clearance": {
+      "sha256": "ba25b69e835fc8c5de4ea5cbcbfcca5e1ea1d9f8627c912890d0056657212e2d",
+      "clips": {
+        "boss_march": {
+          "half_frame_samples": 109,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08230340108275414,
+            "distal-valve-to-head": 0.0441560372710228,
+            "leg-to-leg": 0.1345689669251442,
+            "palm-to-other-palm": 0.3835793733596802,
+            "palm-to-shell": 0.12546066818329626,
+            "palm-to-legs": 0.021601924662349364,
+            "distal-legs-to-thorax": 0.10006690746425517
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "spawn_adds": {
+          "half_frame_samples": 93,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08233550935983658,
+            "distal-valve-to-head": 0.04400047744511515,
+            "leg-to-leg": 0.13462156802415848,
+            "palm-to-other-palm": 0.38463325798511505,
+            "palm-to-shell": 0.09452560314108077,
+            "palm-to-legs": 0.046675718104997044,
+            "distal-legs-to-thorax": 0.11933852233572503
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "emp_roar": {
+          "half_frame_samples": 85,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08233550935983658,
+            "distal-valve-to-head": 0.04415606940165162,
+            "leg-to-leg": 0.13462156802415848,
+            "palm-to-other-palm": 0.38463325798511505,
+            "palm-to-shell": 0.08940547583965944,
+            "palm-to-legs": 0.046675718104997044,
+            "distal-legs-to-thorax": 0.15629025020040108
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "phase2_shift": {
+          "half_frame_samples": 97,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08233550935983658,
+            "distal-valve-to-head": 0.043942571955800536,
+            "leg-to-leg": 0.13462157547473907,
+            "palm-to-other-palm": 0.38463325798511505,
+            "palm-to-shell": 0.13821013200469026,
+            "palm-to-legs": 0.013331954341238683,
+            "distal-legs-to-thorax": 0.14482895738853804
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "hit": {
+          "half_frame_samples": 41,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.0819241926074028,
+            "distal-valve-to-head": 0.04390196050381001,
+            "leg-to-leg": 0.13394907861948013,
+            "palm-to-other-palm": 0.38271163403987885,
+            "palm-to-shell": 0.09135183481273312,
+            "palm-to-legs": 0.02420173541397702,
+            "distal-legs-to-thorax": 0.12961505669923473
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "death": {
+          "half_frame_samples": 105,
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08200228586792946,
+            "distal-valve-to-head": 0.04342589472772235,
+            "leg-to-leg": 0.13424475491046906,
+            "palm-to-other-palm": 0.3830764591693878,
+            "palm-to-shell": 0.13821013200469026,
+            "palm-to-legs": 0.00033654258535952,
+            "distal-legs-to-thorax": 0.034667447700726495
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        }
+      },
+      "transitions": {
+        "boss_march_to_spawn_adds": {
+          "sampled_weights": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.0823077354580164,
+            "distal-valve-to-head": 0.04391397498981364,
+            "leg-to-leg": 0.13457609713077545,
+            "palm-to-other-palm": 0.3837214261293411,
+            "palm-to-shell": 0.12638646058933045,
+            "palm-to-legs": 0.023635288832045326,
+            "distal-legs-to-thorax": 0.10272611018748934
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "emp_roar_to_hit": {
+          "sampled_weights": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08215926215052605,
+            "distal-valve-to-head": 0.045692574232816696,
+            "leg-to-leg": 0.13433335721492767,
+            "palm-to-other-palm": 0.38380958139896393,
+            "palm-to-shell": 0.09257392483215493,
+            "palm-to-legs": 0.031890405804445354,
+            "distal-legs-to-thorax": 0.1387941556161496
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        },
+        "phase2_shift_to_death": {
+          "sampled_weights": [
+            0,
+            0.25,
+            0.5,
+            0.75,
+            1
+          ],
+          "positive_clearance_lower_bounds_m": {
+            "distal-valves": 0.08233104646205902,
+            "distal-valve-to-head": 0.04469506602565859,
+            "leg-to-leg": 0.13461656868457794,
+            "palm-to-other-palm": 0.38461218774318695,
+            "palm-to-shell": 0.14129618747293063,
+            "palm-to-legs": 0.014250270950018407,
+            "distal-legs-to-thorax": 0.13914207258225098
+          },
+          "joint_bearings_in_contact_at_every_sample": 26
+        }
       }
     }
   },
   "atlas": {
     "textures": {
       "basecolor": {
-        "bytes": 1480299,
+        "bytes": 1459063,
         "mip_levels": 12,
         "uastc_mip_bytes_before_zstd": 5592432,
-        "level0_rmse_rgb8": 1.2
+        "level0_rmse_rgb8": 1.214
       },
       "normal": {
-        "bytes": 2891191,
+        "bytes": 3007533,
         "mip_levels": 12,
         "uastc_mip_bytes_before_zstd": 5592432,
-        "level0_rmse_rgb8": 0.922,
+        "level0_rmse_rgb8": 0.964,
         "decoded_unit_length_range": [
-          0.953022,
-          1.079073
+          0.932534,
+          1.070315
         ]
       },
       "orm": {
-        "bytes": 2798098,
+        "bytes": 2716643,
         "mip_levels": 12,
         "uastc_mip_bytes_before_zstd": 5592432,
-        "level0_rmse_rgb8": 1.569
+        "level0_rmse_rgb8": 1.549
       },
       "emissive": {
-        "bytes": 168391,
+        "bytes": 152459,
         "mip_levels": 12,
         "uastc_mip_bytes_before_zstd": 5592432,
-        "level0_rmse_rgb8": 0.391
+        "level0_rmse_rgb8": 0.426
       }
     },
-    "file_bytes": 19545632,
+    "file_bytes": 19661784,
     "primitives": 1,
     "gltf_vertices": 6044,
-    "ktx2_bytes": 7337979,
+    "ktx2_bytes": 7335698,
     "uastc_bytes_before_zstd": 22369728
   },
   "sources": {
     "high.blend": {
-      "file_sha256": "8efe4ab606d1c297be9bfb3e34e80a2b790079000e6cae22c5dfc40c7af0c26a",
-      "logical_geometry_hierarchy_skin_animation_sha256": "b13dfd6f057bd48e877b17243bc7eba2b7aa8cb77c70da9aacf40b221613697a",
+      "file_sha256": "b5f2c356d950698b7ec1e8d727e9609cfd5676764bb5fec9b142e97487c3f203",
+      "logical_geometry_hierarchy_skin_animation_sha256": "eb994551d0baf868bd80edce441b19c7bf91b40219f4883f5a8478327e61675a",
       "editable_material_graphs_sha256": "b385b493cab547ae3e585cae845ca5915c6878c5feda9ad0b6b8438914ee3fb7",
-      "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+      "skeleton_and_groups_sha256": "09ae440914828b26e08b21d66806f5641a580084f795898c70dd73b88c9f9963",
       "clips_sha256": {
-        "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
-        "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
-        "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
-        "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
-        "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
-        "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+        "boss_march": "6319bf61c143156a317dcca68486c5261d9a8091f92df9d9004a04c5984886a0",
+        "death": "0e1a05a408ce8acd74a2e08d8bc26eadb0c7fb380e54fe13fc36b7f9154e6185",
+        "emp_roar": "380e2f359b9a9b8809dc4167435e33dbf29779e340d8ac68123fa49ff2f447d5",
+        "hit": "6110968266ea5b7f2b2dc73c34fa48d2284ef9b93be3e3c47bfc053f16a12dc5",
+        "phase2_shift": "1517dba715fb6d1914090e45cac0a3772e527a260ad859593c3b2c5efb1dedfa",
+        "spawn_adds": "8059bfc60a401c711a9f6650578086386be3cc37e43f2fb1f1b50143c95a5ac5"
       }
     },
     "low.blend": {
-      "file_sha256": "1a7a93756023430edb333e22993e0c44491e0537379fa66e0be6d69c8cdb5c02",
-      "logical_geometry_hierarchy_skin_animation_sha256": "871fb8808dd1a97a853fc89039c26ccb7043162535fb41c8f8ff8b90f17a8005",
-      "editable_material_graphs_sha256": "5a340d86e4e98660f8efc96d12bf2dd30cfc2225d69432cde17277f94e8d9d35",
-      "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+      "file_sha256": "b7153a0ea83358decdf9f9b0ac88ee3ada2eec6d075198766a70f6deb8db46bf",
+      "logical_geometry_hierarchy_skin_animation_sha256": "dacb6a2f237edfa18e34bcc07f682af69202d8a4d9eedeac27fb56e9b33a9601",
+      "editable_material_graphs_sha256": "6eae42602c25e08d6a26c3e75e3ecaa7f70abc0078d424a856dfef83208078dc",
+      "skeleton_and_groups_sha256": "09ae440914828b26e08b21d66806f5641a580084f795898c70dd73b88c9f9963",
       "clips_sha256": {
-        "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
-        "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
-        "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
-        "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
-        "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
-        "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+        "boss_march": "6319bf61c143156a317dcca68486c5261d9a8091f92df9d9004a04c5984886a0",
+        "death": "0e1a05a408ce8acd74a2e08d8bc26eadb0c7fb380e54fe13fc36b7f9154e6185",
+        "emp_roar": "380e2f359b9a9b8809dc4167435e33dbf29779e340d8ac68123fa49ff2f447d5",
+        "hit": "6110968266ea5b7f2b2dc73c34fa48d2284ef9b93be3e3c47bfc053f16a12dc5",
+        "phase2_shift": "1517dba715fb6d1914090e45cac0a3772e527a260ad859593c3b2c5efb1dedfa",
+        "spawn_adds": "8059bfc60a401c711a9f6650578086386be3cc37e43f2fb1f1b50143c95a5ac5"
       }
     }
   },
@@ -668,36 +952,36 @@
             "surface": "Swept crest L",
             "source_finish": "shell",
             "decoded_rgb8": [
-              34,
-              34,
-              42
+              33,
+              33,
+              39
             ]
           },
           {
             "surface": "Ventral thorax",
             "source_finish": "tissue",
             "decoded_rgb8": [
-              36,
-              30,
-              42
+              28,
+              24,
+              34
             ]
           },
           {
             "surface": "Eye L",
             "source_finish": "eye",
             "decoded_rgb8": [
-              233,
-              75,
-              162
+              230,
+              74,
+              159
             ]
           },
           {
             "surface": "Crest vein L",
             "source_finish": "spine",
             "decoded_rgb8": [
-              231,
-              69,
-              149
+              254,
+              79,
+              168
             ]
           }
         ]
@@ -800,8 +1084,8 @@
           255
         ],
         "normal_length_range": [
-          0.9530218839645386,
-          1.0790729522705078
+          0.932533860206604,
+          1.0703152418136597
         ]
       },
       {
@@ -812,8 +1096,8 @@
           255
         ],
         "normal_length_range": [
-          0.930817186832428,
-          1.040236234664917
+          0.9229193329811096,
+          1.0647834539413452
         ]
       },
       {
@@ -824,8 +1108,8 @@
           255
         ],
         "normal_length_range": [
-          0.9806979894638062,
-          1.0233640670776367
+          0.9327976703643799,
+          1.077760934829712
         ]
       },
       {
@@ -836,8 +1120,8 @@
           255
         ],
         "normal_length_range": [
-          0.985640823841095,
-          1.0250457525253296
+          0.9704198837280273,
+          1.0680139064788818
         ]
       },
       {
@@ -848,8 +1132,8 @@
           255
         ],
         "normal_length_range": [
-          0.9890052676200867,
-          1.0133366584777832
+          0.9823901653289795,
+          1.0304327011108398
         ]
       },
       {
@@ -860,8 +1144,8 @@
           255
         ],
         "normal_length_range": [
-          0.993659257888794,
-          1.0065146684646606
+          0.989751398563385,
+          1.0163674354553223
         ]
       },
       {
@@ -873,7 +1157,7 @@
         ],
         "normal_length_range": [
           1.000015377998352,
-          1.0023502111434937
+          1.0064536333084106
         ]
       },
       {
@@ -897,7 +1181,7 @@
         ],
         "normal_length_range": [
           1.000015377998352,
-          1.000015377998352
+          1.0000768899917603
         ]
       },
       {
@@ -950,8 +1234,8 @@
             "surface": "Swept crest L",
             "source_finish": "shell",
             "decoded_rgb8": [
-              191,
-              104,
+              84,
+              99,
               20
             ]
           },
@@ -960,7 +1244,7 @@
             "source_finish": "tissue",
             "decoded_rgb8": [
               255,
-              131,
+              133,
               8
             ]
           },
@@ -968,8 +1252,8 @@
             "surface": "Eye L",
             "source_finish": "eye",
             "decoded_rgb8": [
-              168,
-              71,
+              0,
+              75,
               5
             ]
           },
@@ -977,7 +1261,7 @@
             "surface": "Crest vein L",
             "source_finish": "spine",
             "decoded_rgb8": [
-              234,
+              212,
               97,
               10
             ]
@@ -1104,18 +1388,18 @@
             "surface": "Eye L",
             "source_finish": "eye",
             "decoded_rgb8": [
-              233,
-              75,
-              162
+              230,
+              74,
+              159
             ]
           },
           {
             "surface": "Crest vein L",
             "source_finish": "spine",
             "decoded_rgb8": [
-              231,
-              69,
-              149
+              252,
+              78,
+              166
             ]
           }
         ]
@@ -1340,5 +1624,15 @@
       255
     ],
     "srgb": true
+  },
+  "editable_overlap": {
+    "high.blend": {
+      "triangles": 80016,
+      "positive_area_uv_or_coplanar_pairs": 0
+    },
+    "low.blend": {
+      "triangles": 23480,
+      "positive_area_uv_or_coplanar_pairs": 0
+    }
   }
 }

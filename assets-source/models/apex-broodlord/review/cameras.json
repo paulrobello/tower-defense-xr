@@ -117,6 +117,35 @@
         ]
       ],
       "ortho_scale": 1.3
+    },
+    "dorsal": {
+      "world_matrix": [
+        [
+          -0.8690647482872009,
+          -0.2550373673439026,
+          0.4238895773887634,
+          0.7400000095367432
+        ],
+        [
+          0.49469831585884094,
+          -0.44803884625434875,
+          0.7446709275245667,
+          1.2999999523162842
+        ],
+        [
+          8.738599177604556e-08,
+          0.8568646907806396,
+          0.5155413150787354,
+          1.309999942779541
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "ortho_scale": 1.18
     }
   },
   "animations": {
@@ -233,8 +262,8 @@
         ],
         "ortho_scale": 1.18
       },
-      "warm_changed_pixels": 6273,
-      "warm_image_fraction": 0.023929595947265625
+      "warm_changed_pixels": 6747,
+      "warm_image_fraction": 0.025737762451171875
     },
     "lod1-front": {
       "same_mesh": "apex-broodlord-lod1.glb",
@@ -269,8 +298,8 @@
         ],
         "ortho_scale": 1.06
       },
-      "warm_changed_pixels": 7262,
-      "warm_image_fraction": 0.02770233154296875
+      "warm_changed_pixels": 7395,
+      "warm_image_fraction": 0.028209686279296875
     },
     "lod1-flank": {
       "same_mesh": "apex-broodlord-lod1.glb",
@@ -305,8 +334,8 @@
         ],
         "ortho_scale": 1.16
       },
-      "warm_changed_pixels": 4451,
-      "warm_image_fraction": 0.016979217529296875
+      "warm_changed_pixels": 5063,
+      "warm_image_fraction": 0.019313812255859375
     },
     "lod0-oblique": {
       "same_mesh": "apex-broodlord-lod0.glb",
@@ -341,8 +370,8 @@
         ],
         "ortho_scale": 1.18
       },
-      "warm_changed_pixels": 6409,
-      "warm_image_fraction": 0.024448394775390625
+      "warm_changed_pixels": 6943,
+      "warm_image_fraction": 0.026485443115234375
     },
     "lod0-front": {
       "same_mesh": "apex-broodlord-lod0.glb",
@@ -377,8 +406,8 @@
         ],
         "ortho_scale": 1.06
       },
-      "warm_changed_pixels": 7515,
-      "warm_image_fraction": 0.028667449951171875
+      "warm_changed_pixels": 7665,
+      "warm_image_fraction": 0.029239654541015625
     },
     "lod0-flank": {
       "same_mesh": "apex-broodlord-lod0.glb",
@@ -413,28 +442,34 @@
         ],
         "ortho_scale": 1.16
       },
-      "warm_changed_pixels": 4322,
-      "warm_image_fraction": 0.01648712158203125
+      "warm_changed_pixels": 4927,
+      "warm_image_fraction": 0.018795013427734375
     }
   },
   "underside_silhouette_margins_px": {
     "high": {
-      "left": 40.8056690893024,
-      "bottom": 47.88017240256474,
-      "right": 40.80037116145343,
-      "top": 47.65001095952539
+      "left": 40.439294770712735,
+      "bottom": 51.55165168375626,
+      "right": 44.77796276671444,
+      "top": 48.3306841384009
     },
     "lod1": {
-      "left": 41.3331809577754,
-      "bottom": 47.88011957471531,
-      "right": 41.32847590904498,
-      "top": 47.88083149569081
+      "left": 40.95870161936597,
+      "bottom": 51.551604066876365,
+      "right": 45.303497903844345,
+      "top": 48.56277146931029
     },
     "lod0": {
-      "left": 40.970441749653844,
-      "bottom": 47.88011957471531,
-      "right": 40.971714235019135,
-      "top": 47.727661644685895
+      "left": 40.59070535726474,
+      "bottom": 51.551604066876365,
+      "right": 44.9359808348147,
+      "top": 48.41014842808977
     }
-  }
+  },
+  "reviewed_glb_sha256": {
+    "lod0": "05d806d99cd9993454b6a98c7c6b7cb0947e32acaaf4660eda48cdf529f98657",
+    "lod1": "ba25b69e835fc8c5de4ea5cbcbfcca5e1ea1d9f8627c912890d0056657212e2d"
+  },
+  "reviewed_high_blend_sha256": "b5f2c356d950698b7ec1e8d727e9609cfd5676764bb5fec9b142e97487c3f203",
+  "before_lod0_sha256": "710b3a149dc7cccc2b33db9fb0aef6716bc6933e5242c7e63df93541e3974a19"
 }

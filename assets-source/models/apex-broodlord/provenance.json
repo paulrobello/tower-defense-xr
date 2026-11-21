@@ -1,13 +1,13 @@
 {
   "piece": "apex-broodlord",
-  "stage": "P3-T6c staged animated boss",
-  "authoring_date": "2026-11-21",
+  "stage": "P3-T7 F11 staged revision",
   "authoring": {
     "model": "GPT-6.2 Astra",
     "reasoning_effort": "high",
     "tools": ["Blender 5.2.2 LTS d13f752e3b9c", "KTX-Software 4.4.2"],
-    "source": "Original four-stilt matriarch with articulated foreclaws, swept split casque, overlapping posterior shingles, six in-place actions and a hand-parameterized branching fracture mask."
+    "source": "Project-authored integrated brow and sagittal suture, reprofiled swept crest blades, narrow oblique eyes, hooked mandibles, anterior breast collars, swept pleural plates and tapered abdominal scutes over a recessed underplate."
   },
+  "authoring_date": "2026-11-21",
   "reference": {
     "approved_direction": "Bastion Rib",
     "concept_approved": "2026-11-20",
@@ -29,6 +29,15 @@
     "health_bar_m": 1.02,
     "lod_swap_m": 8,
     "origin": "Neutral support plane, glTF +Y up, +Z forward. Simulation owns movement and facing on the support surface, collision, health-bar placement, add spawning, EMP suppression and the 50% HP phase trigger."
+  },
+  "revision_of": {
+    "git_commit": "80c2b4fe7a0b092d44ec9bc532d8029d1d5976b0",
+    "previous_independent_score": 75,
+    "previous_provenance_sha256": "714e5fdec0e6d290039723d21465ee890b394bd9cb94c2b4abb63565e462c3ce",
+    "previous_glb_sha256": {
+      "apex-broodlord-lod0.glb": "710b3a149dc7cccc2b33db9fb0aef6716bc6933e5242c7e63df93541e3974a19",
+      "apex-broodlord-lod1.glb": "a144705052f7ba303ee89e09623126a103148888a7440d971c1278368187cf43"
+    }
   },
   "production": {
     "high_triangles": 80016,
@@ -71,113 +80,257 @@
     "loop_clips": ["boss_march"],
     "one_shots": ["spawn_adds", "emp_roar", "phase2_shift", "hit", "death"],
     "maps": "Four 2048px UASTC maps with twelve mips and embedded PNG fallback. Cycles CPU bakes high rest-surface base color, tangent normal, native magenta emission and AO/roughness/metallic. A bounded 24-degree normal correction transfers the high tangent field to LOD0. The standalone 2048px phase2-cracks map stores linear coverage encoded with the sRGB transfer function, including antialias texels. A single UV0 sample decoded as sRGB multiplies linear #ff4d00 and adds to native emission when enabled. The phase scalar is zero in Phase 1.",
-    "review": "EEVEE Metal, fixed oblique, front, flank and underside. Both GLBs use decoded KTX2 maps and the same studio cameras. The phase comparison reuses each mesh and camera, changing only the additive fissure factor. Neutral orbit and six performed clips."
+    "review": "EEVEE Metal. Matched high and decoded receivers from oblique, front, flank, underside and raised rear cameras. Both receivers change only the additive fissure factor across the three Phase 1 / Phase 2 camera pairs. The motion reel traverses every authored clip."
   },
   "failed_attempts_and_corrections": [
-    "Neutral triangle connectivity exposed two free outer fingers. Seated each proximal knuckle farther into its palm and added a thorax-owned pelvic socket to bridge the rear coxa throughout abdominal motion.",
-    "The initial front projection separated the crest halves too far along their mid-length. Widened the paired armor plates, narrowed their center gap and introduced a second branching magenta seam on each.",
-    "The first summon pose swept the palm into the front blade. Raised the brachia during the summon and shortened their outward arc. The revised posed reimports pass foreclaw-leg separation.",
-    "The initial all-mip verifier reused its texture path variable for a surface label at mip zero. Kept independent texture and probe variables and reran both complete reimport reports.",
-    "The first Metal underside framing clipped a toe. Recentered that single matched camera and expanded its orthographic width from 1.19 to 1.30 m. Per-view projected vertex margins in review/cameras.json cover all tips on the high source and both reimports.",
-    "The first death collapse pushed a front femur below the support plane. Reduced the thorax drop to 140 mm, eased its pitch and folded the crest while settling. Both LODs hold the terminal pose on four feet."
+    "Independent round one scored 75/100. The oval eyes and exposed thorax competed with the two visually separate crest plates.",
+    "The first revision preview improved the facial silhouette and abdominal overlaps, but the sagittal center fell into shadow. Raised and widened the shared brow, introduced one central emissive suture and tapered the side veins. Replaced the side plate's rounded profile with a swept shoulder scale."
   ],
+  "tangent_correction": "The original portable validator rejected five zero-length LOD0 tangents at split cap corners on abdominal scutes 0, 1 and 3. Each corner belongs to exactly one triangle. The packager derives its positive-U direction from that triangle, projects it onto the stored normal plane and normalizes it. It retains the original handedness. The receipt verifies every other GLB byte is identical, including UVs, positions, indices, normals and all images. Both corrected packages pass the original validator.",
+  "clearance_correction": "The expanded triangle separation verifier found the distal left valve intersecting the stationary brow at death frame 12 in a rejected preflight. The revision retains the forward brow, trims the trailing shield to the center of the skull, and passes on all half frames in both final packages.",
   "clean_repeat": {
-    "platform": "Two independent empty Linux x86_64 stages and packages A and B.",
+    "platform": "Independent empty Linux x86_64 stages and packages; Blender 5.2.2 CPU, KTX-Software 4.4.2. OPENBLAS_NUM_THREADS=1, OMP_NUM_THREADS=1 and PYTHONHASHSEED=0.",
+    "raw_stage_sha256": {
+      "basecolor.png": "8438ca9e1f918a1f09b70f02c8861bc80d4c760f4dfab6e7c2a5e2baefb7460a",
+      "emissive.png": "ef2c383c94b8eabb9479ec78643c82b406c04d58159750895170fc5009917e85",
+      "geometry.json": "7e07cfbc88a231dcf6260086187a7ac3ac9f240da31846f680039b1fe7b75f38",
+      "lod0/basecolor.png": "8438ca9e1f918a1f09b70f02c8861bc80d4c760f4dfab6e7c2a5e2baefb7460a",
+      "lod0/emissive.png": "ef2c383c94b8eabb9479ec78643c82b406c04d58159750895170fc5009917e85",
+      "lod0/normal.png": "1a8b5bc4b2b002f8b7868f289d9f921726c8843ff64884ee92030cbb3f5bdeda",
+      "lod0/orm.png": "9e0b468209c192b4b3529e40dad3340ccb43571638cff3cc9c38e3c7e3b2245a",
+      "lod0/source.bin": "da2fe44fbf516408f2cd7b5df5e64311f33a56905fa5d67f27b09268e0935ee6",
+      "lod0/source.gltf": "869ce08da6f951fc1cd1e8f63bee931da1dca4cd49a65d5a9311f6a2d8af4949",
+      "lod1/basecolor.png": "8438ca9e1f918a1f09b70f02c8861bc80d4c760f4dfab6e7c2a5e2baefb7460a",
+      "lod1/emissive.png": "ef2c383c94b8eabb9479ec78643c82b406c04d58159750895170fc5009917e85",
+      "lod1/normal.png": "1a8b5bc4b2b002f8b7868f289d9f921726c8843ff64884ee92030cbb3f5bdeda",
+      "lod1/orm.png": "9e0b468209c192b4b3529e40dad3340ccb43571638cff3cc9c38e3c7e3b2245a",
+      "lod1/source.bin": "b0b5c57e140871826140c6e5c6060831a05fb107cc9ed5d661531636c8c9ac0f",
+      "lod1/source.gltf": "e22868c122487cc05e4b05c314f16992819007211e9be7f966848ad6ff47eb98",
+      "normal.png": "1a8b5bc4b2b002f8b7868f289d9f921726c8843ff64884ee92030cbb3f5bdeda",
+      "orm.png": "9e0b468209c192b4b3529e40dad3340ccb43571638cff3cc9c38e3c7e3b2245a",
+      "phase2-cracks.png": "5f989c361c33b1c52964be97e2d0bfd2ffd95fce587fe695a37740f3a14d1746"
+    },
+    "raw_stage_repeat_sha256": {
+      "basecolor.png": "8438ca9e1f918a1f09b70f02c8861bc80d4c760f4dfab6e7c2a5e2baefb7460a",
+      "emissive.png": "ef2c383c94b8eabb9479ec78643c82b406c04d58159750895170fc5009917e85",
+      "geometry.json": "7e07cfbc88a231dcf6260086187a7ac3ac9f240da31846f680039b1fe7b75f38",
+      "lod0/basecolor.png": "8438ca9e1f918a1f09b70f02c8861bc80d4c760f4dfab6e7c2a5e2baefb7460a",
+      "lod0/emissive.png": "ef2c383c94b8eabb9479ec78643c82b406c04d58159750895170fc5009917e85",
+      "lod0/normal.png": "1a8b5bc4b2b002f8b7868f289d9f921726c8843ff64884ee92030cbb3f5bdeda",
+      "lod0/orm.png": "9e0b468209c192b4b3529e40dad3340ccb43571638cff3cc9c38e3c7e3b2245a",
+      "lod0/source.bin": "da2fe44fbf516408f2cd7b5df5e64311f33a56905fa5d67f27b09268e0935ee6",
+      "lod0/source.gltf": "869ce08da6f951fc1cd1e8f63bee931da1dca4cd49a65d5a9311f6a2d8af4949",
+      "lod1/basecolor.png": "8438ca9e1f918a1f09b70f02c8861bc80d4c760f4dfab6e7c2a5e2baefb7460a",
+      "lod1/emissive.png": "ef2c383c94b8eabb9479ec78643c82b406c04d58159750895170fc5009917e85",
+      "lod1/normal.png": "1a8b5bc4b2b002f8b7868f289d9f921726c8843ff64884ee92030cbb3f5bdeda",
+      "lod1/orm.png": "9e0b468209c192b4b3529e40dad3340ccb43571638cff3cc9c38e3c7e3b2245a",
+      "lod1/source.bin": "b0b5c57e140871826140c6e5c6060831a05fb107cc9ed5d661531636c8c9ac0f",
+      "lod1/source.gltf": "e22868c122487cc05e4b05c314f16992819007211e9be7f966848ad6ff47eb98",
+      "normal.png": "1a8b5bc4b2b002f8b7868f289d9f921726c8843ff64884ee92030cbb3f5bdeda",
+      "orm.png": "9e0b468209c192b4b3529e40dad3340ccb43571638cff3cc9c38e3c7e3b2245a",
+      "phase2-cracks.png": "5f989c361c33b1c52964be97e2d0bfd2ffd95fce587fe695a37740f3a14d1746"
+    },
     "products_match_sha256": {
-      "apex-broodlord-lod0.glb": "710b3a149dc7cccc2b33db9fb0aef6716bc6933e5242c7e63df93541e3974a19",
-      "apex-broodlord-lod1.glb": "a144705052f7ba303ee89e09623126a103148888a7440d971c1278368187cf43",
-      "basecolor.ktx2": "2823bad401bdffbe1a62d90a0ac5f94bc61ebec587addbd7cfa800c2d063b1c1",
-      "basecolor.png": "8b9689bbe16f044f3d02a412fc79c4e55e26f03f53877c209b2c3f2cbec2e278",
-      "emissive.ktx2": "419aad824157f4ee75b68dc32e9f1ab61ad1bec73355069e412c7868de00a58a",
-      "emissive.png": "8f0191d2ba40d64870b3d9ce42b0ed774a1bc4c3b399ca54be996d7369035729",
-      "normal.ktx2": "5961433f02c327d56600a9a71632b9794d605110c34f9fc3de9f65b3b5b9050a",
-      "normal.png": "e1448f1d15775f918fae0e1d9d2a23d582e7f4af66f6d383e4757e5c48ac880a",
-      "orm.ktx2": "26d522027b4219df6613c49df1469fa2ce78bab4edc18abae73f34ae7904324e",
-      "orm.png": "87b7224c999fa3f0b5b550446b5ebd96f55f1975ccb56da11314d3c779a4c1d4",
+      "apex-broodlord-lod0.glb": "05d806d99cd9993454b6a98c7c6b7cb0947e32acaaf4660eda48cdf529f98657",
+      "apex-broodlord-lod1.glb": "ba25b69e835fc8c5de4ea5cbcbfcca5e1ea1d9f8627c912890d0056657212e2d",
+      "basecolor.ktx2": "dce4a778d482d1b591a2acaedc6d5f196bb097174c8a427fe2613727a719aacf",
+      "basecolor.png": "8438ca9e1f918a1f09b70f02c8861bc80d4c760f4dfab6e7c2a5e2baefb7460a",
+      "emissive.ktx2": "f828329bcb5434a526d8c7bfe80eac51a304ff4bd1e378f8d008f8a592d9fef7",
+      "emissive.png": "ef2c383c94b8eabb9479ec78643c82b406c04d58159750895170fc5009917e85",
+      "normal.ktx2": "2bfdaacbdd8bf19ac21e0af275837b8356eeda5b0b15d07ed1869dbb05cd1b78",
+      "normal.png": "1a8b5bc4b2b002f8b7868f289d9f921726c8843ff64884ee92030cbb3f5bdeda",
+      "orm.ktx2": "af9e85a32ad171da6213c3038c8b73b696c58da3a42fe46b8001e6a7d664c8ac",
+      "orm.png": "9e0b468209c192b4b3529e40dad3340ccb43571638cff3cc9c38e3c7e3b2245a",
       "phase2-cracks.ktx2": "a44c49d989d3223e29377158b08f4d5e9254062256e36a18216e3cfdc3f53c65",
       "phase2-cracks.png": "5f989c361c33b1c52964be97e2d0bfd2ffd95fce587fe695a37740f3a14d1746"
     },
-    "final_verifier_sha256": "1f34d44d09d1646cd5bf1c26184f3483b709c06a99302dde088c1662db43df7b",
-    "clean_reimport_report_sha256": {
-      "A": "c8564f0f954f2b5feffb01d4e34a7e9630fe81723aaa270bc841b22c331e86a0",
-      "B": "5dfa84ebfa5df0fed052b063071cae713c3bd68ac664ac627863c5303c986cb1"
-    },
-    "verification_environment": "Linux x86_64 Blender 5.2.2 / KTX 4.4.2, OPENBLAS_NUM_THREADS=1, OMP_NUM_THREADS=1, PYTHONHASHSEED=0. Each final report ran in a separate one-core process.",
     "stage_a_editable": {
       "high.blend": {
-        "file_sha256": "8efe4ab606d1c297be9bfb3e34e80a2b790079000e6cae22c5dfc40c7af0c26a",
-        "logical_geometry_hierarchy_skin_animation_sha256": "b13dfd6f057bd48e877b17243bc7eba2b7aa8cb77c70da9aacf40b221613697a",
+        "file_sha256": "b5f2c356d950698b7ec1e8d727e9609cfd5676764bb5fec9b142e97487c3f203",
+        "logical_geometry_hierarchy_skin_animation_sha256": "eb994551d0baf868bd80edce441b19c7bf91b40219f4883f5a8478327e61675a",
         "editable_material_graphs_sha256": "b385b493cab547ae3e585cae845ca5915c6878c5feda9ad0b6b8438914ee3fb7",
-        "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+        "skeleton_and_groups_sha256": "09ae440914828b26e08b21d66806f5641a580084f795898c70dd73b88c9f9963",
         "clips_sha256": {
-          "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
-          "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
-          "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
-          "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
-          "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
-          "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+          "boss_march": "6319bf61c143156a317dcca68486c5261d9a8091f92df9d9004a04c5984886a0",
+          "death": "0e1a05a408ce8acd74a2e08d8bc26eadb0c7fb380e54fe13fc36b7f9154e6185",
+          "emp_roar": "380e2f359b9a9b8809dc4167435e33dbf29779e340d8ac68123fa49ff2f447d5",
+          "hit": "6110968266ea5b7f2b2dc73c34fa48d2284ef9b93be3e3c47bfc053f16a12dc5",
+          "phase2_shift": "1517dba715fb6d1914090e45cac0a3772e527a260ad859593c3b2c5efb1dedfa",
+          "spawn_adds": "8059bfc60a401c711a9f6650578086386be3cc37e43f2fb1f1b50143c95a5ac5"
         }
       },
       "low.blend": {
-        "file_sha256": "1a7a93756023430edb333e22993e0c44491e0537379fa66e0be6d69c8cdb5c02",
-        "logical_geometry_hierarchy_skin_animation_sha256": "871fb8808dd1a97a853fc89039c26ccb7043162535fb41c8f8ff8b90f17a8005",
-        "editable_material_graphs_sha256": "5a340d86e4e98660f8efc96d12bf2dd30cfc2225d69432cde17277f94e8d9d35",
-        "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+        "file_sha256": "b7153a0ea83358decdf9f9b0ac88ee3ada2eec6d075198766a70f6deb8db46bf",
+        "logical_geometry_hierarchy_skin_animation_sha256": "dacb6a2f237edfa18e34bcc07f682af69202d8a4d9eedeac27fb56e9b33a9601",
+        "editable_material_graphs_sha256": "6eae42602c25e08d6a26c3e75e3ecaa7f70abc0078d424a856dfef83208078dc",
+        "skeleton_and_groups_sha256": "09ae440914828b26e08b21d66806f5641a580084f795898c70dd73b88c9f9963",
         "clips_sha256": {
-          "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
-          "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
-          "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
-          "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
-          "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
-          "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+          "boss_march": "6319bf61c143156a317dcca68486c5261d9a8091f92df9d9004a04c5984886a0",
+          "death": "0e1a05a408ce8acd74a2e08d8bc26eadb0c7fb380e54fe13fc36b7f9154e6185",
+          "emp_roar": "380e2f359b9a9b8809dc4167435e33dbf29779e340d8ac68123fa49ff2f447d5",
+          "hit": "6110968266ea5b7f2b2dc73c34fa48d2284ef9b93be3e3c47bfc053f16a12dc5",
+          "phase2_shift": "1517dba715fb6d1914090e45cac0a3772e527a260ad859593c3b2c5efb1dedfa",
+          "spawn_adds": "8059bfc60a401c711a9f6650578086386be3cc37e43f2fb1f1b50143c95a5ac5"
         }
       }
     },
     "stage_b_editable": {
       "high.blend": {
-        "file_sha256": "457a20c5773b5a6be912608d3f4fc4a8073f2931862ee660006b3cfed7a8e75c",
-        "logical_geometry_hierarchy_skin_animation_sha256": "b13dfd6f057bd48e877b17243bc7eba2b7aa8cb77c70da9aacf40b221613697a",
+        "file_sha256": "5acbb1c68c799f914c6a90ca5f67d95ed85d8af4a4b003122ba202c9edd8b4fd",
+        "logical_geometry_hierarchy_skin_animation_sha256": "eb994551d0baf868bd80edce441b19c7bf91b40219f4883f5a8478327e61675a",
         "editable_material_graphs_sha256": "b385b493cab547ae3e585cae845ca5915c6878c5feda9ad0b6b8438914ee3fb7",
-        "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+        "skeleton_and_groups_sha256": "09ae440914828b26e08b21d66806f5641a580084f795898c70dd73b88c9f9963",
         "clips_sha256": {
-          "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
-          "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
-          "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
-          "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
-          "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
-          "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+          "boss_march": "6319bf61c143156a317dcca68486c5261d9a8091f92df9d9004a04c5984886a0",
+          "death": "0e1a05a408ce8acd74a2e08d8bc26eadb0c7fb380e54fe13fc36b7f9154e6185",
+          "emp_roar": "380e2f359b9a9b8809dc4167435e33dbf29779e340d8ac68123fa49ff2f447d5",
+          "hit": "6110968266ea5b7f2b2dc73c34fa48d2284ef9b93be3e3c47bfc053f16a12dc5",
+          "phase2_shift": "1517dba715fb6d1914090e45cac0a3772e527a260ad859593c3b2c5efb1dedfa",
+          "spawn_adds": "8059bfc60a401c711a9f6650578086386be3cc37e43f2fb1f1b50143c95a5ac5"
         }
       },
       "low.blend": {
-        "file_sha256": "978f25cbb4b20a4bb3ae59da2a1b21a8f05379c504f8125ec42295a8c51aa434",
-        "logical_geometry_hierarchy_skin_animation_sha256": "871fb8808dd1a97a853fc89039c26ccb7043162535fb41c8f8ff8b90f17a8005",
-        "editable_material_graphs_sha256": "5a340d86e4e98660f8efc96d12bf2dd30cfc2225d69432cde17277f94e8d9d35",
-        "skeleton_and_groups_sha256": "286508d24a27757e27ca38f55a57a539cb1ff883437e83d6b294af7a26c420b9",
+        "file_sha256": "51f2abd01a9fc2d1cf73e3a01f1118b07b1bb94e03da3add5fe4c6d917ae2bcb",
+        "logical_geometry_hierarchy_skin_animation_sha256": "dacb6a2f237edfa18e34bcc07f682af69202d8a4d9eedeac27fb56e9b33a9601",
+        "editable_material_graphs_sha256": "6eae42602c25e08d6a26c3e75e3ecaa7f70abc0078d424a856dfef83208078dc",
+        "skeleton_and_groups_sha256": "09ae440914828b26e08b21d66806f5641a580084f795898c70dd73b88c9f9963",
         "clips_sha256": {
-          "boss_march": "50a84ad6388fe7cfe4bb1de01232a4011f30eaea43b98aa8ed033cba5b2a11da",
-          "death": "f9ca750dd3dee92eea29f7ce646d1bf5170d1af92b633d86952869ac96194783",
-          "emp_roar": "0e4bd324e40d146e8cef79c47a594d1883f061561e7f616d4dfa98d3eccbc312",
-          "hit": "0110ee7355400569ec11936de828fdc275b179c3356a850641878caed3cf2660",
-          "phase2_shift": "8b6d254803d9b7ccd86371efcef4931136e17c4ec1096bb34f34643deb72f959",
-          "spawn_adds": "ad3b31c6f0921fd6ec26ea98c17d381d96d32e7af26d0279edad6a818356af9c"
+          "boss_march": "6319bf61c143156a317dcca68486c5261d9a8091f92df9d9004a04c5984886a0",
+          "death": "0e1a05a408ce8acd74a2e08d8bc26eadb0c7fb380e54fe13fc36b7f9154e6185",
+          "emp_roar": "380e2f359b9a9b8809dc4167435e33dbf29779e340d8ac68123fa49ff2f447d5",
+          "hit": "6110968266ea5b7f2b2dc73c34fa48d2284ef9b93be3e3c47bfc053f16a12dc5",
+          "phase2_shift": "1517dba715fb6d1914090e45cac0a3772e527a260ad859593c3b2c5efb1dedfa",
+          "spawn_adds": "8059bfc60a401c711a9f6650578086386be3cc37e43f2fb1f1b50143c95a5ac5"
         }
       }
     },
-    "comparison": "GLBs, PNGs and KTX2 are byte-identical. Geometry measurements, skeleton, weights, topology, UVs and animation fingerprints match across repeats."
+    "reimport_report_sha256": {
+      "A": "8b7af23038399eeeabfd4a835821ab299c0dc21d67624d1a490f28fad9e3a71a",
+      "B": "d929cf18773110c3fbc012e471eeb3362d627cc382fd3329074bab736a64638c"
+    },
+    "comparison": "All raw glTF, bin, texture and geometry-report files and all twelve portable GLB, PNG and KTX2 products match byte for byte. Editable topology, skin, rig, material graphs, packed images and clip fingerprints match."
+  },
+  "portable_tangent_frame_receipt": {
+    "apex-broodlord/apex-broodlord-lod0.glb": {
+      "original_glb_sha256": "38756e1cf7138ea983896bf1ba91b9f53157da2191ccfa1c783401808969a45c",
+      "glb_sha256": "05d806d99cd9993454b6a98c7c6b7cb0947e32acaaf4660eda48cdf529f98657",
+      "all_bytes_outside_repaired_xyz_sha256": "38756e1cf7138ea983896bf1ba91b9f53157da2191ccfa1c783401808969a45c",
+      "repair_count": 5,
+      "repaired_cap_corners": [
+        {
+          "vertex": 930,
+          "triangle": [930, 911, 910],
+          "uv": [0.14338378608226776, 0.8722330927848816],
+          "original_length": 0,
+          "uv_derivative_projected_length": 0.7476531824195346,
+          "normalized_tangent": [0.9342665705157794, 0.3487237643058779, -0.0744158009096376],
+          "stored_handedness": -1.0
+        },
+        {
+          "vertex": 937,
+          "triangle": [937, 918, 917],
+          "uv": [0.22917480766773224, 0.8722330927848816],
+          "original_length": 0,
+          "uv_derivative_projected_length": 0.7476531824195346,
+          "normalized_tangent": [0.9342665705157794, -0.3487237643058779, 0.0744158009096376],
+          "stored_handedness": -1.0
+        },
+        {
+          "vertex": 1243,
+          "triangle": [1243, 1224, 1223],
+          "uv": [0.39338380098342896, 0.8722330927848816],
+          "original_length": 0,
+          "uv_derivative_projected_length": 0.8118381393448179,
+          "normalized_tangent": [0.9464422778432048, 0.3138164494828777, -0.07593583307586968],
+          "stored_handedness": -1.0
+        },
+        {
+          "vertex": 1250,
+          "triangle": [1250, 1231, 1230],
+          "uv": [0.47917479276657104, 0.8722330927848816],
+          "original_length": 0,
+          "uv_derivative_projected_length": 0.8118381393448179,
+          "normalized_tangent": [0.9464422778432048, -0.3138164494828777, 0.07593583307586968],
+          "stored_handedness": -1.0
+        },
+        {
+          "vertex": 1869,
+          "triangle": [1869, 1850, 1849],
+          "uv": [0.893383800983429, 0.8722330927848816],
+          "original_length": 0,
+          "uv_derivative_projected_length": 0.6860727040037025,
+          "normalized_tangent": [0.9319771271850904, 0.3449295615969047, -0.11154475308320357],
+          "stored_handedness": -1.0
+        }
+      ]
+    },
+    "apex-broodlord/apex-broodlord-lod1.glb": {
+      "original_glb_sha256": "ba25b69e835fc8c5de4ea5cbcbfcca5e1ea1d9f8627c912890d0056657212e2d",
+      "glb_sha256": "ba25b69e835fc8c5de4ea5cbcbfcca5e1ea1d9f8627c912890d0056657212e2d",
+      "all_bytes_outside_repaired_xyz_sha256": "ba25b69e835fc8c5de4ea5cbcbfcca5e1ea1d9f8627c912890d0056657212e2d",
+      "repair_count": 0,
+      "repaired_cap_corners": []
+    }
+  },
+  "serialized_clips_match_frozen_channel_contract": {
+    "boss_march": {
+      "channels": 84,
+      "target_paths_interpolation_and_times_sha256": "31633bd993da2e322858aa70524e7d058dfa39469bdae4c95def80c0a47ad7fb"
+    },
+    "death": {
+      "channels": 84,
+      "target_paths_interpolation_and_times_sha256": "a02322ab13c84f40b258b7acfad5185b72c113f0e7e932fb84f4051358edd4fd"
+    },
+    "emp_roar": {
+      "channels": 84,
+      "target_paths_interpolation_and_times_sha256": "1c7d9b8146d6800a656cce0aca451017ad17d3a5419b1efa2c7575823c84f8a5"
+    },
+    "hit": {
+      "channels": 84,
+      "target_paths_interpolation_and_times_sha256": "61ac32f5515a7bb25a963ae1719c2dfa13520fa75404ea3271ed72ec95b418ae"
+    },
+    "phase2_shift": {
+      "channels": 84,
+      "target_paths_interpolation_and_times_sha256": "15464ced42f7281853dcb03b9fa4a8e8ea1bd39a0d7e9e28135d7a7fe3f54c8d"
+    },
+    "spawn_adds": {
+      "channels": 84,
+      "target_paths_interpolation_and_times_sha256": "19b395aa0f246a995cdcbf76828afd51bebdf2180df6efa9f1abc48d60f25c4e"
+    }
+  },
+  "neutral_bind_comparison": {
+    "world_root_translation_m": [0.0, 0.0, 0.0],
+    "identical_between_revision_lods": true,
+    "largest_world_joint_position_change_from_round_one_m": 0.015846306093955157,
+    "joint": "blade_hind.R",
+    "reason": "The original rig generator fits its neutral bearings to the full revised mesh envelope."
   },
   "checks": {
     "reimport": "reimport.json",
-    "candidate_verifier": "blender/verify_broodlord.py",
-    "continuity": "Rest-pose triangle BVHs connect all 98 anatomical patches into one graph. Posed triangle BVHs test adjacent control-chain contacts, foreclaw clearance, and inter-leg separation at seven poses per clip per LOD. All authored half-frames are measured for root drift, blade contact, health-bar clearance, principal articulation travel and endpoints. Additional tests rotate the march to a vertical support surface, measure distal crest separation in head-transverse space and exercise three interrupted/recovery blends at five interpolation weights each.",
-    "texture": "Vendor RGBA8 decoded and checked on every mip of all five maps. Decoded mip-zero atlas compared against lossless bake. Color and scalar semantic probes recorded in geometry.json."
+    "review": "review/cameras.json",
+    "geometry": "All 98 UV-addressable anatomical patches form a single connected rest assembly. Geometry and UVs on both editable sources and both packaged receivers have zero positive-area coplanar overlaps.",
+    "motion": "Evaluated skin positions, supports, crest clearance, joints and distal-to-head and limb separation at half-frame intervals on both exact GLBs. Per-pose triangle partitions establish positive projected separation lower bounds. Three additional staged transitions sample five blend weights.",
+    "phase": "Each matching phase pair uses the same decoded receiver and camera. The pixel evidence records where enabling the separately decoded fissure map adds orange.",
+    "maps": "All twelve mips of all five 2048 px maps decoded. Unit normal bounds, source recipe probes, opaque alpha and intact/bright grayscale crack probes passed."
+  },
+  "creative_score": 82,
+  "independent_visual_review": {
+    "date": "2026-11-21",
+    "score_out_of_100": 82,
+    "reviewed_glbs": {
+      "lod0": "05d806d99cd9993454b6a98c7c6b7cb0947e32acaaf4660eda48cdf529f98657",
+      "lod1": "ba25b69e835fc8c5de4ea5cbcbfcca5e1ea1d9f8627c912890d0056657212e2d"
+    },
+    "observations": "The crest tips remain tall and symmetric, the underside is smooth and the jaws recessed. The cracks read flatter and LOD1 shows more faceting."
   },
   "acceptance": {
+    "independent_visual_score": 82,
     "creative_owner": "pending combined P3-T7 review",
-    "runtime": "pending P4 integration",
-    "independent_visual_score": "tracked by the phase review owner"
+    "runtime": "pending P4 integration and Quest acceptance"
   },
   "source_sha256": {
     "blender/apex_broodlord.py": "b674f25165bbe4ffc3ceaa07d75c555f0ca11134e7c65c278cac1caca8015c58",
+    "blender/apex_broodlord_revision.py": "2cb6be974c8cd4c1822a7ab4b8d13a51f0be7c1dad3ad15803e10110ac84cabb",
     "blender/broodlord_bake.py": "aa785ae36cff9515f5f15ef7179e2826d3bcfa8d4b4dbc6d2aaf4157940eab21",
     "blender/broodlord_cracks.py": "f9c1420a8bc775f5cee5d5d85c58f3a74145c940d0d5d75a2ea874f13256aef8",
     "blender/broodlord_rig.py": "2d99674ac887b8081d3e29f730d3ccbc27a14084789f6aebd64401b1e75e77d8",
@@ -188,11 +341,14 @@
     "blender/core_bastion.py": "26bd7b5a221c5f4fc7d17c58f53feeb57290e3e36d66e7b895ac56fea41a1a19",
     "blender/core_bastion_shape.py": "c1b6df3d5bd80e695dbb28150183224bf808313b7c79e1af43a58de4ac1b6182",
     "blender/document_broodlord.py": "1ea844268f4b40507cad4e5cf96dfa0dbfeb18c567f8bdb8d37da705c1d062c7",
+    "blender/document_broodlord_revision.py": "c1eb15a9f41df347a29a59518f35cc737378b76b993914a808404a21470c131e",
     "blender/materials.py": "fb2219a20eb700a15b76bdcfb7d9be5c7ceb4bf199f7e31204852c5fa6681eb3",
     "blender/package_broodlord.py": "f613058caf93d39bec108749b0172192fa112112f60f161554229290679194c3",
+    "blender/package_broodlord_revision.py": "6190e72fecfaa54f00e3b5e43219304c15333cf3eca32a4eaec230f2f5a901f1",
     "blender/package_core_bastion.py": "de2f82079aadef748e3ecdea5f65b3358e6bd3e1c5c2e2b6503f850c41d52d64",
     "blender/package_surface_clamp.py": "899980dc7ef0196aca30beb612e9062fa8d19f14f7e3a965901d87b6a3a68e59",
     "blender/review_broodlord.py": "41c8406e1f29a13ce2c87d446c9350dbe60228f3cc0772226c35ff79f2e990c1",
+    "blender/review_broodlord_revision.py": "b7c8729964f06cdbda73156edd59ae3158dd951a5532c6ea75b38600bd90cc39",
     "blender/review_core_bastion.py": "98d142618897bef956bc7aa7049a29a6827a403b1b96e4e573138cab9f3f87fe",
     "blender/review_materials.py": "ab7558febaef274294546e7e34a25ebfa35aaa7467f95f9d5887e402e768e23d",
     "blender/review_skitter.py": "74458aba08fe2c3d7c411b78c1043c8fc6405bfb8d43225dbabdfd02c9277725",
@@ -201,53 +357,60 @@
     "blender/skitter_shape.py": "88eecd38654845d5fc536555a01752b3f42312c78f9d3eed329571fa37a294db",
     "blender/surface_fields.py": "a2408130a5f39b9dfd625fa388b585b9ee239ed3bbd02bc2b89278f7eca5651e",
     "blender/verify_broodlord.py": "1f34d44d09d1646cd5bf1c26184f3483b709c06a99302dde088c1662db43df7b",
+    "blender/verify_broodlord_revision.py": "c80c92ea0d9e7bacf04cedc78be2792e9a542a144b50b4afa5a9269004e5ab0a",
     "blender/verify_core_bastion.py": "eee345536ef0c8f5f7ead150f48073f3bb4b3dec0546048359036b97edf5e1ab",
     "blender/verify_skitter.py": "c6f27e424c1e03c764b44705ffdb1057653ee0e9931bfe0c434b8ac873f0fba5",
     "scripts/assets/encode_ktx2.py": "ef7c2b27f936bab9cc0f02f27492cea4fd7c151045923f0308504c4867873515",
     "scripts/assets/ktx2.py": "ad0fe05d66f62b1bb51f93997c35982ea9df2a5072c9f30d0bef9cb948321966",
-    "scripts/validate_glbs.py": "b1cce7201143a05202dd35ecc61827807991f228f18ac7249169ea3da2eb87c1"
+    "scripts/validate_glbs.py": "b1cce7201143a05202dd35ecc61827807991f228f18ac7249169ea3da2eb87c1",
+    "docs/art-bible.md": "c7d854579a450b32ffb0c23575c201fdf2c09359619b8ba06cad64d9e615656f",
+    "docs/blender-kit-project.md": "32b374b2767af97dbb4c3a7ab13c4a7594655f35c27499ed2f7c6086807670a4"
   },
   "files": {
-    "README.md": "075c897628e65d4383b9b677a83cc4577a8b8f9e187aa236c54ac15c8b3d1bba",
-    "apex-broodlord-lod0.glb": "710b3a149dc7cccc2b33db9fb0aef6716bc6933e5242c7e63df93541e3974a19",
-    "apex-broodlord-lod1.glb": "a144705052f7ba303ee89e09623126a103148888a7440d971c1278368187cf43",
-    "basecolor.ktx2": "2823bad401bdffbe1a62d90a0ac5f94bc61ebec587addbd7cfa800c2d063b1c1",
-    "basecolor.png": "8b9689bbe16f044f3d02a412fc79c4e55e26f03f53877c209b2c3f2cbec2e278",
-    "emissive.ktx2": "419aad824157f4ee75b68dc32e9f1ab61ad1bec73355069e412c7868de00a58a",
-    "emissive.png": "8f0191d2ba40d64870b3d9ce42b0ed774a1bc4c3b399ca54be996d7369035729",
-    "geometry.json": "0897b66f9eb3de3fce86f57d5ed1e8ccae3167d379ec5b35078ab434806e0973",
-    "high.blend": "8efe4ab606d1c297be9bfb3e34e80a2b790079000e6cae22c5dfc40c7af0c26a",
-    "low.blend": "1a7a93756023430edb333e22993e0c44491e0537379fa66e0be6d69c8cdb5c02",
-    "normal.ktx2": "5961433f02c327d56600a9a71632b9794d605110c34f9fc3de9f65b3b5b9050a",
-    "normal.png": "e1448f1d15775f918fae0e1d9d2a23d582e7f4af66f6d383e4757e5c48ac880a",
-    "orm.ktx2": "26d522027b4219df6613c49df1469fa2ce78bab4edc18abae73f34ae7904324e",
-    "orm.png": "87b7224c999fa3f0b5b550446b5ebd96f55f1975ccb56da11314d3c779a4c1d4",
+    "README.md": "df135312fd8790c6214dd91b4509d850b3aeb073a3b154f007352131e7c2af8b",
+    "apex-broodlord-lod0.glb": "05d806d99cd9993454b6a98c7c6b7cb0947e32acaaf4660eda48cdf529f98657",
+    "apex-broodlord-lod1.glb": "ba25b69e835fc8c5de4ea5cbcbfcca5e1ea1d9f8627c912890d0056657212e2d",
+    "basecolor.ktx2": "dce4a778d482d1b591a2acaedc6d5f196bb097174c8a427fe2613727a719aacf",
+    "basecolor.png": "8438ca9e1f918a1f09b70f02c8861bc80d4c760f4dfab6e7c2a5e2baefb7460a",
+    "emissive.ktx2": "f828329bcb5434a526d8c7bfe80eac51a304ff4bd1e378f8d008f8a592d9fef7",
+    "emissive.png": "ef2c383c94b8eabb9479ec78643c82b406c04d58159750895170fc5009917e85",
+    "geometry.json": "7e07cfbc88a231dcf6260086187a7ac3ac9f240da31846f680039b1fe7b75f38",
+    "high.blend": "b5f2c356d950698b7ec1e8d727e9609cfd5676764bb5fec9b142e97487c3f203",
+    "low.blend": "b7153a0ea83358decdf9f9b0ac88ee3ada2eec6d075198766a70f6deb8db46bf",
+    "normal.ktx2": "2bfdaacbdd8bf19ac21e0af275837b8356eeda5b0b15d07ed1869dbb05cd1b78",
+    "normal.png": "1a8b5bc4b2b002f8b7868f289d9f921726c8843ff64884ee92030cbb3f5bdeda",
+    "orm.ktx2": "af9e85a32ad171da6213c3038c8b73b696c58da3a42fe46b8001e6a7d664c8ac",
+    "orm.png": "9e0b468209c192b4b3529e40dad3340ccb43571638cff3cc9c38e3c7e3b2245a",
     "phase2-cracks.ktx2": "a44c49d989d3223e29377158b08f4d5e9254062256e36a18216e3cfdc3f53c65",
     "phase2-cracks.png": "5f989c361c33b1c52964be97e2d0bfd2ffd95fce587fe695a37740f3a14d1746",
-    "reimport.json": "c8564f0f954f2b5feffb01d4e34a7e9630fe81723aaa270bc841b22c331e86a0",
-    "review/cameras.json": "6197934ca0166bd2cadf1688c0426abd56436e430795f998d398d92dc6b3f966",
-    "review/comparison.jpg": "8f7fece38a985dda7d3b363a458ca13f8a2087bf6d83c3287f37e6767d73a061",
-    "review/high-flank.png": "eda9037a062478570a8f7c6a34c16fc6b8a4fe095b181fff012259fe4b57272e",
-    "review/high-front.png": "c92d824d95c6676edccb5b3d46789b507df6fa63a04daa6014b5860cd11908fe",
-    "review/high-oblique.png": "3baf4416ab6761a8df75386e0dfe6012d65248a80ed15f0f4bfc4a81ff0b2ff1",
-    "review/high-underside.png": "e20f92dc18643d10d503f1f6924f54c51dcffd03ab4f60b22f9708c254958d0c",
-    "review/lod0-flank.png": "a0e8163f36bf78f9576d305faa4ec35dd58d7d46d1fa7d5cf0825df877adc3b1",
-    "review/lod0-front.png": "43ec37623d551a37ed69bf6a8152b1b34ab631d31f83c9ab8b617dcdadbd136a",
-    "review/lod0-oblique.png": "7cee1cf9de95a0ae14fd1638f6d6ddb8c09bcf60ac6fcdb2957a4433f5d5551a",
-    "review/lod0-phase2-flank.png": "0fc88600bfe904628081337a815e8d25f436a8b8fd97e975ce3ec26c54c41e09",
-    "review/lod0-phase2-front.png": "2aab1659474aeb7fd9c15b7663ca0e42c8fbd1f20654b6606ae9ff20c5f1009c",
-    "review/lod0-phase2-oblique.png": "1542d73bb8fd6daec87e52f22d4bb0842d8e26356eeab4a0e3a3fd0f12a6fd6d",
-    "review/lod0-underside.png": "5ecd073bbc9ec5d7484e2a650ea16745d620a49454325a777a58af3194da9102",
-    "review/lod1-flank.png": "1dd1f43a9d60f96fabd0ed757c0a7c816a3224a4cb4bbf9f8d0d9a885243cd7e",
-    "review/lod1-front.png": "f1b5272c160338dfa0cb11691a2e9e2d1aa070d6ebeff2c468601944485196e5",
-    "review/lod1-oblique.png": "00cb51c29d5b66d52075b956946a12a9a15699580527d0da0b3740bd6960ab36",
-    "review/lod1-phase2-flank.png": "a914a8c0793c0a701c0672df3eaf9e9b39a1f0749917141bb08c0fca03e5c699",
-    "review/lod1-phase2-front.png": "e9a45b4536b54f307fd2408674f0cdbd230e5093f890094f2c9767ef0eb1955a",
-    "review/lod1-phase2-oblique.png": "5a76d99a21d4f9eb2c755e5c689cd9701438f0784eb97df47cbedb22edc5c269",
-    "review/lod1-underside.png": "8f8d1aa48ed8df8554c105cfaee3370e2218d7aa9faeecee65fd115e454af2ab",
-    "review/motion.jpg": "fc78c0a466fe103ad35bc32d5638db28cea89069b01e1ae1e7314788f91adaf4",
-    "review/motion.mp4": "c28a2867712fa61999922bc8ddea28ea5d28c55ef655d5c60670aa6724f4b90b",
-    "review/phases.jpg": "8ce28be262456e08b7c32726e55b09d1bd0e6198b151bcdfcb8d3dd1bd41631b",
-    "review/turntable.mp4": "08183df96df0c3988e7c239b7851e96141c5305cfe667ba252b6c60c82c91886"
+    "reimport.json": "8b7af23038399eeeabfd4a835821ab299c0dc21d67624d1a490f28fad9e3a71a",
+    "review/cameras.json": "7161ad079b5e1a4a2f9b6e257dfc1e15408d4fad5e8dd813419a7c8d368325e4",
+    "review/comparison.jpg": "012a2dd2cb50ce4a1235e285dee99d80cf4debfc81d84c91eca6e55728ce7d7f",
+    "review/high-dorsal.png": "35b4e7e8d9e40797ed7bb138fddaf5e7d2ada1f78e196100e96c2ff036b8bd09",
+    "review/high-flank.png": "e6bf0fdbcf0fc262183779e41f3025844ddb5fc2109589abd35c839760ede6f8",
+    "review/high-front.png": "1a2fb6c0cf6ca610adb246c375c71d10f17a14103a81d2c34e9b56ef518efb8b",
+    "review/high-oblique.png": "5b307cdc7cedc05cbf5690771eeb4b96024db6fed49687434492978c2a88bd49",
+    "review/high-underside.png": "06d147e5931173bd6d13252285e7687ee7dbce6c83c751bff9f3f7d7c90662ba",
+    "review/lod0-dorsal.png": "347e2ac028bdbb6fcae9974010e211cbf67a1e50ba98be535d06ed9e2e589a4e",
+    "review/lod0-flank.png": "b3ca2b37c2eafd6facb8e36441640e08d5011fb5ae49de588ccf4720105ae5a3",
+    "review/lod0-front.png": "9a54bc1619e48232ac30477637fbf1d45958952b1b217b1e90c13e28b671634d",
+    "review/lod0-oblique.png": "0501e975ade8720522d10ba7b78f5773f2530c2dcb943c61685ff69fa7da977e",
+    "review/lod0-phase2-flank.png": "1e01e00605af7ea27a66044f2dffaa8c2bb9acc9090f29bcb043f7ba07ea5bff",
+    "review/lod0-phase2-front.png": "7712ba8e6cead7feed499bab394e0599c3157dbdf68e3865a71577ed6532e1a3",
+    "review/lod0-phase2-oblique.png": "14eca5a9926d8083f8cc24a6aaf5eb1773257e56161bda084b4139f4e7955dbf",
+    "review/lod0-underside.png": "d2488322efb8b813bd5ce136e08182e33e25890ed16b0154b349715c01b248fd",
+    "review/lod1-dorsal.png": "f7829e2543a81aa00ef4717854ebea87d67d5fa6c293b166c486a7d38457137e",
+    "review/lod1-flank.png": "82324e6c17843edc3abd852d545f4e9bad74a55e7fc68d2410694072f690f3f5",
+    "review/lod1-front.png": "578ae1c35ffb8239b08e98a6b80c76dabf9080e7ecc2d60edfc2b86d4e73b306",
+    "review/lod1-oblique.png": "0cc2d6f729a8dd0aa67d06ab785cede978d6de8aed48e8146bf8dae434b8a187",
+    "review/lod1-phase2-flank.png": "669bdabdf5ea26caeeb0f5c3712b4e2a27914424bb3a5ec2571a6b7e2557123e",
+    "review/lod1-phase2-front.png": "799e27f14b46f42ba73f84141247d0fcc14672f875f7fe49acec5bca6be42c88",
+    "review/lod1-phase2-oblique.png": "e1627cacda07a949263d0e3c492d1d4e61b8398e1c90938c29296051fe2cd606",
+    "review/lod1-underside.png": "3c57c69c816d8c48e254697993cf309e09079bf38d1d742eed8a5298b8c2928e",
+    "review/motion.jpg": "2e6d84d479a661c18ed5014b3c3b3fdb8c7c135fb3fd9597f6b13e77834e02e9",
+    "review/motion.mp4": "f6fa49f89ea19de90a777a8745e88e4d4bfbb851f3f87922e27d193d31c7661d",
+    "review/phases.jpg": "23d69883c4e68985ec13b3167a4186343efe8176f4b0c9451f35af16e0f24a77",
+    "review/revision-comparison.jpg": "211fd83ae8d8335d73f3406487cdc8e02f7c6235413c31dbaaddfe7c093f5a16",
+    "review/turntable.mp4": "aa17fce8963eee39551dc3f645a62250d59d42816bf9f999e870c08fa9868335"
   }
 }

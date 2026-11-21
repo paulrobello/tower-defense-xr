@@ -46,7 +46,7 @@
   - `P3-T6c` complete (`01a1fb3c91067130bdb8af122f51b91a`). [Apex Broodlord](docs/art-review-index.md#apex-broodlord) is staged at 23,480/7,840 tris with 28 bones, one material, four 2048 px maps and a standalone Phase 2 crack mask. Both imported LODs play the six clips with matched two-phase views and motion evidence.
   - `P3-T6` (`01a1fadb18be76c79209166e054aeb93`): Technical and evidence criteria passed for all five invaders. Both LODs of each play their required clips after re-import, and exact repeated exports and matched proof are indexed for `P3-T7`. The rollup closes when Paul approves the combined package at Owner Checkpoint 2.
 - **Wave 4 (Owner Checkpoint #2 before P4 promotion):**
-  - `P3-T7` (`01a1fb3c93b976f4850cfb761acebef9`): The [initial independent audit](docs/art-review-index.md#initial-independent-audit) scored 46 assets at `ab44c84`. Thirty-five cleared 80/100. Ten [revisions](docs/art-review-index.md#passed-revisions) passed independent re-review, bringing the total to forty-five. The [Apex Broodlord finding](docs/art-review-index.md#findings-requiring-revision) remains before Paul's creative approval.
+  - `P3-T7` (`01a1fb3c93b976f4850cfb761acebef9`): **Awaiting Paul at [Owner Checkpoint 2](docs/art-review-index.md#owner-checkpoint-2).** All 46 assets scored 80–97/100 after the eleven [revisions](docs/art-review-index.md#passed-revisions). The pinned Linux gate passed 40 GLBs, 102 KTX2 textures and 218 tests. Approve batch `fef4524a7d46821336beecb348e36ecfed3aee20fbac82c27ff7b29a6e7eac09` before Phase 4 promotion.
 
 ### Phase 4 sound effects approved
 
@@ -105,5 +105,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Finish the combined audit and invader revisions.** Revise Apex Broodlord for finding F11 in the initial audit, run its technical gates and present the complete independent review at Owner Checkpoint 2. Complete `P3-T7` before production asset promotion. The private radial theme candidate remains ready for its later transplant.
+1. **Obtain approval at Owner Checkpoint 2.** Paul’s approval of the exact batch recorded in the art review closes the remaining creative criteria on `P3-T6` and `P3-T7`. `P4-T1` then promotes the approved package. The private radial theme candidate remains ready for its later transplant.
 2. **Collect owner feedback** from the [public test build](https://rift-bastion.pardev.net/). Asset promotion stays gated by Owner Checkpoint 2.
