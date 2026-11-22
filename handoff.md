@@ -2,15 +2,24 @@
 
 ## State
 
-- November 22, 2026, Pacific time. The checkout is on `main`, based on `267f10b` before this handoff. The existing change reported by `git status --short` was `?? AGENTS.md`.
-- The verified public build is `b83e975d348e` at `origin/main` commit `7f7ce09`. The release passed 221 tests, 43 Metal IWER checks and 12 desktop campaign checks. [Live Quest build](https://rift-bastion.pardev.net/?v=b83e975d348e) · [CI and deployment](https://github.com/paulrobello/tower-defense-xr/actions/runs/45044276376)
-- Local `main` contains unpublished Phase 3 asset and review work. Base public playtest fixes on `origin/main` in a sibling worktree so the release contains the intended changes. The separate `codex/rift-radial-theme` worktree holds candidate `304e811` and its local review evidence. Paul granted standing approval to merge and deploy verified Rift Bastion changes. Asset promotion has its own approval checkpoint.
+- November 22, 2026, Pacific time. Local `main` merges `origin/main` (`1939c78`) together with the unpublished Phase 3 asset and review commits awaiting Owner Checkpoint 2.
+- The verified public build on `origin/main` commit `1939c78` is `8fdcd8aad564`. [Live Quest build](https://rift-bastion.pardev.net/?v=8fdcd8aad564) · [CI and deployment](https://github.com/paulrobello/tower-defense-xr/actions/runs/45078687291)
+- Local `main` contains unpublished Phase 3 asset and review work. Base public playtest fixes on `origin/main` in a sibling worktree so the release contains only intended changes. The separate `codex/rift-radial-theme` worktree holds candidate `304e811` and its local review evidence. Paul granted standing approval to push and deploy verified Rift Bastion changes. Asset promotion still has its own approval checkpoint.
+
+### Completed in latest review & deploy pass (`origin/main` `1939c78` / build `8fdcd8aad564`)
+
+- **Rendering & occlusion audit and fixes** (224/224 unit tests, `make checkall-ci` + gitleaks, Metal GPU IWER P0/P1/P2 walks, 12/12 desktop campaign checks, and live Metal Chromium verification on `https://rift-bastion.pardev.net/?v=8fdcd8aad564` with zero console/CSP errors):
+  - Moved scene lighting (`HemisphereLight`, shadow-casting `DirectionalLight`, rim light, Core glow) out of `test-room` to scene root and added procedural `RoomEnvironment` PMREM reflections + `PCFSoftShadowMap` shadows + `stencil: true` on `WebGLRenderer` (`src/desktop/bootstrap.ts`), fixing pitch-black PBR meshes in XR passthrough and enabling real floor/table shadows.
+  - Aligned desktop test room (`4.8 × 4.2 × 2.8 m`, central table, side console table) with `VIRTUAL_ROOM_DIMENSIONS` so portals and turrets sit flush on desktop walls/tables instead of floating.
+  - Fixed room-mesh occlusion (`src/mr/occlusion.ts`): switched `roomOccluderMaterial` to `FrontSide` with positive `polygonOffset` (`2, 2`), oriented reversed planar mesh scans outward, switched portal cutouts/masks/GLSL bypass from oversized circles (`1.35 × 1.35 m`) to exact ellipses (`0.95 × 1.35 m`), made aperture stencil masks `DoubleSide`, and synced portal cutouts live during calibration (`src/main.ts`).
+  - Re-enabled CPU-optimized WebXR `depth-sensing` (`usagePreference: ['cpu-optimized']`, avoiding Three.js's uncontrolled GPU depth pass), wired `occlusion.updateFromXrFrame(...)`, and added a zero-triangle per-eye `onBeforeRender` hook (`mr-occlusion-eye-bind-hook`) so stereo left/right eyes bind their own depth texture and `normDepthBufferFromNormView` matrix.
+  - Fixed blockout & UI rendering bugs (`src/render/blockouts.ts`, `src/xr/placement.ts`, `src/xr/calibration.ts`, `src/main.ts`): roll-free `buildPortalWorldMatrix` portal orientation, hiding closed portal `vortexRingMesh`, transparent pass + render-order + camera-billboarded enemy HP bars, white `blastRingMat` for accurate instance colors, working `enemy-hit` flashes and Disruptor EMP ring rotation, per-entity GPU material/geometry/binding disposal on despawn, distinct XR overlay `renderOrder` tiers (`1000..1050`), `initialActive: false` for turret placement ghost on launch, reduced range-sphere tint, and stick-neutral gating after radial build selection.
 
 ## Unfinished work
 
 ### Retest the Quest fixes on one build
 
-Use `b83e975d348e` for all three open playtest items. Test with **Room Mesh** enabled and use **Auto (Off)** as the comparison if geometry disappears. Record the build, occlusion mode, tracked surface, controller hand, and whether the issue appears before or after **Lock Core**. The earlier controller and rendering checks ran in IWER.
+Use `8fdcd8aad564` for all three open playtest items. Test with **Auto Depth** and **Room Mesh** enabled, and use **Off** as the comparison if geometry disappears. Record the build, occlusion mode, tracked surface, controller hand, and whether the issue appears before or after **Lock Core**. The earlier controller and rendering checks ran in IWER.
 
 | Item | Physical check still needed |
 | --- | --- |
@@ -42,8 +51,7 @@ Use `b83e975d348e` for all three open playtest items. Test with **Room Mesh** en
 
 ## Unresolved issues
 
-- The current build has emulator coverage for the reported symptoms and still needs a combined physical Quest retest. The earlier hardware measurements are playtest evidence and leave the full Phase 5 frame floor open.
-- The current Quest session omits native depth sensing. **Auto (Off)** resolves to Off, and **Room Mesh** uses classified scan geometry. The native-depth comparison in the Phase 5 plan requires a supported native path before it can produce comparable data.
+- The rendering and occlusion fixes are deployed on `origin/main` (`1939c78`, build `8fdcd8aad564`) and verified in unit tests, Metal IWER, and live Metal Chromium, but physical Quest 3 hardware retesting is still required for the three open board items and to compare **Auto Depth** vs **Room Mesh** vs **Off** on real passthrough. Earlier hardware measurements are playtest evidence and leave the full Phase 5 frame floor open.
 - Phase 3 runtime promotion is waiting on the recorded batch approval. Phase 4 music is waiting on the owner WAVs.
 
 ## Next steps
