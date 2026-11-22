@@ -385,17 +385,19 @@ export function createTurretGhostPreview(): TurretGhostPreview {
     transparent: true,
     opacity: 0.9,
     depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -2,
   });
   accentMat.forceSinglePass = true;
 
   const rangeMat = new THREE.MeshBasicMaterial({
     color: GHOST_COLOR_SURFACE_VALID,
     transparent: true,
-    opacity: 0.14,
-    side: THREE.DoubleSide,
+    opacity: 0.05,
+    side: THREE.FrontSide,
     depthWrite: false,
   });
-  rangeMat.forceSinglePass = true;
 
   const ownedGeometries: THREE.BufferGeometry[] = [];
 
@@ -409,7 +411,7 @@ export function createTurretGhostPreview(): TurretGhostPreview {
   const footprintRing = new THREE.Mesh(footprintGeo, accentMat);
   footprintRing.name = 'turret-ghost-footprint-ring';
   footprintRing.rotation.x = -Math.PI / 2;
-  footprintRing.position.y = 0.002;
+  footprintRing.position.y = 0.006;
   group.add(footprintRing);
 
   // 2. Surface-clamp mount group (base hub + 4 articulated clamp legs)
@@ -868,6 +870,7 @@ export function createTurretPlacementController(
   // Tracks which surface (if any) was active when the user detached into hover-pod mode
   let detachedFromSurfaceId: string | null = null;
   let hoverStickWasActive = false;
+  let requireStickNeutralBeforeHover = false;
 
   let nextTurretSeq = 1;
   const placedTurretsMap = new Map<string, PlacedTurretRecord>();
@@ -1288,6 +1291,10 @@ export function createTurretPlacementController(
       }
       selectedTier = 'T1';
       relocatingTurretId = null;
+      mountProfile = 'surface-clamp';
+      detachedFromSurfaceId = null;
+      hoverStickWasActive = false;
+      requireStickNeutralBeforeHover = true;
       active = true;
       ghost.setVisible(true);
       notify();
@@ -1416,7 +1423,11 @@ export function createTurretPlacementController(
 
       const stickY = rayOptions?.stickY ?? 0;
       const dtSec = rayOptions?.dtSec ?? 1 / 60;
-      const stickDeflected = Math.abs(stickY) > deadzone;
+      const rawStickDeflected = Math.abs(stickY) > deadzone;
+      if (!rawStickDeflected) {
+        requireStickNeutralBeforeHover = false;
+      }
+      const stickDeflected = rawStickDeflected && !requireStickNeutralBeforeHover;
 
       if (stickDeflected) {
         if (mountProfile !== 'hover-pod') {

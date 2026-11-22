@@ -809,9 +809,14 @@ try {
       const turretCount = app.placement.turretCount;
       await window.__p1Helpers.pressButton('right', 'trigger');
       const blockedCommit = app.placement.turretCount === turretCount;
-      // Pull the hover pod in front of that wall, then release the stick.
+      // Pull the hover pod in front of that wall until it enters a valid mid-air depth, then release.
       window.__p1Helpers.setStick('right', 0, 0.9);
-      await window.__xrEmu.frames(35);
+      for (let i = 0; i < 45; i += 1) {
+        await window.__xrEmu.frames(1);
+        if (app.placement.lastValidation?.valid && app.placement.hoverDepthM <= 2.1) {
+          break;
+        }
+      }
       window.__p1Helpers.setStick('right', 0, 0);
       await window.__xrEmu.frames(2);
 

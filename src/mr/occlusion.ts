@@ -62,13 +62,17 @@ export interface OcclusionSurface {
 
 export interface PortalAperture {
   readonly id: string;
-  /** World-space center of the circular portal aperture. */
+  /** World-space center of the portal aperture. */
   readonly center: THREE.Vector3;
   /** Unit outward world normal of the portal opening (pointing into the room). */
   readonly normal: THREE.Vector3;
-  /** Radius of the circular portal opening in meters. */
+  /** Nominal radius of a circular portal opening in meters (fallback for `radiusX`/`radiusY`). */
   readonly radius: number;
-  /** Optional full world transform (+Z outward normal, XY circular opening). */
+  /** Optional horizontal half-width in meters for elliptical apertures (defaults to `radius`). */
+  readonly radiusX?: number;
+  /** Optional vertical half-height in meters for elliptical apertures (defaults to `radius`). */
+  readonly radiusY?: number;
+  /** Optional full world transform (+Z outward normal, XY opening). */
   readonly worldMatrix?: THREE.Matrix4;
   /** Optional explicit host surface ID (co-located siblings within tolerance are also cut). */
   readonly hostSurfaceId?: string;
@@ -136,6 +140,7 @@ export interface DepthOcclusionUniforms {
   readonly uRbPortalCount: { value: number };
   readonly uRbPortalInvWorld: { value: THREE.Matrix4[] };
   readonly uRbPortalRadius: { value: number[] };
+  readonly uRbPortalRadii: { value: THREE.Vector2[] };
 }
 
 export interface OcclusionState {
@@ -234,7 +239,9 @@ interface CompiledPortal {
   readonly normal: THREE.Vector3;
   readonly center: THREE.Vector3;
   readonly radius: number;
-  readonly circumradius: number;
+  readonly radiusX: number;
+  readonly radiusY: number;
+  readonly unitCircumradius: number;
   readonly halfPlanes: readonly HalfPlane2D[];
 }
 
@@ -289,14 +296,22 @@ function buildApertureHalfPlanes(segments: number): HalfPlane2D[] {
   return planes;
 }
 
+function resolvePortalRadii(portal: PortalAperture): { rx: number; ry: number } {
+  const fallback = Math.max(0, portal.radius);
+  const rx = Math.max(0, portal.radiusX ?? fallback);
+  const ry = Math.max(0, portal.radiusY ?? fallback);
+  return { rx, ry };
+}
+
 function compilePortal(portal: PortalAperture, segments: number): CompiledPortal {
   const worldMatrix = buildPortalWorldMatrix(portal, new THREE.Matrix4());
   const invWorld = worldMatrix.clone().invert();
   const normal = new THREE.Vector3().setFromMatrixColumn(worldMatrix, 2).normalize();
   const center = new THREE.Vector3().setFromMatrixPosition(worldMatrix);
-  const radius = Math.max(0, portal.radius);
+  const { rx, ry } = resolvePortalRadii(portal);
+  const radius = Math.max(rx, ry);
   const halfPlanes = buildApertureHalfPlanes(segments);
-  const circumradius = radius / Math.cos(Math.PI / halfPlanes.length);
+  const unitCircumradius = 1 / Math.cos(Math.PI / halfPlanes.length);
   return {
     portal,
     worldMatrix,
@@ -304,7 +319,9 @@ function compilePortal(portal: PortalAperture, segments: number): CompiledPortal
     normal,
     center,
     radius,
-    circumradius,
+    radiusX: rx,
+    radiusY: ry,
+    unitCircumradius,
     halfPlanes,
   };
 }
@@ -367,27 +384,39 @@ function appendConvexFan(out: Triangle3[], poly: readonly Point3[]): void {
 }
 
 /**
- * Subtracts a circumscribed convex N-gon aperture (centered at local origin with inradius `radius`)
- * from a single triangle in portal-local 3D coordinates. Preserves exact winding and emits zero
- * triangles inside the open disk `x^2 + y^2 < radius^2`.
+ * Subtracts a circumscribed convex elliptical N-gon aperture (centered at local origin with
+ * semi-axes `(radiusX, radiusY)`) from a single triangle in portal-local 3D coordinates. Preserves
+ * exact winding and emits zero triangles inside the open ellipse `(x/rx)^2 + (y/ry)^2 < 1`.
  */
 function subtractApertureFromLocalTriangle(
   tri: Triangle3,
   portal: CompiledPortal,
   out: Triangle3[],
 ): boolean {
-  const r = portal.radius;
-  const cr = portal.circumradius;
+  const rx = portal.radiusX;
+  const ry = portal.radiusY;
+  if (rx <= 1e-5 || ry <= 1e-5) {
+    out.push(tri);
+    return false;
+  }
+  const crX = rx * portal.unitCircumradius;
+  const crY = ry * portal.unitCircumradius;
   const minX = Math.min(tri.a.x, tri.b.x, tri.c.x);
   const maxX = Math.max(tri.a.x, tri.b.x, tri.c.x);
   const minY = Math.min(tri.a.y, tri.b.y, tri.c.y);
   const maxY = Math.max(tri.a.y, tri.b.y, tri.c.y);
-  if (maxX < -cr || minX > cr || maxY < -cr || minY > cr) {
+  if (maxX < -crX || minX > crX || maxY < -crY || minY > crY) {
     out.push(tri);
     return false;
   }
 
-  let remaining: Point3[] = [tri.a, tri.b, tri.c];
+  const invRx = 1 / rx;
+  const invRy = 1 / ry;
+  let remaining: Point3[] = [
+    { x: tri.a.x * invRx, y: tri.a.y * invRy, z: tri.a.z },
+    { x: tri.b.x * invRx, y: tri.b.y * invRy, z: tri.b.z },
+    { x: tri.c.x * invRx, y: tri.c.y * invRy, z: tri.c.z },
+  ];
   const piecesOutside: Triangle3[] = [];
   let cutAny = false;
 
@@ -399,8 +428,8 @@ function subtractApertureFromLocalTriangle(
     for (let i = 0; i < remaining.length; i += 1) {
       const curr = remaining[i] as Point3;
       const next = remaining[(i + 1) % remaining.length] as Point3;
-      const dCurr = nx * curr.x + ny * curr.y - r;
-      const dNext = nx * next.x + ny * next.y - r;
+      const dCurr = nx * curr.x + ny * curr.y - 1;
+      const dNext = nx * next.x + ny * next.y - 1;
 
       if (dCurr >= -CLIP_EPS) pushUniquePoint(outside, curr);
       if (dCurr <= CLIP_EPS) pushUniquePoint(inside, curr);
@@ -449,7 +478,11 @@ function subtractApertureFromLocalTriangle(
   }
 
   for (const piece of piecesOutside) {
-    out.push(piece);
+    out.push({
+      a: { x: piece.a.x * rx, y: piece.a.y * ry, z: piece.a.z },
+      b: { x: piece.b.x * rx, y: piece.b.y * ry, z: piece.b.z },
+      c: { x: piece.c.x * rx, y: piece.c.y * ry, z: piece.c.z },
+    });
   }
   return true;
 }
@@ -481,6 +514,35 @@ function extractSurfaceWorldTriangles(surface: OcclusionSurface): Triangle3[] {
       const c: Point3 = { x: _tmpVecC.x, y: _tmpVecC.y, z: _tmpVecC.z };
       if (triangleAreaSq(a, b, c) > DEGENERATE_AREA_SQ) {
         triangles.push({ a, b, c });
+      }
+    }
+    // If a planar open mesh has winding flipped opposite its room-facing normal, orient front faces outward.
+    if (surface.normal && surface.normal.lengthSq() > 1e-12 && triangles.length > 0) {
+      let sumX = 0;
+      let sumY = 0;
+      let sumZ = 0;
+      let totalArea = 0;
+      for (const tri of triangles) {
+        _tmpEdge1.set(tri.b.x - tri.a.x, tri.b.y - tri.a.y, tri.b.z - tri.a.z);
+        _tmpEdge2.set(tri.c.x - tri.a.x, tri.c.y - tri.a.y, tri.c.z - tri.a.z);
+        _tmpNormal.crossVectors(_tmpEdge1, _tmpEdge2);
+        const len = _tmpNormal.length();
+        totalArea += len;
+        sumX += _tmpNormal.x;
+        sumY += _tmpNormal.y;
+        sumZ += _tmpNormal.z;
+      }
+      const avgLen = Math.hypot(sumX, sumY, sumZ);
+      if (totalArea > 1e-8 && avgLen > 0.7 * totalArea) {
+        const dot =
+          (sumX * surface.normal.x + sumY * surface.normal.y + sumZ * surface.normal.z) / avgLen;
+        if (dot < -0.5) {
+          for (const tri of triangles) {
+            const tmp = tri.b;
+            tri.b = tri.c;
+            tri.c = tmp;
+          }
+        }
       }
     }
     return triangles;
@@ -762,7 +824,8 @@ export function evaluateDepthOcclusionSample(params: {
   if (role === 'portal-interior') {
     // Interior is recessed behind the wall; check if any portal aperture frames this fragment.
     for (const portal of portals) {
-      if (portal.radius <= 1e-5) continue;
+      const { rx, ry } = resolvePortalRadii(portal);
+      if (rx <= 1e-5 || ry <= 1e-5) continue;
       buildPortalWorldMatrix(portal, _tmpInvMat).invert();
       _tmpVecA.copy(worldPosition).applyMatrix4(_tmpInvMat);
       _tmpVecB.copy(cameraPosition).applyMatrix4(_tmpInvMat);
@@ -770,9 +833,9 @@ export function evaluateDepthOcclusionSample(params: {
         const denom = _tmpVecB.z - _tmpVecA.z;
         if (denom > 1e-4) {
           const t = _tmpVecB.z / denom;
-          const hitX = _tmpVecB.x + t * (_tmpVecA.x - _tmpVecB.x);
-          const hitY = _tmpVecB.y + t * (_tmpVecA.y - _tmpVecB.y);
-          if (hitX * hitX + hitY * hitY <= portal.radius * portal.radius) {
+          const hitX = (_tmpVecB.x + t * (_tmpVecA.x - _tmpVecB.x)) / rx;
+          const hitY = (_tmpVecB.y + t * (_tmpVecA.y - _tmpVecB.y)) / ry;
+          if (hitX * hitX + hitY * hitY <= 1.0) {
             const portalHitViewZ = viewDepthMeters * t;
             const occluded = envDepthMeters < portalHitViewZ - foregroundMargin;
             return { occluded, bypassedByPortal: !occluded };
@@ -785,7 +848,8 @@ export function evaluateDepthOcclusionSample(params: {
 
   if (role === 'world-object') {
     for (const portal of portals) {
-      if (portal.radius <= 1e-5) continue;
+      const { rx, ry } = resolvePortalRadii(portal);
+      if (rx <= 1e-5 || ry <= 1e-5) continue;
       buildPortalWorldMatrix(portal, _tmpInvMat).invert();
       _tmpVecA.copy(worldPosition).applyMatrix4(_tmpInvMat);
       _tmpVecB.copy(cameraPosition).applyMatrix4(_tmpInvMat);
@@ -793,9 +857,9 @@ export function evaluateDepthOcclusionSample(params: {
         const denom = _tmpVecB.z - _tmpVecA.z;
         if (denom > 1e-4) {
           const t = _tmpVecB.z / denom;
-          const hitX = _tmpVecB.x + t * (_tmpVecA.x - _tmpVecB.x);
-          const hitY = _tmpVecB.y + t * (_tmpVecA.y - _tmpVecB.y);
-          if (hitX * hitX + hitY * hitY <= portal.radius * portal.radius) {
+          const hitX = (_tmpVecB.x + t * (_tmpVecA.x - _tmpVecB.x)) / rx;
+          const hitY = (_tmpVecB.y + t * (_tmpVecA.y - _tmpVecB.y)) / ry;
+          if (hitX * hitX + hitY * hitY <= 1.0) {
             const portalHitViewZ = viewDepthMeters * t;
             if (envDepthMeters >= portalHitViewZ - foregroundMargin) {
               return { occluded: false, bypassedByPortal: true };
@@ -874,6 +938,7 @@ uniform float uRbRawValueToMeters;
 uniform int uRbPortalCount;
 uniform mat4 uRbPortalInvWorld[${MAX_PORTAL_APERTURES}];
 uniform float uRbPortalRadius[${MAX_PORTAL_APERTURES}];
+uniform vec2 uRbPortalRadii[${MAX_PORTAL_APERTURES}];
 uniform float uRbOccRole;
 uniform float uRbOccDepthBias;
 uniform float uRbOccForegroundMargin;
@@ -921,16 +986,16 @@ bool rbShouldDiscardByDepth() {
   if ( uRbOccRole > 1.5 ) {
     for ( int i = 0; i < ${MAX_PORTAL_APERTURES}; i++ ) {
       if ( i >= uRbPortalCount ) break;
-      float r = uRbPortalRadius[i];
-      if ( r <= 0.0001 ) continue;
+      vec2 radii = uRbPortalRadii[i];
+      if ( radii.x <= 0.0001 || radii.y <= 0.0001 ) continue;
       vec3 localFrag = ( uRbPortalInvWorld[i] * vec4( vRbOccWorldPos, 1.0 ) ).xyz;
       vec3 localEye = ( uRbPortalInvWorld[i] * vec4( cameraPosition, 1.0 ) ).xyz;
       if ( localEye.z > 0.001 && localFrag.z <= uRbOccDepthBias ) {
         float denom = localEye.z - localFrag.z;
         if ( denom > 0.0001 ) {
           float t = localEye.z / denom;
-          vec2 hitXY = mix( localEye.xy, localFrag.xy, t );
-          if ( dot( hitXY, hitXY ) <= r * r ) {
+          vec2 hitXY = mix( localEye.xy, localFrag.xy, t ) / radii;
+          if ( dot( hitXY, hitXY ) <= 1.0 ) {
             float portalHitViewZ = vRbOccViewZ * t;
             return envDepth < ( portalHitViewZ - uRbOccForegroundMargin );
           }
@@ -943,16 +1008,16 @@ bool rbShouldDiscardByDepth() {
   if ( uRbOccRole < 0.5 ) {
     for ( int i = 0; i < ${MAX_PORTAL_APERTURES}; i++ ) {
       if ( i >= uRbPortalCount ) break;
-      float r = uRbPortalRadius[i];
-      if ( r <= 0.0001 ) continue;
+      vec2 radii = uRbPortalRadii[i];
+      if ( radii.x <= 0.0001 || radii.y <= 0.0001 ) continue;
       vec3 localFrag = ( uRbPortalInvWorld[i] * vec4( vRbOccWorldPos, 1.0 ) ).xyz;
       vec3 localEye = ( uRbPortalInvWorld[i] * vec4( cameraPosition, 1.0 ) ).xyz;
       if ( localEye.z > 0.001 && localFrag.z <= uRbOccDepthBias ) {
         float denom = localEye.z - localFrag.z;
         if ( denom > 0.0001 ) {
           float t = localEye.z / denom;
-          vec2 hitXY = mix( localEye.xy, localFrag.xy, t );
-          if ( dot( hitXY, hitXY ) <= r * r ) {
+          vec2 hitXY = mix( localEye.xy, localFrag.xy, t ) / radii;
+          if ( dot( hitXY, hitXY ) <= 1.0 ) {
             float portalHitViewZ = vRbOccViewZ * t;
             if ( envDepth >= ( portalHitViewZ - uRbOccForegroundMargin ) ) {
               return false;
@@ -1058,6 +1123,7 @@ export function applyDepthOcclusion(
       uRbPortalCount: controller.uniforms.uRbPortalCount,
       uRbPortalInvWorld: controller.uniforms.uRbPortalInvWorld,
       uRbPortalRadius: controller.uniforms.uRbPortalRadius,
+      uRbPortalRadii: controller.uniforms.uRbPortalRadii,
       uRbOccRole: roleUniform,
       uRbOccDepthBias: biasUniform,
       uRbOccForegroundMargin: marginUniform,
@@ -1125,7 +1191,7 @@ export function createPortalApertureMaskMaterial(
     colorWrite: false,
     depthWrite: false,
     depthTest: true,
-    side: THREE.FrontSide,
+    side: THREE.DoubleSide,
   });
   applyDepthOcclusion(material, controller, {
     role: 'portal-mask',
@@ -1144,10 +1210,9 @@ export function createPortalApertureMaskMesh(
   controller: OcclusionController,
   options: { segments?: number; stencilRef?: number; foregroundMargin?: number } = {},
 ): THREE.Mesh {
-  const geometry = new THREE.CircleGeometry(
-    Math.max(0.01, portal.radius),
-    options.segments ?? DEFAULT_APERTURE_SEGMENTS,
-  );
+  const { rx, ry } = resolvePortalRadii(portal);
+  const geometry = new THREE.CircleGeometry(1, options.segments ?? DEFAULT_APERTURE_SEGMENTS);
+  geometry.scale(Math.max(0.01, rx), Math.max(0.01, ry), 1);
   const material = createPortalApertureMaskMaterial(controller, options);
   const mesh = new THREE.Mesh(geometry, material);
   mesh.name = `portal-aperture-mask:${portal.id}`;
@@ -1290,6 +1355,8 @@ function clonePortalAperture(portal: PortalAperture): PortalAperture {
     center: portal.center.clone(),
     normal: portal.normal.clone().normalize(),
     radius: portal.radius,
+    ...(portal.radiusX !== undefined ? { radiusX: portal.radiusX } : {}),
+    ...(portal.radiusY !== undefined ? { radiusY: portal.radiusY } : {}),
     ...(portal.worldMatrix ? { worldMatrix: portal.worldMatrix.clone() } : {}),
     ...(portal.hostSurfaceId !== undefined ? { hostSurfaceId: portal.hostSurfaceId } : {}),
     ...(portal.hostKind !== undefined ? { hostKind: portal.hostKind } : {}),
@@ -1310,13 +1377,36 @@ export function createOcclusionController(
   root.add(roomMeshRoot);
 
   // Shared opaque depth-only material for room-mesh fallback occluders.
+  // FrontSide prevents back-facing walls (such as a near wall behind the desktop camera) from
+  // erasing the entire room, and positive polygonOffset pushes occluder depth slightly behind
+  // flush-mounted Core/turret bases, calibration rings, and shadow catchers to prevent z-fighting.
   const roomOccluderMaterial = new THREE.MeshBasicMaterial({
     color: 0x000000,
     colorWrite: false,
     depthWrite: true,
     depthTest: true,
-    side: THREE.DoubleSide,
+    side: THREE.FrontSide,
+    polygonOffset: true,
+    polygonOffsetFactor: 2,
+    polygonOffsetUnits: 2,
   });
+
+  // Zero-triangle per-eye render hook that binds the active stereo eye's depth texture and
+  // normDepthBufferFromNormView matrix right before each eye renders its opaque/transparent lists.
+  const eyeBindGeo = new THREE.BufferGeometry();
+  eyeBindGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(9), 3));
+  eyeBindGeo.setDrawRange(0, 0);
+  const eyeBindMat = new THREE.MeshBasicMaterial({
+    colorWrite: false,
+    depthWrite: false,
+    depthTest: false,
+  });
+  const eyeBindMesh = new THREE.Mesh(eyeBindGeo, eyeBindMat);
+  eyeBindMesh.name = 'mr-occlusion-eye-bind-hook';
+  eyeBindMesh.renderOrder = -1000;
+  eyeBindMesh.frustumCulled = false;
+  eyeBindMesh.raycast = () => undefined;
+  root.add(eyeBindMesh);
 
   const dummyDepth2D = createDummyDepth2D();
   const dummyDepthArray = createDummyDepthArray();
@@ -1326,6 +1416,10 @@ export function createOcclusionController(
     () => new THREE.Matrix4(),
   );
   const portalRadiusUniforms: number[] = Array.from({ length: MAX_PORTAL_APERTURES }, () => 0);
+  const portalRadiiUniforms: THREE.Vector2[] = Array.from(
+    { length: MAX_PORTAL_APERTURES },
+    () => new THREE.Vector2(0, 0),
+  );
 
   const uniforms: DepthOcclusionUniforms = {
     uRbOccEnabled: { value: 0 },
@@ -1338,6 +1432,7 @@ export function createOcclusionController(
     uRbPortalCount: { value: 0 },
     uRbPortalInvWorld: { value: portalInvWorldUniforms },
     uRbPortalRadius: { value: portalRadiusUniforms },
+    uRbPortalRadii: { value: portalRadiiUniforms },
   };
 
   const viewSlots: MutableDepthViewSlot[] = Array.from({ length: maxViews }, (_, i) =>
@@ -1586,17 +1681,35 @@ export function createOcclusionController(
     uniforms.uRbPortalCount.value = count;
     for (let i = 0; i < MAX_PORTAL_APERTURES; i += 1) {
       const targetMat = portalInvWorldUniforms[i] as THREE.Matrix4;
+      const targetRadii = portalRadiiUniforms[i] as THREE.Vector2;
       if (i < count) {
         const portal = activePortals[i] as PortalAperture;
+        const { rx, ry } = resolvePortalRadii(portal);
         buildPortalWorldMatrix(portal, scratchPortalMatrix);
         targetMat.copy(scratchPortalMatrix).invert();
-        portalRadiusUniforms[i] = Math.max(0, portal.radius);
+        portalRadiusUniforms[i] = Math.max(rx, ry);
+        targetRadii.set(rx, ry);
       } else {
         targetMat.identity();
         portalRadiusUniforms[i] = 0;
+        targetRadii.set(0, 0);
       }
     }
   }
+
+  eyeBindMesh.onBeforeRender = (renderer, _scene, camera) => {
+    if (uniforms.uRbOccEnabled.value < 0.5) return;
+    const xrCamera = renderer.xr?.isPresenting
+      ? (renderer.xr.getCamera() as unknown as { cameras?: readonly THREE.Camera[] })
+      : undefined;
+    let index = 0;
+    const cameras = xrCamera?.cameras;
+    if (cameras && cameras.length > 1) {
+      const found = cameras.indexOf(camera);
+      if (found >= 0) index = found;
+    }
+    bindView(index);
+  };
 
   // Apply initial visibility/uniforms.
   syncOutputsAndNotify();
@@ -1844,6 +1957,9 @@ export function createOcclusionController(
       }
       occluders.clear();
       roomOccluderMaterial.dispose();
+      eyeBindMesh.removeFromParent();
+      eyeBindGeo.dispose();
+      eyeBindMat.dispose();
       for (const slot of viewSlots) {
         slot.dataTexture?.dispose();
         slot.dataTexture = null;

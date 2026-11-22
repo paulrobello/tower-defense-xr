@@ -1,3 +1,4 @@
+import { OVERLAY_RENDER_ORDER } from '@par/xr-workspace';
 import * as THREE from 'three';
 import { RIFT_PORTAL_SPEC } from './content/index.ts';
 import { type ActionBus, createActionBus } from './core/action-bus.ts';
@@ -120,16 +121,31 @@ function toOcclusionSurfaces(surfaces: readonly RoomSurface[]): OcclusionSurface
 }
 
 function toPortalApertures(portals: readonly PortalAnchor[]): PortalAperture[] {
-  const defaultRadius =
-    Math.max(RIFT_PORTAL_SPEC.apertureWidthM, RIFT_PORTAL_SPEC.apertureHeightM) * 0.5;
-  return portals.map((p) => ({
-    id: p.id,
-    center: new THREE.Vector3(p.position.x, p.position.y, p.position.z),
-    normal: new THREE.Vector3(p.normal.x, p.normal.y, p.normal.z),
-    radius: Math.max(p.width, p.height) * 0.5 || defaultRadius,
-    ...(p.surfaceId ? { hostSurfaceId: p.surfaceId } : {}),
-    hostKind: p.hostKind === 'virtual-rift' ? 'other' : p.hostKind,
-  }));
+  const defaultRx = RIFT_PORTAL_SPEC.apertureWidthM * 0.5;
+  const defaultRy = RIFT_PORTAL_SPEC.apertureHeightM * 0.5;
+  return portals.map((p) => {
+    const radiusX = p.width > 0 ? p.width * 0.5 : defaultRx;
+    const radiusY = p.height > 0 ? p.height * 0.5 : defaultRy;
+    return {
+      id: p.id,
+      center: new THREE.Vector3(p.position.x, p.position.y, p.position.z),
+      normal: new THREE.Vector3(p.normal.x, p.normal.y, p.normal.z),
+      radius: Math.max(radiusX, radiusY),
+      radiusX,
+      radiusY,
+      ...(p.surfaceId ? { hostSurfaceId: p.surfaceId } : {}),
+      hostKind: p.hostKind === 'virtual-rift' ? 'other' : p.hostKind,
+    };
+  });
+}
+
+function portalAnchorSignature(portals: readonly PortalAnchor[]): string {
+  return portals
+    .map(
+      (p) =>
+        `${p.id}:${p.surfaceId ?? ''}:${p.position.x.toFixed(3)},${p.position.y.toFixed(3)},${p.position.z.toFixed(3)}:${p.normal.x.toFixed(3)},${p.normal.y.toFixed(3)},${p.normal.z.toFixed(3)}`,
+    )
+    .join('|');
 }
 
 export function mountApp(container: HTMLElement): AppRuntime {
@@ -193,7 +209,6 @@ export function mountApp(container: HTMLElement): AppRuntime {
     xr: {
       framebufferScale: initial.framebufferScale,
       foveation: initial.fixedFoveation,
-      depthSensing: null,
     },
   });
   shell.xrOverlayRoot.add(xrHudRoot);
@@ -215,11 +230,13 @@ export function mountApp(container: HTMLElement): AppRuntime {
   const perfHud = createPerfHud(perfRecorder, settings, {
     container,
     initialMode: 'desktop',
+    renderOrder: OVERLAY_RENDER_ORDER + 10,
   });
   shell.xrOverlayRoot.add(perfHud.xrRoot);
 
   const domSettings = createDomSettingsPanel(settings, { container });
   const xrSettings = createXrSettingsPanel(settings, {
+    renderOrder: OVERLAY_RENDER_ORDER + 20,
     onClose: () => bus.dispatch({ type: 'menu/close-settings' }, 'xr'),
   });
   xrSettings.root.position.set(0, 0, 0);
@@ -264,7 +281,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
   const syncRoomGeometryToMr = (surfaces: readonly RoomSurface[]): void => {
     const occSurfaces = toOcclusionSurfaces(surfaces);
     occlusion.syncRoomSurfaces(
-      occlusion.requestedMode === 'room-mesh'
+      occlusion.effectiveMode === 'room-mesh'
         ? occSurfaces.filter((surface) => surface.kind !== 'other')
         : [],
     );
@@ -299,6 +316,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
     coreAnchor: calibration.coreAnchor,
     portalAnchors: calibration.portalAnchors,
   });
+  let syncedPortalSignature = portalAnchorSignature(calibration.portalAnchors);
   occlusion.setPortals(toPortalApertures(calibration.portalAnchors));
 
   let currentSim: CombatSimulation = createCombatSimulation({
@@ -321,6 +339,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
     portalAnchors: () => calibration.portalAnchors,
     actionBus: bus,
     getCredits: () => currentSim.getState().credits,
+    initialActive: false,
   });
   // BlockoutRenderer renders the articulated tier-specific turrets; keep placement records for ray picking
   placement.placedTurretsGroup.visible = false;
@@ -330,6 +349,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
     overlayRoot: shell.xrOverlayRoot,
     actionBus: bus,
     placement,
+    renderOrder: OVERLAY_RENDER_ORDER + 30,
     getBuildState: () => {
       const simState = currentSim.getState();
       return {
@@ -399,6 +419,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
     container,
     initialMode: 'desktop',
     initialVisible: true,
+    renderOrder: OVERLAY_RENDER_ORDER + 50,
   });
   shell.xrOverlayRoot.add(threatChevrons.xrRoot);
 
@@ -408,6 +429,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
     settingsStore: settings,
     container,
     initialMode: 'desktop',
+    renderOrder: OVERLAY_RENDER_ORDER + 20,
   });
   xrHudRoot.add(missionOverlay.xrRoot);
   const missionOverlayPanel = {
@@ -471,6 +493,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
       coreAnchor: calibration.coreAnchor,
       portalAnchors: calibration.portalAnchors,
     });
+    syncedPortalSignature = portalAnchorSignature(calibration.portalAnchors);
     occlusion.setPortals(toPortalApertures(calibration.portalAnchors));
     syncRoomGeometryToMr(roomModel.surfaces);
 
@@ -496,6 +519,11 @@ export function mountApp(container: HTMLElement): AppRuntime {
   blockouts.syncFromSim(currentSim.getState(), currentSim.drainEvents(), 0);
 
   const unsubCalibration = calibration.subscribe(() => {
+    const nextSignature = portalAnchorSignature(calibration.portalAnchors);
+    if (nextSignature !== syncedPortalSignature) {
+      syncedPortalSignature = nextSignature;
+      occlusion.setPortals(toPortalApertures(calibration.portalAnchors));
+    }
     syncTacticalHud();
   });
 
@@ -818,6 +846,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
       );
 
       roomModel.updateFromFrame(frame, shell.xr.reference, { nowMs: timeMs, resumeLiveScan: true });
+      occlusion.updateFromXrFrame(frame, shell.xr.reference);
 
       if (state.phase === 'prep' || state.phase === 'wave' || state.phase === 'intermission') {
         placement.updateFromXrFrame(
@@ -839,7 +868,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
         state.transition(simState.phase, 'sim-step');
       }
 
-      blockouts.syncFromSim(simState, events, dt);
+      blockouts.syncFromSim(simState, events, dt, activeCamera);
       threatChevrons.update({
         snapshot: simState,
         events,
@@ -868,6 +897,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
         },
         [],
         dt,
+        activeCamera,
       );
     }
 

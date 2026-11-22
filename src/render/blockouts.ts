@@ -50,6 +50,7 @@ import {
 } from '../content/index.ts';
 import {
   applyDepthOcclusion,
+  buildPortalWorldMatrix,
   configurePortalInteriorMaterial,
   configurePortalRimMaterial,
   createPortalApertureMaskMesh,
@@ -93,6 +94,7 @@ export interface RiftPortalBlockout {
   readonly group: THREE.Group;
   readonly frameMesh: THREE.Mesh;
   readonly interiorMesh: THREE.Mesh;
+  readonly vortexRingMesh: THREE.Mesh;
   readonly apertureMaskMesh: THREE.Mesh | null;
   readonly frameMaterial: THREE.MeshStandardMaterial;
   readonly interiorMaterial: THREE.MeshBasicMaterial;
@@ -176,7 +178,12 @@ export interface BlockoutRenderer {
   readonly railBeamInstancedMesh: THREE.InstancedMesh;
   readonly hpBgInstancedMesh: THREE.InstancedMesh;
   readonly hpFillInstancedMesh: THREE.InstancedMesh;
-  syncFromSim(snapshot: CombatSimulationState, events?: readonly SimEvent[], dt?: number): void;
+  syncFromSim(
+    snapshot: CombatSimulationState,
+    events?: readonly SimEvent[],
+    dt?: number,
+    camera?: THREE.Camera | null,
+  ): void;
   dispose(): void;
 }
 
@@ -270,28 +277,64 @@ export function createBlockoutRenderer(
 
   const ownedGeometries = new Set<THREE.BufferGeometry>();
   const ownedMaterials = new Set<THREE.Material>();
-  const depthBindings: DepthOcclusionBinding[] = [];
+  const depthBindings = new Set<DepthOcclusionBinding>();
+  const entityDisposers = new Map<string, () => void>();
 
-  function trackGeo<T extends THREE.BufferGeometry>(geo: T): T {
+  function trackGeo<T extends THREE.BufferGeometry>(geo: T, bucket?: THREE.BufferGeometry[]): T {
     ownedGeometries.add(geo);
+    bucket?.push(geo);
     return geo;
   }
 
   function trackMat<T extends THREE.Material>(
     mat: T,
     role: 'world-object' | 'portal-rim' | 'portal-interior' | 'none' = 'world-object',
+    matBucket?: THREE.Material[],
+    bindingBucket?: DepthOcclusionBinding[],
   ): T {
     ownedMaterials.add(mat);
+    matBucket?.push(mat);
     if (useDepthOcclusion && occlusion && role !== 'none') {
-      if (role === 'portal-rim') {
-        depthBindings.push(configurePortalRimMaterial(mat, occlusion));
-      } else if (role === 'portal-interior') {
-        depthBindings.push(configurePortalInteriorMaterial(mat, occlusion));
-      } else {
-        depthBindings.push(applyDepthOcclusion(mat, occlusion, { role: 'world-object' }));
-      }
+      const binding =
+        role === 'portal-rim'
+          ? configurePortalRimMaterial(mat, occlusion)
+          : role === 'portal-interior'
+            ? configurePortalInteriorMaterial(mat, occlusion)
+            : applyDepthOcclusion(mat, occlusion, { role: 'world-object' });
+      depthBindings.add(binding);
+      bindingBucket?.push(binding);
     }
     return mat;
+  }
+
+  function registerEntityCleanup(
+    key: string,
+    geos: THREE.BufferGeometry[],
+    mats: THREE.Material[],
+    bindings: DepthOcclusionBinding[],
+  ): void {
+    entityDisposers.set(key, () => {
+      for (const binding of bindings) {
+        binding.dispose();
+        depthBindings.delete(binding);
+      }
+      for (const geo of geos) {
+        geo.dispose();
+        ownedGeometries.delete(geo);
+      }
+      for (const mat of mats) {
+        mat.dispose();
+        ownedMaterials.delete(mat);
+      }
+    });
+  }
+
+  function disposeEntityCleanup(key: string): void {
+    const fn = entityDisposers.get(key);
+    if (fn) {
+      fn();
+      entityDisposers.delete(key);
+    }
   }
 
   // Shared reusable unit primitives to minimize BufferGeometry allocations
@@ -367,11 +410,13 @@ export function createBlockoutRenderer(
         color: 0x2de2ff,
         transparent: true,
         opacity: 0.28,
-        side: THREE.DoubleSide,
+        side: THREE.FrontSide,
         depthWrite: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -2,
+        polygonOffsetUnits: -2,
       }),
     );
-    shieldMaterial.forceSinglePass = true;
 
     const shieldRingGeo = trackGeo(
       new THREE.RingGeometry(
@@ -383,7 +428,8 @@ export function createBlockoutRenderer(
     const shieldRingMesh = new THREE.Mesh(shieldRingGeo, shieldMaterial);
     shieldRingMesh.name = 'core-bastion-shield-ring';
     shieldRingMesh.rotation.x = -Math.PI / 2;
-    shieldRingMesh.position.y = 0.012;
+    shieldRingMesh.position.y = 0.014;
+    shieldRingMesh.renderOrder = 1;
     group.add(shieldRingMesh);
 
     const domeGeo = trackGeo(
@@ -400,6 +446,7 @@ export function createBlockoutRenderer(
     const shieldDomeMesh = new THREE.Mesh(domeGeo, shieldMaterial);
     shieldDomeMesh.name = 'core-bastion-shield-dome';
     shieldDomeMesh.position.y = 0.005;
+    shieldDomeMesh.renderOrder = 2;
     group.add(shieldDomeMesh);
 
     return {
@@ -425,15 +472,20 @@ export function createBlockoutRenderer(
   const portalsMap = new Map<string, RiftPortalBlockout>();
 
   function createRiftPortalBlockout(portal: SimPortalState): RiftPortalBlockout {
+    const entityGeos: THREE.BufferGeometry[] = [];
+    const entityMats: THREE.Material[] = [];
+    const entityBindings: DepthOcclusionBinding[] = [];
+
     const group = new THREE.Group();
     group.name = `blockout-portal-${portal.id}`;
     group.userData.portalId = portal.id;
     group.userData.portalIndex = portal.portalIndex;
 
-    const apertureRadius =
-      Math.max(RIFT_PORTAL_SPEC.apertureWidthM, RIFT_PORTAL_SPEC.apertureHeightM) * 0.5;
-    const scaleX = RIFT_PORTAL_SPEC.apertureWidthM / (apertureRadius * 2);
-    const scaleY = RIFT_PORTAL_SPEC.apertureHeightM / (apertureRadius * 2);
+    const radiusX = RIFT_PORTAL_SPEC.apertureWidthM * 0.5;
+    const radiusY = RIFT_PORTAL_SPEC.apertureHeightM * 0.5;
+    const apertureRadius = Math.max(radiusX, radiusY);
+    const scaleX = radiusX / apertureRadius;
+    const scaleY = radiusY / apertureRadius;
 
     const frameMaterial = trackMat(
       new THREE.MeshStandardMaterial({
@@ -444,10 +496,13 @@ export function createBlockoutRenderer(
         roughness: 0.25,
       }),
       'portal-rim',
+      entityMats,
+      entityBindings,
     );
 
     const frameGeo = trackGeo(
       new THREE.TorusGeometry(apertureRadius, RIFT_PORTAL_SPEC.rimThicknessM * 0.5, 10, 32),
+      entityGeos,
     );
     const frameMesh = new THREE.Mesh(frameGeo, frameMaterial);
     frameMesh.name = `portal-frame-${portal.id}`;
@@ -464,8 +519,10 @@ export function createBlockoutRenderer(
         depthWrite: false,
       }),
       'portal-interior',
+      entityMats,
+      entityBindings,
     );
-    const interiorGeo = trackGeo(new THREE.CircleGeometry(apertureRadius * 0.96, 32));
+    const interiorGeo = trackGeo(new THREE.CircleGeometry(apertureRadius * 0.96, 32), entityGeos);
     const interiorMesh = new THREE.Mesh(interiorGeo, interiorMaterial);
     interiorMesh.name = `portal-interior-${portal.id}`;
     interiorMesh.scale.set(scaleX, scaleY, 1);
@@ -473,38 +530,44 @@ export function createBlockoutRenderer(
     group.add(interiorMesh);
 
     // Inner teal vortex ring
-    const vortexRing = new THREE.Mesh(sharedRingGeo, interiorMaterial);
-    vortexRing.name = `portal-vortex-ring-${portal.id}`;
-    vortexRing.scale.set(
+    const vortexRingMesh = new THREE.Mesh(sharedRingGeo, interiorMaterial);
+    vortexRingMesh.name = `portal-vortex-ring-${portal.id}`;
+    vortexRingMesh.scale.set(
       RIFT_PORTAL_SPEC.apertureWidthM * 0.34,
       RIFT_PORTAL_SPEC.apertureHeightM * 0.34,
       1,
     );
-    vortexRing.position.z = -0.015;
-    group.add(vortexRing);
+    vortexRingMesh.position.z = -0.015;
+    group.add(vortexRingMesh);
 
-    group.position.set(portal.position.x, portal.position.y, portal.position.z);
     _dir.set(portal.normal.x, portal.normal.y, portal.normal.z).normalize();
     if (_dir.lengthSq() < 1e-6) _dir.set(0, 0, 1);
-    group.quaternion.setFromUnitVectors(_zAxis, _dir);
+    const portalAperture: PortalAperture = {
+      id: portal.id,
+      center: new THREE.Vector3(portal.position.x, portal.position.y, portal.position.z),
+      normal: _dir.clone(),
+      radius: apertureRadius,
+      radiusX,
+      radiusY,
+      hostKind: portal.hostKind === 'virtual-rift' ? 'other' : portal.hostKind,
+    };
+    buildPortalWorldMatrix(portalAperture, _mat4);
+    _mat4.decompose(group.position, group.quaternion, _scale);
     group.updateMatrixWorld(true);
 
-    // Create explicit portal aperture stencil mask mesh when occlusion controller is present
+    // Create explicit portal aperture stencil mask mesh matching the exact elliptical opening
     let apertureMaskMesh: THREE.Mesh | null = null;
     if (occlusion) {
-      const aperture: PortalAperture = {
-        id: portal.id,
-        center: new THREE.Vector3(portal.position.x, portal.position.y, portal.position.z),
-        normal: _dir.clone(),
-        radius: apertureRadius,
-        hostKind: portal.hostKind === 'virtual-rift' ? 'other' : portal.hostKind,
-      };
-      apertureMaskMesh = createPortalApertureMaskMesh(aperture, occlusion);
+      apertureMaskMesh = createPortalApertureMaskMesh(portalAperture, occlusion);
       ownedGeometries.add(apertureMaskMesh.geometry);
-      ownedMaterials.add(apertureMaskMesh.material as THREE.Material);
+      entityGeos.push(apertureMaskMesh.geometry);
+      const maskMat = apertureMaskMesh.material as THREE.Material;
+      ownedMaterials.add(maskMat);
+      entityMats.push(maskMat);
       portalsGroup.add(apertureMaskMesh);
     }
 
+    registerEntityCleanup(`portal:${portal.id}`, entityGeos, entityMats, entityBindings);
     portalsGroup.add(group);
 
     return {
@@ -513,6 +576,7 @@ export function createBlockoutRenderer(
       group,
       frameMesh,
       interiorMesh,
+      vortexRingMesh,
       apertureMaskMesh,
       frameMaterial,
       interiorMaterial,
@@ -735,6 +799,8 @@ export function createBlockoutRenderer(
   }
 
   function createTurretBlockout(simTurret: SimTurret): TurretBlockout {
+    const entityMats: THREE.Material[] = [];
+    const entityBindings: DepthOcclusionBinding[] = [];
     const def = getTurretDefinition(simTurret.kind);
     const stats = getTurretTierStats(simTurret.kind, simTurret.tier);
     const b = stats.blockout;
@@ -752,6 +818,9 @@ export function createBlockoutRenderer(
         metalness: 0.78,
         roughness: 0.3,
       }),
+      'world-object',
+      entityMats,
+      entityBindings,
     );
     const accentColor = new THREE.Color(def.accentColorHex);
     const accentMaterial = trackMat(
@@ -762,6 +831,9 @@ export function createBlockoutRenderer(
         metalness: 0.4,
         roughness: 0.22,
       }),
+      'world-object',
+      entityMats,
+      entityBindings,
     );
     const empMaterial = trackMat(
       new THREE.MeshBasicMaterial({
@@ -770,7 +842,11 @@ export function createBlockoutRenderer(
         opacity: 0.9,
         wireframe: true,
       }),
+      'world-object',
+      entityMats,
+      entityBindings,
     );
+    registerEntityCleanup(`turret:${simTurret.id}`, [], entityMats, entityBindings);
 
     // 1. Surface-clamp 4-leg articulated mount
     const clampMountGroup = new THREE.Group();
@@ -903,6 +979,8 @@ export function createBlockoutRenderer(
   const enemiesMap = new Map<string, EnemyBlockout>();
 
   function createEnemyBlockout(simEnemy: SimEnemy): EnemyBlockout {
+    const entityMats: THREE.Material[] = [];
+    const entityBindings: DepthOcclusionBinding[] = [];
     const def = getEnemyDefinition(simEnemy.archetypeId);
     const b = def.blockout;
 
@@ -922,6 +1000,9 @@ export function createBlockoutRenderer(
         metalness: 0.55,
         roughness: 0.42,
       }),
+      'world-object',
+      entityMats,
+      entityBindings,
     );
     const accentColor = new THREE.Color(def.emissiveColorHex);
     const accentMaterial = trackMat(
@@ -932,6 +1013,9 @@ export function createBlockoutRenderer(
         metalness: 0.35,
         roughness: 0.25,
       }),
+      'world-object',
+      entityMats,
+      entityBindings,
     );
 
     let crackMaterial: THREE.MeshBasicMaterial | null = null;
@@ -1035,6 +1119,9 @@ export function createBlockoutRenderer(
           transparent: true,
           opacity: 0.45,
         }),
+        'world-object',
+        entityMats,
+        entityBindings,
       );
       const crackSeams = new THREE.Group();
       crackSeams.name = 'broodlord-armor-crack-seams';
@@ -1055,8 +1142,15 @@ export function createBlockoutRenderer(
         opacity: 0.8,
         side: THREE.DoubleSide,
         depthWrite: false,
+        polygonOffset: true,
+        polygonOffsetFactor: -2,
+        polygonOffsetUnits: -2,
       }),
+      'world-object',
+      entityMats,
+      entityBindings,
     );
+    registerEntityCleanup(`enemy:${simEnemy.id}`, [], entityMats, entityBindings);
     const frostRingMesh = new THREE.Mesh(sharedRingGeo, frostMat);
     frostRingMesh.name = 'enemy-cryo-frost-ring';
     frostRingMesh.rotation.x = -Math.PI / 2;
@@ -1103,6 +1197,8 @@ export function createBlockoutRenderer(
   const hpBarFillMat = trackMat(
     new THREE.MeshBasicMaterial({
       color: 0xffffff,
+      transparent: true,
+      opacity: 0.98,
       depthWrite: false,
     }),
     'none',
@@ -1112,6 +1208,7 @@ export function createBlockoutRenderer(
   hpBgInstancedMesh.name = 'instanced-enemy-hp-bg';
   hpBgInstancedMesh.count = 0;
   hpBgInstancedMesh.frustumCulled = false;
+  hpBgInstancedMesh.renderOrder = 10;
 
   const hpFillInstancedMesh = new THREE.InstancedMesh(
     hpBarFillGeo,
@@ -1121,6 +1218,7 @@ export function createBlockoutRenderer(
   hpFillInstancedMesh.name = 'instanced-enemy-hp-fill';
   hpFillInstancedMesh.count = 0;
   hpFillInstancedMesh.frustumCulled = false;
+  hpFillInstancedMesh.renderOrder = 11;
   healthBarsGroup.add(hpBgInstancedMesh, hpFillInstancedMesh);
 
   // Weapon FX InstancedMeshes (all pre-allocated once at startup)
@@ -1144,11 +1242,14 @@ export function createBlockoutRenderer(
   );
   const blastRingMat = trackMat(
     new THREE.MeshBasicMaterial({
-      color: 0xff7043,
+      color: 0xffffff,
       transparent: true,
       opacity: 0.82,
       side: THREE.DoubleSide,
       depthWrite: false,
+      polygonOffset: true,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2,
     }),
   );
   const cryoBeamMat = trackMat(
@@ -1402,7 +1503,7 @@ export function createBlockoutRenderer(
     hpBgInstancedMesh,
     hpFillInstancedMesh,
 
-    syncFromSim(snapshot, events = [], dt = 0) {
+    syncFromSim(snapshot, events = [], dt = 0, camera = null) {
       if (disposed) return;
 
       const stepDt = Number.isFinite(dt) && dt > 0 ? dt : 0;
@@ -1453,21 +1554,24 @@ export function createBlockoutRenderer(
         }
 
         portalBlockout.isOpen = simPortal.isOpen;
-        portalBlockout.group.position.set(
-          simPortal.position.x,
-          simPortal.position.y,
-          simPortal.position.z,
-        );
         _dir.set(simPortal.normal.x, simPortal.normal.y, simPortal.normal.z).normalize();
         if (_dir.lengthSq() < 1e-6) _dir.set(0, 0, 1);
+        _vecA.set(simPortal.position.x, simPortal.position.y, simPortal.position.z);
         if (simPortal.hostKind !== 'virtual-rift') {
           // Keep the entire rim on the room side even at grazing angles.
-          portalBlockout.group.position.addScaledVector(
-            _dir,
-            RIFT_PORTAL_SPEC.rimThicknessM / 2 + 0.01,
-          );
+          _vecA.addScaledVector(_dir, RIFT_PORTAL_SPEC.rimThicknessM / 2 + 0.01);
         }
-        portalBlockout.group.quaternion.setFromUnitVectors(_zAxis, _dir);
+        buildPortalWorldMatrix(
+          {
+            id: simPortal.id,
+            center: _vecA,
+            normal: _dir,
+            radius:
+              Math.max(RIFT_PORTAL_SPEC.apertureWidthM, RIFT_PORTAL_SPEC.apertureHeightM) * 0.5,
+          },
+          _mat4,
+        );
+        _mat4.decompose(portalBlockout.group.position, portalBlockout.group.quaternion, _scale);
 
         if (portalBlockout.apertureMaskMesh) {
           portalBlockout.apertureMaskMesh.position.copy(portalBlockout.group.position);
@@ -1481,6 +1585,7 @@ export function createBlockoutRenderer(
         }
 
         portalBlockout.interiorMesh.visible = simPortal.isOpen;
+        portalBlockout.vortexRingMesh.visible = simPortal.isOpen;
         portalBlockout.frameMaterial.emissiveIntensity = simPortal.isOpen
           ? 1.15 + 0.35 * Math.sin(portalBlockout.pulsePhase) + portalBlockout.spawnFlashSec
           : 0.35;
@@ -1495,6 +1600,7 @@ export function createBlockoutRenderer(
           if (record.apertureMaskMesh) {
             portalsGroup.remove(record.apertureMaskMesh);
           }
+          disposeEntityCleanup(`portal:${id}`);
           portalsMap.delete(id);
         }
       }
@@ -1582,6 +1688,7 @@ export function createBlockoutRenderer(
       for (const [id, record] of turretsMap.entries()) {
         if (!seenTurrets.has(id)) {
           turretsGroup.remove(record.group);
+          disposeEntityCleanup(`turret:${id}`);
           turretsMap.delete(id);
         }
       }
@@ -1603,6 +1710,17 @@ export function createBlockoutRenderer(
       const seenEnemies = new Set<string>();
       let hpBarIndex = 0;
 
+      // Compute camera billboard orientation once for all enemy health bars
+      const hasBillboardCam = Boolean(camera);
+      if (camera) {
+        camera.updateMatrixWorld(false);
+        _quat.setFromRotationMatrix(camera.matrixWorld);
+      } else {
+        _quat.identity();
+      }
+      _vecMid.set(1, 0, 0).applyQuaternion(_quat); // billboard right axis
+      _dir.set(0, 0, 1).applyQuaternion(_quat); // billboard toward-camera axis
+
       for (const simEnemy of snapshot.enemies) {
         seenEnemies.add(simEnemy.id);
         let enemyBlockout = enemiesMap.get(simEnemy.id);
@@ -1621,24 +1739,40 @@ export function createBlockoutRenderer(
         // Orient invader along its locomotion tangent & surface normal
         _upAxis.set(simEnemy.normal.x, simEnemy.normal.y, simEnemy.normal.z).normalize();
         if (_upAxis.lengthSq() < 1e-6) _upAxis.set(0, 1, 0);
-        _dir.set(simEnemy.tangent.x, simEnemy.tangent.y, simEnemy.tangent.z).normalize();
-        if (_dir.lengthSq() < 1e-6) _dir.set(0, 0, 1);
-        _vecA.crossVectors(_upAxis, _dir);
-        if (_vecA.lengthSq() < 1e-6) {
-          _vecA.set(1, 0, 0);
+        _vecA.set(simEnemy.tangent.x, simEnemy.tangent.y, simEnemy.tangent.z).normalize();
+        if (_vecA.lengthSq() < 1e-6) _vecA.set(0, 0, 1);
+        _vecB.crossVectors(_upAxis, _vecA);
+        if (_vecB.lengthSq() < 1e-6) {
+          _vecB.set(1, 0, 0);
         } else {
-          _vecA.normalize();
+          _vecB.normalize();
         }
-        _vecB.crossVectors(_vecA, _upAxis).normalize();
-        _mat4.makeBasis(_vecA, _upAxis, _vecB);
+        _vecA.crossVectors(_vecB, _upAxis).normalize();
+        _mat4.makeBasis(_vecB, _upAxis, _vecA);
         enemyBlockout.group.quaternion.setFromRotationMatrix(_mat4);
         _upAxis.set(0, 1, 0);
 
-        // Subtle locomotion bob / Disruptor ring rotation
+        // Subtle locomotion bob + Disruptor EMP ring rotation
         enemyBlockout.locomotionPhase += stepDt * (0.8 + simEnemy.effectiveSpeedMps * 4.5);
         enemyBlockout.bodyGroup.position.y =
           Math.sin(enemyBlockout.locomotionPhase) *
           (simEnemy.movementLayer === 'air' ? 0.025 : 0.01);
+        if (simEnemy.archetypeId === 'rift-disruptor') {
+          const empRing = enemyBlockout.bodyGroup.getObjectByName('disruptor-emp-ring');
+          if (empRing) {
+            empRing.rotation.z += stepDt * 3.2;
+          }
+        }
+
+        // Hit flash decay + emissive response
+        if (enemyBlockout.hitFlashSec > 0) {
+          enemyBlockout.hitFlashSec = Math.max(0, enemyBlockout.hitFlashSec - stepDt);
+          enemyBlockout.primaryMaterial.emissive.setHex(0xffffff);
+          enemyBlockout.primaryMaterial.emissiveIntensity = (enemyBlockout.hitFlashSec / 0.1) * 0.8;
+        } else {
+          enemyBlockout.primaryMaterial.emissive.setHex(0x000000);
+          enemyBlockout.primaryMaterial.emissiveIntensity = 0;
+        }
 
         // Cryo-Slow Cyan Frost Tint
         const isSlowed = simEnemy.slowFactor > 0 && simEnemy.slowRemainingSec > 0;
@@ -1677,7 +1811,7 @@ export function createBlockoutRenderer(
           }
         }
 
-        // Instanced World HP Bar above enemy
+        // Instanced World HP Bar above enemy (billboarded toward active camera)
         if (hpBarIndex < MAX_INSTANCED_HP_BARS && simEnemy.hp > 0) {
           const hpRatio = THREE.MathUtils.clamp(
             simEnemy.maxHp > 0 ? simEnemy.hp / simEnemy.maxHp : 0,
@@ -1688,14 +1822,19 @@ export function createBlockoutRenderer(
           const barScaleWidth = simEnemy.isBoss ? 1.85 : 1.0;
 
           _dummyObj.position.set(simEnemy.position.x, barY, simEnemy.position.z);
-          _dummyObj.quaternion.identity();
+          if (hasBillboardCam) _dummyObj.quaternion.copy(_quat);
+          else _dummyObj.quaternion.identity();
           _dummyObj.scale.set(barScaleWidth, simEnemy.isBoss ? 1.35 : 1, 1);
           _dummyObj.updateMatrix();
           hpBgInstancedMesh.setMatrixAt(hpBarIndex, _dummyObj.matrix);
 
-          // Left-aligned fill bar inside the backing bar
+          // Left-aligned fill bar slightly in front of the backing bar along viewer axis
           const fillOffset = -0.15 * barScaleWidth * (1 - hpRatio);
-          _dummyObj.position.set(simEnemy.position.x + fillOffset, barY, simEnemy.position.z);
+          _dummyObj.position.set(
+            simEnemy.position.x + _vecMid.x * fillOffset + _dir.x * 0.003,
+            barY + _vecMid.y * fillOffset + _dir.y * 0.003,
+            simEnemy.position.z + _vecMid.z * fillOffset + _dir.z * 0.003,
+          );
           _dummyObj.scale.set(barScaleWidth * hpRatio, simEnemy.isBoss ? 1.35 : 1, 1);
           _dummyObj.updateMatrix();
           hpFillInstancedMesh.setMatrixAt(hpBarIndex, _dummyObj.matrix);
@@ -1717,7 +1856,22 @@ export function createBlockoutRenderer(
       for (const [id, record] of enemiesMap.entries()) {
         if (!seenEnemies.has(id)) {
           enemiesGroup.remove(record.group);
+          disposeEntityCleanup(`enemy:${id}`);
           enemiesMap.delete(id);
+        }
+      }
+
+      // Apply enemy-hit flashes for enemies created during this very frame
+      if (events.length > 0) {
+        for (const ev of events) {
+          if (ev.type === 'enemy-hit') {
+            const eb = enemiesMap.get(ev.enemyId);
+            if (eb && eb.hitFlashSec === 0) {
+              eb.hitFlashSec = 0.1;
+              eb.primaryMaterial.emissive.setHex(0xffffff);
+              eb.primaryMaterial.emissiveIntensity = 0.8;
+            }
+          }
         }
       }
 
@@ -1849,9 +2003,11 @@ export function createBlockoutRenderer(
       if (disposed) return;
       disposed = true;
 
-      for (const binding of depthBindings.splice(0)) {
+      entityDisposers.clear();
+      for (const binding of depthBindings) {
         binding.dispose();
       }
+      depthBindings.clear();
       for (const geo of ownedGeometries) {
         geo.dispose();
       }
