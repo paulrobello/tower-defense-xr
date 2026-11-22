@@ -710,10 +710,12 @@ try {
         }
       }
 
+      app.debugGrantCredits(100);
       const targets = [
         { label: 'floor', expectedKind: 'floor', point: { x: -0.9, y: 0.0, z: -0.55 } },
         { label: 'table', expectedKind: 'table', point: { x: 1.6, y: 0.74, z: 0.0 } },
         { label: 'wall', expectedKind: 'wall', point: chosenWallTarget },
+        { label: 'ceiling', expectedKind: 'ceiling', point: { x: 1.25, y: 2.8, z: 0.55 } },
       ];
 
       function rotateYByQuat(q) {

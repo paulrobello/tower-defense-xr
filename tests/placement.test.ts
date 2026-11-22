@@ -29,7 +29,6 @@ import {
   computeHoverPodPose,
   computeSurfaceMountPose,
   inspectFootprintWithinPolygon,
-  PLACEMENT_REASON_LABELS,
   stepHoverPodDepth,
   validateTurretPlacement,
 } from '../src/sim/placement-rules.ts';
@@ -605,7 +604,7 @@ describe('Placement constraints: 0.35 m spacing, 14-turret hard cap, Core & Port
     controller.dispose();
   });
 
-  it('rejects INSUFFICIENT_CREDITS ("NO CREDITS"), OUT_OF_RANGE, and INVALID_SURFACE (ceiling)', () => {
+  it('accepts ceiling mounts, including reversed tracked normals, while rejecting credit and range failures', () => {
     const ceilingSurface = makeRectSurface({
       id: 'ceiling-main',
       semanticLabel: 'ceiling',
@@ -621,9 +620,20 @@ describe('Placement constraints: 0.35 m spacing, 14-turret hard cap, Core & Port
       position: { x: 0, y: 2.8, z: -1.0 },
       surface: ceilingSurface,
     });
-    expect(ceilingCheck.valid).toBe(false);
-    expect(ceilingCheck.reason).toBe('INVALID_SURFACE');
-    expect(ceilingCheck.reasonLabel).toBe(PLACEMENT_REASON_LABELS.INVALID_SURFACE);
+    expect(ceilingCheck.valid).toBe(true);
+    expect(ceilingCheck.surfaceKind).toBe('ceiling');
+    expect(ceilingCheck.pose.normal.y).toBeCloseTo(-1);
+
+    const reversedCeilingCheck = validateTurretPlacement({
+      kind: 'autocannon',
+      mountProfile: 'surface-clamp',
+      position: { x: 0, y: 2.8, z: -1.0 },
+      surface: { ...ceilingSurface, normal: new THREE.Vector3(0, 1, 0) },
+      surfaceKind: 'ceiling',
+    });
+    expect(reversedCeilingCheck.valid).toBe(true);
+    expect(reversedCeilingCheck.surfaceKind).toBe('ceiling');
+    expect(reversedCeilingCheck.pose.normal.y).toBeCloseTo(-1);
 
     const tooFarCheck = validateTurretPlacement({
       kind: 'autocannon',

@@ -354,11 +354,11 @@ export function formatPlacementInvalidReason(
   return PLACEMENT_REASON_LABELS[reason];
 }
 
-/** Returns true if `kind` is an attachable turret surface (`'floor' | 'table' | 'wall'`). */
+/** Returns true if `kind` is an attachable turret surface. */
 export function isAttachableSurfaceKind(
   kind: string | null | undefined,
 ): kind is AttachableSurfaceKind {
-  return kind === 'floor' || kind === 'table' || kind === 'wall';
+  return kind === 'floor' || kind === 'table' || kind === 'wall' || kind === 'ceiling';
 }
 
 function vec3Length(v: Readonly<Vec3>): number {
@@ -1052,10 +1052,9 @@ function extractVec3(item: Readonly<Vec3> | { readonly position: Readonly<Vec3> 
 }
 
 /**
- * Validates a candidate turret placement (either `'surface-clamp'` on floor/table/wall or
- * `'hover-pod'` in mid-air) against all spatial and economy constraints:
+ * Validates a surface-clamp or mid-air hover-pod placement against spatial and economy constraints:
  * 1. `CAP_REACHED` (`14` active turret hard cap)
- * 2. `INVALID_SURFACE` (`surface-clamp` requires `'floor' | 'table' | 'wall'`)
+ * 2. `INVALID_SURFACE` (surface clamps require a floor, table, wall, or ceiling)
  * 3. `OUT_OF_RANGE` (`0.5–6.0 m` for surface snap; `0.8–5.0 m` for hover-pod when ray distance/depth given)
  * 4. `CORE_ZONE` (`0.55 m` keep-out radius around the Core Bastion)
  * 5. `PORTAL_ZONE` (`0.65 m` keep-out radius around any Rift Portal anchor)
@@ -1105,13 +1104,15 @@ export function validateTurretPlacement(
     ({ x: 0, y: 1, z: 0 } as const);
   const rayOrigin = candidate.rayOrigin;
   const flipNormal =
-    rawSurfaceKind === 'wall' && rayOrigin
-      ? dotVec3(rawNormal, {
-          x: rayOrigin.x - candidate.position.x,
-          y: rayOrigin.y - candidate.position.y,
-          z: rayOrigin.z - candidate.position.z,
-        }) < 0
-      : (rawSurfaceKind === 'floor' || rawSurfaceKind === 'table') && rawNormal.y < 0;
+    rawSurfaceKind === 'ceiling'
+      ? rawNormal.y > 0
+      : rawSurfaceKind === 'wall' && rayOrigin
+        ? dotVec3(rawNormal, {
+            x: rayOrigin.x - candidate.position.x,
+            y: rayOrigin.y - candidate.position.y,
+            z: rayOrigin.z - candidate.position.z,
+          }) < 0
+        : (rawSurfaceKind === 'floor' || rawSurfaceKind === 'table') && rawNormal.y < 0;
   const mountNormal = flipNormal
     ? { x: -rawNormal.x, y: -rawNormal.y, z: -rawNormal.z }
     : rawNormal;
@@ -1211,12 +1212,9 @@ export function validateTurretPlacement(
     ) {
       reasons.push('INVALID_SURFACE');
     } else {
-      // Infer floor/table/wall from normal if kind wasn't explicitly labeled
+      // Infer floor, ceiling, or wall from the normal when the scan omitted the surface label.
       validSurfaceKind =
-        Math.abs(pose.normal.y) >= 0.7 ? (pose.normal.y > 0 ? 'floor' : null) : 'wall';
-      if (validSurfaceKind === null) {
-        reasons.push('INVALID_SURFACE');
-      }
+        Math.abs(pose.normal.y) >= 0.7 ? (pose.normal.y > 0 ? 'floor' : 'ceiling') : 'wall';
     }
   }
 

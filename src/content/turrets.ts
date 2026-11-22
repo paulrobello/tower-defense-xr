@@ -30,7 +30,7 @@ export type DamageType = (typeof DAMAGE_TYPES)[number];
 export const MOVEMENT_LAYERS = ['surface', 'air'] as const;
 export type MovementLayer = (typeof MOVEMENT_LAYERS)[number];
 
-export const ATTACHABLE_SURFACE_KINDS = ['floor', 'table', 'wall'] as const;
+export const ATTACHABLE_SURFACE_KINDS = ['floor', 'table', 'wall', 'ceiling'] as const;
 export type AttachableSurfaceKind = (typeof ATTACHABLE_SURFACE_KINDS)[number];
 
 /** Footprint radius of every turret base (meters). */
@@ -117,9 +117,9 @@ export const TURRET_MOUNT_PROFILES: Record<TurretMountProfileId, TurretMountProf
     id: 'surface-clamp',
     label: 'Articulated Surface Clamp',
     description:
-      'Flush mechanical clamp base that locks onto scanned floors, tables, or walls aligned to the surface normal.',
+      'Flush mechanical clamp base that locks onto scanned floors, tables, walls, or ceilings aligned to the surface normal.',
     alignsToSurfaceNormal: true,
-    allowedSurfaces: ['floor', 'table', 'wall'],
+    allowedSurfaces: ['floor', 'table', 'wall', 'ceiling'],
     minDistanceM: SURFACE_SNAP_MIN_RANGE_M,
     maxDistanceM: SURFACE_SNAP_MAX_RANGE_M,
     blockout: {

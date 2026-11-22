@@ -220,6 +220,7 @@ const _dir = new THREE.Vector3();
 const _upAxis = new THREE.Vector3(0, 1, 0);
 const _zAxis = new THREE.Vector3(0, 0, 1);
 const _quat = new THREE.Quaternion();
+const _hpViewPosition = new THREE.Vector3();
 const _scale = new THREE.Vector3();
 const _mat4 = new THREE.Matrix4();
 const _color = new THREE.Color();
@@ -349,9 +350,45 @@ export function createBlockoutRenderer(
   // ==========================================================================
   // 1. Core Bastion Blockout (CORE_BASTION_SPEC)
   // ==========================================================================
+  const contactShadowSize = 32;
+  const contactShadowPixels = new Uint8Array(contactShadowSize * contactShadowSize * 4);
+  for (let y = 0; y < contactShadowSize; y += 1) {
+    for (let x = 0; x < contactShadowSize; x += 1) {
+      const radius =
+        Math.hypot(x + 0.5 - contactShadowSize / 2, y + 0.5 - contactShadowSize / 2) /
+        (contactShadowSize / 2);
+      const fade = 1 - THREE.MathUtils.smoothstep(radius, 0.25, 0.96);
+      contactShadowPixels[(y * contactShadowSize + x) * 4 + 3] = Math.round(255 * fade);
+    }
+  }
+  const coreContactShadowMap = new THREE.DataTexture(
+    contactShadowPixels,
+    contactShadowSize,
+    contactShadowSize,
+  );
+  coreContactShadowMap.magFilter = THREE.LinearFilter;
+  coreContactShadowMap.minFilter = THREE.LinearFilter;
+  coreContactShadowMap.needsUpdate = true;
+
   function createCoreBastion(): CoreBastionBlockout {
     const group = new THREE.Group();
     group.name = 'blockout-core-bastion';
+    const shadowDiameter = CORE_BASTION_SPEC.shieldDomeRadiusM * 2.15;
+    const contact = new THREE.Mesh(
+      trackGeo(new THREE.PlaneGeometry(shadowDiameter, shadowDiameter)),
+      trackMat(
+        new THREE.MeshBasicMaterial({
+          map: coreContactShadowMap,
+          opacity: 0.31,
+          transparent: true,
+          depthWrite: false,
+        }),
+      ),
+    );
+    contact.name = 'core-bastion-contact-shadow';
+    contact.rotation.x = -Math.PI / 2;
+    contact.position.y = 0.007;
+    group.add(contact);
 
     const pedestalHeight = CORE_BASTION_SPEC.heightM * 0.56;
     const pedestalGeo = trackGeo(
@@ -372,7 +409,6 @@ export function createBlockoutRenderer(
     const pedestalMesh = new THREE.Mesh(pedestalGeo, pedestalMat);
     pedestalMesh.name = 'core-bastion-pedestal';
     pedestalMesh.position.y = pedestalHeight * 0.5;
-    pedestalMesh.castShadow = true;
     pedestalMesh.receiveShadow = true;
     group.add(pedestalMesh);
 
@@ -401,7 +437,6 @@ export function createBlockoutRenderer(
     const energyCoreMesh = new THREE.Mesh(coreGeo, coreMaterial);
     energyCoreMesh.name = 'core-bastion-energy-core';
     energyCoreMesh.position.y = CORE_BASTION_SPEC.heightM - coreRadius;
-    energyCoreMesh.castShadow = true;
     group.add(energyCoreMesh);
 
     // Shield ring at base + translucent shield dome reacting to `core-hit`
@@ -1189,10 +1224,9 @@ export function createBlockoutRenderer(
     new THREE.MeshBasicMaterial({
       color: 0x09131d,
       transparent: true,
-      opacity: 0.82,
+      opacity: 0.55,
       depthWrite: false,
     }),
-    'none',
   );
   const hpBarFillMat = trackMat(
     new THREE.MeshBasicMaterial({
@@ -1201,7 +1235,6 @@ export function createBlockoutRenderer(
       opacity: 0.98,
       depthWrite: false,
     }),
-    'none',
   );
 
   const hpBgInstancedMesh = new THREE.InstancedMesh(hpBarBgGeo, hpBarBgMat, MAX_INSTANCED_HP_BARS);
@@ -1559,7 +1592,7 @@ export function createBlockoutRenderer(
         _vecA.set(simPortal.position.x, simPortal.position.y, simPortal.position.z);
         if (simPortal.hostKind !== 'virtual-rift') {
           // Keep the entire rim on the room side even at grazing angles.
-          _vecA.addScaledVector(_dir, RIFT_PORTAL_SPEC.rimThicknessM / 2 + 0.01);
+          _vecA.addScaledVector(_dir, RIFT_PORTAL_SPEC.rimThicknessM / 2 + 0.03);
         }
         buildPortalWorldMatrix(
           {
@@ -1713,7 +1746,7 @@ export function createBlockoutRenderer(
       // Compute camera billboard orientation once for all enemy health bars
       const hasBillboardCam = Boolean(camera);
       if (camera) {
-        camera.updateMatrixWorld(false);
+        camera.getWorldPosition(_hpViewPosition);
         _quat.setFromRotationMatrix(camera.matrixWorld);
       } else {
         _quat.identity();
@@ -1812,13 +1845,21 @@ export function createBlockoutRenderer(
         }
 
         // Instanced World HP Bar above enemy (billboarded toward active camera)
-        if (hpBarIndex < MAX_INSTANCED_HP_BARS && simEnemy.hp > 0) {
+        const barY = simEnemy.position.y + def.blockout.healthBarOffsetHeightM;
+        // Prevent the enemy world overlay from filling the headset view near the eye.
+        if (
+          hpBarIndex < MAX_INSTANCED_HP_BARS &&
+          simEnemy.hp > 0 &&
+          (!camera ||
+            _hpViewPosition.distanceToSquared(
+              _vecA.set(simEnemy.position.x, barY, simEnemy.position.z),
+            ) >= 0.25)
+        ) {
           const hpRatio = THREE.MathUtils.clamp(
             simEnemy.maxHp > 0 ? simEnemy.hp / simEnemy.maxHp : 0,
             0.02,
             1,
           );
-          const barY = simEnemy.position.y + def.blockout.healthBarOffsetHeightM;
           const barScaleWidth = simEnemy.isBoss ? 1.85 : 1.0;
 
           _dummyObj.position.set(simEnemy.position.x, barY, simEnemy.position.z);
@@ -2024,6 +2065,7 @@ export function createBlockoutRenderer(
       railBeamInstancedMesh.dispose();
       hpBgInstancedMesh.dispose();
       hpFillInstancedMesh.dispose();
+      coreContactShadowMap.dispose();
 
       portalsMap.clear();
       turretsMap.clear();

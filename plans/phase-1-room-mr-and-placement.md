@@ -2,7 +2,7 @@
 
 > **PRD Reference:** `PRD.md` §Phases (P1), Decisions D2–D6  
 > **Depends On:** [`plans/phase-0-foundation-and-deploy.md`](phase-0-foundation-and-deploy.md)  
-> **Goal:** Deliver the complete room-scale mixed-reality spatial foundation: Quest 3 plane/mesh ingestion with graceful virtual room fallback, layered WebXR Depth Sensing + room-mesh occlusion with portal aperture cutouts and real-world shadow catchers, pre-mission Core Anchor calibration, seated/standing Play Arc, and hybrid floor/table/wall/mid-air turret placement with the `@par/xr-workspace` radial menu — matched 1:1 on desktop.
+> **Goal:** Deliver the complete room-scale mixed-reality spatial foundation: Quest 3 plane/mesh ingestion with graceful virtual room fallback, layered WebXR Depth Sensing + room-mesh occlusion with portal aperture cutouts and real-world shadow catchers, pre-mission Core Anchor calibration, seated/standing Play Arc, and hybrid floor, table, wall, ceiling, and mid-air turret placement with the `@par/xr-workspace` radial menu — matched 1:1 on desktop.
 
 ---
 
@@ -44,12 +44,12 @@
 - **Dependencies:** `P1-T1`, `P1-T3`
 - **Scope:**
   - Implement `src/xr/placement.ts` + pure validation helpers in `src/sim/placement-rules.ts`:
-    - Cast controller laser (`@par/xr-workspace` `PlacementRays` + `createPointer`) against scanned floors, tables, and walls.
+    - Cast controller laser (`@par/xr-workspace` `PlacementRays` + `createPointer`) against scanned floors, tables, walls, and ceilings.
     - **Auto Surface-Snap:** When the ray hits a valid surface within range (`0.5–6.0 m`), snap the hologram ghost flush to the surface normal and check the **entire footprint** against the plane boundary / nearby mesh triangles (`webxr.md` line 27 — no half-hanging turret bases!). Render clamp-legs preview + range dome.
     - **Thumbstick Hover-Pod Mode:** Pushing/pulling the aiming thumbstick forward/backward detaches the ghost into mid-air repulsor hover-pod mode at smoothly bounded depth (`0.8–5.0 m`), switching the preview mount to the glowing repulsor ring. Aiming back onto a valid surface with neutral stick re-snaps (or pressing brief B/Y toggle forces re-snap).
     - **Rules & Constraints:** Enforce **hard cap of 14 active turrets**, **`0.35 m` minimum center-to-center spacing**, Core keep-out radius (`0.55 m`), and portal keep-out radius (`0.65 m`). Color-code hologram ghost (cyan = valid surface, violet-cyan = valid hover-pod, crimson + crisp SDF reason label = invalid: `"CAP 14/14"`, `"TOO CLOSE"`, `"OVERHANG"`, `"CORE ZONE"`).
     - Store each placed turret's pose relative to its supporting `RoomSurfaceModel` anchor (or Core frame for hover-pods) so tracking refinements move visual + collider together.
-- **Verification:** `vitest` proves footprint overhang rejection, surface normal alignment (floor/table/wall), hover-pod depth clamping (`0.8–5.0 m`), `0.35 m` spacing, and 14-turret cap; `make checkall` passes.
+- **Verification:** `vitest` proves footprint overhang rejection, surface normal alignment (floor, table, wall, ceiling), hover-pod depth clamping (`0.8–5.0 m`), `0.35 m` spacing, and 14-turret cap; `make checkall` passes.
 
 ### Wave 3 (Parallel after Wave 2)
 
@@ -69,7 +69,7 @@
 - **Scope:**
   - Extend `scripts/xr-emu/` with a P1 automated walk exercising both **seated (`1.2 m`)** and **standing (`1.65 m`)** head poses:
     1. Enter `immersive-ar` → verify Calibration Core suggestion & Lock Core.
-    2. Open thumbstick radial menu → select turret → snap onto floor, table, and wall surfaces → verify valid placements.
+    2. Open thumbstick radial menu → select turret → snap onto floor, table, wall, and ceiling surfaces → verify valid placements.
     3. Push thumbstick to detach into mid-air hover-pod mode → place hover turret → verify repulsor mount state.
     4. Trigger invalid placement (`TOO CLOSE` / `CAP 14/14`) → assert rejection reason label.
     5. Verify portal aperture rendering and occlusion mode toggle (`Auto Depth` / `Room Mesh` / `Off`) without errors.

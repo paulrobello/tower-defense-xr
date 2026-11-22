@@ -473,6 +473,10 @@ describe('MR Occlusion Controller — depth-uniform updates & zero-allocation te
     expect(floatSlot?.dataTexture?.format).toBe(THREE.RedFormat);
     expect(floatSlot?.dataTexture?.type).toBe(THREE.FloatType);
     expect(new Float32Array(floatSlot?.backingBuffer as ArrayBuffer)[0]).toBeCloseTo(1.85, 4);
+    expect(controller.bindView(1)).toBe(false);
+    expect(controller.uniforms.uRbOccEnabled.value).toBe(0);
+    expect(controller.bindView(0)).toBe(true);
+    expect(controller.uniforms.uRbOccEnabled.value).toBe(1);
 
     controller.dispose();
   });
@@ -556,6 +560,7 @@ describe('MR Occlusion — shader patch & portal aperture stencil/mask bypass', 
     expect(fakeShader.uniforms.uRbPortalInvWorld).toBe(controller.uniforms.uRbPortalInvWorld);
     expect(fakeShader.vertexShader).toContain('vRbOccViewZ = -mvPosition.z;');
     expect(fakeShader.fragmentShader).toContain('if ( rbShouldDiscardByDepth() ) discard;');
+    expect(fakeShader.fragmentShader).toContain('normViewUv.y = 1.0 - normViewUv.y;');
 
     // Portal stencil mask mesh writes stencil ref 1 without color or depth writes.
     const portal: PortalAperture = {
@@ -654,11 +659,11 @@ describe('MR Occlusion — shader patch & portal aperture stencil/mask bypass', 
     });
     expect(enemyBehindSolidWall).toEqual({ occluded: true, bypassedByPortal: false });
 
-    // 4. Portal rim flush on the wall (2.5 m) is NOT clipped by wall depth (2.48 m),
+    // 4. Portal rim flush on the wall (2.5 m) is NOT clipped by wall depth (2.42 m),
     //    but IS occluded by a foreground hand at 0.7 m.
     const rimOnWall = evaluateDepthOcclusionSample({
       viewDepthMeters: 2.5,
-      envDepthMeters: 2.48,
+      envDepthMeters: 2.42,
       worldPosition: new THREE.Vector3(0.58, 1.5, -2.5),
       cameraPosition,
       portals: [portal],
