@@ -362,6 +362,80 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
     expect(renderer.portals.size).toBe(0);
     expect(scene.getObjectByName('rift-bastion-blockouts-root')).toBeUndefined();
   });
+
+  it('keeps HP bar fill above background, billboards HP bars toward camera, preserves blast ring instance colors, and hides closed portal vortex rings', () => {
+    const scene = new THREE.Scene();
+    const renderer = createBlockoutRenderer(scene);
+    const sim = createCombatSimulation({ seed: 7 });
+    const enemy = sim.debugSpawnEnemy('rift-disruptor', {
+      position: { x: 0.5, y: 1.0, z: -0.5 },
+      hp: 100,
+    });
+
+    const cam = new THREE.PerspectiveCamera();
+    cam.position.set(2, 1.5, 0);
+    cam.lookAt(0, 1.0, 0);
+    cam.updateMatrixWorld(true);
+
+    renderer.syncFromSim(
+      sim.getState(),
+      [
+        {
+          type: 'enemy-hit',
+          tick: 1,
+          timeSec: 0.016,
+          enemyId: enemy.id,
+          archetypeId: 'rift-disruptor',
+          turretId: null,
+          damageType: 'kinetic',
+          damage: 10,
+          remainingHp: 90,
+          maxHp: 100,
+          position: enemy.position,
+          isDot: false,
+          isSplash: false,
+          isChain: false,
+          isPiercing: false,
+        },
+      ],
+      0.016,
+      cam,
+    );
+
+    // HP fill renders in transparent pass strictly after HP bg
+    expect((renderer.hpFillInstancedMesh.material as THREE.MeshBasicMaterial).transparent).toBe(
+      true,
+    );
+    expect(renderer.hpFillInstancedMesh.renderOrder).toBeGreaterThan(
+      renderer.hpBgInstancedMesh.renderOrder,
+    );
+
+    // Blast ring base material is white so instanceColor isn't darkened/tinted muddy
+    expect(
+      (renderer.blastRingInstancedMesh.material as THREE.MeshBasicMaterial).color.getHex(),
+    ).toBe(0xffffff);
+
+    // HP bar matrix adopts camera orientation (not identity) when camera is rotated
+    const hpMat = new THREE.Matrix4();
+    const hpPos = new THREE.Vector3();
+    const hpQuat = new THREE.Quaternion();
+    const hpScale = new THREE.Vector3();
+    renderer.hpBgInstancedMesh.getMatrixAt(0, hpMat);
+    hpMat.decompose(hpPos, hpQuat, hpScale);
+    const camQuat = new THREE.Quaternion().setFromRotationMatrix(cam.matrixWorld);
+    expect(Math.abs(hpQuat.dot(camQuat))).toBeCloseTo(1, 4);
+
+    // Enemy hit flash applies emissive response
+    const enemyBlockout = renderer.enemies.get(enemy.id);
+    expect(enemyBlockout?.primaryMaterial.emissiveIntensity).toBeGreaterThan(0);
+
+    // Closed portals hide both interiorMesh and vortexRingMesh
+    for (const portal of renderer.portals.values()) {
+      expect(portal.vortexRingMesh.visible).toBe(portal.isOpen);
+    }
+
+    renderer.dispose();
+  });
 });
 
 describe('P2-T5: ThreatChevrons (Off-FOV Angular Projection & Portal/Core Threat Filtering)', () => {

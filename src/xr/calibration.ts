@@ -1085,6 +1085,9 @@ export function createCalibrationPreview(): CalibrationPreview {
     opacity: 0.85,
     side: THREE.DoubleSide,
     depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -2,
   });
   const coreRing = new THREE.Mesh(
     new THREE.RingGeometry(CORE_BASTION_SPEC.radiusM * 0.72, CORE_BASTION_SPEC.radiusM, 36),
@@ -1113,6 +1116,9 @@ export function createCalibrationPreview(): CalibrationPreview {
     opacity: 0.55,
     side: THREE.DoubleSide,
     depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -2,
   });
   const keepOutRing = new THREE.Mesh(
     new THREE.RingGeometry(CORE_KEEP_OUT_RADIUS - 0.025, CORE_KEEP_OUT_RADIUS, 40),
@@ -1128,6 +1134,9 @@ export function createCalibrationPreview(): CalibrationPreview {
     opacity: 0.45,
     side: THREE.DoubleSide,
     depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -2,
   });
   const clearanceRing = new THREE.Mesh(
     new THREE.RingGeometry(MIN_PORTAL_CLEARANCE_M - 0.035, MIN_PORTAL_CLEARANCE_M, 64),
@@ -1147,9 +1156,9 @@ export function createCalibrationPreview(): CalibrationPreview {
       group.visible = visible;
 
       const { x, y, z } = state.coreAnchor.position;
-      coreRing.position.set(x, y + 0.004, z);
-      keepOutRing.position.set(x, y + 0.003, z);
-      clearanceRing.position.set(x, y + 0.002, z);
+      coreRing.position.set(x, y + 0.008, z);
+      keepOutRing.position.set(x, y + 0.006, z);
+      clearanceRing.position.set(x, y + 0.004, z);
 
       const statusColor = state.isValid ? cyanColor : crimsonColor;
       coreRingMat.color.copy(statusColor);

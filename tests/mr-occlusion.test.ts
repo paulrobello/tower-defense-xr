@@ -1024,3 +1024,103 @@ describe('MR Shadow Catchers — creation, sync, horizontal filtering, and dispo
     expect(manager.count).toBe(0);
   });
 });
+
+describe('MR Occlusion — elliptical cutouts, FrontSide polygonOffset, and per-eye stereo bind hook', () => {
+  it('cuts exact elliptical portal apertures without side bleed-through and uses FrontSide + polygonOffset', () => {
+    const controller = createOcclusionController({ initialMode: 'room-mesh' });
+    const wall = makeWallPlaneSurface('wall-north', -2.0, 4.0, 2.8);
+    const portal: PortalAperture = {
+      id: 'rift-elliptical',
+      center: new THREE.Vector3(0, 1.4, -2.0),
+      normal: new THREE.Vector3(0, 0, 1),
+      radius: 0.675,
+      radiusX: 0.475,
+      radiusY: 0.675,
+      hostSurfaceId: 'wall-north',
+      hostKind: 'wall',
+    };
+    controller.setPortals([portal]);
+    controller.syncRoomSurfaces([wall]);
+
+    const mesh = controller.getOccluderMesh('wall-north') as THREE.Mesh;
+    const mat = mesh.material as THREE.MeshBasicMaterial;
+    expect(mat.side).toBe(THREE.FrontSide);
+    expect(mat.polygonOffset).toBe(true);
+    expect(mat.polygonOffsetFactor).toBeGreaterThan(0);
+    expect(mat.polygonOffsetUnits).toBeGreaterThan(0);
+
+    controller.root.updateMatrixWorld(true);
+    const raycaster = new THREE.Raycaster();
+
+    // Inside horizontal ellipse (x = 0.40 < 0.475) -> passes through
+    raycaster.set(new THREE.Vector3(0.4, 1.4, 0), new THREE.Vector3(0, 0, -1));
+    expect(raycaster.intersectObject(mesh, false).length).toBe(0);
+
+    // Outside horizontal ellipse (x = 0.56 > 0.475) even though < 0.675 -> hits solid wall!
+    raycaster.set(new THREE.Vector3(0.56, 1.4, 0), new THREE.Vector3(0, 0, -1));
+    expect(raycaster.intersectObject(mesh, false).length).toBe(1);
+
+    // Inside vertical ellipse (y = 1.4 + 0.60, dy = 0.60 < 0.675) -> passes through
+    raycaster.set(new THREE.Vector3(0, 2.0, 0), new THREE.Vector3(0, 0, -1));
+    expect(raycaster.intersectObject(mesh, false).length).toBe(0);
+
+    // Back-facing ray from behind the wall (z = -3 -> +Z) is culled by FrontSide
+    raycaster.set(new THREE.Vector3(1.2, 1.4, -3), new THREE.Vector3(0, 0, 1));
+    expect(raycaster.intersectObject(mesh, false).length).toBe(0);
+
+    // Elliptical aperture mask matches (radiusX, radiusY) and renders DoubleSide
+    const mask = createPortalApertureMaskMesh(portal, controller);
+    mask.geometry.computeBoundingBox();
+    const size = mask.geometry.boundingBox?.getSize(new THREE.Vector3());
+    expect(size?.x).toBeCloseTo(0.95, 2);
+    expect(size?.y).toBeCloseTo(1.35, 2);
+    expect((mask.material as THREE.MeshBasicMaterial).side).toBe(THREE.DoubleSide);
+
+    mask.geometry.dispose();
+    (mask.material as THREE.Material).dispose();
+    controller.dispose();
+  });
+
+  it('binds the active stereo eye depth texture via the zero-triangle onBeforeRender hook', () => {
+    const controller = createOcclusionController({ initialMode: 'auto-depth' });
+    const views = [{ eye: 'left' }, { eye: 'right' }] as unknown as XRView[];
+    const map = new Map<XRView, XRCPUDepthInformation | null>([
+      [views[0] as XRView, makeFakeCpuDepthInfo({ rawValueToMeters: 0.001 })],
+      [views[1] as XRView, makeFakeCpuDepthInfo({ rawValueToMeters: 0.002 })],
+    ]);
+    const fake = makeFakeXrFrame({ views, cpuDepthByView: map });
+    controller.updateFromXrFrame(fake.frame, fake.referenceSpace);
+
+    const hook = controller.root.getObjectByName('mr-occlusion-eye-bind-hook') as THREE.Mesh;
+    expect(hook).toBeDefined();
+    expect(hook.geometry.drawRange.count).toBe(0);
+
+    const leftCam = new THREE.PerspectiveCamera();
+    const rightCam = new THREE.PerspectiveCamera();
+    const fakeRenderer = {
+      xr: { isPresenting: true, getCamera: () => ({ cameras: [leftCam, rightCam] }) },
+    } as unknown as THREE.WebGLRenderer;
+
+    hook.onBeforeRender(
+      fakeRenderer,
+      new THREE.Scene(),
+      rightCam,
+      hook.geometry,
+      hook.material as THREE.Material,
+      null as unknown as THREE.Group,
+    );
+    expect(controller.uniforms.uRbRawValueToMeters.value).toBeCloseTo(0.002);
+
+    hook.onBeforeRender(
+      fakeRenderer,
+      new THREE.Scene(),
+      leftCam,
+      hook.geometry,
+      hook.material as THREE.Material,
+      null as unknown as THREE.Group,
+    );
+    expect(controller.uniforms.uRbRawValueToMeters.value).toBeCloseTo(0.001);
+
+    controller.dispose();
+  });
+});

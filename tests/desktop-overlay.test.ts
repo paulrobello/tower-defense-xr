@@ -214,11 +214,12 @@ describe('desktop bootstrap shell', () => {
     bus.dispatch({ type: 'view/recenter' }, 'desktop');
     expect(shell.camera.position.x).toBeCloseTo(0);
 
-    // Entering XR via action bus hides virtual room + background for passthrough.
+    // Entering XR via action bus hides virtual room + background for passthrough, while keeping scene lights active.
     bus.dispatch({ type: 'xr/enter' }, 'desktop');
     await vi.waitFor(() => expect(shell.xr.presenting).toBe(true));
     expect(shell.mode).toBe('xr');
     expect(shell.room.visible).toBe(false);
+    expect(shell.scene.getObjectByName('scene-lights')?.visible).toBe(true);
     expect(shell.scene.background).toBeNull();
     expect(mock.xr.setFramebufferScaleFactor).toHaveBeenCalledWith(1.2);
 

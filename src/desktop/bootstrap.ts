@@ -10,8 +10,14 @@
  */
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { Text } from 'troika-three-text';
 import type { ActionBus } from '../core/action-bus.ts';
+import {
+  VIRTUAL_CENTRAL_TABLE,
+  VIRTUAL_CONSOLE_TABLE,
+  VIRTUAL_ROOM_DIMENSIONS,
+} from '../mr/virtual-room.ts';
 import { configureFonts } from '../ui/fonts.ts';
 import {
   createXrSessionManager,
@@ -41,7 +47,7 @@ const PALETTE = {
   danger: '#ff6b6b',
 } as const;
 
-const ROOM = { width: 6, height: 3, depth: 5 } as const;
+const ROOM = VIRTUAL_ROOM_DIMENSIONS;
 const DESKTOP_CAMERA_POSITION = new THREE.Vector3(0, 1.65, 3.2);
 const DESKTOP_CAMERA_TARGET = new THREE.Vector3(0, 0.9, 0);
 
@@ -255,7 +261,8 @@ export function createTestRoom(): { room: THREE.Group; core: THREE.Mesh } {
     new THREE.MeshStandardMaterial({ color: PALETTE.floor, roughness: 0.7, metalness: 0.35 }),
   );
   floor.rotation.x = -Math.PI / 2;
-  floor.position.y = 0.001;
+  floor.position.y = -0.001;
+  floor.receiveShadow = true;
   floor.name = 'room-floor';
   room.add(floor);
 
@@ -263,7 +270,7 @@ export function createTestRoom(): { room: THREE.Group; core: THREE.Mesh } {
   const gridMaterial = grid.material as THREE.LineBasicMaterial;
   gridMaterial.transparent = true;
   gridMaterial.opacity = 0.12;
-  grid.position.y = 0.002;
+  grid.position.y = 0.0005;
   room.add(grid);
 
   const trimMaterial = new THREE.MeshStandardMaterial({
@@ -311,23 +318,42 @@ export function createTestRoom(): { room: THREE.Group; core: THREE.Mesh } {
     roughness: 0.4,
     metalness: 0.8,
   });
-  const table = new THREE.Group();
-  table.name = 'test-table';
-  const top = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.05, 0.8), metal);
-  top.position.y = 0.75;
-  table.add(top);
-  const legGeometry = new THREE.BoxGeometry(0.05, 0.725, 0.05);
-  for (const [x, z] of [
-    [-0.65, -0.35],
-    [0.65, -0.35],
-    [-0.65, 0.35],
-    [0.65, 0.35],
-  ] as const) {
-    const leg = new THREE.Mesh(legGeometry, metal);
-    leg.position.set(x, 0.3625, z);
-    table.add(leg);
-  }
-  room.add(table);
+  const addTable = (
+    name: string,
+    spec: {
+      readonly width: number;
+      readonly depth: number;
+      readonly y: number;
+      readonly position: { readonly x: number; readonly y: number; readonly z: number };
+    },
+  ): void => {
+    const table = new THREE.Group();
+    table.name = name;
+    table.position.set(spec.position.x, 0, spec.position.z);
+    const thickness = 0.05;
+    const top = new THREE.Mesh(new THREE.BoxGeometry(spec.width, thickness, spec.depth), metal);
+    top.position.y = spec.y - thickness / 2;
+    top.receiveShadow = true;
+    top.castShadow = true;
+    table.add(top);
+    const legHeight = Math.max(0.05, spec.y - thickness);
+    const legGeometry = new THREE.BoxGeometry(0.05, legHeight, 0.05);
+    const lx = Math.max(0.05, spec.width / 2 - 0.05);
+    const lz = Math.max(0.05, spec.depth / 2 - 0.05);
+    for (const [x, z] of [
+      [-lx, -lz],
+      [lx, -lz],
+      [-lx, lz],
+      [lx, lz],
+    ] as const) {
+      const leg = new THREE.Mesh(legGeometry, metal);
+      leg.position.set(x, legHeight / 2, z);
+      table.add(leg);
+    }
+    room.add(table);
+  };
+  addTable('test-table', VIRTUAL_CENTRAL_TABLE);
+  addTable('test-console-table', VIRTUAL_CONSOLE_TABLE);
 
   const core = new THREE.Mesh(
     new THREE.OctahedronGeometry(0.12, 0),
@@ -343,15 +369,42 @@ export function createTestRoom(): { room: THREE.Group; core: THREE.Mesh } {
   core.position.set(0, 0.95, 0);
   room.add(core);
 
-  room.add(new THREE.HemisphereLight('#8fb8ff', '#0a0c10', 0.7));
-  const key = new THREE.DirectionalLight('#dfe9ff', 1.1);
-  key.position.set(2, 2.8, 1.5);
-  room.add(key);
-  const glow = new THREE.PointLight(PALETTE.core, 1.2, 3);
-  glow.position.set(0, 1.2, 0);
-  room.add(glow);
-
   return { room, core };
+}
+
+/** Builds scene-level lighting kept active in both Desktop and XR passthrough sessions. */
+export function createSceneLights(): THREE.Group {
+  const lights = new THREE.Group();
+  lights.name = 'scene-lights';
+
+  lights.add(new THREE.HemisphereLight('#9ec4ff', '#16202e', 0.85));
+
+  const key = new THREE.DirectionalLight('#eef4ff', 1.35);
+  key.name = 'scene-key-light';
+  key.position.set(2.2, 3.6, 1.8);
+  key.castShadow = true;
+  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.camera.near = 0.5;
+  key.shadow.camera.far = 12;
+  key.shadow.camera.left = -4;
+  key.shadow.camera.right = 4;
+  key.shadow.camera.top = 4;
+  key.shadow.camera.bottom = -4;
+  key.shadow.bias = -0.0005;
+  key.shadow.normalBias = 0.02;
+  lights.add(key);
+
+  const rim = new THREE.DirectionalLight('#60a5fa', 0.45);
+  rim.name = 'scene-rim-light';
+  rim.position.set(-2.4, 2.2, -2.0);
+  lights.add(rim);
+
+  const glow = new THREE.PointLight(PALETTE.core, 1.1, 3.5);
+  glow.name = 'scene-core-glow';
+  glow.position.set(0, 1.2, 0);
+  lights.add(glow);
+
+  return lights;
 }
 
 export type FrameCallback = (deltaSeconds: number, timeMs: number, frame?: XRFrame) => void;
@@ -434,11 +487,20 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
 
   const renderer =
     options.createRenderer?.() ??
-    new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      stencil: true,
+      powerPreference: 'high-performance',
+    });
   renderer.setPixelRatio(Math.min(globalThis.devicePixelRatio ?? 1, 2));
   renderer.setClearColor(0x000000, 0);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  if (renderer.shadowMap) {
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  }
   renderer.domElement.dataset.control = 'game-canvas';
   applyStyle(renderer.domElement, { display: 'block', width: '100%', height: '100%' });
   const position = getComputedStyle(container).position;
@@ -457,6 +519,22 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
   scene.background = desktopBackground;
   const { room, core } = createTestRoom();
   scene.add(room);
+  scene.add(createSceneLights());
+
+  let envRenderTarget: THREE.WebGLRenderTarget | null = null;
+  if (typeof renderer.getContext === 'function') {
+    try {
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      const envScene = new RoomEnvironment();
+      envRenderTarget = pmrem.fromScene(envScene, 0.04);
+      scene.environment = envRenderTarget.texture;
+      scene.environmentIntensity = 0.75;
+      envScene.dispose();
+      pmrem.dispose();
+    } catch {
+      // Headless / mock renderers without a WebGL2 context skip PMREM generation.
+    }
+  }
 
   const camera = new THREE.PerspectiveCamera(65, 1, 0.05, 50);
   camera.position.copy(DESKTOP_CAMERA_POSITION);
@@ -589,6 +667,11 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
       overlay.dispose();
       controls.dispose();
       stopOverlay();
+      if (envRenderTarget) {
+        scene.environment = null;
+        envRenderTarget.dispose();
+        envRenderTarget = null;
+      }
       disposeObject(scene);
       renderer.dispose();
       renderer.domElement.remove();

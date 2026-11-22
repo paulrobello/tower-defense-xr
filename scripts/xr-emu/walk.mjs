@@ -28,7 +28,13 @@ const { values: opts } = parseArgs({
 });
 
 const SEATED_HEAD_Y = 1.2;
-const EXPECTED_OPTIONAL_FEATURES = ['plane-detection', 'mesh-detection', 'anchors', 'local-floor'];
+const EXPECTED_OPTIONAL_FEATURES = [
+  'plane-detection',
+  'mesh-detection',
+  'depth-sensing',
+  'anchors',
+  'local-floor',
+];
 const EXPECTED_FRAMEBUFFER_SCALE = 1.15;
 const EXPECTED_FOVEATION = 0.5;
 
@@ -377,9 +383,7 @@ try {
   const missingFeatures = EXPECTED_OPTIONAL_FEATURES.filter((f) => !requestedFeatures.includes(f));
   record(
     'xr-optional-features',
-    missingFeatures.length === 0 &&
-      !requestedFeatures.includes('depth-sensing') &&
-      xrCapture.lastRequest?.hasDepthSensing === false,
+    missingFeatures.length === 0 && xrCapture.lastRequest?.hasDepthSensing === true,
     {
       requested: requestedFeatures,
       missing: missingFeatures,
