@@ -134,10 +134,7 @@ export interface CalibrationPreview {
   readonly coreRing: THREE.Mesh;
   readonly keepOutRing: THREE.Mesh;
   readonly clearanceRing: THREE.Mesh;
-  readonly portalFramesGroup: THREE.Group;
-  update(
-    state: Pick<CalibrationState, 'coreAnchor' | 'portalAnchors' | 'isValid' | 'locked' | 'active'>,
-  ): void;
+  update(state: Pick<CalibrationState, 'coreAnchor' | 'isValid' | 'locked' | 'active'>): void;
   setVisible(visible: boolean): void;
   dispose(): void;
 }
@@ -1073,7 +1070,6 @@ export function validateCalibration(
  * - Core Anchor ring + beacon (`calibration-core-anchor`)
  * - Core keep-out ring (`0.55 m`, `calibration-core-keepout-ring`)
  * - `2.0 m` minimum portal clearance ring (`calibration-clearance-ring`)
- * - Candidate Rift Portal hologram frames (`calibration-portal-frames`)
  */
 export function createCalibrationPreview(): CalibrationPreview {
   const group = new THREE.Group();
@@ -1141,54 +1137,11 @@ export function createCalibrationPreview(): CalibrationPreview {
   clearanceRing.rotation.x = -Math.PI / 2;
   group.add(clearanceRing);
 
-  const portalFramesGroup = new THREE.Group();
-  portalFramesGroup.name = 'calibration-portal-frames';
-  group.add(portalFramesGroup);
-
-  const portalFrameGeo = new THREE.RingGeometry(
-    Math.min(DEFAULT_PORTAL_WIDTH, DEFAULT_PORTAL_HEIGHT) * 0.42,
-    Math.min(DEFAULT_PORTAL_WIDTH, DEFAULT_PORTAL_HEIGHT) * 0.5,
-    4,
-  );
-  portalFrameGeo.rotateZ(Math.PI / 4);
-  const portalScaleX = DEFAULT_PORTAL_WIDTH / Math.min(DEFAULT_PORTAL_WIDTH, DEFAULT_PORTAL_HEIGHT);
-  const portalScaleY =
-    DEFAULT_PORTAL_HEIGHT / Math.min(DEFAULT_PORTAL_WIDTH, DEFAULT_PORTAL_HEIGHT);
-
-  const portalWallMat = new THREE.MeshBasicMaterial({
-    color: cyanColor,
-    transparent: true,
-    opacity: 0.8,
-    side: THREE.DoubleSide,
-    depthWrite: false,
-  });
-  const portalVirtualMat = new THREE.MeshBasicMaterial({
-    color: violetColor,
-    transparent: true,
-    opacity: 0.85,
-    side: THREE.DoubleSide,
-    depthWrite: false,
-  });
-
-  const portalSlots: THREE.Mesh[] = [];
-  for (let i = 0; i < MAX_PORTAL_ANCHORS; i += 1) {
-    const slot = new THREE.Mesh(portalFrameGeo, portalWallMat);
-    slot.name = `calibration-portal-frame-${i}`;
-    slot.scale.set(portalScaleX, portalScaleY, 1);
-    slot.visible = false;
-    portalFramesGroup.add(slot);
-    portalSlots.push(slot);
-  }
-
-  const zAxis = new THREE.Vector3(0, 0, 1);
-  const targetNormal = new THREE.Vector3();
-
   return {
     group,
     coreRing,
     keepOutRing,
     clearanceRing,
-    portalFramesGroup,
     update(state) {
       const visible = state.active && !state.locked;
       group.visible = visible;
@@ -1201,24 +1154,6 @@ export function createCalibrationPreview(): CalibrationPreview {
       const statusColor = state.isValid ? cyanColor : crimsonColor;
       coreRingMat.color.copy(statusColor);
       clearanceMat.color.copy(statusColor);
-
-      for (let i = 0; i < portalSlots.length; i += 1) {
-        const slot = portalSlots[i] as THREE.Mesh;
-        const portal = state.portalAnchors[i];
-        if (!portal) {
-          slot.visible = false;
-          continue;
-        }
-        slot.visible = true;
-        slot.position.set(portal.position.x, portal.position.y, portal.position.z);
-        targetNormal.set(portal.normal.x, portal.normal.y, portal.normal.z).normalize();
-        if (targetNormal.lengthSq() < 1e-6) targetNormal.set(0, 0, 1);
-        slot.quaternion.setFromUnitVectors(zAxis, targetNormal);
-        slot.material = portal.hostKind === 'virtual-rift' ? portalVirtualMat : portalWallMat;
-        slot.userData.portalId = portal.id;
-        slot.userData.hostKind = portal.hostKind;
-        slot.userData.distanceFromCore = portal.distanceFromCore;
-      }
     },
     setVisible(visible) {
       group.visible = visible;
@@ -1228,13 +1163,10 @@ export function createCalibrationPreview(): CalibrationPreview {
       coreBeacon.geometry.dispose();
       keepOutRing.geometry.dispose();
       clearanceRing.geometry.dispose();
-      portalFrameGeo.dispose();
       coreRingMat.dispose();
       (coreBeacon.material as THREE.Material).dispose();
       keepOutMat.dispose();
       clearanceMat.dispose();
-      portalWallMat.dispose();
-      portalVirtualMat.dispose();
     },
   };
 }

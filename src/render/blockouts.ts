@@ -460,6 +460,7 @@ export function createBlockoutRenderer(
         transparent: true,
         opacity: 0.86,
         side: THREE.DoubleSide,
+        depthWrite: false,
       }),
       'portal-interior',
     );
@@ -1458,6 +1459,13 @@ export function createBlockoutRenderer(
         );
         _dir.set(simPortal.normal.x, simPortal.normal.y, simPortal.normal.z).normalize();
         if (_dir.lengthSq() < 1e-6) _dir.set(0, 0, 1);
+        if (simPortal.hostKind !== 'virtual-rift') {
+          // Keep the entire rim on the room side even at grazing angles.
+          portalBlockout.group.position.addScaledVector(
+            _dir,
+            RIFT_PORTAL_SPEC.rimThicknessM / 2 + 0.01,
+          );
+        }
         portalBlockout.group.quaternion.setFromUnitVectors(_zAxis, _dir);
 
         if (portalBlockout.apertureMaskMesh) {

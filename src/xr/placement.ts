@@ -1369,8 +1369,15 @@ export function createTurretPlacementController(
       lastRayOrigin = cloneVec3(rayOrigin);
       lastRayDirection = cloneVec3(rayDirection);
 
-      const attachableHit = raycastSurfaceInternal(rayOrigin, rayDirection, true);
-      const anyHit = attachableHit ?? raycastSurfaceInternal(rayOrigin, rayDirection, false);
+      const solidHit = raycastSurfaceInternal(
+        rayOrigin,
+        rayDirection,
+        false,
+        (surface) => surface.kind !== 'other',
+      );
+      const anyHit = solidHit ?? raycastSurfaceInternal(rayOrigin, rayDirection, false);
+      const attachableHit =
+        solidHit && isAttachableSurfaceKind(solidHit.surface.kind) ? solidHit : null;
       lastSurfaceHit = attachableHit;
 
       if (rayOptions?.mountProfile) {
@@ -1448,6 +1455,7 @@ export function createTurretPlacementController(
           normal: hoverPose.normal,
           rayOrigin,
           rayDistanceM: hoverDepthM,
+          blockingSurfaceDistanceM: solidHit?.distance,
           depthM: hoverDepthM,
           forwardHint,
         };

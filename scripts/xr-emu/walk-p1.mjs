@@ -378,6 +378,21 @@ try {
         corePos: st.coreAnchor.position,
         coreHorizDistM: Number(horizDist.toFixed(3)),
         portalCount: st.portalAnchors.length,
+        duplicatePortalPreview: Boolean(
+          app.shell.scene.getObjectByName('calibration-portal-frames'),
+        ),
+        mountedRiftsInRoom: st.portalAnchors
+          .filter((portal) => portal.hostKind !== 'virtual-rift')
+          .every((portal) => {
+            const rendered = app.blockouts.portals.get(portal.id)?.group.position;
+            if (!rendered) return false;
+            return (
+              (rendered.x - portal.position.x) * portal.normal.x +
+                (rendered.y - portal.position.y) * portal.normal.y +
+                (rendered.z - portal.position.z) * portal.normal.z >
+              0.06
+            );
+          }),
         minPortalDistM: Number(
           Math.min(...st.portalAnchors.map((p) => p.distanceFromCore)).toFixed(3),
         ),
@@ -394,6 +409,8 @@ try {
         standingCalib.coreHorizDistM >= 1.2 &&
         standingCalib.coreHorizDistM <= 1.8 &&
         standingCalib.portalCount >= 2 &&
+        !standingCalib.duplicatePortalPreview &&
+        standingCalib.mountedRiftsInRoom &&
         standingCalib.minPortalDistM >= 2.0,
       standingCalib,
     );
@@ -781,7 +798,14 @@ try {
       // Push thumbstick forward (WebXR y = -0.9 => pushPullStick = +0.9) to detach into hover-pod mode.
       window.__p1Helpers.setStick('right', 0, -0.9);
       await window.__xrEmu.frames(10);
-      // Release stick back to neutral while holding steady aim on the detached ray.
+      // The wall blocks the forward push. Trigger must not commit the hidden turret.
+      const blockedReason = app.placement.lastValidation?.reason;
+      const turretCount = app.placement.turretCount;
+      await window.__p1Helpers.pressButton('right', 'trigger');
+      const blockedCommit = app.placement.turretCount === turretCount;
+      // Pull the hover pod in front of that wall, then release the stick.
+      window.__p1Helpers.setStick('right', 0, 0.9);
+      await window.__xrEmu.frames(35);
       window.__p1Helpers.setStick('right', 0, 0);
       await window.__xrEmu.frames(2);
 
@@ -790,6 +814,8 @@ try {
         hoverDepthM: Number(app.placement.hoverDepthM.toFixed(3)),
         valid: app.placement.lastValidation?.valid ?? false,
         reason: app.placement.lastValidation?.reason ?? null,
+        blockedReason,
+        blockedCommit,
         ghostHoverVisible: app.placement.ghost.hoverPodGroup.visible,
         ghostClampVisible: app.placement.ghost.clampMountGroup.visible,
       };
@@ -801,6 +827,8 @@ try {
         hoverPreview.hoverDepthM >= 0.8 &&
         hoverPreview.hoverDepthM <= 5.0 &&
         hoverPreview.valid === true &&
+        hoverPreview.blockedReason === 'BLOCKED_BY_SURFACE' &&
+        hoverPreview.blockedCommit &&
         hoverPreview.ghostHoverVisible === true &&
         hoverPreview.ghostClampVisible === false,
       hoverPreview,
