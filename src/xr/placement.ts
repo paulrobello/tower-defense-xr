@@ -275,10 +275,12 @@ export interface TurretPlacementControllerOptions {
   readonly preferredHandedness?: XRHandedness;
   readonly ghost?: TurretGhostPreview;
   readonly placementRays?: PlacementRays;
+  readonly rayOverlayRoot?: THREE.Group;
   readonly pointer?: Pointer;
 }
 
 export interface TurretPlacementController {
+  readonly active: boolean;
   readonly state: Readonly<PlacementControllerState>;
   readonly ghost: TurretGhostPreview;
   readonly placementRays: PlacementRays | null;
@@ -320,8 +322,9 @@ export interface TurretPlacementController {
     frame: XRFrame,
     referenceSpace: XRReferenceSpace,
     dtSec: number,
-    suppressTrigger?: (source: XRInputSource) => boolean,
+    useInterfaceRay?: (source: XRInputSource) => boolean,
   ): PlacementValidationResult | null;
+  confirmXrPlacement(frame: XRFrame, referenceSpace: XRReferenceSpace, source: XRInputSource): void;
   confirmPlacement(source?: ActionSource): PlacedTurretRecord | null;
   placeTurret(input: DirectPlaceTurretInput, source?: ActionSource): PlacedTurretRecord | null;
   relocateTurret(
@@ -803,6 +806,21 @@ export function createTurretPlacementController(
   const pointer = options.pointer ?? createPointer({ far: 12 });
   const placementRays = options.placementRays ?? (scene ? new PlacementRays(scene) : null);
   const ownsPlacementRays = options.placementRays === undefined && placementRays !== null;
+  if (placementRays && options.rayOverlayRoot) options.rayOverlayRoot.add(placementRays.group);
+  const stopRayOverlay = placementRays
+    ? keepAbove(placementRays.group, OVERLAY_RENDER_ORDER + 1)
+    : null;
+  const xrSources = (frame: XRFrame): XRInputSource[] =>
+    [...(frame.session?.inputSources ?? [])].filter(
+      (s) => !s.hand && s.gamepad && s.targetRaySpace,
+    );
+  const aimingSourceFor = (sources: readonly XRInputSource[]): XRInputSource | undefined =>
+    sources.find((s) => s.handedness === preferredHandedness) ?? sources[0];
+  const xrStickY = (source: XRInputSource): number => {
+    const axes = source.gamepad?.axes;
+    const yIndex = (axes?.length ?? 0) >= 4 ? 3 : 1;
+    return -(axes?.[yIndex] ?? 0);
+  };
 
   const placedTurretsGroup = new THREE.Group();
   placedTurretsGroup.name = 'placed-turrets-layer';
@@ -1176,6 +1194,9 @@ export function createTurretPlacementController(
   );
 
   const controller: TurretPlacementController = {
+    get active() {
+      return active;
+    },
     get state() {
       return buildState();
     },
@@ -1511,24 +1532,20 @@ export function createTurretPlacementController(
       notify();
       return validation;
     },
-    updateFromXrFrame(frame, referenceSpace, dtSec, suppressTrigger) {
+    updateFromXrFrame(frame, referenceSpace, dtSec, useInterfaceRay) {
       if (!active) {
         placementRays?.clear();
         return null;
       }
 
-      const inputSources = [...(frame.session?.inputSources ?? [])].filter(
-        (s) => !s.hand && s.targetRaySpace,
-      );
+      const inputSources = xrSources(frame);
       if (inputSources.length === 0) {
         placementRays?.clear();
         return null;
       }
 
       // Prefer the configured aiming hand (e.g. 'right'), falling back to the first controller
-      const aimingSource =
-        inputSources.find((s) => s.handedness === preferredHandedness) ??
-        (inputSources[0] as XRInputSource);
+      const aimingSource = aimingSourceFor(inputSources);
 
       const rayTargets: PlacementRayTarget[] = [];
       let activeValidation: PlacementValidationResult | null = null;
@@ -1543,7 +1560,7 @@ export function createTurretPlacementController(
           buttonEdgesBySource.set(source, edges);
         }
         edges.update(source.gamepad);
-        if (suppressTrigger?.(source)) continue;
+        if (useInterfaceRay?.(source)) continue;
 
         const origin = new THREE.Vector3(
           pose.transform.position.x,
@@ -1559,23 +1576,14 @@ export function createTurretPlacementController(
         const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(quat).normalize();
 
         if (source === aimingSource) {
-          const pad = source.gamepad;
-          const axisOffset = (pad?.axes.length ?? 0) >= 4 ? 2 : 0;
-          // WebXR standard gamepad thumbstick Y is negative when pushed forward/up
-          const rawGamepadY = pad?.axes[axisOffset + 1] ?? 0;
-          const pushPullStick = -rawGamepadY;
-
           // Brief B/Y button press (buttons[5] or buttons[4]) forces re-snap to surface mode
           const resnapPressed = edges.pressed(5) || edges.pressed(4);
-          // Controller Contract (webxr.md): Grip (buttons[1]) is manipulation and must suppress trigger activation
-          const gripHeld = edges.held(1);
-          const triggerPressed = edges.pressed(0);
 
           activeValidation = controller.updateFromRay(
             { x: origin.x, y: origin.y, z: origin.z },
             { x: direction.x, y: direction.y, z: direction.z },
             {
-              stickY: pushPullStick,
+              stickY: xrStickY(source),
               dtSec,
               resnap: resnapPressed,
             },
@@ -1594,10 +1602,6 @@ export function createTurretPlacementController(
             contact: activeValidation.mountProfile === 'hover-pod' || lastSurfaceHit !== null,
             valid: activeValidation.valid,
           });
-
-          if (triggerPressed && !gripHeld && activeValidation.valid) {
-            controller.confirmPlacement('xr');
-          }
         } else {
           const hit = raycastSurfaceInternal(
             { x: origin.x, y: origin.y, z: origin.z },
@@ -1617,6 +1621,22 @@ export function createTurretPlacementController(
 
       placementRays?.update(rayTargets);
       return activeValidation;
+    },
+    confirmXrPlacement(frame, referenceSpace, source) {
+      if (
+        !active ||
+        source !== aimingSourceFor(xrSources(frame)) ||
+        source.gamepad?.buttons[1]?.pressed
+      )
+        return;
+      const pose = frame.getPose(source.targetRaySpace, referenceSpace);
+      if (!pose) return;
+      const { position, orientation } = pose.transform;
+      const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(
+        new THREE.Quaternion(orientation.x, orientation.y, orientation.z, orientation.w),
+      );
+      controller.updateFromRay(position, direction, { stickY: xrStickY(source), dtSec: 0 });
+      controller.confirmPlacement('xr');
     },
     confirmPlacement(source = 'xr') {
       if (!lastValidation?.valid) {
@@ -1967,6 +1987,7 @@ export function createTurretPlacementController(
       placedTurretsGroup.removeFromParent();
       surfacePickGroup.removeFromParent();
 
+      stopRayOverlay?.();
       if (ownsPlacementRays && placementRays) {
         placementRays.dispose();
       }

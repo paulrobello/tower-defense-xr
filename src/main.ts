@@ -303,6 +303,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
   let currentSim: CombatSimulation = createCombatSimulation({
     seed,
+    autoLaunchInitialWave: false,
     navGraph: currentNavGraph,
     surfaces: roomModel.surfaces,
     coreAnchor: calibration.coreAnchor,
@@ -315,6 +316,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
   const placement = createTurretPlacementController({
     roomModel,
     scene: shell.scene,
+    rayOverlayRoot: shell.xrOverlayRoot,
     coreAnchor: () => calibration.coreAnchor,
     portalAnchors: () => calibration.portalAnchors,
     actionBus: bus,
@@ -474,6 +476,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
     currentSim = createCombatSimulation({
       seed,
+      autoLaunchInitialWave: false,
       navGraph: currentNavGraph,
       surfaces: roomModel.surfaces,
       coreAnchor: calibration.coreAnchor,
@@ -526,16 +529,27 @@ export function mountApp(container: HTMLElement): AppRuntime {
         if (shell.xr.session) {
           roomModel.setSession(shell.xr.session);
           detachRadialSession?.();
-          detachRadialSession = radialControls.attachSession(shell.xr.session, (event) => {
+          detachRadialSession = radialControls.attachSession(shell.xr.session, (start) => {
             const reference = shell.xr.reference;
-            if (state.phase !== 'calibrate' || !reference || !event.inputSource.gamepad) return;
-            const pose = event.frame.getPose(event.inputSource.targetRaySpace, reference);
-            if (!pose) return;
-            const { position, orientation } = pose.transform;
-            const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(
-              new THREE.Quaternion(orientation.x, orientation.y, orientation.z, orientation.w),
-            );
-            calibration.moveCoreByRay(position, direction);
+            if (!reference || !start.inputSource.gamepad || start.inputSource.hand) return null;
+            const phaseAtPress = state.phase;
+            if (phaseAtPress === 'calibrate') {
+              return (event) => {
+                if (state.phase !== 'calibrate') return;
+                const pose = event.frame.getPose(event.inputSource.targetRaySpace, reference);
+                if (!pose) return;
+                const { position, orientation } = pose.transform;
+                const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(
+                  new THREE.Quaternion(orientation.x, orientation.y, orientation.z, orientation.w),
+                );
+                calibration.moveCoreByRay(position, direction);
+              };
+            }
+            if (!placement.active) return null;
+            return (event) => {
+              if (state.phase !== phaseAtPress) return;
+              placement.confirmXrPlacement(event.frame, reference, event.inputSource);
+            };
           });
         }
 
@@ -746,11 +760,9 @@ export function mountApp(container: HTMLElement): AppRuntime {
       syncTacticalHud();
     }),
     bus.on('wave/launch', () => {
-      if (state.phase === 'calibrate') {
-        calibration.confirmLockCore();
-      }
+      if (state.phase !== 'prep' && state.phase !== 'intermission') return;
       const res = currentSim.launchWave();
-      if (res.ok && state.phase !== 'wave' && state.can('wave')) {
+      if (res.ok && state.can('wave')) {
         state.transition('wave', 'wave/launch');
       }
       blockouts.syncFromSim(currentSim.getState(), currentSim.drainEvents(), 0);

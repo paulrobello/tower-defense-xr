@@ -41,6 +41,7 @@ import {
   getTurretTierStats,
   MAX_ACTIVE_ENEMIES,
   RIFT_PORTAL_SPEC,
+  TURRET_BARREL_START_FRACTION,
   TURRET_MOUNT_PROFILES,
   type TurretKind,
   type TurretMountProfileId,
@@ -539,7 +540,7 @@ export function createBlockoutRenderer(
     const b = stats.blockout;
 
     headMesh.scale.set(b.headWidthM, b.headHeightM, b.headLengthM);
-    const barrelStartZ = b.headLengthM * 0.46;
+    const barrelStartZ = b.headLengthM * TURRET_BARREL_START_FRACTION;
 
     if (kind === 'autocannon') {
       if (tier === 'T1') {
