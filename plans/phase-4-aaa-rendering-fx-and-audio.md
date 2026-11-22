@@ -11,6 +11,7 @@
 ### Wave 1 (Parallel Runtime Asset Pipeline, Lighting & Audio Generation)
 
 #### `P4-T1`: Runtime GLB/KTX2 Asset Promotion, Off-Thread Streaming & Shader Precompilation Veil
+
 - **Dependencies:** `plans/phase-3-art-direction-and-blender-assets.md` (`P3-T2`, `P3-T4`, `P3-T5`, `P3-T6` owner-approved)
 - **Scope:**
   - Promote validated KTX2 GLBs, UI icon atlas, and key art from `assets-source/` to `public/assets/` with a checked-in runtime asset manifest (`public/assets/manifest.json`) verified against SHA-256 hashes.
@@ -20,6 +21,7 @@
 - **Verification:** Automated test verifies manifest hash integrity, zero missing bone/muzzle sockets, and zero new WebGL program links after load-veil dismissal; `make checkall` passes.
 
 #### `P4-T2`: AAA Lighting, Procedural IBL, Shadow-Catcher Tuning & Dimensional Rift Shader
+
 - **Dependencies:** `P4-T1`, `plans/phase-1-room-mr-and-placement.md` (`P1-T2`)
 - **Scope:**
   - Build `src/render/lighting.ts`: generate a crisp tactical procedural `PMREMGenerator` environment map (so brushed titanium and ceramic PBR metallic/roughness surfaces pop vividly in passthrough MR without heavy HDR downloads), 1 directional key light casting a tuned `1024×1024` PCF shadow map onto Core, turrets, enemies, and real-room shadow-catchers, plus a pool of `≤2` transient dynamic point lights for Plasma explosions and Broodlord pulses.
@@ -28,6 +30,7 @@
 - **Verification:** Visual GPU Playwright capture verifies metallic/ceramic reflections, floor/table shadow catchers, oblique-angle portal parallax with zero passthrough seam, and draw-call count `≤200` (both eyes); `make checkall` passes.
 
 #### `P4-T3`: GPU-Instanced Combat VFX & Particle Pools
+
 - **Dependencies:** `P4-T1`
 - **Scope:**
   - Implement `src/render/vfx-pool.ts` with pre-allocated zero-GC ring buffers across `InstancedMesh` batches (`≤2,500` active particles/tracers total):
@@ -39,6 +42,7 @@
 - **Verification:** Unit test proves zero runtime heap/geometry allocations in steady-state `tick()`, strict `≤2,500` cap enforcement, and clean disposal; GPU Playwright stress capture verifies draw-call overhead stays `≤12` extra draws for full Wave 12 VFX; `make checkall` passes.
 
 #### `P4-T4`: ElevenLabs Spatial SFX Production (~28 Cues) & `audition.html`
+
 - **Dependencies:** `plans/phase-2-combat-simulation-and-waves.md` (`P2-T4`)
 - **Scope:**
   - Execute `$create-game-audio-assets` → `$elevenlabs` (`eleven_text_to_sound_v2`) within the PRD pre-approved spend boundary (~28 SFX cues with 3× retry headroom):
@@ -53,6 +57,7 @@
 ### Wave 2 (Audio Integration & Music Mastering after `P4-T4` + Owner Suno WAVs)
 
 #### `P4-T5`: Suno Music Mastering & Spatial Web Audio Bus Integration
+
 - **Dependencies:** `P4-T1`, `P4-T4`, owner-supplied Suno WAVs from [`suno-music-prompt.md`](../suno-music-prompt.md)
 - **Scope:**
   - Archive Paul's downloaded Suno WAVs untouched under `assets-source/audio/music/raw/` with complete `provenance.json` (song ID, link, date, model `v6`, plan at generation, SHA-256).
@@ -61,6 +66,7 @@
 - **Verification:** Automated audio validator verifies post-encode LUFS, peak, gapless loop seam, and `0.5L + 0.5R` mono compatibility; Playwright browser audio test verifies gesture unlock, bounded voice count, mute/volume persistence, and clean missing-file resilience; `make checkall` passes.
 
 #### `P4-T6`: Tactical Sci-Fi Radial Menu Re-Skin (`RadialMenuTheme` + Higgsfield Icon Badges)
+
 - **Dependencies:** `plans/phase-1-room-mr-and-placement.md` (`P1-T5`), `plans/phase-3-art-direction-and-blender-assets.md` (`P3-T2` approved Higgsfield UI icons)
 - **Scope:**
   - Opt the `@par/xr-workspace` Build Wheel and Turret Command Wheel (`src/xr/radial-controls.ts`) into a bespoke **Rift Bastion Tactical Sci-Fi** `RadialMenuTheme` matching `docs/art-bible.md` (gunmetal/brushed-titanium wedge backing, subtle chamfered bezel ring, high-contrast cyan hover / amber affordability / crimson disabled states, crisp Troika SDF cost badges, and promoted Higgsfield RGBA turret & command icon decals on each wedge).
