@@ -52,7 +52,7 @@
 - **Dependencies:** `P5-T3`
 - **Scope:**
   - Complete and record Paul's physical Quest 3 acceptance checklist (`docs/verification/p5-quest3-acceptance.md`):
-    - **Seated (`Front 180° Arc`):** Comfortable Core placement, zero behind-the-back blind-siding, smooth floor/table/wall + mid-air hover-pod turret placement, readable SDF text and icons, comfortable 10–15 min pacing to Wave 12 Boss Victory.
+    - **Seated (`Front 180° Arc`):** Comfortable Core placement, zero behind-the-back blind-siding, smooth floor, table, wall, ceiling, and mid-air hover-pod turret placement, readable SDF text and icons, comfortable 10–15 min pacing to Wave 12 Boss Victory.
     - **Standing (`Full 360° Room`):** Wall/ceiling portal cutouts visually convincing at oblique angles, physical hand/furniture occlusion clean, floor/table shadows grounded, spatialized ElevenLabs SFX + Suno score clearly audible and unclipped on Quest speakers.
     - **Fallback & Persistence:** Test room-scan-denied virtual fallback, Settings survival across XR exit/re-entry, IndexedDB best score/stars persistence, and in-XR `Update: Reload` flow.
   - Deploy final verified release build to `https://rift-bastion.pardev.net/` (after explicit push approval per Git Workflow), run live production browser smoke + Quest Browser live-URL verification, and update `PRD.md` status and `README.md` phase table.

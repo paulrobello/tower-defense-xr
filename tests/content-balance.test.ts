@@ -95,6 +95,7 @@ describe('P2-T2 Content Data Tables & 12-Wave Mission Script', () => {
         'floor',
         'table',
         'wall',
+        'ceiling',
       ]);
       expect(TURRET_MOUNT_PROFILES['hover-pod'].minDistanceM).toBe(HOVER_POD_MIN_DEPTH_M);
       expect(TURRET_MOUNT_PROFILES['hover-pod'].maxDistanceM).toBe(HOVER_POD_MAX_DEPTH_M);

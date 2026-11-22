@@ -2,11 +2,11 @@
 
 ## State
 
-- November 22, 2026, Pacific time. Local `main` merges `origin/main` (`1939c78`) together with the unpublished Phase 3 asset and review commits awaiting Owner Checkpoint 2.
-- The verified public build on `origin/main` commit `1939c78` is `8fdcd8aad564`. [Live Quest build](https://rift-bastion.pardev.net/?v=8fdcd8aad564) · [CI and deployment](https://github.com/paulrobello/tower-defense-xr/actions/runs/45078687291)
+- November 22, 2026, Pacific time. Local `main` contains the public playtest fixes and unpublished Phase 3 asset and review commits awaiting Owner Checkpoint 2.
+- The verified public build on `origin/main` commit `ae65f0d` is `037506dfadf7`. [Live Quest build](https://rift-bastion.pardev.net/?v=037506dfadf7) · [CI and deployment](https://github.com/paulrobello/tower-defense-xr/actions/runs/45085086024)
 - Local `main` contains unpublished Phase 3 asset and review work. Base public playtest fixes on `origin/main` in a sibling worktree so the release contains only intended changes. The separate `codex/rift-radial-theme` worktree holds candidate `304e811` and its local review evidence. Paul granted standing approval to push and deploy verified Rift Bastion changes. Asset promotion still has its own approval checkpoint.
 
-### Completed in latest review & deploy pass (`origin/main` `1939c78` / build `8fdcd8aad564`)
+### Prior rendering pass (`1939c78` / build `8fdcd8aad564`)
 
 - **Rendering & occlusion audit and fixes** (224/224 unit tests, `make checkall-ci` + gitleaks, Metal GPU IWER P0/P1/P2 walks, 12/12 desktop campaign checks, and live Metal Chromium verification on `https://rift-bastion.pardev.net/?v=8fdcd8aad564` with zero console/CSP errors):
   - Moved scene lighting (`HemisphereLight`, shadow-casting `DirectionalLight`, rim light, Core glow) out of `test-room` to scene root and added procedural `RoomEnvironment` PMREM reflections + `PCFSoftShadowMap` shadows + `stencil: true` on `WebGLRenderer` (`src/desktop/bootstrap.ts`), fixing pitch-black PBR meshes in XR passthrough and enabling real floor/table shadows.
@@ -19,13 +19,16 @@
 
 ### Retest the Quest fixes on one build
 
-Use `8fdcd8aad564` for all three open playtest items. Test with **Auto Depth** and **Room Mesh** enabled, and use **Off** as the comparison if geometry disappears. Record the build, occlusion mode, tracked surface, controller hand, and whether the issue appears before or after **Lock Core**. The earlier controller and rendering checks ran in IWER.
+Use `037506dfadf7` for the open playtest items. Test with **Auto Depth** and **Room Mesh**, and use **Off** as the comparison if geometry disappears. Record the build, occlusion mode, tracked surface, controller hand, and whether the issue appears before or after **Lock Core**.
 
 | Item | Physical check still needed |
 | --- | --- |
 | `01a1ffabf1cd74fb930edf36f01a6b49` | Grip-drag the tactical HUD, Settings, and FPS widget. Confirm each stays at its released position and button state stays steady while gripping. Reposition the Core onto the same floor used by a turret. Verify the Core and rifts stay visible with **Room Mesh** enabled. |
 | `01a20205fd2a773f9004cc5cfffc9e5d` | Place and relocate floor and wall turrets. Verify their models extend into the room, hover pods cannot be committed through a surface, and portal edges stay stable from an oblique angle. |
 | `01a204103a7976208bd4b5dbe9ee4fa7` | Sweep the controller lasers across the room while idle and while placing. Verify placing turrets leaves the mission in prep beyond the former 20-second timeout. Press **Launch Wave** separately and check that shots leave the visible barrel in the direction it points. |
+| `01a2059e5d2372b2bf5ee09b50398e63` | Inspect the Core's soft contact shadow at a grazing floor angle. Mount a turret on the ceiling away from a rift, then look at wall rifts from the side with Auto Depth. Check whether the separate black rectangle recurs during Wave 1. Compare the same view in Room Mesh and Off. |
+
+The 3:27–3:29 PM PST captures and trace are in `.local/headset/quest-20261122-152920/`. The correction flips the WebXR depth coordinate to its top-left origin, clears stale depth when a view is missing, increases rift clearance, and applies depth occlusion to enemy health bars while suppressing close-to-eye quads. The exact black rectangle source remains open. The release passed all 224 tests, 44 Metal IWER checks including a ceiling placement, and 12 desktop campaign checks. Reports and captures are in `.local/quest-depth-evidence/`.
 
 ### Unblock and finish Phase 4
 
@@ -51,7 +54,7 @@ Use `8fdcd8aad564` for all three open playtest items. Test with **Auto Depth** a
 
 ## Unresolved issues
 
-- The rendering and occlusion fixes are deployed on `origin/main` (`1939c78`, build `8fdcd8aad564`) and verified in unit tests, Metal IWER, and live Metal Chromium, but physical Quest 3 hardware retesting is still required for the three open board items and to compare **Auto Depth** vs **Room Mesh** vs **Off** on real passthrough. Earlier hardware measurements are playtest evidence and leave the full Phase 5 frame floor open.
+- Build `037506dfadf7` awaits a physical Quest retest of the floor, ceilings, portal depth, and black rectangle in the table above. Earlier hardware measurements are playtest evidence and leave the full Phase 5 frame floor open.
 - Phase 3 runtime promotion is waiting on the recorded batch approval. Phase 4 music is waiting on the owner WAVs.
 
 ## Next steps

@@ -83,6 +83,14 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
     expect(renderer.coreBastion.energyCoreMesh.position.y).toBeLessThanOrEqual(
       CORE_BASTION_SPEC.heightM,
     );
+    const shadow = renderer.coreBastion.group.getObjectByName(
+      'core-bastion-contact-shadow',
+    ) as THREE.Mesh;
+    expect(shadow).toBeDefined();
+    expect(shadow.position.y).toBeGreaterThan(0);
+    expect((shadow.material as THREE.MeshBasicMaterial).depthWrite).toBe(false);
+    expect(renderer.coreBastion.pedestalMesh.castShadow).toBe(false);
+    expect(renderer.coreBastion.energyCoreMesh.castShadow).toBe(false);
 
     // 4 Rift Portals created with aperture mask meshes
     expect(renderer.portals.size).toBe(4);
@@ -424,6 +432,10 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
     hpMat.decompose(hpPos, hpQuat, hpScale);
     const camQuat = new THREE.Quaternion().setFromRotationMatrix(cam.matrixWorld);
     expect(Math.abs(hpQuat.dot(camQuat))).toBeCloseTo(1, 4);
+    cam.position.copy(hpPos).add(new THREE.Vector3(0, 0, 0.2));
+    renderer.syncFromSim(sim.getState(), [], 0, cam);
+    expect(renderer.hpBgInstancedMesh.count).toBe(0);
+    expect(renderer.hpFillInstancedMesh.count).toBe(0);
 
     // Enemy hit flash applies emissive response
     const enemyBlockout = renderer.enemies.get(enemy.id);

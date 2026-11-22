@@ -814,10 +814,10 @@ export function evaluateDepthOcclusionSample(params: {
     params.depthBias ??
     (role === 'portal-rim' ? DEFAULT_PORTAL_RIM_DEPTH_BIAS : DEFAULT_DEPTH_BIAS);
 
-  if (role === 'portal-mask') {
+  if (role === 'portal-mask' || role === 'portal-rim') {
     // Discard the aperture stencil mask only if a real foreground object (hand/furniture) sits
     // strictly closer than the portal wall plane minus foregroundMargin.
-    const occluded = envDepthMeters < viewDepthMeters - foregroundMargin;
+    const occluded = envDepthMeters < viewDepthMeters - Math.max(foregroundMargin, depthBias);
     return { occluded, bypassedByPortal: !occluded };
   }
 
@@ -843,7 +843,8 @@ export function evaluateDepthOcclusionSample(params: {
         }
       }
     }
-    return { occluded: false, bypassedByPortal: true };
+    const occluded = envDepthMeters < viewDepthMeters - foregroundMargin;
+    return { occluded, bypassedByPortal: !occluded };
   }
 
   if (role === 'world-object') {
@@ -974,13 +975,15 @@ bool rbShouldDiscardByDepth() {
     return false;
   }
   vec2 normViewUv = ( vRbOccClipPos.xy / vRbOccClipPos.w ) * 0.5 + 0.5;
+  // WebXR depth-view coordinates start at the top left, independently of clip space.
+  normViewUv.y = 1.0 - normViewUv.y;
   float envDepth = rbSampleEnvDepthMeters( normViewUv );
   if ( envDepth <= 0.001 ) {
     return false;
   }
   // Role 3: portal-mask (only discard when real foreground hand/furniture is closer than portal plane)
   if ( uRbOccRole > 2.5 ) {
-    return envDepth < ( vRbOccViewZ - uRbOccForegroundMargin );
+    return envDepth < ( vRbOccViewZ - max( uRbOccForegroundMargin, uRbOccDepthBias ) );
   }
   // Role 2: portal-interior (bypass wall depth; discard only if real foreground sits in front of aperture)
   if ( uRbOccRole > 1.5 ) {
@@ -1002,7 +1005,11 @@ bool rbShouldDiscardByDepth() {
         }
       }
     }
-    return false;
+    return envDepth < ( vRbOccViewZ - uRbOccForegroundMargin );
+  }
+  // Role 1: portal rim, using the same foreground separation as the aperture mask.
+  if ( uRbOccRole > 0.5 ) {
+    return envDepth < ( vRbOccViewZ - max( uRbOccForegroundMargin, uRbOccDepthBias ) );
   }
   // Role 0: world-object (emerging enemies/projectiles behind a portal aperture bypass the host wall)
   if ( uRbOccRole < 0.5 ) {
@@ -1631,11 +1638,13 @@ export function createOcclusionController(
   }
 
   function bindView(viewIndex: number): boolean {
-    const slot = viewSlots[viewIndex] ?? viewSlots[0];
+    const slot = viewSlots[viewIndex];
     if (!slot || slot.source === 'none' || !slot.activeTexture) {
+      uniforms.uRbOccEnabled.value = 0;
       return false;
     }
 
+    uniforms.uRbOccEnabled.value = resolveEffectiveMode() === 'depth-sensing' ? 1 : 0;
     if (slot.encoding === DEPTH_ENCODING_GPU_ARRAY_R) {
       uniforms.uRbDepthArrayTex.value = slot.activeTexture;
       uniforms.uRbDepthTex.value = dummyDepth2D;
@@ -1698,7 +1707,7 @@ export function createOcclusionController(
   }
 
   eyeBindMesh.onBeforeRender = (renderer, _scene, camera) => {
-    if (uniforms.uRbOccEnabled.value < 0.5) return;
+    if (resolveEffectiveMode() !== 'depth-sensing') return;
     const xrCamera = renderer.xr?.isPresenting
       ? (renderer.xr.getCamera() as unknown as { cameras?: readonly THREE.Camera[] })
       : undefined;
@@ -1849,15 +1858,14 @@ export function createOcclusionController(
         return resolveEffectiveMode();
       }
 
-      const viewCount = Math.min(viewerPose.views.length, viewSlots.length);
       let acquiredAny = false;
 
-      for (let i = 0; i < viewCount; i += 1) {
-        const view = viewerPose.views[i] as XRView;
+      for (let i = 0; i < viewSlots.length; i += 1) {
+        const view = viewerPose.views[i];
         const slot = viewSlots[i] as MutableDepthViewSlot;
         let updated = false;
 
-        if (canTryGpu && glBinding) {
+        if (view && canTryGpu && glBinding) {
           try {
             const gpuInfo = glBinding.getDepthInformation(view);
             if (gpuInfo) {
@@ -1868,7 +1876,7 @@ export function createOcclusionController(
           }
         }
 
-        if (!updated && canTryCpu) {
+        if (view && !updated && canTryCpu) {
           try {
             const cpuInfo = frame.getDepthInformation(view);
             if (cpuInfo) {
