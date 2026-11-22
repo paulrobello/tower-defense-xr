@@ -478,9 +478,9 @@ try {
     right.updateButtonValue('trigger', 1);
     await emu.frames(2);
     right.updateButtonValue('trigger', 0);
+    await emu.frames(2);
     right.updateAxes('thumbstick', 0, 0);
     app.placement.cancelPlacement();
-    await emu.frames(2);
 
     const placed = app.sim.getState().turrets.find((t) => t.kind === 'rail-sniper');
     const blockout = placed ? app.blockouts.turrets.get(placed.id) : undefined;

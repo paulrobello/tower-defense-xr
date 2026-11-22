@@ -6,9 +6,9 @@
 
 ## State
 
-- **Updated:** November 21, 2026 (Pacific time)
+- **Updated:** November 22, 2026 (Pacific time)
 - **Repo:** `/Users/probello/Repos/tower-defense-xr`, branch `main`. The existing local formatting edit in the Phase 4 plan is separate from this handoff.
-- **Public build:** [GitHub](https://github.com/paulrobello/tower-defense-xr) and [live test build](https://rift-bastion.pardev.net/). The Quest turret and portal correction was deployed at commit `f709146`, build `7cadf474cdb5`, on November 21, 2026. GitHub Actions passed Linux parity and Pages deploy. The live manifest matched the verified content hash. The local backup branch `codex/rift-pre-publication-history` retains the original history. [Deployment run](https://github.com/paulrobello/tower-defense-xr/actions/runs/44996036945)
+- **Public build:** [GitHub](https://github.com/paulrobello/tower-defense-xr) and [live test build](https://rift-bastion.pardev.net/). The Quest aim and input correction was deployed at commit `7f7ce09`, build `b83e975d348e`, on November 22, 2026. GitHub Actions passed Linux parity and Pages deploy. The live manifest matched the verified content hash. The local backup branch `codex/rift-pre-publication-history` retains the original history. [Deployment run](https://github.com/paulrobello/tower-defense-xr/actions/runs/45044276376)
 - **Completed work:**
   - **Phase 0 complete:** `P0-T1`–`P0-T6` closed. The local gates, 14/14 IWER smoke and build A→B Reload checks passed. [GitHub Actions](https://github.com/paulrobello/tower-defense-xr/actions/runs/44874742012) passed the pinned Linux gate and Pages deployment. The live manifest matched the verified build and Quest Browser rendered desktop calibration on its Adreno GPU. Immersive play and physical performance remain Phase 5 work.
   - **Phase 1 (100% complete):** `P1-T1`–`P1-T6` closed. `bun scripts/xr-emu/walk-p1.mjs` passes **19/19** checks (seated `1.2 m` `front-180` + standing `1.65 m` `full-360` calibration, floor/table/wall surface-clamp + thumbstick hover-pod `0.8–5.0 m`, `TOO_CLOSE` & `CAP 14/14` SDF labels, `auto-depth → room-mesh → off` cutouts).
@@ -39,6 +39,8 @@
 - Linux parity passed 219 tests and Metal IWER passed 14/14 smoke, 20/20 calibration and placement, and 8/8 combat checks. Regression fixtures verify the Core's contact height for a flipped, tilted floor, separate mesh and fitted surface transforms for portal openings, and trigger suppression while moving all three widgets. Follow-up card `01a1ffabf1cd74fb930edf36f01a6b49` awaits a physical check of grip moves, floor placement, and **Room Mesh** visibility. Phase 5 still owns instrumented pacing and both-posture acceptance.
 - The 8:17–8:18 PM PST headset captures showed wall and floor turrets obscured by their mounts and a speckled cyan portal rectangle. Build `7cadf474cdb5` orients floor and table turrets upward and wall turrets toward the aiming controller. Hover placement rejects depth beyond the first solid surface. Calibration and combat share the same portal rim, positioned clear of the host plane while the gameplay anchor stays on the surface.
 - Linux parity passed 220 tests. Metal IWER passed 14/14 smoke, 20/20 calibration and placement, and 8/8 combat checks. Regression evidence covers reversed scan normals at preview and commit, a blocked controller trigger beyond a wall, a successful placement after pulling the pod inside the room, and separate room and portal depth. Card `01a20205fd2a773f9004cc5cfffc9e5d` awaits the physical Quest retest.
+- The 8:03 AM PST Quest capture and owner report showed shot effects departing at an angle to the turret, intermittent controller rays, and unexpected Wave 1 launch. Build `b83e975d348e` computes heading relative to each mount and emits shots from the barrel, including mortar launch angles. Idle and placement rays draw in the XR overlay. One WebXR press owns either a UI action or a world action. Wave 1 waits for **Launch Wave**.
+- Linux parity passed 221 tests. Metal IWER passed 14/14 smoke, 21/21 calibration and placement, and 8/8 combat checks. Desktop campaign passed 12/12. Regression evidence includes all four weapons on floor and wall mounts, two idle ray angles with Room Mesh enabled, Wave 0 beyond the former timeout, and a separate trigger press to launch. Card `01a204103a7976208bd4b5dbe9ee4fa7` awaits a wearer retest.
 
 ### Next Up — Phase 3: Art Direction & Blender AAA Assets (2 open cards, `plans/phase-3-art-direction-and-blender-assets.md`)
 - **Wave 1 complete.**
@@ -116,5 +118,5 @@
 
 ## Next Steps (Recommended Resume Order)
 
-1. **Collect the Quest retest** on build `7cadf474cdb5`. Verify floor and wall turrets protrude into the room and the rift rim stays stable with Room Mesh enabled. Confirm grip moves, Core height, and Room Mesh visibility from the previous follow-up.
+1. **Collect the Quest retest** on build `b83e975d348e`. Place floor and wall turrets, verify the controller beams as you aim around the room, then press **Launch Wave** and check that shots follow the barrels. Confirm portal depth, grip moves, and Core height from earlier follow-ups.
 2. **Obtain approval at Owner Checkpoint 2.** Paul’s approval of the exact batch recorded in the art review closes the remaining creative criteria on `P3-T6` and `P3-T7`. `P4-T1` then promotes the approved package. The private radial theme candidate remains ready for its later transplant.

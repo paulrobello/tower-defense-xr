@@ -6,6 +6,7 @@ import {
   ENEMIES,
   ENEMY_IDS,
   getTurretTierStats,
+  TURRET_BARREL_START_FRACTION,
   TURRET_KINDS,
   type TurretKind,
 } from '../src/content/index.ts';
@@ -25,6 +26,48 @@ import {
 } from '../src/ui/threat-chevrons.ts';
 
 describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invaders, Instanced FX)', () => {
+  it('aligns the shot origin and launch direction with the displayed barrel on floor and wall mounts', () => {
+    for (const kind of TURRET_KINDS) {
+      for (const kindOfSurface of ['floor', 'wall'] as const) {
+        const scene = new THREE.Scene();
+        const renderer = createBlockoutRenderer(scene);
+        const sim = createCombatSimulation({ seed: 42 });
+        const wall = kindOfSurface === 'wall';
+        const turret = sim.placeTurret({
+          kind,
+          position: { x: 0, y: wall ? 1.1 : 0, z: -1 },
+          normal: wall ? { x: 0, y: 0, z: 1 } : { x: 0, y: 1, z: 0 },
+          mountProfile: 'surface-clamp',
+          surfaceKind: kindOfSurface,
+        }).turret;
+        if (!turret) throw new Error('Expected turret placement');
+        sim.debugSpawnEnemy('carapace-brute', {
+          position: { x: 0.65, y: 0.4, z: 0.25 },
+          hp: 2000,
+        });
+        const { state, events } = sim.tick();
+        const shot = events.find((event) => event.type === 'turret-fired');
+        if (!shot) throw new Error(`Expected a shot from ${kind}`);
+        renderer.syncFromSim(state, events, 1 / 60);
+        const displayed = renderer.turrets.get(turret.id);
+        if (!displayed) throw new Error('Expected the displayed turret');
+        const b = turret.stats.blockout;
+        const reach = b.headLengthM * TURRET_BARREL_START_FRACTION + b.barrelLengthM;
+        const muzzle = displayed.pitchCradle.localToWorld(new THREE.Vector3(0, 0, reach));
+        expect(muzzle.distanceTo(new THREE.Vector3().copy(shot.fromPosition))).toBeLessThan(1e-6);
+        const forward = displayed.pitchCradle.getWorldDirection(new THREE.Vector3());
+        const launch = new THREE.Vector3().copy(shot.toPosition).sub(muzzle);
+        if (kind === 'plasma-mortar') {
+          const shell = state.projectiles.find((projectile) => projectile.id === shot.projectileId);
+          if (!shell) throw new Error('Expected a mortar projectile');
+          launch.y += 4 * shell.arcHeightM;
+        }
+        expect(forward.dot(launch.normalize())).toBeCloseTo(1, 5);
+        renderer.dispose();
+      }
+    }
+  });
+
   it('creates Core Bastion and Rift Portals with aperture masks and reacts to core-hit events', () => {
     const scene = new THREE.Scene();
     const occlusion = createOcclusionController({ initialMode: 'auto-depth' });

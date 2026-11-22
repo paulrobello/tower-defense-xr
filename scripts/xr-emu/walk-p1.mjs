@@ -270,7 +270,7 @@ async function createEmulatedPage(url) {
           released.distanceTo(moved) < 0.005
         );
       },
-      async pressControl(name) {
+      async aimControl(name) {
         const app = window.__riftBastionApp;
         const control = app.shell.xrOverlayRoot.getObjectByName(name);
         if (!control) throw new Error(`Missing XR control ${name}`);
@@ -278,6 +278,9 @@ async function createEmulatedPage(url) {
         const head = window.__xrEmu.device.position;
         this.aimController('right', { x: head.x + 0.2, y: head.y - 0.23, z: head.z }, target);
         await window.__xrEmu.frames(3);
+      },
+      async pressControl(name) {
+        await this.aimControl(name);
         await this.pressButton('right', 'trigger', 2, 3);
       },
       setHeadPose(x, y, z, pitch = 0, yaw = 0) {
@@ -600,11 +603,13 @@ try {
       await window.__p1Helpers.pressControl('settings-close');
       const closedSettings = !app.xrSettings.visible && app.tacticalHud.xrRoot.visible;
       await window.__p1Helpers.pressControl('tactical-hud-primary-action');
+      for (let i = 0; i < 25 * 60; i += 1) app.sim.tick();
       return {
         openedSettings,
         closedSettings,
         phase: app.state.phase,
         locked: app.calibration.locked,
+        waveAfter25Seconds: app.sim.getState().currentWave,
         playArc: app.calibration.playArc,
       };
     });
@@ -613,7 +618,8 @@ try {
       seatedLocked.openedSettings === true &&
         seatedLocked.closedSettings === true &&
         seatedLocked.phase === 'prep' &&
-        seatedLocked.locked === true,
+        seatedLocked.locked === true &&
+        seatedLocked.waveAfter25Seconds === 0,
       seatedLocked,
     );
 
@@ -1183,6 +1189,60 @@ try {
         occlusionOff.xrSettingsClosed === true,
       occlusionOff,
     );
+
+    const inputOwnership = await page.evaluate(async () => {
+      const app = window.__riftBastionApp;
+      const controls = window.__p1Helpers;
+      const { device, frames } = window.__xrEmu;
+      const right = device.controllers.right;
+      app.settings.set('roomOcclusion', 'room-mesh');
+      app.placement.cancelPlacement();
+      const count = app.placement.turretCount;
+      const stillPreparing = app.state.phase === 'prep' && app.sim.getState().currentWave === 0;
+      const rays = app.shell.xrOverlayRoot.getObjectByName('rift-bastion-radial-rays');
+      const idleBeamWitnesses = [];
+      for (const x of [-2, 2]) {
+        controls.aimController('right', { x: 0.25, y: 1.15, z: 1.2 }, { x, y: 0.5, z: -0.6 });
+        await frames(3);
+        const beam = rays
+          .getObjectByName('placement-ray-right')
+          ?.getObjectByName('placement-ray-beam');
+        idleBeamWitnesses.push(
+          Boolean(beam?.visible && beam.parent.visible && !beam.material.depthTest),
+        );
+      }
+
+      // A press that starts in the room may not activate the HUD if the controller crosses it.
+      app.placement.beginBuild('autocannon');
+      await frames(3);
+      right.updateButtonValue('trigger', 1);
+      await frames(3);
+      const noCommitOnPress = app.placement.turretCount === count;
+      await controls.aimControl('tactical-hud-primary-action');
+      right.updateButtonValue('trigger', 0);
+      await frames(3);
+      const crossedHudWithoutLaunch = app.state.phase === 'prep';
+      await controls.pressControl('tactical-hud-primary-action');
+      return {
+        stillPreparing,
+        idleBeamWitnesses,
+        noCommitOnPress,
+        crossedHudWithoutLaunch,
+        deliberateLaunch: app.state.phase === 'wave' && app.sim.getState().currentWave === 1,
+        turretCountUnchanged: app.placement.turretCount === count,
+      };
+    });
+    record(
+      'xr-visible-idle-rays-and-distinct-wave-launch',
+      inputOwnership.stillPreparing &&
+        inputOwnership.idleBeamWitnesses.every(Boolean) &&
+        inputOwnership.noCommitOnPress &&
+        inputOwnership.crossedHudWithoutLaunch &&
+        inputOwnership.deliberateLaunch &&
+        inputOwnership.turretCountUnchanged,
+      inputOwnership,
+    );
+    await snap(page, '11-xr-room-mesh-controller-rays.jpg');
 
     // Clean XR session exit
     await page.evaluate(() => window.__riftBastionApp?.shell.xr.exit());

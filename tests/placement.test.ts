@@ -865,6 +865,7 @@ describe('Surface-relative & Core-relative anchor tracking sync and XR controlle
     gripPressed = true;
     triggerPressed = true;
     controller.updateFromXrFrame(xrFrame, referenceSpace, 1 / 72);
+    controller.confirmXrPlacement(xrFrame, referenceSpace, rightSource);
     expect(controller.turretCount).toBe(0);
 
     // Frame 3: Release Grip & Trigger
@@ -875,6 +876,8 @@ describe('Surface-relative & Core-relative anchor tracking sync and XR controlle
     // Frame 4: Clean Trigger press without Grip -> places turret on table
     triggerPressed = true;
     controller.updateFromXrFrame(xrFrame, referenceSpace, 1 / 72);
+    expect(controller.turretCount).toBe(0);
+    controller.confirmXrPlacement(xrFrame, referenceSpace, rightSource);
     expect(controller.turretCount).toBe(1);
     expect(controller.placedTurrets[0]?.surfaceKind).toBe('table');
 

@@ -165,7 +165,9 @@ export interface XrRadialControls {
   /** Attaches `selectstart`/`select`/`selectend` listeners directly to an `XRSession`. */
   attachSession(
     session: XRSession,
-    onWorldSelect?: (event: XRInputSourceEvent) => void,
+    captureWorldSelect?: (
+      event: XRInputSourceEvent,
+    ) => ((selection: XRInputSourceEvent) => void) | null,
   ): () => void;
   close(): void;
   reset(): void;
@@ -434,6 +436,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   const rayActions = new Map<XRInputSource, RadialChoiceId>();
   const rayCells = new Map<XRInputSource, string>();
   const panelPresses = new Map<XRInputSource, { panel: XrPanelTarget; cell: string }>();
+  const worldPresses = new Map<XRInputSource, (selection: XRInputSourceEvent) => void>();
   let pointedPanel: XrPanelTarget | null = null;
   let panelModal = false;
   const triggerStart = new Map<
@@ -493,9 +496,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   ): void {
     if (pointedPanel !== panel) pointedPanel?.setHovered(null);
     pointedPanel = panel;
-    if (!panel) return;
-
-    panel.root.updateWorldMatrix(true, true);
+    panel?.root.updateWorldMatrix(true, true);
     const beams: PlacementRayTarget[] = [];
     for (const source of sources) {
       if (source.hand || !source.gamepad) continue;
@@ -505,10 +506,17 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       const { position, orientation } = pose.transform;
       aimObject.position.set(position.x, position.y, position.z);
       aimObject.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
-      const hit = pointer.castFrom(aimObject, [panel.root]);
-      const cell = hit && panel.cellAt(hit.object);
+      const hit = panel ? pointer.castFrom(aimObject, [panel.root]) : null;
+      const cell = hit && panel?.cellAt(hit.object);
       if (cell) rayCells.set(source, cell);
-      if (hit || panelModal || options.isBusy?.()) {
+      if (
+        cell ||
+        !placement?.active ||
+        panelModal ||
+        anyGripHeld ||
+        options.isBusy?.() ||
+        menu?.root.visible
+      ) {
         beams.push({
           source,
           origin: aimObject.position.clone(),
@@ -519,7 +527,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         });
       }
     }
-    panel.setHovered(rayCells.values().next().value ?? null);
+    panel?.setHovered(rayCells.values().next().value ?? null);
     controllerRays.update(beams);
   }
 
@@ -717,6 +725,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
     triggerStart.clear();
     gripSuppressedTriggers.clear();
     panelPresses.clear();
+    worldPresses.clear();
     rayCells.clear();
     pointedPanel?.setHovered(null);
     pointedPanel = null;
@@ -822,6 +831,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
           gripPressedSources.delete(known);
           triggerStart.delete(known);
           panelPresses.delete(known);
+          worldPresses.delete(known);
           gripSuppressedTriggers.delete(known);
           rayActions.delete(known);
           if (selectingSource === known) selectingSource = null;
@@ -835,6 +845,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       if (gripHeld) {
         invalidatePendingTriggers();
         panelPresses.clear();
+        worldPresses.clear();
       }
       updateWidgetGrab(gripStarted, frame, referenceSpace);
 
@@ -869,6 +880,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         }
       }
 
+      let drewWheelRays = false;
       // Single-stick open when wheel is closed and neither grip nor busy state is active
       if (
         !menu?.root.visible &&
@@ -943,6 +955,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
           }
 
           controllerRays.update(beams);
+          drewWheelRays = true;
 
           // Hover precedence: active selecting press > deliberate owner stick tilt > opener laser > other laser > cancel
           const stickChoice = nav.choice();
@@ -955,11 +968,11 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
           menu.setHovered(hoveredAction);
           applyDisabledWedgeStyling(menu.root, activeItems);
         }
-      } else if (!menu?.root.visible) {
-        hoveredAction = null;
-        const panel = options.getPanel?.() ?? null;
+      }
+      if (!drewWheelRays) {
+        if (!menu?.root.visible) hoveredAction = null;
+        const panel = menu?.root.visible ? null : (options.getPanel?.() ?? null);
         updatePanelRays(panel?.root.visible ? panel : null, inputSources, frame, referenceSpace);
-        if (!pointedPanel) controllerRays.clear();
       }
       if (menu?.root.visible && pointedPanel) {
         pointedPanel.setHovered(null);
@@ -1044,20 +1057,30 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       const wasSuppressed = gripSuppressedTriggers.delete(source);
       return hadPress || hadPanelPress || wasSuppressed || Boolean(menu?.root.visible);
     },
-    attachSession(session, onWorldSelect) {
+    attachSession(session, captureWorldSelect) {
       const onSelectStart = (event: XRInputSourceEvent) => {
-        controls.handleSelectStart(event.inputSource);
+        const source = event.inputSource;
+        worldPresses.delete(source);
+        if (!controls.handleSelectStart(source)) {
+          const action = captureWorldSelect?.(event);
+          if (action) worldPresses.set(source, action);
+        }
       };
       const onSelect = (event: XRInputSourceEvent) => {
-        if (!controls.handleSelect(event.inputSource)) onWorldSelect?.(event);
+        const source = event.inputSource;
+        const worldAction = worldPresses.get(source);
+        worldPresses.delete(source);
+        if (!controls.handleSelect(source)) worldAction?.(event);
       };
       const onSelectEnd = (event: XRInputSourceEvent) => {
+        worldPresses.delete(event.inputSource);
         controls.handleSelectEnd(event.inputSource);
       };
       session.addEventListener('selectstart', onSelectStart);
       session.addEventListener('select', onSelect);
       session.addEventListener('selectend', onSelectEnd);
       return () => {
+        worldPresses.clear();
         session.removeEventListener('selectstart', onSelectStart);
         session.removeEventListener('select', onSelect);
         session.removeEventListener('selectend', onSelectEnd);

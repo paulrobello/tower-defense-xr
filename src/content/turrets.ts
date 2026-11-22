@@ -168,6 +168,9 @@ export interface TurretMeshBudget {
   readonly textureSizePx: number;
 }
 
+/** Common blockout barrel start along the pitched weapon's local +Z axis. */
+export const TURRET_BARREL_START_FRACTION = 0.46;
+
 export const DEFAULT_TURRET_MESH_BUDGET: TurretMeshBudget = {
   maxLod0Tris: 6500,
   maxLod1Tris: 2500,

@@ -70,6 +70,7 @@ import {
   TARGET_PRIORITIES,
   type TargetPriority,
   TOTAL_WAVES,
+  TURRET_BARREL_START_FRACTION,
   TURRET_FOOTPRINT_RADIUS_M,
   TURRET_KINDS,
   TURRET_MIN_SPACING_M,
@@ -738,6 +739,8 @@ export interface CombatSimulationConfig {
   readonly initialPhase?: SimCombatPhase;
   /** When `true`, starts Wave 1 immediately upon creation instead of waiting in `'prep'`. */
   readonly autoStartWave1?: boolean;
+  /** Allow the initial countdown to launch Wave 1 automatically. */
+  readonly autoLaunchInitialWave?: boolean;
   /** Initial prep countdown duration in seconds (defaults to `INITIAL_PREP_DURATION_SEC = 20`). */
   readonly initialPrepDurationSec?: number;
   /** Custom wave table override (defaults to `WAVES`). */
@@ -1060,10 +1063,12 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
   let phase: SimCombatPhase = config.initialPhase ?? 'prep';
   let currentWave = 0;
   let wavesCleared = 0;
-  let prepRemainingSec =
-    typeof config.initialPrepDurationSec === 'number' && config.initialPrepDurationSec >= 0
+  const autoLaunchInitialWave = config.autoLaunchInitialWave ?? true;
+  let prepRemainingSec = autoLaunchInitialWave
+    ? typeof config.initialPrepDurationSec === 'number' && config.initialPrepDurationSec >= 0
       ? config.initialPrepDurationSec
-      : INITIAL_PREP_DURATION_SEC;
+      : INITIAL_PREP_DURATION_SEC
+    : 0;
   let intermissionRemainingSec = 0;
   let waveElapsedSec = 0;
 
@@ -1643,16 +1648,48 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
     return best;
   }
 
-  function updateTurretAimAngles(turret: SimTurret, targetPos: Readonly<Vec3>): void {
-    const dx = targetPos.x - turret.position.x;
-    const dy = targetPos.y - turret.position.y;
-    const dz = targetPos.z - turret.position.z;
-    const horizDist = Math.hypot(dx, dz);
-    turret.yaw = Math.atan2(dx, dz);
-    turret.pitch = Math.atan2(dy, Math.max(1e-5, horizDist));
+  function aimTurret(
+    turret: SimTurret,
+    targetPos: Readonly<Vec3>,
+  ): {
+    muzzle: Vec3;
+    arcHeightM: number;
+  } {
+    const blockout = turret.stats.blockout;
+    const { right, up, forward } = turret.pose;
+    const pivotHeight = blockout.baseHeightM + blockout.headHeightM / 2;
+    const pivot = {
+      x: turret.position.x + up.x * pivotHeight,
+      y: turret.position.y + up.y * pivotHeight,
+      z: turret.position.z + up.z * pivotHeight,
+    };
+    const arcHeightM =
+      turret.kind === 'plasma-mortar'
+        ? Math.min(1.35, Math.max(0.35, distanceVec3(pivot, targetPos) * 0.35))
+        : 0;
+    const dx = targetPos.x - pivot.x;
+    // The derivative of the mortar's parabolic lift at launch is four times its arc height.
+    const dy = targetPos.y - pivot.y + 4 * arcHeightM;
+    const dz = targetPos.z - pivot.z;
+    const localX = dx * right.x + dy * right.y + dz * right.z;
+    const localY = dx * up.x + dy * up.y + dz * up.z;
+    const localZ = dx * forward.x + dy * forward.y + dz * forward.z;
+    turret.yaw = Math.atan2(localX, localZ);
+    turret.pitch = Math.atan2(localY, Math.hypot(localX, localZ));
+    const barrelReach =
+      blockout.headLengthM * TURRET_BARREL_START_FRACTION + blockout.barrelLengthM;
+    const muzzleScale = barrelReach / (Math.hypot(dx, dy, dz) || 1);
+    return {
+      muzzle: {
+        x: pivot.x + dx * muzzleScale,
+        y: pivot.y + dy * muzzleScale,
+        z: pivot.z + dz * muzzleScale,
+      },
+      arcHeightM,
+    };
   }
 
-  function fireAutocannon(turret: SimTurret, target: SimEnemy): void {
+  function fireAutocannon(turret: SimTurret, target: SimEnemy, muzzle: Vec3): void {
     const stats = turret.stats;
     const mult = computeEffectiveDamageMultiplier({
       enemyId: target.enemyId,
@@ -1673,7 +1710,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       tier: turret.tier,
       damageType: 'kinetic',
       targetEnemyId: target.id,
-      fromPosition: cloneVec3(turret.position),
+      fromPosition: muzzle,
       toPosition: cloneVec3(target.position),
       projectileId: null,
     });
@@ -1686,18 +1723,17 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
     });
   }
 
-  function firePlasmaMortar(turret: SimTurret, target: SimEnemy): void {
+  function firePlasmaMortar(
+    turret: SimTurret,
+    target: SimEnemy,
+    startPos: Vec3,
+    arcHeightM: number,
+  ): void {
     const stats = turret.stats;
-    const startPos: Vec3 = {
-      x: turret.position.x,
-      y: turret.position.y + stats.blockout.muzzleOffsetM.y,
-      z: turret.position.z,
-    };
     const targetPos = cloneVec3(target.position);
     const dist = Math.max(0.25, distanceVec3(startPos, targetPos));
     const speedMps = Math.max(1.0, stats.projectileSpeedMps);
     const flightDurationSec = Math.max(SIM_FIXED_DT, dist / speedMps);
-    const arcHeightM = Math.min(1.35, Math.max(0.35, dist * 0.35));
 
     const projectileId = `proj-${nextProjectileSeq++}`;
     const projectile: SimProjectile = {
@@ -1747,7 +1783,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
     });
   }
 
-  function fireCryoArc(turret: SimTurret, primaryTarget: SimEnemy): void {
+  function fireCryoArc(turret: SimTurret, primaryTarget: SimEnemy, muzzle: Vec3): void {
     const stats = turret.stats;
     const chainedTargets: SimEnemy[] = [primaryTarget];
     const visitedIds = new Set<string>([primaryTarget.id]);
@@ -1783,7 +1819,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       tier: turret.tier,
       damageType: 'cryo',
       targetEnemyId: primaryTarget.id,
-      fromPosition: cloneVec3(turret.position),
+      fromPosition: muzzle,
       toPosition: cloneVec3(primaryTarget.position),
       projectileId: null,
     });
@@ -1826,9 +1862,8 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
     }
   }
 
-  function fireRailSniper(turret: SimTurret, primaryTarget: SimEnemy): void {
+  function fireRailSniper(turret: SimTurret, primaryTarget: SimEnemy, startPos: Vec3): void {
     const stats = turret.stats;
-    const startPos = turret.position;
     const toTarget = {
       x: primaryTarget.position.x - startPos.x,
       y: primaryTarget.position.y - startPos.y,
@@ -1843,7 +1878,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
 
     // Find any additional enemies pierced along the 3D line-of-sight beam up to `rangeM`
     const candidatesInRange = enemySpatialHash.queryRadius(
-      startPos,
+      turret.position,
       stats.rangeM,
       (e) => e.hp > 0 && e.id !== primaryTarget.id,
     );
@@ -2059,7 +2094,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       }
 
       turret.targetEnemyId = target.id;
-      updateTurretAimAngles(turret, target.position);
+      const { muzzle, arcHeightM } = aimTurret(turret, target.position);
 
       if (turret.fireCooldownSec <= 1e-7) {
         turret.fireCooldownSec = turret.stats.fireIntervalSec;
@@ -2067,16 +2102,16 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
 
         switch (turret.kind) {
           case 'autocannon':
-            fireAutocannon(turret, target);
+            fireAutocannon(turret, target, muzzle);
             break;
           case 'plasma-mortar':
-            firePlasmaMortar(turret, target);
+            firePlasmaMortar(turret, target, muzzle, arcHeightM);
             break;
           case 'cryo-arc':
-            fireCryoArc(turret, target);
+            fireCryoArc(turret, target, muzzle);
             break;
           case 'rail-sniper':
-            fireRailSniper(turret, target);
+            fireRailSniper(turret, target, muzzle);
             break;
         }
       }
@@ -2283,6 +2318,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
     if (phase === 'victory' || phase === 'defeat') return;
 
     if (phase === 'prep') {
+      if (!autoLaunchInitialWave) return;
       prepRemainingSec = Math.max(0, prepRemainingSec - dt);
       if (prepRemainingSec <= 1e-7) {
         beginWave(1, 0);
