@@ -37,7 +37,6 @@ import type { CoreAnchor, PortalAnchor } from '../src/xr/calibration.ts';
 import {
   createTurretGhostPreview,
   createTurretPlacementController,
-  GHOST_COLOR_HOVER_VALID,
   GHOST_COLOR_INVALID,
   GHOST_COLOR_SURFACE_VALID,
 } from '../src/xr/placement.ts';
@@ -107,6 +106,49 @@ describe('src/sim/placement-rules.ts pure TypeScript boundary', () => {
 });
 
 describe('Surface-normal mount alignment (floor, table, walls, and tilted planes)', () => {
+  it('previews and commits mounts on the room-facing sides of reversed floor and wall scans', () => {
+    const floor = makeRectSurface({
+      id: 'downward-floor',
+      semanticLabel: 'floor',
+      center: new THREE.Vector3(),
+      normal: new THREE.Vector3(0, -1, 0),
+      width: 5,
+      depth: 5,
+    });
+    const wall = makeRectSurface({
+      id: 'outward-wall',
+      semanticLabel: 'wall',
+      center: new THREE.Vector3(0, 1.4, -2),
+      normal: new THREE.Vector3(0, 0, -1),
+      width: 4,
+      depth: 2.8,
+    });
+    const roomModel = createRoomSurfaceModel({
+      initialMode: 'virtual-fallback',
+      virtualSurfacesProvider: () => [floor, wall],
+    });
+    const placement = createTurretPlacementController({ roomModel, initialCredits: 1000 });
+    const origin = { x: 0, y: 1.4, z: 0 };
+
+    for (const [aim, surface, roomNormal] of [
+      [{ x: 0, y: -1, z: 0 }, floor, new THREE.Vector3(0, 1, 0)],
+      [{ x: 0, y: 0, z: -1 }, wall, new THREE.Vector3(0, 0, 1)],
+    ] as const) {
+      placement.beginBuild('autocannon');
+      const preview = placement.updateFromRay(origin, aim);
+      expect(preview.valid).toBe(true);
+      expect(preview.surfaceId).toBe(surface.id);
+      expect(roomNormal.dot(new THREE.Vector3().copy(preview.pose.normal))).toBeCloseTo(1);
+      const placed = placement.confirmPlacement('xr');
+      if (!placed) throw new Error('Expected a committed surface mount');
+      expect(
+        roomNormal.dot(new THREE.Vector3(0, 1, 0).applyQuaternion(placed.visual.quaternion)),
+      ).toBeCloseTo(1);
+      expect(placed.surfaceAnchor?.tracked).toBe(true);
+    }
+    placement.dispose();
+  });
+
   it('aligns surface-clamp local +Y axis exactly to floor, table, and wall outward normals', () => {
     const cases: Array<{ label: string; normal: Vec3; position: Vec3 }> = [
       { label: 'floor (+Y)', normal: { x: 0, y: 1, z: 0 }, position: { x: 0.4, y: 0, z: -1.1 } },
@@ -332,12 +374,13 @@ describe('Thumbstick push/pull hover-pod depth clamping (0.8–5.0 m) & surface 
       stickY: 0.9,
       dtSec: 0.25,
     });
-    expect(hoverResult.valid).toBe(true);
+    expect(hoverResult.reason).toBe('BLOCKED_BY_SURFACE');
+    expect(controller.confirmPlacement()).toBeNull();
     expect(hoverResult.mountProfile).toBe('hover-pod');
     expect(controller.mountMode).toBe('hover-pod');
     expect(controller.hoverDepthM).toBeGreaterThanOrEqual(HOVER_POD_MIN_DEPTH_M);
     expect(controller.hoverDepthM).toBeLessThanOrEqual(HOVER_POD_MAX_DEPTH_M);
-    expect(controller.ghost.state.colorHex).toBe(GHOST_COLOR_HOVER_VALID);
+    expect(controller.ghost.state.colorHex).toBe(GHOST_COLOR_INVALID);
     expect(controller.ghost.clampMountGroup.visible).toBe(false);
     expect(controller.ghost.hoverPodGroup.visible).toBe(true);
 

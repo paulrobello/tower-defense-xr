@@ -69,6 +69,7 @@ export const PLACEMENT_INVALID_REASONS = [
   'OVERHANG',
   'CORE_ZONE',
   'PORTAL_ZONE',
+  'BLOCKED_BY_SURFACE',
   'OUT_OF_RANGE',
   'INSUFFICIENT_CREDITS',
   'INVALID_SURFACE',
@@ -84,6 +85,7 @@ export const PLACEMENT_REASON_LABELS: Readonly<Record<PlacementInvalidReason, st
     OVERHANG: 'OVERHANG',
     CORE_ZONE: 'CORE ZONE',
     PORTAL_ZONE: 'PORTAL ZONE',
+    BLOCKED_BY_SURFACE: 'BLOCKED BY SURFACE',
     OUT_OF_RANGE: 'OUT OF RANGE',
     INSUFFICIENT_CREDITS: 'NO CREDITS',
     INVALID_SURFACE: 'INVALID SURFACE',
@@ -304,6 +306,8 @@ export interface TurretPlacementCandidate extends PlacementValidationContext {
   readonly rayOrigin?: Readonly<Vec3>;
   /** Optional explicit ray distance in meters. */
   readonly rayDistanceM?: number;
+  /** Distance along the placement ray to the first solid room surface. */
+  readonly blockingSurfaceDistanceM?: number;
   /** Optional explicit hover-pod depth in meters. */
   readonly depthM?: number;
   /** Optional forward orientation hint for computing the turret mount pose. */
@@ -1099,12 +1103,24 @@ export function validateTurretPlacement(
     candidate.surfaceNormal ??
     surface?.normal ??
     ({ x: 0, y: 1, z: 0 } as const);
+  const rayOrigin = candidate.rayOrigin;
+  const flipNormal =
+    rawSurfaceKind === 'wall' && rayOrigin
+      ? dotVec3(rawNormal, {
+          x: rayOrigin.x - candidate.position.x,
+          y: rayOrigin.y - candidate.position.y,
+          z: rayOrigin.z - candidate.position.z,
+        }) < 0
+      : (rawSurfaceKind === 'floor' || rawSurfaceKind === 'table') && rawNormal.y < 0;
+  const mountNormal = flipNormal
+    ? { x: -rawNormal.x, y: -rawNormal.y, z: -rawNormal.z }
+    : rawNormal;
 
-  const pose: TurretMountPose =
+  const pose =
     mountProfile === 'surface-clamp'
       ? computeSurfaceMountPose({
           position: candidate.position,
-          normal: rawNormal,
+          normal: mountNormal,
           forwardHint: candidate.forwardHint,
           surfaceId,
           surfaceKind: rawSurfaceKind,
@@ -1162,7 +1178,7 @@ export function validateTurretPlacement(
   if (typeof candidate.rayDistanceM === 'number' && Number.isFinite(candidate.rayDistanceM)) {
     distanceM = candidate.rayDistanceM;
   } else if (
-    mountProfile === 'hover-pod' &&
+    pose.mountProfile === 'hover-pod' &&
     typeof candidate.depthM === 'number' &&
     Number.isFinite(candidate.depthM)
   ) {
@@ -1205,6 +1221,13 @@ export function validateTurretPlacement(
   }
 
   // 3. Range / depth check
+  if (
+    pose.mountProfile === 'hover-pod' &&
+    candidate.blockingSurfaceDistanceM !== undefined &&
+    pose.depthM + footprintRadiusM > candidate.blockingSurfaceDistanceM
+  ) {
+    reasons.push('BLOCKED_BY_SURFACE');
+  }
   if (distanceM !== null) {
     if (mountProfile === 'surface-clamp') {
       if (
