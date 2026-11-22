@@ -16,6 +16,26 @@ Room-scale WebXR mixed-reality tactical sci-fi tower defense for Meta Quest 3 (s
 - Pure TypeScript simulation under `src/sim/` and `src/nav/` (zero Three.js or WASM dependencies).
 - Reserved ports (`~/.claude/used_ports.md`): `4272` (dev + Quest USB/LAN preview), `4273` (production preview + isolated browser verification).
 
+## Commands
+
+- `make dev` — dev server on `4272` (binds `0.0.0.0` for Quest USB/LAN preview); `make dev-restart` / `make dev-stop` manage it, `make preview` serves the production build on `4273`.
+- Single test file: `bun run test -- tests/sim-engine.test.ts` (verified form); single case: append `-t "case name"`.
+- `make model-check` — Blender asset gate (`tests/test_model_check.py` + `scripts/validate_glbs.py`).
+
+## Architecture
+
+Hard dependency rule: `src/core/`, `src/content/`, `src/sim/`, `src/nav/` are pure TypeScript with zero Three.js/WASM imports; render/XR/UI layers consume them, never the reverse.
+
+- `src/core/` — action bus, seeded PRNG streams, game state machine.
+- `src/sim/` — authoritative combat simulation (`engine.ts`), placement rules, spatial hash.
+- `src/nav/` — navigation graph over scanned room surfaces; rebuilt only at explicit gates (e.g. Lock Core), never per scan event (per-scan rebuilds froze Quest calibration at ~1.3 s/rebuild).
+- `src/content/` — deterministic balance data: turrets, enemies, waves, portal spec.
+- `src/render/` + `src/mr/` — blockout renderer; room scan, occlusion, shadow catchers, virtual room surfaces.
+- `src/xr/` — WebXR session, Core calibration, turret placement, radial controls. `src/desktop/` — desktop parity shell and controls.
+- `src/ui/` — HUD/overlays (troika text). `src/perf/` — perf HUD + 1-second-bin recorder backing the FPS-floor gate. `src/settings/` + `src/persist/` — settings and IndexedDB persistence.
+- `src/main.ts` is the composition root wiring every controller; unit tests mirror modules in `tests/` (vitest, happy-dom); XR verification is scripted IWER walks under `scripts/xr-emu/`.
+- Assets flow `assets-source/` → `blender/` generators → `make model-check` → promotion into `public/assets/` (`scripts/prepare-assets.ts` runs on every dev/build).
+
 ## Verification Gates
 
 - Fast gate: `make checkall` (`lint` + `typecheck` + `test` + `build`)
