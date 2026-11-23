@@ -56,18 +56,21 @@ export function createLightingController(
 
   const keyLight = new THREE.DirectionalLight('#f8fafc', 1.75);
   keyLight.name = 'aaa-key-light';
-  keyLight.position.set(2.4, 3.8, 2.0);
+  const keyLightOffset = new THREE.Vector3(2.2, 3.6, 1.8);
+  keyLight.position.copy(keyLightOffset);
   keyLight.castShadow = true;
   keyLight.shadow.mapSize.set(1024, 1024);
-  keyLight.shadow.camera.near = 0.4;
-  keyLight.shadow.camera.far = 12;
-  keyLight.shadow.camera.left = -4;
-  keyLight.shadow.camera.right = 4;
-  keyLight.shadow.camera.top = 4;
-  keyLight.shadow.camera.bottom = -4;
-  keyLight.shadow.bias = -0.00045;
-  keyLight.shadow.normalBias = 0.02;
+  keyLight.shadow.camera.near = 0.5;
+  keyLight.shadow.camera.far = 10;
+  keyLight.shadow.camera.left = -3.2;
+  keyLight.shadow.camera.right = 3.2;
+  keyLight.shadow.camera.top = 3.2;
+  keyLight.shadow.camera.bottom = -3.2;
+  keyLight.shadow.radius = 2.5;
+  keyLight.shadow.bias = -0.0003;
+  keyLight.shadow.normalBias = 0.025;
   group.add(keyLight);
+  group.add(keyLight.target);
 
   const rimLight = new THREE.DirectionalLight('#38bdf8', 0.65);
   rimLight.name = 'aaa-rim-light';
@@ -123,6 +126,12 @@ export function createLightingController(
     },
     setCorePosition(position) {
       coreGlowLight.position.set(position.x, position.y + 0.56, position.z);
+      keyLight.target.position.set(position.x, position.y, position.z);
+      keyLight.position.set(
+        position.x + keyLightOffset.x,
+        position.y + keyLightOffset.y,
+        position.z + keyLightOffset.z,
+      );
     },
     setCoreState(hpRatio, isHitFlash) {
       if (isHitFlash) {

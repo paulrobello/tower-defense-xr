@@ -135,6 +135,7 @@ export interface DepthOcclusionUniforms {
   readonly uRbDepthArrayTex: { value: THREE.Texture };
   readonly uRbDepthEncoding: { value: number };
   readonly uRbDepthArrayLayer: { value: number };
+  readonly uRbDepthTexSize: { value: THREE.Vector2 };
   readonly uRbNormDepthFromNormView: { value: THREE.Matrix4 };
   readonly uRbRawValueToMeters: { value: number };
   readonly uRbPortalCount: { value: number };
@@ -934,6 +935,7 @@ uniform sampler2DArray uRbDepthArrayTex;
 #endif
 uniform float uRbDepthEncoding;
 uniform float uRbDepthArrayLayer;
+uniform vec2 uRbDepthTexSize;
 uniform mat4 uRbNormDepthFromNormView;
 uniform float uRbRawValueToMeters;
 uniform int uRbPortalCount;
@@ -947,11 +949,7 @@ varying vec3 vRbOccWorldPos;
 varying vec4 vRbOccClipPos;
 varying float vRbOccViewZ;
 
-float rbSampleEnvDepthMeters( vec2 normViewUv ) {
-  vec2 depthUv = ( uRbNormDepthFromNormView * vec4( normViewUv, 0.0, 1.0 ) ).xy;
-  if ( depthUv.x < 0.0 || depthUv.x > 1.0 || depthUv.y < 0.0 || depthUv.y > 1.0 ) {
-    return 0.0;
-  }
+float rbSampleRawDepthMeters( vec2 depthUv ) {
   if ( uRbDepthEncoding < 0.5 ) {
     vec2 rg = texture2D( uRbDepthTex, depthUv ).rg;
     return dot( rg, vec2( 255.0, 65280.0 ) ) * uRbRawValueToMeters;
@@ -968,6 +966,76 @@ float rbSampleEnvDepthMeters( vec2 normViewUv ) {
   #else
   return texture2D( uRbDepthTex, depthUv ).r * uRbRawValueToMeters;
   #endif
+}
+
+float rbSampleEnvDepthMeters( vec2 normViewUv ) {
+  vec2 depthUv = ( uRbNormDepthFromNormView * vec4( normViewUv, 0.0, 1.0 ) ).xy;
+  if ( depthUv.x < 0.0 || depthUv.x > 1.0 || depthUv.y < 0.0 || depthUv.y > 1.0 ) {
+    return 0.0;
+  }
+  if ( uRbDepthTexSize.x <= 1.5 || uRbDepthTexSize.y <= 1.5 ) {
+    return rbSampleRawDepthMeters( depthUv );
+  }
+  // Software 2x2 bilinear interpolation over decoded meter depths eliminates blocky NearestFilter
+  // stair-stepping from low-resolution Quest CPU depth textures without corrupting packed uint16 bytes.
+  vec2 invSize = 1.0 / uRbDepthTexSize;
+  vec2 texelPos = depthUv * uRbDepthTexSize - 0.5;
+  vec2 base = floor( texelPos );
+  vec2 f = clamp( texelPos - base, 0.0, 1.0 );
+  vec2 uv00 = clamp( ( base + vec2( 0.5, 0.5 ) ) * invSize, 0.0, 1.0 );
+  vec2 uv10 = clamp( ( base + vec2( 1.5, 0.5 ) ) * invSize, 0.0, 1.0 );
+  vec2 uv01 = clamp( ( base + vec2( 0.5, 1.5 ) ) * invSize, 0.0, 1.0 );
+  vec2 uv11 = clamp( ( base + vec2( 1.5, 1.5 ) ) * invSize, 0.0, 1.0 );
+
+  float d00 = rbSampleRawDepthMeters( uv00 );
+  float d10 = rbSampleRawDepthMeters( uv10 );
+  float d01 = rbSampleRawDepthMeters( uv01 );
+  float d11 = rbSampleRawDepthMeters( uv11 );
+
+  float w00 = d00 > 0.001 ? ( 1.0 - f.x ) * ( 1.0 - f.y ) : 0.0;
+  float w10 = d10 > 0.001 ? f.x * ( 1.0 - f.y ) : 0.0;
+  float w01 = d01 > 0.001 ? ( 1.0 - f.x ) * f.y : 0.0;
+  float w11 = d11 > 0.001 ? f.x * f.y : 0.0;
+  float wSum = w00 + w10 + w01 + w11;
+  if ( wSum <= 0.0001 ) {
+    return 0.0;
+  }
+  return ( d00 * w00 + d10 * w10 + d01 * w01 + d11 * w11 ) / wSum;
+}
+
+float rbPortalForegroundAlpha() {
+  if ( uRbOccEnabled < 0.5 || vRbOccClipPos.w <= 0.0001 ) {
+    return 1.0;
+  }
+  vec2 normViewUv = ( vRbOccClipPos.xy / vRbOccClipPos.w ) * 0.5 + 0.5;
+  normViewUv.y = 1.0 - normViewUv.y;
+  float envDepth = rbSampleEnvDepthMeters( normViewUv );
+  if ( envDepth <= 0.001 ) {
+    return 1.0;
+  }
+  float refViewZ = vRbOccViewZ;
+  if ( uRbOccRole > 1.5 && uRbOccRole < 2.5 ) {
+    for ( int i = 0; i < ${MAX_PORTAL_APERTURES}; i++ ) {
+      if ( i >= uRbPortalCount ) break;
+      vec2 radii = uRbPortalRadii[i];
+      if ( radii.x <= 0.0001 || radii.y <= 0.0001 ) continue;
+      vec3 localFrag = ( uRbPortalInvWorld[i] * vec4( vRbOccWorldPos, 1.0 ) ).xyz;
+      vec3 localEye = ( uRbPortalInvWorld[i] * vec4( cameraPosition, 1.0 ) ).xyz;
+      if ( localEye.z > 0.001 && localFrag.z <= uRbOccDepthBias ) {
+        float denom = localEye.z - localFrag.z;
+        if ( denom > 0.0001 ) {
+          float t = localEye.z / denom;
+          vec2 hitXY = mix( localEye.xy, localFrag.xy, t ) / radii;
+          if ( dot( hitXY, hitXY ) <= 1.0 ) {
+            refViewZ = vRbOccViewZ * t;
+            break;
+          }
+        }
+      }
+    }
+  }
+  float cutoff = refViewZ - uRbOccForegroundMargin;
+  return smoothstep( cutoff, cutoff + 0.06, envDepth );
 }
 
 bool rbShouldDiscardByDepth() {
@@ -1125,6 +1193,7 @@ export function applyDepthOcclusion(
       uRbDepthArrayTex: controller.uniforms.uRbDepthArrayTex,
       uRbDepthEncoding: controller.uniforms.uRbDepthEncoding,
       uRbDepthArrayLayer: controller.uniforms.uRbDepthArrayLayer,
+      uRbDepthTexSize: controller.uniforms.uRbDepthTexSize,
       uRbNormDepthFromNormView: controller.uniforms.uRbNormDepthFromNormView,
       uRbRawValueToMeters: controller.uniforms.uRbRawValueToMeters,
       uRbPortalCount: controller.uniforms.uRbPortalCount,
@@ -1147,6 +1216,16 @@ export function applyDepthOcclusion(
       shader.fragmentShader = `${FRAGMENT_DECL}\n${shader.fragmentShader}`.replace(
         'void main() {',
         'void main() {\n  if ( rbShouldDiscardByDepth() ) discard;\n',
+      );
+    }
+    if (
+      role === 'portal-interior' &&
+      shader.fragmentShader.includes('// RB_PORTAL_ALPHA_HOOK') &&
+      !shader.fragmentShader.includes('alpha *= rbPortalForegroundAlpha()')
+    ) {
+      shader.fragmentShader = shader.fragmentShader.replace(
+        '// RB_PORTAL_ALPHA_HOOK',
+        'alpha *= rbPortalForegroundAlpha();',
       );
     }
   };
@@ -1434,6 +1513,7 @@ export function createOcclusionController(
     uRbDepthArrayTex: { value: dummyDepthArray },
     uRbDepthEncoding: { value: DEPTH_ENCODING_CPU_RG8_UINT16 },
     uRbDepthArrayLayer: { value: 0 },
+    uRbDepthTexSize: { value: new THREE.Vector2(1, 1) },
     uRbNormDepthFromNormView: { value: new THREE.Matrix4() },
     uRbRawValueToMeters: { value: 1 },
     uRbPortalCount: { value: 0 },
@@ -1655,6 +1735,7 @@ export function createOcclusionController(
 
     uniforms.uRbDepthEncoding.value = slot.encoding;
     uniforms.uRbDepthArrayLayer.value = slot.arrayLayer;
+    uniforms.uRbDepthTexSize.value.set(Math.max(1, slot.width), Math.max(1, slot.height));
     uniforms.uRbNormDepthFromNormView.value.copy(slot.normDepthBufferFromNormView);
     uniforms.uRbRawValueToMeters.value = slot.rawValueToMeters;
     return true;
@@ -1683,6 +1764,7 @@ export function createOcclusionController(
     uniforms.uRbDepthTex.value = dummyDepth2D;
     uniforms.uRbDepthArrayTex.value = dummyDepthArray;
     uniforms.uRbDepthArrayLayer.value = 0;
+    uniforms.uRbDepthTexSize.value.set(1, 1);
   }
 
   function syncPortalUniforms(): void {

@@ -9,12 +9,14 @@ import type {
   RuntimeAssetManifest,
   SharedPbrMaterialId,
 } from '../src/render/asset-loader.ts';
+import { createBlockoutRenderer } from '../src/render/blockouts.ts';
 import { createLightingController, MAX_TRANSIENT_POINT_LIGHTS } from '../src/render/lighting.ts';
 import {
   createRiftPortalShaderMaterial,
   type RiftPortalShaderUniforms,
 } from '../src/render/portal-shader.ts';
 import { createCombatVfxPool, MAX_TOTAL_VFX_CAP, MAX_VFX_SPARKS } from '../src/render/vfx-pool.ts';
+import { createCombatSimulation } from '../src/sim/engine.ts';
 import {
   createTurretGhostPreview,
   GHOST_COLOR_HOVER_VALID,
@@ -76,6 +78,8 @@ describe('Phase 4 AAA Runtime Pipeline (P4-T1, P4-T2, P4-T3)', () => {
     expect(uniforms.uSurge.value).toBe(0);
     expect(uniforms.uTime.value).toBe(0);
     expect(uniforms.uHasVortexMap.value).toBe(0);
+    expect(mat.vertexShader).toContain('#include <project_vertex>');
+    expect(mat.fragmentShader).toContain('// RB_PORTAL_ALPHA_HOOK');
     mat.dispose();
   });
 
@@ -235,5 +239,112 @@ describe('Phase 4 AAA Runtime Pipeline (P4-T1, P4-T2, P4-T3)', () => {
 
     ghost.dispose();
     for (const m of sharedMats.values()) m.dispose();
+  });
+
+  it('compensates Helios mortar 35-deg rest ascent and anchors Cryo-Arc beams to the GLB muzzleSocket', () => {
+    const buildMockTurretGlb = (muzzleLocal: [number, number, number]): THREE.Group => {
+      const root = new THREE.Group();
+      const yawRing = new THREE.Group();
+      yawRing.name = 'yawRing';
+      yawRing.position.set(0, 0.085, 0);
+      const pitchCradle = new THREE.Group();
+      pitchCradle.name = 'pitchCradle';
+      pitchCradle.position.set(0, 0.09, 0);
+      const recoilGroup = new THREE.Group();
+      recoilGroup.name = 'recoilGroup';
+      const muzzleSocket = new THREE.Object3D();
+      muzzleSocket.name = 'muzzleSocket';
+      muzzleSocket.position.set(muzzleLocal[0], muzzleLocal[1], muzzleLocal[2]);
+      recoilGroup.add(muzzleSocket);
+      pitchCradle.add(recoilGroup);
+      yawRing.add(pitchCradle);
+      root.add(yawRing);
+      return root;
+    };
+
+    const fakeAssets: RuntimeAssetLibrary = {
+      manifest: null,
+      progress: { loaded: 40, total: 40, ready: true, precompiled: true },
+      ready: true,
+      broodlordPhase2Emissive: null,
+      loadAll: async () => true,
+      hasModel: () => true,
+      hasSharedMaterial: () => false,
+      getSharedMaterial: () => null,
+      instantiate: (id) => {
+        if (id.startsWith('glacier-cryo-arc')) {
+          return { root: buildMockTurretGlb([0, 0.065, 0.14]), animations: [], isSkinned: false };
+        }
+        if (id.startsWith('helios-plasma-mortar')) {
+          return { root: buildMockTurretGlb([0, 0.08, 0.16]), animations: [], isSkinned: false };
+        }
+        return { root: new THREE.Group(), animations: [], isSkinned: false };
+      },
+      precompile: async () => undefined,
+      subscribe: () => () => undefined,
+      dispose: () => undefined,
+    };
+
+    const scene = new THREE.Scene();
+    const renderer = createBlockoutRenderer(scene, null, { assets: fakeAssets });
+    const sim = createCombatSimulation({ seed: 77, startingCredits: 1000 });
+
+    const mortar = sim.placeTurret({
+      kind: 'plasma-mortar',
+      position: { x: 0, y: 0, z: 0 },
+      normal: { x: 0, y: 1, z: 0 },
+      mountProfile: 'surface-clamp',
+      surfaceKind: 'floor',
+    }).turret;
+    const cryo = sim.placeTurret({
+      kind: 'cryo-arc',
+      position: { x: 0.8, y: 0, z: 0 },
+      normal: { x: 0, y: 1, z: 0 },
+      mountProfile: 'surface-clamp',
+      surfaceKind: 'floor',
+    }).turret;
+    if (!mortar || !cryo) throw new Error('Expected mortar and cryo turrets');
+
+    sim.debugSpawnEnemy('carapace-brute', {
+      position: { x: 0.8, y: 0.24, z: -1.4 },
+      hp: 2000,
+    });
+    const { state, events } = sim.tick();
+    renderer.syncFromSim(state, events, 1 / 60);
+
+    // 1. Helios mortar GLB pitchCradle subtracts the baked 35-deg rest ascent
+    const mortarBlockout = renderer.turrets.get(mortar.id);
+    const mortarCradle = mortarBlockout?.group.getObjectByName('pitchCradle');
+    expect(mortarCradle).toBeDefined();
+    const expectedGlbPitch = THREE.MathUtils.clamp(
+      mortar.pitch - (35 * Math.PI) / 180,
+      -0.55,
+      0.85,
+    );
+    expect(mortarCradle?.rotation.x).toBeCloseTo(-expectedGlbPitch, 4);
+
+    // 2. Cryo-Arc beam first segment starts from the GLB muzzleSocket world position (not old blockout reach)
+    const cryoBlockout = renderer.turrets.get(cryo.id);
+    const cryoSocket = cryoBlockout?.group.getObjectByName('muzzleSocket');
+    expect(cryoSocket).toBeDefined();
+    // Reset recoil offset to inspect unfired nozzle tip where the beam was spawned
+    const cryoRecoil = cryoBlockout?.group.getObjectByName('recoilGroup');
+    if (cryoRecoil) cryoRecoil.position.z = 0;
+    cryoBlockout?.group.updateWorldMatrix(true, true);
+    const expectedMuzzle = new THREE.Vector3();
+    cryoSocket?.getWorldPosition(expectedMuzzle);
+
+    expect(renderer.cryoArcInstancedMesh.count).toBeGreaterThanOrEqual(3);
+    const segMat = new THREE.Matrix4();
+    renderer.cryoArcInstancedMesh.getMatrixAt(0, segMat);
+    const segCenter = new THREE.Vector3();
+    const segQuat = new THREE.Quaternion();
+    const segScale = new THREE.Vector3();
+    segMat.decompose(segCenter, segQuat, segScale);
+    const segAxis = new THREE.Vector3(0, 1, 0).applyQuaternion(segQuat);
+    const segStart = segCenter.clone().addScaledVector(segAxis, -segScale.y * 0.5);
+    expect(segStart.distanceTo(expectedMuzzle)).toBeLessThan(0.01);
+
+    renderer.dispose();
   });
 });

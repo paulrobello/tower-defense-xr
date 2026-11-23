@@ -636,7 +636,7 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   if (renderer.shadowMap) {
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
   }
   renderer.domElement.dataset.control = 'game-canvas';
   applyStyle(renderer.domElement, { display: 'block', width: '100%', height: '100%' });

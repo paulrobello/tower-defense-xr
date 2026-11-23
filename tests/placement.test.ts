@@ -902,4 +902,97 @@ describe('Surface-relative & Core-relative anchor tracking sync and XR controlle
     ghostPreview.dispose();
     controller.dispose();
   });
+
+  it('keeps rejection reason labels upright and facing the viewer across floor, wall, and ceiling mounts', () => {
+    const ghost = createTurretGhostPreview();
+    const viewerPosition: Vec3 = { x: 0, y: 1.5, z: 1.8 };
+
+    const mounts: Array<{
+      readonly label: string;
+      readonly pos: Vec3;
+      readonly normal: Vec3;
+      readonly quat: THREE.Quaternion;
+    }> = [
+      {
+        label: 'floor facing away',
+        pos: { x: 0, y: 0, z: -0.6 },
+        normal: { x: 0, y: 1, z: 0 },
+        quat: new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI),
+      },
+      {
+        label: 'wall mount',
+        pos: { x: -1.8, y: 1.2, z: -0.4 },
+        normal: { x: 1, y: 0, z: 0 },
+        quat: new THREE.Quaternion().setFromUnitVectors(
+          new THREE.Vector3(0, 1, 0),
+          new THREE.Vector3(1, 0, 0),
+        ),
+      },
+      {
+        label: 'ceiling mount',
+        pos: { x: 0, y: 2.6, z: -0.5 },
+        normal: { x: 0, y: -1, z: 0 },
+        quat: new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI),
+      },
+    ];
+
+    const worldQuat = new THREE.Quaternion();
+    const labelPos = new THREE.Vector3();
+    for (const mount of mounts) {
+      ghost.update({
+        kind: 'autocannon',
+        tier: 'T1',
+        visible: true,
+        viewerPosition,
+        validation: {
+          valid: false,
+          reason: 'TOO_CLOSE',
+          reasons: ['TOO_CLOSE'],
+          reasonLabel: 'TOO CLOSE',
+          mountProfile: 'surface-clamp',
+          surfaceId: 'surf',
+          surfaceKind: 'wall',
+          cost: 100,
+          activeTurretCount: 1,
+          hardTurretCap: 14,
+          distanceM: 1.5,
+          nearestTurretDistanceM: 0.2,
+          coreDistanceM: 1.2,
+          nearestPortalDistanceM: 2.0,
+          footprint: null,
+          pose: {
+            mountProfile: 'surface-clamp',
+            position: mount.pos,
+            normal: mount.normal,
+            right: { x: 1, y: 0, z: 0 },
+            up: mount.normal,
+            forward: { x: 0, y: 0, z: 1 },
+            quaternion: {
+              x: mount.quat.x,
+              y: mount.quat.y,
+              z: mount.quat.z,
+              w: mount.quat.w,
+            },
+          },
+        },
+      });
+
+      expect(ghost.reasonLabel.visible).toBe(true);
+      ghost.reasonLabel.getWorldQuaternion(worldQuat);
+      ghost.reasonLabel.getWorldPosition(labelPos);
+      const labelUp = new THREE.Vector3(0, 1, 0).applyQuaternion(worldQuat);
+      const labelFront = new THREE.Vector3(0, 0, 1).applyQuaternion(worldQuat);
+      const toViewer = new THREE.Vector3(
+        viewerPosition.x - labelPos.x,
+        viewerPosition.y - labelPos.y,
+        viewerPosition.z - labelPos.z,
+      ).normalize();
+
+      // Label is always upright (+Y dot world +Y > 0.7) and front-facing toward viewer (dot > 0.95)
+      expect(labelUp.y, mount.label).toBeGreaterThan(0.7);
+      expect(labelFront.dot(toViewer), mount.label).toBeGreaterThan(0.95);
+    }
+
+    ghost.dispose();
+  });
 });

@@ -275,6 +275,78 @@ interface CatcherEntry {
   revision: number;
 }
 
+interface HorizontalSurfaceBounds {
+  readonly kind: ShadowSurfaceKind;
+  readonly minX: number;
+  readonly maxX: number;
+  readonly minZ: number;
+  readonly maxZ: number;
+  readonly avgY: number;
+}
+
+const COPLANAR_SHADOW_Y_TOLERANCE_M = 0.08;
+
+function estimateHorizontalBounds(surface: ShadowCatcherSurface): HorizontalSurfaceBounds | null {
+  let minX = Number.POSITIVE_INFINITY;
+  let maxX = Number.NEGATIVE_INFINITY;
+  let minZ = Number.POSITIVE_INFINITY;
+  let maxZ = Number.NEGATIVE_INFINITY;
+  let sumY = 0;
+  let count = 0;
+
+  if (surface.polygon && surface.polygon.length >= 3) {
+    for (const pt of surface.polygon) {
+      _vA.set(pt.x, 0, pt.z).applyMatrix4(surface.worldMatrix);
+      if (_vA.x < minX) minX = _vA.x;
+      if (_vA.x > maxX) maxX = _vA.x;
+      if (_vA.z < minZ) minZ = _vA.z;
+      if (_vA.z > maxZ) maxZ = _vA.z;
+      sumY += _vA.y;
+      count += 1;
+    }
+  } else if (surface.vertices && surface.vertices.length >= 9) {
+    const worldMatrix = surface.meshWorldMatrix ?? surface.worldMatrix;
+    let maxY = Number.NEGATIVE_INFINITY;
+    for (let i = 0; i + 2 < surface.vertices.length; i += 3) {
+      _vA
+        .set(
+          surface.vertices[i] as number,
+          surface.vertices[i + 1] as number,
+          surface.vertices[i + 2] as number,
+        )
+        .applyMatrix4(worldMatrix);
+      if (_vA.x < minX) minX = _vA.x;
+      if (_vA.x > maxX) maxX = _vA.x;
+      if (_vA.z < minZ) minZ = _vA.z;
+      if (_vA.z > maxZ) maxZ = _vA.z;
+      if (_vA.y > maxY) maxY = _vA.y;
+      count += 1;
+    }
+    if (count > 0 && Number.isFinite(maxY)) {
+      return { kind: surface.kind, minX, maxX, minZ, maxZ, avgY: maxY };
+    }
+  }
+
+  if (count === 0) return null;
+  return { kind: surface.kind, minX, maxX, minZ, maxZ, avgY: sumY / count };
+}
+
+function overlapsCoplanarPlane(
+  candidate: HorizontalSurfaceBounds,
+  planes: readonly HorizontalSurfaceBounds[],
+): boolean {
+  for (const plane of planes) {
+    if (plane.kind !== candidate.kind) continue;
+    if (Math.abs(plane.avgY - candidate.avgY) > COPLANAR_SHADOW_Y_TOLERANCE_M) continue;
+    const overlapX =
+      Math.min(plane.maxX, candidate.maxX) - Math.max(plane.minX, candidate.minX) > 0.05;
+    const overlapZ =
+      Math.min(plane.maxZ, candidate.maxZ) - Math.max(plane.minZ, candidate.minZ) > 0.05;
+    if (overlapX && overlapZ) return true;
+  }
+  return false;
+}
+
 export function createShadowCatcherManager(
   options: ShadowCatcherOptions = {},
 ): ShadowCatcherManager {
@@ -330,14 +402,32 @@ export function createShadowCatcherManager(
         return { created: 0, updated: 0, removed: 0, activeCount: 0 };
       }
 
+      const eligible: ShadowCatcherSurface[] = [];
+      const planeBounds: HorizontalSurfaceBounds[] = [];
+      for (const surface of surfaces) {
+        if (!isEligibleShadowSurface(surface, { acceptedKinds, minHorizontalNormalY })) {
+          continue;
+        }
+        eligible.push(surface);
+        if (surface.source === 'plane' && surface.visible !== false) {
+          const b = estimateHorizontalBounds(surface);
+          if (b) planeBounds.push(b);
+        }
+      }
+
       const seen = new Set<string>();
       let created = 0;
       let updated = 0;
       let removed = 0;
 
-      for (const surface of surfaces) {
-        if (!isEligibleShadowSurface(surface, { acceptedKinds, minHorizontalNormalY })) {
-          continue;
+      for (const surface of eligible) {
+        // Quest reports both XRPlane and XRMesh for the same floor/table; skip the overlapping
+        // mesh shadow catcher when a coplanar plane already owns that elevation.
+        if (surface.source === 'mesh' && planeBounds.length > 0) {
+          const mb = estimateHorizontalBounds(surface);
+          if (mb && overlapsCoplanarPlane(mb, planeBounds)) {
+            continue;
+          }
         }
         seen.add(surface.id);
 

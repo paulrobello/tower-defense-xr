@@ -147,6 +147,8 @@ export interface TurretGhostUpdateInput {
   readonly kind?: TurretKind;
   readonly tier?: TurretTierId;
   readonly visible?: boolean;
+  /** Optional world-space viewer/camera position used to keep rejection labels upright & front-facing. */
+  readonly viewerPosition?: Readonly<Vec3>;
 }
 
 export interface TurretGhostPreviewOptions {
@@ -195,6 +197,8 @@ export interface PlacementRayUpdateOptions {
   readonly mountProfile?: TurretMountProfileId;
   /** Optional forward orientation hint for surface-clamp mount pose. */
   readonly forwardHint?: Readonly<Vec3>;
+  /** Optional world-space viewer/camera position for upright billboarded placement labels. */
+  readonly viewerPosition?: Readonly<Vec3>;
 }
 
 export interface PlacedTurretCollider extends AnchorColliderTarget {
@@ -607,6 +611,8 @@ export function createTurretGhostPreview(
   const stopKeepAbove = keepAbove(reasonLabel, OVERLAY_RENDER_ORDER);
   group.add(reasonLabel);
 
+  let currentLabelHeightM = 0.42;
+
   function syncTurretDimensions(kind: TurretKind, tier: TurretTierId): number {
     const stats = getTurretTierStats(kind, tier);
     const b = stats.blockout;
@@ -621,9 +627,19 @@ export function createTurretGhostPreview(
     );
 
     rangeSphere.scale.setScalar(stats.rangeM);
-    reasonLabel.position.set(0, b.totalHeightM + 0.14, 0);
+    currentLabelHeightM = b.totalHeightM + 0.14;
+    reasonLabel.position.set(0, currentLabelHeightM, 0);
     return stats.rangeM;
   }
+
+  const _labelWorldPos = new THREE.Vector3();
+  const _labelToViewer = new THREE.Vector3();
+  const _labelWorldUp = new THREE.Vector3(0, 1, 0);
+  const _labelBasisX = new THREE.Vector3();
+  const _labelBasisY = new THREE.Vector3();
+  const _labelRotMat = new THREE.Matrix4();
+  const _labelWorldQuat = new THREE.Quaternion();
+  const _invGroupQuat = new THREE.Quaternion();
 
   let currentKind: TurretKind = 'autocannon';
   let currentTier: TurretTierId = 'T1';
@@ -698,6 +714,57 @@ export function createTurretGhostPreview(
       if (!valid && labelText) {
         reasonLabel.visible = true;
         updateScalableLabel(reasonLabel, labelText);
+
+        // Position label clear of floor, wall, or ceiling mount and billboard upright toward viewer
+        // so placement text is never horizontally mirrored, sideways, or upside down.
+        if (pose.normal.y < -0.5) {
+          _labelWorldPos.set(
+            pose.position.x,
+            pose.position.y - currentLabelHeightM,
+            pose.position.z,
+          );
+        } else if (Math.abs(pose.normal.y) < 0.5) {
+          _labelWorldPos.set(
+            pose.position.x + pose.normal.x * 0.24,
+            pose.position.y + 0.26,
+            pose.position.z + pose.normal.z * 0.24,
+          );
+        } else {
+          _labelWorldPos.set(
+            pose.position.x,
+            pose.position.y + currentLabelHeightM,
+            pose.position.z,
+          );
+        }
+
+        _invGroupQuat.copy(group.quaternion).invert();
+        reasonLabel.position
+          .copy(_labelWorldPos)
+          .sub(group.position)
+          .applyQuaternion(_invGroupQuat);
+
+        const viewer = input.viewerPosition;
+        if (viewer) {
+          _labelToViewer.set(
+            viewer.x - _labelWorldPos.x,
+            viewer.y - _labelWorldPos.y,
+            viewer.z - _labelWorldPos.z,
+          );
+          if (_labelToViewer.lengthSq() > 1e-6) {
+            _labelToViewer.normalize();
+            if (Math.abs(_labelToViewer.y) > 0.98) {
+              _labelToViewer.set(0, 0, 1);
+            }
+            _labelBasisX.crossVectors(_labelWorldUp, _labelToViewer).normalize();
+            _labelBasisY.crossVectors(_labelToViewer, _labelBasisX).normalize();
+            _labelRotMat.makeBasis(_labelBasisX, _labelBasisY, _labelToViewer);
+            _labelWorldQuat.setFromRotationMatrix(_labelRotMat);
+            reasonLabel.quaternion.copy(_invGroupQuat).multiply(_labelWorldQuat);
+          }
+        } else {
+          reasonLabel.quaternion.copy(_invGroupQuat);
+        }
+        reasonLabel.updateMatrixWorld(true);
       } else {
         reasonLabel.visible = false;
       }
@@ -1646,6 +1713,7 @@ export function createTurretPlacementController(
         kind: selectedKind,
         tier: selectedTier,
         visible: active,
+        viewerPosition: rayOptions?.viewerPosition ?? rayOrigin,
       });
       notify();
       return validation;
@@ -1661,6 +1729,16 @@ export function createTurretPlacementController(
         placementRays?.clear();
         return null;
       }
+
+      const viewerPose =
+        typeof frame.getViewerPose === 'function' ? frame.getViewerPose(referenceSpace) : null;
+      const viewerPosition: Vec3 | undefined = viewerPose
+        ? {
+            x: viewerPose.transform.position.x,
+            y: viewerPose.transform.position.y,
+            z: viewerPose.transform.position.z,
+          }
+        : undefined;
 
       // Prefer the configured aiming hand (e.g. 'right'), falling back to the first controller
       const aimingSource = aimingSourceFor(inputSources);
@@ -1704,6 +1782,7 @@ export function createTurretPlacementController(
               stickY: xrStickY(source),
               dtSec,
               resnap: resnapPressed,
+              viewerPosition,
             },
           );
 

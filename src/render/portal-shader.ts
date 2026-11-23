@@ -40,7 +40,8 @@ void main() {
   vec3 camLocal = (inverse(modelMatrix) * vec4(cameraPosition, 1.0)).xyz;
   vLocalViewDir = normalize(camLocal - position);
 
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  vec3 transformed = position;
+  #include <project_vertex>
 }
 `;
 
@@ -193,6 +194,7 @@ void main() {
   float edgeAlpha = 1.0 - smoothstep(edgeFadeStart, 1.005, rNoisy);
   float openAlpha = smoothstep(0.0, 0.10, openMask);
   float alpha = edgeAlpha * openAlpha * clamp(0.90 + rimElectric * 0.1, 0.0, 1.0);
+  // RB_PORTAL_ALPHA_HOOK
 
   gl_FragColor = vec4(col, alpha);
 }

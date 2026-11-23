@@ -828,5 +828,85 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       expect(sim.getState().phase).toBe('wave');
       expect(sim.getState().activePortals).toHaveLength(4);
     });
+
+    it('prevents wall-mounted turrets from targeting enemies behind their own wall or across a room wall', () => {
+      const sim = createCombatSimulation({
+        seed: 901,
+        startingCredits: 1000,
+        surfaces: [
+          {
+            id: 'floor-main',
+            kind: 'floor',
+            normal: { x: 0, y: 1, z: 0 },
+            center: { x: 0, y: 0, z: 0 },
+            polygon: [
+              { x: -2.4, y: 0, z: -2.1 },
+              { x: 2.4, y: 0, z: -2.1 },
+              { x: 2.4, y: 0, z: 2.1 },
+              { x: -2.4, y: 0, z: 2.1 },
+            ],
+          },
+          {
+            id: 'wall-west',
+            kind: 'wall',
+            normal: { x: 1, y: 0, z: 0 },
+            center: { x: -2.0, y: 1.4, z: 0 },
+            polygon: [
+              { x: -2.0, y: 0, z: -2.1 },
+              { x: -2.0, y: 0, z: 2.1 },
+              { x: -2.0, y: 2.8, z: 2.1 },
+              { x: -2.0, y: 2.8, z: -2.1 },
+            ],
+          },
+          {
+            id: 'wall-divider',
+            kind: 'wall',
+            normal: { x: 0, y: 0, z: 1 },
+            center: { x: 0, y: 1.4, z: -0.5 },
+            polygon: [
+              { x: -2.4, y: 0, z: -0.5 },
+              { x: 2.4, y: 0, z: -0.5 },
+              { x: 2.4, y: 2.8, z: -0.5 },
+              { x: -2.4, y: 2.8, z: -0.5 },
+            ],
+          },
+        ],
+      });
+
+      // Wall turret mounted on west wall facing +X into the room
+      const wallTurret = sim.placeTurret({
+        kind: 'rail-sniper',
+        position: { x: -2.0, y: 1.2, z: 0.4 },
+        normal: { x: 1, y: 0, z: 0 },
+        mountProfile: 'surface-clamp',
+        surfaceId: 'wall-west',
+        surfaceKind: 'wall',
+      }).turret;
+      if (!wallTurret) throw new Error('Expected wall turret placement');
+
+      // Enemy 1: behind the west mounting wall (x = -2.8 < -2.0) — must NOT be targeted
+      sim.debugSpawnEnemy('carapace-brute', {
+        position: { x: -2.8, y: 1.2, z: 0.4 },
+        hp: 500,
+      });
+      // Enemy 2: on the far side of wall-divider (z = -1.2 vs turret z = 0.4) — must NOT be targeted
+      sim.debugSpawnEnemy('carapace-brute', {
+        position: { x: -1.0, y: 1.2, z: -1.2 },
+        hp: 500,
+      });
+
+      const blockedRes = sim.tick();
+      expect(blockedRes.events.some((e) => e.type === 'turret-fired')).toBe(false);
+
+      // Enemy 3: inside the room in front of both walls — SHOULD be targeted and hit
+      const visibleEnemy = sim.debugSpawnEnemy('carapace-brute', {
+        position: { x: -0.8, y: 1.2, z: 0.4 },
+        hp: 500,
+      });
+      const clearRes = sim.tick();
+      const shot = clearRes.events.find((e) => e.type === 'turret-fired');
+      expect(shot).toBeDefined();
+      expect(shot?.targetEnemyId).toBe(visibleEnemy.id);
+    });
   });
 });

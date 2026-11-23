@@ -78,6 +78,8 @@ export const MAX_INSTANCED_RAIL_BEAMS = 24;
 export const MAX_INSTANCED_HP_BARS = MAX_ACTIVE_ENEMIES + 8;
 
 const CRYO_SUBSEGMENTS_PER_LINK = 3;
+/** Helios Plasma Mortar GLBs are authored with their crucible tilted +35° upward at rest. */
+const HELIOS_MORTAR_REST_ASCENT_RAD = (35 * Math.PI) / 180;
 
 export interface CoreBastionBlockout {
   readonly group: THREE.Group;
@@ -329,6 +331,7 @@ export function createBlockoutRenderer(
     readonly headPitchCradle: THREE.Object3D | null;
     readonly headRecoilGroup: THREE.Object3D | null;
     readonly headRotaryCluster: THREE.Object3D | null;
+    readonly headMuzzleSocket: THREE.Object3D | null;
     readonly materials: THREE.MeshStandardMaterial[];
     readonly bindings: DepthOcclusionBinding[];
     tier: TurretTierId;
@@ -608,6 +611,7 @@ export function createBlockoutRenderer(
       headPitchCradle: headInst.root.getObjectByName('pitchCradle') ?? null,
       headRecoilGroup: headInst.root.getObjectByName('recoilGroup') ?? null,
       headRotaryCluster: headInst.root.getObjectByName('rotaryCluster') ?? null,
+      headMuzzleSocket: headInst.root.getObjectByName('muzzleSocket') ?? null,
       materials,
       bindings,
       tier: simTurret.tier,
@@ -767,7 +771,7 @@ export function createBlockoutRenderer(
   // ==========================================================================
   // 1. Core Bastion Blockout (CORE_BASTION_SPEC)
   // ==========================================================================
-  const contactShadowSize = 32;
+  const contactShadowSize = 128;
   const contactShadowPixels = new Uint8Array(contactShadowSize * contactShadowSize * 4);
   for (let y = 0; y < contactShadowSize; y += 1) {
     for (let x = 0; x < contactShadowSize; x += 1) {
@@ -791,6 +795,8 @@ export function createBlockoutRenderer(
     const group = new THREE.Group();
     group.name = 'blockout-core-bastion';
     const shadowDiameter = CORE_BASTION_SPEC.shieldDomeRadiusM * 2.15;
+    // Skip low-res WebXR depth-row discard on the grounded contact shadow so Quest depth rows
+    // never slice horizontal banding lines across the Core floor shadow.
     const contact = new THREE.Mesh(
       trackGeo(new THREE.PlaneGeometry(shadowDiameter, shadowDiameter)),
       trackMat(
@@ -799,7 +805,11 @@ export function createBlockoutRenderer(
           opacity: 0.31,
           transparent: true,
           depthWrite: false,
+          polygonOffset: true,
+          polygonOffsetFactor: -1,
+          polygonOffsetUnits: -1,
         }),
+        'none',
       ),
     );
     contact.name = 'core-bastion-contact-shadow';
@@ -1776,6 +1786,17 @@ export function createBlockoutRenderer(
   const activeBlastRings: ActiveBlastRingFx[] = [];
   const activeCryoSegments: ActiveBeamSegmentFx[] = [];
   const activeRailBeams: ActiveBeamSegmentFx[] = [];
+  const mortarVisualOffsets = new Map<string, Vec3>();
+
+  function resolveTurretMuzzleWorldPosition(turretId: string, fallback: Readonly<Vec3>): Vec3 {
+    const view = turretAssetViews.get(turretId);
+    if (view?.headMuzzleSocket) {
+      view.container.updateWorldMatrix(true, true);
+      view.headMuzzleSocket.getWorldPosition(_vecA);
+      return { x: _vecA.x, y: _vecA.y, z: _vecA.z };
+    }
+    return { x: fallback.x, y: fallback.y, z: fallback.z };
+  }
 
   let fxCounts: WeaponFxCounts = {
     activeTracers: 0,
@@ -1869,6 +1890,7 @@ export function createBlockoutRenderer(
           break;
         }
         case 'turret-fired': {
+          const shotOrigin = resolveTurretMuzzleWorldPosition(ev.turretId, ev.fromPosition);
           const turretBlockout = turretsMap.get(ev.turretId);
           if (turretBlockout) {
             turretBlockout.recoilOffsetM =
@@ -1877,43 +1899,55 @@ export function createBlockoutRenderer(
                 : ev.turretKind === 'plasma-mortar'
                   ? 0.045
                   : 0.025;
+            turretBlockout.recoilGroup.position.z = -turretBlockout.recoilOffsetM;
+            const turretView = turretAssetViews.get(ev.turretId);
+            if (turretView?.headRecoilGroup) {
+              turretView.headRecoilGroup.position.z = -turretBlockout.recoilOffsetM;
+            }
           }
 
           if (ev.turretKind === 'autocannon') {
             if (activeTracers.length >= MAX_INSTANCED_TRACERS) activeTracers.shift();
             activeTracers.push({
-              from: { ...ev.fromPosition },
+              from: shotOrigin,
               to: { ...ev.toPosition },
               elapsedSec: 0,
               durationSec: 0.14,
               colorHex: 0xf59e0b,
             });
-            vfx.spawnMuzzleFlash(ev.fromPosition, 0xfbbf24, ev.tier === 'T3' ? 0.11 : 0.08);
-            const dx = ev.toPosition.x - ev.fromPosition.x;
-            const dy = ev.toPosition.y - ev.fromPosition.y;
-            const dz = ev.toPosition.z - ev.fromPosition.z;
+            vfx.spawnMuzzleFlash(shotOrigin, 0xfbbf24, ev.tier === 'T3' ? 0.11 : 0.08);
+            const dx = ev.toPosition.x - shotOrigin.x;
+            const dy = ev.toPosition.y - shotOrigin.y;
+            const dz = ev.toPosition.z - shotOrigin.z;
             const len = Math.max(0.01, Math.hypot(dx, dy, dz));
-            vfx.spawnShellCasing(ev.fromPosition, { x: dx / len, y: dy / len, z: dz / len });
+            vfx.spawnShellCasing(shotOrigin, { x: dx / len, y: dy / len, z: dz / len });
             vfx.spawnImpactBurst(ev.toPosition, 0xf59e0b, 5, 1.6, 0.013);
           } else if (ev.turretKind === 'rail-sniper') {
             if (activeRailBeams.length >= MAX_INSTANCED_RAIL_BEAMS) activeRailBeams.shift();
             activeRailBeams.push({
-              from: { ...ev.fromPosition },
+              from: shotOrigin,
               to: { ...ev.toPosition },
               elapsedSec: 0,
               durationSec: 0.26,
               thicknessM: ev.tier === 'T3' ? 0.028 : ev.tier === 'T2' ? 0.022 : 0.017,
               colorHex: 0x7dd3fc,
             });
-            vfx.spawnMuzzleFlash(ev.fromPosition, 0x7dd3fc, 0.13);
-            vfx.spawnRailRings(ev.fromPosition, ev.toPosition, 0x7dd3fc);
+            vfx.spawnMuzzleFlash(shotOrigin, 0x7dd3fc, 0.13);
+            vfx.spawnRailRings(shotOrigin, ev.toPosition, 0x7dd3fc);
             lighting?.flashPoint(ev.toPosition, 0x38bdf8, 3.2, 2.8, 0.22);
           } else if (ev.turretKind === 'cryo-arc') {
-            spawnCryoJaggedLink(ev.fromPosition, ev.toPosition);
-            vfx.spawnMuzzleFlash(ev.fromPosition, 0x22d3ee, 0.09);
+            spawnCryoJaggedLink(shotOrigin, ev.toPosition);
+            vfx.spawnMuzzleFlash(shotOrigin, 0x22d3ee, 0.09);
             vfx.spawnImpactBurst(ev.toPosition, 0x67e8f9, 7, 1.4, 0.016);
           } else if (ev.turretKind === 'plasma-mortar') {
-            vfx.spawnMuzzleFlash(ev.fromPosition, 0xff7b29, 0.12);
+            vfx.spawnMuzzleFlash(shotOrigin, 0xff7b29, 0.12);
+            if (ev.projectileId) {
+              mortarVisualOffsets.set(ev.projectileId, {
+                x: shotOrigin.x - ev.fromPosition.x,
+                y: shotOrigin.y - ev.fromPosition.y,
+                z: shotOrigin.z - ev.fromPosition.z,
+              });
+            }
           }
           break;
         }
@@ -2067,8 +2101,13 @@ export function createBlockoutRenderer(
       coreBastion.energyCoreMesh.position.y =
         CORE_BASTION_SPEC.heightM - 0.15 + Math.sin(elapsedTotalSec * 2.4) * 0.018;
 
-      // Process events after ensuring entities exist or during update
-      processEvents(events);
+      // Process core-hit before applying Core flash tint; defer weapon/entity events until
+      // portals, turrets, and enemies have this tick's exact transforms and muzzle sockets.
+      for (const ev of events) {
+        if (ev.type === 'core-hit') {
+          coreBastion.hitFlashRemainingSec = 0.35;
+        }
+      }
 
       if (coreBastion.hitFlashRemainingSec > 0) {
         coreBastion.hitFlashRemainingSec = Math.max(0, coreBastion.hitFlashRemainingSec - stepDt);
@@ -2326,9 +2365,19 @@ export function createBlockoutRenderer(
             turretView.headYawRing.rotation.y = simTurret.yaw + upgradeSpin + empTwitch;
           }
           if (turretView.headPitchCradle) {
-            turretView.headPitchCradle.rotation.x = simTurret.isDisrupted
-              ? 0.34 + Math.sin(elapsedTotalSec * 14) * 0.04
-              : -simTurret.pitch;
+            if (simTurret.isDisrupted) {
+              turretView.headPitchCradle.rotation.x = 0.34 + Math.sin(elapsedTotalSec * 14) * 0.04;
+            } else if (simTurret.kind === 'plasma-mortar') {
+              // Helios mortar GLBs are built with their crucible already inclined +35° upward.
+              const glbPitch = THREE.MathUtils.clamp(
+                simTurret.pitch - HELIOS_MORTAR_REST_ASCENT_RAD,
+                -0.55,
+                0.85,
+              );
+              turretView.headPitchCradle.rotation.x = -glbPitch;
+            } else {
+              turretView.headPitchCradle.rotation.x = -simTurret.pitch;
+            }
           }
           if (turretView.headRecoilGroup) {
             turretView.headRecoilGroup.position.z = -turretBlockout.recoilOffsetM;
@@ -2371,19 +2420,6 @@ export function createBlockoutRenderer(
           turretsGroup.remove(record.group);
           disposeEntityCleanup(`turret:${id}`);
           turretsMap.delete(id);
-        }
-      }
-
-      // Re-run event recoil/flash bindings for turrets or enemies created in this very frame
-      if (events.length > 0) {
-        for (const ev of events) {
-          if (ev.type === 'turret-fired') {
-            const tb = turretsMap.get(ev.turretId);
-            if (tb && tb.recoilOffsetM === 0) {
-              tb.recoilOffsetM = 0.03;
-              tb.recoilGroup.position.z = -tb.recoilOffsetM;
-            }
-          }
         }
       }
 
@@ -2608,15 +2644,17 @@ export function createBlockoutRenderer(
         }
       }
 
-      // Apply enemy-hit flashes for enemies created during this very frame
+      // Process combat events after entity transforms & GLB muzzle sockets match this tick.
+      processEvents(events);
+
+      // Apply enemy-hit flashes immediately on this frame for both blockout & GLB views
       if (events.length > 0) {
         for (const ev of events) {
           if (ev.type === 'enemy-hit') {
             const eb = enemiesMap.get(ev.enemyId);
-            if (eb && eb.hitFlashSec === 0) {
-              eb.hitFlashSec = 0.1;
+            if (eb && eb.hitFlashSec > 0) {
               eb.primaryMaterial.emissive.setHex(0xffffff);
-              eb.primaryMaterial.emissiveIntensity = 0.8;
+              eb.primaryMaterial.emissiveIntensity = (eb.hitFlashSec / 0.1) * 0.8;
             }
           }
         }
@@ -2660,17 +2698,30 @@ export function createBlockoutRenderer(
       tracerInstancedMesh.count = tracerWrite;
       tracerInstancedMesh.instanceMatrix.needsUpdate = true;
 
-      // 5b. Live Mortar Plasma Shells (synced from snapshot.projectiles)
+      // 5b. Live Mortar Plasma Shells (synced from snapshot.projectiles, blended from GLB muzzle)
       let shellCount = 0;
+      const liveProjectileIds = new Set<string>();
       for (const proj of snapshot.projectiles) {
+        liveProjectileIds.add(proj.id);
         if (shellCount >= MAX_INSTANCED_MORTAR_SHELLS) break;
-        _dummyObj.position.set(proj.position.x, proj.position.y, proj.position.z);
+        const offset = mortarVisualOffsets.get(proj.id);
+        const blend = offset ? Math.max(0, 1 - proj.progress * 3.0) : 0;
+        _dummyObj.position.set(
+          proj.position.x + (offset ? offset.x * blend : 0),
+          proj.position.y + (offset ? offset.y * blend : 0),
+          proj.position.z + (offset ? offset.z * blend : 0),
+        );
         _dummyObj.quaternion.identity();
         const radius = proj.tier === 'T3' ? 0.068 : proj.tier === 'T2' ? 0.056 : 0.046;
         _dummyObj.scale.setScalar(radius);
         _dummyObj.updateMatrix();
         mortarShellInstancedMesh.setMatrixAt(shellCount, _dummyObj.matrix);
         shellCount += 1;
+      }
+      for (const id of mortarVisualOffsets.keys()) {
+        if (!liveProjectileIds.has(id)) {
+          mortarVisualOffsets.delete(id);
+        }
       }
       mortarShellInstancedMesh.count = shellCount;
       mortarShellInstancedMesh.instanceMatrix.needsUpdate = true;
@@ -2792,6 +2843,7 @@ export function createBlockoutRenderer(
       activeBlastRings.length = 0;
       activeCryoSegments.length = 0;
       activeRailBeams.length = 0;
+      mortarVisualOffsets.clear();
 
       root.clear();
       root.removeFromParent();

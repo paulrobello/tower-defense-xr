@@ -1128,4 +1128,72 @@ describe('MR Occlusion — elliptical cutouts, FrontSide polygonOffset, and per-
 
     controller.dispose();
   });
+
+  it('deduplicates coplanar mesh shadow catchers when a scanned plane covers the same floor or table', () => {
+    const manager = createShadowCatcherManager();
+    const floorPlane = makeFloorSurface('plane-floor', 0, 4.5, 4.0, 1, 'floor');
+    const floorMesh: ShadowCatcherSurface = {
+      id: 'mesh-floor',
+      kind: 'floor',
+      source: 'mesh',
+      revision: 1,
+      worldMatrix: new THREE.Matrix4().makeTranslation(0, 0.01, 0),
+      vertices: new Float32Array([-2, 0, -2, 2, 0, -2, 2, 0, 2, -2, 0, 2]),
+      indices: new Uint32Array([0, 2, 1, 0, 3, 2]),
+    };
+    const separateTableMesh: ShadowCatcherSurface = {
+      id: 'mesh-table',
+      kind: 'table',
+      source: 'mesh',
+      revision: 1,
+      worldMatrix: new THREE.Matrix4().makeTranslation(0, 0.78, 0),
+      vertices: new Float32Array([-0.6, 0, -0.4, 0.6, 0, -0.4, 0.6, 0, 0.4, -0.6, 0, 0.4]),
+      indices: new Uint32Array([0, 2, 1, 0, 3, 2]),
+    };
+
+    const stats = manager.sync([floorPlane, floorMesh, separateTableMesh]);
+    expect(stats.activeCount).toBe(2);
+    expect(manager.getMesh('plane-floor')).toBeDefined();
+    expect(manager.getMesh('mesh-floor')).toBeUndefined();
+    expect(manager.getMesh('mesh-table')).toBeDefined();
+
+    manager.dispose();
+  });
+
+  it('injects bilinear depth sampling and soft portal-interior alpha feathering into custom portal shaders', () => {
+    const controller = createOcclusionController({ initialMode: 'auto-depth' });
+    const views = [{ eye: 'left' }] as unknown as XRView[];
+    const map = new Map<XRView, XRCPUDepthInformation | null>([
+      [views[0] as XRView, makeFakeCpuDepthInfo({ width: 160, height: 120 })],
+    ]);
+    const fake = makeFakeXrFrame({ views, cpuDepthByView: map });
+    controller.updateFromXrFrame(fake.frame, fake.referenceSpace);
+    expect(controller.uniforms.uRbDepthTexSize.value.x).toBe(160);
+    expect(controller.uniforms.uRbDepthTexSize.value.y).toBe(120);
+
+    const mat = new THREE.ShaderMaterial({
+      vertexShader: 'void main() {\n  vec3 transformed = position;\n  #include <project_vertex>\n}',
+      fragmentShader:
+        'void main() {\n  float alpha = 1.0;\n  // RB_PORTAL_ALPHA_HOOK\n  gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);\n}',
+    });
+    const binding = configurePortalInteriorMaterial(mat, controller);
+    const shader = {
+      uniforms: {} as Record<string, THREE.IUniform<unknown>>,
+      vertexShader: mat.vertexShader,
+      fragmentShader: mat.fragmentShader,
+    };
+    mat.onBeforeCompile(
+      shader as unknown as THREE.WebGLProgramParametersWithUniforms,
+      {} as THREE.WebGLRenderer,
+    );
+    expect(shader.vertexShader).toContain('vRbOccClipPos = gl_Position;');
+    expect(shader.fragmentShader).toContain('rbSampleRawDepthMeters');
+    expect(shader.fragmentShader).toContain('uRbDepthTexSize');
+    expect(shader.fragmentShader).toContain('alpha *= rbPortalForegroundAlpha();');
+    expect(shader.uniforms.uRbDepthTexSize).toBe(controller.uniforms.uRbDepthTexSize);
+
+    binding.dispose();
+    mat.dispose();
+    controller.dispose();
+  });
 });

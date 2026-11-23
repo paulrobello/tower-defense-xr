@@ -416,6 +416,82 @@ describe('Portal candidate selection (>= 2.0 m clearance, 180° vs 360° arc, sm
       expect(check.valid).toBe(true);
     }
   });
+
+  it('keeps wall portals clear of doorways, keeps ceiling portals inside ceiling corners, and rejects portals behind walls', () => {
+    const northWallWithDoor = makeRectSurface({
+      id: 'wall-north-door',
+      semanticLabel: 'wall',
+      orientation: 'vertical',
+      center: new THREE.Vector3(0, 1.4, -2.5),
+      normal: new THREE.Vector3(0, 0, 1),
+      right: new THREE.Vector3(1, 0, 0),
+      width: 4.8,
+      depth: 2.8,
+    });
+    const doorwayInCenter = makeRectSurface({
+      id: 'door-north-center',
+      semanticLabel: 'door_frame',
+      orientation: 'vertical',
+      center: new THREE.Vector3(0, 1.1, -2.5),
+      normal: new THREE.Vector3(0, 0, 1),
+      right: new THREE.Vector3(1, 0, 0),
+      width: 1.0,
+      depth: 2.2,
+    });
+    const westWall = makeRectSurface({
+      id: 'wall-west',
+      semanticLabel: 'wall',
+      orientation: 'vertical',
+      center: new THREE.Vector3(-2.4, 1.4, 0),
+      normal: new THREE.Vector3(1, 0, 0),
+      right: new THREE.Vector3(0, 0, -1),
+      width: 5.0,
+      depth: 2.8,
+    });
+    // Adjacent-room wall behind the west wall (x = -3.4) — must NOT receive a portal!
+    const behindWestWall = makeRectSurface({
+      id: 'wall-outside-room',
+      semanticLabel: 'wall',
+      orientation: 'vertical',
+      center: new THREE.Vector3(-3.4, 1.4, -0.5),
+      normal: new THREE.Vector3(1, 0, 0),
+      right: new THREE.Vector3(0, 0, -1),
+      width: 3.0,
+      depth: 2.8,
+    });
+    // Small ceiling right against the north/west corner — center is too close to walls for rim clearance
+    const smallCornerCeiling = makeRectSurface({
+      id: 'ceiling-narrow-strip',
+      semanticLabel: 'ceiling',
+      orientation: 'horizontal',
+      center: new THREE.Vector3(-1.9, 2.8, -2.0),
+      normal: new THREE.Vector3(0, -1, 0),
+      right: new THREE.Vector3(1, 0, 0),
+      width: 0.9,
+      depth: 0.9,
+    });
+
+    const portals = selectPortalAnchors({
+      surfaces: [northWallWithDoor, doorwayInCenter, westWall, behindWestWall, smallCornerCeiling],
+      coreAnchor: coreAtOrigin,
+      playerYaw: 0,
+      playArc: 'front-180',
+    });
+
+    expect(portals.length).toBeGreaterThanOrEqual(MIN_REQUIRED_PORTALS);
+    // Never pick the wall behind wall-west (out of bounds for the room)
+    expect(portals.some((p) => p.surfaceId === 'wall-outside-room')).toBe(false);
+    // Never pick the undersized corner ceiling strip where the portal rim would clip through walls
+    expect(portals.some((p) => p.surfaceId === 'ceiling-narrow-strip')).toBe(false);
+    // Any portal placed on wall-north-door must sit clear of the central doorway (|x| >= 0.5 + 0.595)
+    for (const p of portals) {
+      if (p.surfaceId === 'wall-north-door') {
+        expect(Math.abs(p.position.x)).toBeGreaterThan(1.0);
+      }
+      // Virtual fallback rifts must also stay on the room side of wall-west (x >= -2.4)
+      expect(p.position.x).toBeGreaterThanOrEqual(-2.41);
+    }
+  });
 });
 
 describe('Core relocation, ActionBus integration, and Three.js hologram preview lifecycle', () => {

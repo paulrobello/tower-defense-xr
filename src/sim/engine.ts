@@ -1624,13 +1624,129 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
     return targetingRng.next() < 0.5 ? -1 : 1;
   }
 
+  function isPointInPlanarPolygon3D(
+    point: Readonly<Vec3>,
+    polygon: readonly Vec3[],
+    normal: Readonly<Vec3>,
+  ): boolean {
+    if (polygon.length < 3) return false;
+    // Build orthonormal basis (u, v) on the surface plane
+    const refX = Math.abs(normal.y) < 0.9 ? 0 : 1;
+    const refY = Math.abs(normal.y) < 0.9 ? 1 : 0;
+    const refZ = 0;
+    let ux = refY * normal.z - refZ * normal.y;
+    let uy = refZ * normal.x - refX * normal.z;
+    let uz = refX * normal.y - refY * normal.x;
+    const uLen = Math.hypot(ux, uy, uz);
+    if (uLen < 1e-8) return false;
+    ux /= uLen;
+    uy /= uLen;
+    uz /= uLen;
+    const vx = normal.y * uz - normal.z * uy;
+    const vy = normal.z * ux - normal.x * uz;
+    const vz = normal.x * uy - normal.y * ux;
+
+    const pu = point.x * ux + point.y * uy + point.z * uz;
+    const pv = point.x * vx + point.y * vy + point.z * vz;
+
+    let inside = false;
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+      const pi = polygon[i] as Vec3;
+      const pj = polygon[j] as Vec3;
+      const xi = pi.x * ux + pi.y * uy + pi.z * uz;
+      const yi = pi.x * vx + pi.y * vy + pi.z * vz;
+      const xj = pj.x * ux + pj.y * uy + pj.z * uz;
+      const yj = pj.x * vx + pj.y * vy + pj.z * vz;
+
+      const intersects =
+        yi > pv !== yj > pv && pu < ((xj - xi) * (pv - yi)) / (yj - yi + 1e-12) + xi;
+      if (intersects) inside = !inside;
+    }
+    return inside;
+  }
+
+  function hasTurretLineOfSight(turret: SimTurret, targetPos: Readonly<Vec3>): boolean {
+    const { up } = turret.pose;
+    // 1. A surface-mounted turret cannot aim or shoot backwards through its own mounting surface.
+    if (turret.mountProfile === 'surface-clamp') {
+      const relX = targetPos.x - turret.position.x;
+      const relY = targetPos.y - turret.position.y;
+      const relZ = targetPos.z - turret.position.z;
+      const frontDot = relX * up.x + relY * up.y + relZ * up.z;
+      if (frontDot < -0.05) {
+        return false;
+      }
+    }
+
+    // 2. Reject targets blocked by any scanned room wall/ceiling/floor surface along the sightline.
+    const blockout = turret.stats.blockout;
+    const pivotHeight = blockout.baseHeightM + blockout.headHeightM / 2;
+    const ax = turret.position.x + up.x * pivotHeight;
+    const ay = turret.position.y + up.y * pivotHeight;
+    const az = turret.position.z + up.z * pivotHeight;
+    const dx = targetPos.x - ax;
+    const dy = targetPos.y - ay;
+    const dz = targetPos.z - az;
+
+    for (const surface of surfaces) {
+      if (surface.kind !== 'wall' && surface.kind !== 'ceiling' && surface.kind !== 'floor') {
+        continue;
+      }
+      if (surface.id === turret.surfaceId) continue;
+      if (surface.polygon.length < 3) continue;
+
+      const nLen = Math.hypot(surface.normal.x, surface.normal.y, surface.normal.z);
+      if (nLen < 1e-6) continue;
+      const nx = surface.normal.x / nLen;
+      const ny = surface.normal.y / nLen;
+      const nz = surface.normal.z / nLen;
+
+      const dA =
+        (ax - surface.center.x) * nx + (ay - surface.center.y) * ny + (az - surface.center.z) * nz;
+      const dB =
+        (targetPos.x - surface.center.x) * nx +
+        (targetPos.y - surface.center.y) * ny +
+        (targetPos.z - surface.center.z) * nz;
+      if (dA * dB >= 0) continue;
+
+      const denom = dA - dB;
+      if (Math.abs(denom) < 1e-6) continue;
+      const t = dA / denom;
+      if (t <= 0.04 || t >= 0.96) continue;
+
+      const hit: Vec3 = {
+        x: ax + dx * t,
+        y: ay + dy * t,
+        z: az + dz * t,
+      };
+      if (!isPointInPlanarPolygon3D(hit, surface.polygon, { x: nx, y: ny, z: nz })) {
+        continue;
+      }
+
+      // Allow shots passing through an open portal aperture mounted on this wall/ceiling.
+      const passesThroughPortal = portals.some((portal) => {
+        if (!portal.isOpen) return false;
+        const pDist = distanceVec3(hit, portal.position);
+        return pDist <= 0.72;
+      });
+      if (!passesThroughPortal) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   function acquireTurretTarget(turret: SimTurret): SimEnemy | null {
     const def = TURRETS[turret.kind];
     const allowedLayers = def.targetLayers;
     const candidates = enemySpatialHash.queryRadius(
       turret.position,
       turret.stats.rangeM,
-      (enemy) => enemy.hp > 0 && allowedLayers.includes(enemy.movementLayer),
+      (enemy) =>
+        enemy.hp > 0 &&
+        allowedLayers.includes(enemy.movementLayer) &&
+        hasTurretLineOfSight(turret, enemy.position),
     );
     if (candidates.length === 0) return null;
     const firstCandidate = candidates[0];
@@ -1880,7 +1996,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
     const candidatesInRange = enemySpatialHash.queryRadius(
       turret.position,
       stats.rangeM,
-      (e) => e.hp > 0 && e.id !== primaryTarget.id,
+      (e) => e.hp > 0 && e.id !== primaryTarget.id && hasTurretLineOfSight(turret, e.position),
     );
 
     const piercedSecondary: Array<{ enemy: SimEnemy; t: number }> = [];
