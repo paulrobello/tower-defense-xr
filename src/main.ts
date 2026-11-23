@@ -1,10 +1,16 @@
 import { OVERLAY_RENDER_ORDER } from '@par/xr-workspace';
 import * as THREE from 'three';
+import { createSpatialAudioEngine, type SpatialAudioEngine } from './audio/engine.ts';
 import { RIFT_PORTAL_SPEC } from './content/index.ts';
 import { type ActionBus, createActionBus } from './core/action-bus.ts';
 import { createSeededStreams, resolveSeed } from './core/prng.ts';
 import { createGameStateMachine, type GameStateMachine } from './core/state.ts';
-import { createDesktopShell, type DesktopShell } from './desktop/bootstrap.ts';
+import {
+  applyRoomPbrMaterials,
+  createDesktopShell,
+  type DesktopShell,
+} from './desktop/bootstrap.ts';
+import { createDesktopCommandStrip } from './desktop/command-strip.ts';
 import { createDesktopControls, type DesktopControls } from './desktop/controls.ts';
 import {
   createOcclusionController,
@@ -19,7 +25,9 @@ import { buildNavigationGraph, type RoomNavigationGraph } from './nav/graph.ts';
 import { createPerfHud, type PerfHud } from './perf/hud.ts';
 import { createPerfRecorder, type PerfRecorder } from './perf/recorder.ts';
 import { createPersistStore, type PersistStore } from './persist/store.ts';
+import { createRuntimeAssetLibrary, type RuntimeAssetLibrary } from './render/asset-loader.ts';
 import { type BlockoutRenderer, createBlockoutRenderer } from './render/blockouts.ts';
+import { createLightingController, type LightingController } from './render/lighting.ts';
 import {
   createDomSettingsPanel,
   createXrSettingsPanel,
@@ -43,6 +51,7 @@ import {
   type WaveDefinition,
 } from './sim/engine.ts';
 import { createMissionOverlay, type MissionOverlay } from './ui/mission-overlay.ts';
+import { createTacticalAtlas } from './ui/tactical-atlas.ts';
 import { createTacticalHud, type TacticalHud } from './ui/tactical-hud.ts';
 import { createThreatChevrons, type ThreatChevrons } from './ui/threat-chevrons.ts';
 import { createVersionWatcher, type VersionWatcher } from './ui/version-check.ts';
@@ -59,7 +68,11 @@ import {
   yawFromForward,
 } from './xr/calibration.ts';
 import { createTurretPlacementController, type TurretPlacementController } from './xr/placement.ts';
-import { createXrRadialControls, type XrRadialControls } from './xr/radial-controls.ts';
+import {
+  createXrRadialControls,
+  turretKindFromRadialAction,
+  type XrRadialControls,
+} from './xr/radial-controls.ts';
 
 export const APP_NAME = 'Rift Bastion';
 
@@ -83,6 +96,9 @@ export interface AppRuntime {
   readonly radialControls: XrRadialControls;
   readonly tacticalHud: TacticalHud;
   readonly desktopControls: DesktopControls;
+  readonly assets: RuntimeAssetLibrary;
+  readonly lighting: LightingController;
+  readonly audio: SpatialAudioEngine;
   readonly blockouts: BlockoutRenderer;
   readonly threatChevrons: ThreatChevrons;
   readonly missionOverlay: MissionOverlay;
@@ -213,11 +229,29 @@ export function mountApp(container: HTMLElement): AppRuntime {
   });
   shell.xrOverlayRoot.add(xrHudRoot);
 
-  // Hide static bootstrap placeholder core crystal so BlockoutRenderer's Core Bastion owns the pedestal
+  // Hide static bootstrap placeholder core crystal so Core Bastion GLB owns the pedestal
   const placeholderCore = shell.room.getObjectByName('core-placeholder');
   if (placeholderCore) {
     placeholderCore.visible = false;
   }
+
+  // Upgrade bootstrap lights to AAA tactical lighting + transient explosion point-light pool
+  const bootstrapLights = shell.scene.getObjectByName('scene-lights');
+  if (bootstrapLights) {
+    shell.scene.remove(bootstrapLights);
+  }
+  const lighting = createLightingController(shell.scene, shell.renderer);
+
+  // Runtime AAA GLB/KTX2 asset library + shader precompilation behind load veil
+  const assets = createRuntimeAssetLibrary({ renderer: shell.renderer });
+  const tacticalAtlas = createTacticalAtlas();
+  const audio = createSpatialAudioEngine({
+    initialVolumes: {
+      masterVolume: initial.masterVolume,
+      sfxVolume: initial.sfxVolume,
+      musicVolume: initial.musicVolume,
+    },
+  });
 
   const buildId =
     typeof window !== 'undefined' && typeof window.__APP_BUILD === 'string'
@@ -328,18 +362,48 @@ export function mountApp(container: HTMLElement): AppRuntime {
     portalAnchors: calibration.portalAnchors,
   });
 
-  // --- Blockout Renderer, Turret Placement, Radial Menu, HUD, Chevrons & Mission Overlay ---
-  const blockouts = createBlockoutRenderer(shell.scene, occlusion);
+  // --- AAA Renderer, Turret Placement, Radial Menu, HUD, Chevrons & Mission Overlay ---
+  const blockouts = createBlockoutRenderer(shell.scene, occlusion, { assets, lighting });
+
+  let syncedAssetsReady = false;
+  const unsubAssets = assets.subscribe((prog) => {
+    if (prog.total > 0 && !prog.ready) {
+      shell.overlay.setLoadStatus?.(`Loading AAA assets (${prog.loaded}/${prog.total})…`);
+    } else if (prog.ready && !prog.precompiled) {
+      shell.overlay.setLoadStatus?.('Precompiling shaders…');
+    } else {
+      shell.overlay.setLoadStatus?.(null);
+    }
+    if (prog.ready && !syncedAssetsReady) {
+      syncedAssetsReady = true;
+      applyRoomPbrMaterials(shell.room, assets);
+      if (assets.manifest?.sfx) {
+        audio.registerManifestCues(assets.manifest.sfx);
+      }
+      blockouts.syncFromSim(currentSim.getState(), [], 0, shell.camera);
+    }
+  });
+  void assets
+    .loadAll()
+    .then((ok) => {
+      if (ok) return assets.precompile(shell.renderer, shell.scene, shell.camera);
+      return undefined;
+    })
+    .catch(() => undefined);
 
   const placement = createTurretPlacementController({
     roomModel,
     scene: shell.scene,
     rayOverlayRoot: shell.xrOverlayRoot,
+    assets,
     coreAnchor: () => calibration.coreAnchor,
     portalAnchors: () => calibration.portalAnchors,
     actionBus: bus,
     getCredits: () => currentSim.getState().credits,
     initialActive: false,
+    onPlacementRejected: (_reason, pos) => {
+      audio.play('invalid-placement', { position: pos });
+    },
   });
   // BlockoutRenderer renders the articulated tier-specific turrets; keep placement records for ray picking
   placement.placedTurretsGroup.visible = false;
@@ -349,7 +413,11 @@ export function mountApp(container: HTMLElement): AppRuntime {
     overlayRoot: shell.xrOverlayRoot,
     actionBus: bus,
     placement,
+    atlas: tacticalAtlas,
     renderOrder: OVERLAY_RENDER_ORDER + 30,
+    onActionDispatched: () => {
+      audio.play('radial-tick');
+    },
     getBuildState: () => {
       const simState = currentSim.getState();
       return {
@@ -374,6 +442,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
   const tacticalHud = createTacticalHud({
     actionBus: bus,
+    atlas: tacticalAtlas,
     container,
     initialMode: 'desktop',
     initialVisible: false,
@@ -427,9 +496,13 @@ export function mountApp(container: HTMLElement): AppRuntime {
     persistStore: persist,
     actionBus: bus,
     settingsStore: settings,
+    atlas: tacticalAtlas,
     container,
     initialMode: 'desktop',
     renderOrder: OVERLAY_RENDER_ORDER + 20,
+    onReplay: () => {
+      audio.play('mission-confirm');
+    },
   });
   xrHudRoot.add(missionOverlay.xrRoot);
   const missionOverlayPanel = {
@@ -450,6 +523,31 @@ export function mountApp(container: HTMLElement): AppRuntime {
     isSettingsOpen: () => domSettings.open,
     getPlayArc: () => calibration.playArc,
     enabled: false,
+    onTurretSelected: () => syncTacticalHud(),
+    onBuildKindSelected: () => syncTacticalHud(),
+  });
+
+  const commandStrip = createDesktopCommandStrip(container, tacticalAtlas, (actionId) => {
+    audio.play('radial-tick');
+    const kind = turretKindFromRadialAction(actionId);
+    if (kind) {
+      desktopControls.selectTurretKind(kind);
+      syncTacticalHud();
+      return;
+    }
+    if (actionId === 'wave:launch') {
+      bus.dispatch({ type: 'wave/launch' }, 'desktop');
+      return;
+    }
+    if (
+      actionId === 'turret:upgrade' ||
+      actionId === 'turret:priority' ||
+      actionId === 'turret:relocate' ||
+      actionId === 'turret:sell'
+    ) {
+      desktopControls.issueTurretCommand(actionId);
+      syncTacticalHud();
+    }
   });
 
   let isSyncingTurretAction = false;
@@ -475,7 +573,39 @@ export function mountApp(container: HTMLElement): AppRuntime {
       canLaunchWave: state.phase === 'prep' || state.phase === 'intermission',
       selectedTurretKind: placement.selectedKind,
       mountMode: placement.mountMode,
+      disruptedTurretCount: simState.turrets.filter((t) => t.disabledRemainingSec > 0).length,
     });
+
+    const showStrip =
+      !shell.xr.presenting &&
+      desktopPlaying &&
+      !domSettings.open &&
+      !missionOverlay.visible &&
+      (state.phase === 'prep' || state.phase === 'wave' || state.phase === 'intermission');
+    if (showStrip) {
+      const selectedId = desktopControls.state.selectedTurretId;
+      const selectedRec = selectedId ? placement.getTurret(selectedId) : null;
+      commandStrip.update(
+        {
+          credits: simState.credits,
+          activeTurretCount: simState.turrets.length,
+          hardTurretCap: HARD_TURRET_CAP,
+          canLaunchWave: state.phase === 'prep' || state.phase === 'intermission',
+          phase: state.phase,
+        },
+        selectedRec
+          ? {
+              id: selectedRec.id,
+              kind: selectedRec.kind,
+              tier: selectedRec.tier,
+              priority: selectedRec.priority,
+            }
+          : null,
+        placement.state.active ? placement.selectedKind : null,
+      );
+    } else {
+      commandStrip.hide();
+    }
   };
 
   const initializeMissionFromCalibration = (): void => {
@@ -546,6 +676,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
     if (xrState.presenting !== wasPresenting) {
       wasPresenting = xrState.presenting;
       if (xrState.presenting) {
+        void audio.unlock();
         perfRecorder.onXrSessionStart();
         perfHud.setMode('xr');
         tacticalHud.setMode('xr');
@@ -617,6 +748,11 @@ export function mountApp(container: HTMLElement): AppRuntime {
   const unsubSettings = settings.subscribe((next, previous) => {
     shell.xr.setFoveation(next.fixedFoveation);
     shell.xr.setFramebufferScale(next.framebufferScale);
+    audio.setVolumes({
+      masterVolume: next.masterVolume,
+      sfxVolume: next.sfxVolume,
+      musicVolume: next.musicVolume,
+    });
     if (next.roomOcclusion !== previous.roomOcclusion) {
       occlusion.setMode(next.roomOcclusion);
       syncRoomGeometryToMr(roomModel.surfaces);
@@ -638,8 +774,11 @@ export function mountApp(container: HTMLElement): AppRuntime {
       desktopControls.setEnabled(!shell.xr.presenting);
     } else if (change.to === 'victory' || change.to === 'defeat') {
       placement.cancelPlacement();
+      audio.syncOpenPortals([]);
+      audio.play('mission-confirm');
       void missionOverlay.presentFromSim(currentSim.getState());
     } else if (change.to === 'title') {
+      audio.syncOpenPortals([]);
       calibrationPreview.setVisible(false);
       missionOverlay.hide();
       threatChevrons.clear();
@@ -706,11 +845,15 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
         if (!simRes.ok && matched) {
           placement.removeTurret(matched.id);
+          audio.play('invalid-placement', { position: action.position });
         }
       } finally {
         isSyncingTurretAction = false;
       }
-      blockouts.syncFromSim(currentSim.getState(), currentSim.drainEvents(), 0);
+      const buildState = currentSim.getState();
+      const buildEvents = currentSim.drainEvents();
+      blockouts.syncFromSim(buildState, buildEvents, 0);
+      audio.processSimEvents(buildEvents, buildState);
       syncTacticalHud();
     }),
     bus.on('turret/upgrade', (action) => {
@@ -723,7 +866,10 @@ export function mountApp(container: HTMLElement): AppRuntime {
           rec.investedCredits = res.turret.investedCredits;
         }
       }
-      blockouts.syncFromSim(currentSim.getState(), currentSim.drainEvents(), 0);
+      const upgradeState = currentSim.getState();
+      const upgradeEvents = currentSim.drainEvents();
+      blockouts.syncFromSim(upgradeState, upgradeEvents, 0);
+      audio.processSimEvents(upgradeEvents, upgradeState);
       syncTacticalHud();
     }),
     bus.on('turret/relocate', (action) => {
@@ -762,7 +908,10 @@ export function mountApp(container: HTMLElement): AppRuntime {
       } finally {
         isSyncingTurretAction = false;
       }
-      blockouts.syncFromSim(currentSim.getState(), currentSim.drainEvents(), 0);
+      const relocState = currentSim.getState();
+      const relocEvents = currentSim.drainEvents();
+      blockouts.syncFromSim(relocState, relocEvents, 0);
+      audio.processSimEvents(relocEvents, relocState);
       syncTacticalHud();
     }),
     bus.on('turret/sell', (action) => {
@@ -776,7 +925,10 @@ export function mountApp(container: HTMLElement): AppRuntime {
       } finally {
         isSyncingTurretAction = false;
       }
-      blockouts.syncFromSim(currentSim.getState(), currentSim.drainEvents(), 0);
+      const sellState = currentSim.getState();
+      const sellEvents = currentSim.drainEvents();
+      blockouts.syncFromSim(sellState, sellEvents, 0);
+      audio.processSimEvents(sellEvents, sellState);
       syncTacticalHud();
     }),
     bus.on('turret/set-priority', (action) => {
@@ -793,13 +945,18 @@ export function mountApp(container: HTMLElement): AppRuntime {
       if (res.ok && state.can('wave')) {
         state.transition('wave', 'wave/launch');
       }
-      blockouts.syncFromSim(currentSim.getState(), currentSim.drainEvents(), 0);
+      const waveState = currentSim.getState();
+      const waveEvents = currentSim.drainEvents();
+      blockouts.syncFromSim(waveState, waveEvents, 0);
+      audio.processSimEvents(waveEvents, waveState);
       syncTacticalHud();
     }),
   ];
 
   const onVisibility = (): void => {
-    perfRecorder.onVisibilityChange(!document.hidden);
+    const isVisible = !document.hidden;
+    perfRecorder.onVisibilityChange(isVisible);
+    audio.setVisibility(isVisible);
   };
   if (typeof document !== 'undefined') {
     document.addEventListener('visibilitychange', onVisibility);
@@ -858,7 +1015,9 @@ export function mountApp(container: HTMLElement): AppRuntime {
       }
     }
 
-    // 2. Step deterministic 60 Hz combat simulation & sync visuals
+    // 2. Step deterministic 60 Hz combat simulation & sync visuals + 3D spatial audio
+    lighting.update(dt);
+    audio.updateListener(activeCamera);
     if (state.phase === 'prep' || state.phase === 'wave' || state.phase === 'intermission') {
       const stepRes = currentSim.step(dt);
       const simState = stepRes.state;
@@ -869,6 +1028,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
       }
 
       blockouts.syncFromSim(simState, events, dt, activeCamera);
+      audio.processSimEvents(events, simState);
       threatChevrons.update({
         snapshot: simState,
         events,
@@ -959,6 +1119,9 @@ export function mountApp(container: HTMLElement): AppRuntime {
     radialControls,
     tacticalHud,
     desktopControls,
+    assets,
+    lighting,
+    audio,
     blockouts,
     threatChevrons,
     missionOverlay,
@@ -1016,19 +1179,25 @@ export function mountApp(container: HTMLElement): AppRuntime {
       unsubState();
       unsubRoomModel();
       unsubCalibration();
+      unsubAssets();
       detachRadialSession?.();
       detachRadialSession = null;
       for (const fn of unsubBus) fn();
       if (typeof document !== 'undefined') {
         document.removeEventListener('visibilitychange', onVisibility);
       }
+      commandStrip.dispose();
       desktopControls.dispose();
       missionOverlay.dispose();
       threatChevrons.dispose();
       tacticalHud.dispose();
       radialControls.dispose();
+      tacticalAtlas.dispose();
       placement.dispose();
       blockouts.dispose();
+      audio.dispose();
+      assets.dispose();
+      lighting.dispose();
       calibrationPreview.dispose();
       calibration.dispose();
       shadowCatchers.dispose();

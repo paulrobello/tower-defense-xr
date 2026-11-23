@@ -38,7 +38,7 @@ import type { GamePhase, GameStateMachine } from '../core/state.ts';
 import type { RoomSurfaceModel } from '../mr/room-scan.ts';
 import { type CalibrationController, raycastCorePlacement } from '../xr/calibration.ts';
 import type { TurretPlacementController } from '../xr/placement.ts';
-import { nextTargetPriority } from '../xr/radial-controls.ts';
+import { nextTargetPriority, type TurretRadialActionId } from '../xr/radial-controls.ts';
 
 /** Default hover-pod depth step per mouse wheel notch (meters). */
 export const DEFAULT_WHEEL_DEPTH_STEP_M = 0.25;
@@ -49,6 +49,13 @@ export const DESKTOP_TURRET_HOTKEYS: Readonly<Record<string, TurretKind>> = {
   '2': TURRET_KINDS[1],
   '3': TURRET_KINDS[2],
   '4': TURRET_KINDS[3],
+};
+
+const DESKTOP_TURRET_COMMANDS: Readonly<Record<string, TurretRadialActionId>> = {
+  u: 'turret:upgrade',
+  t: 'turret:priority',
+  r: 'turret:relocate',
+  x: 'turret:sell',
 };
 
 export interface DesktopRay {
@@ -88,6 +95,7 @@ export interface DesktopControls {
   setSelectedTurret(turretId: string | null): void;
   setSettingsOpen(open: boolean): void;
   selectTurretKind(kind: TurretKind): void;
+  issueTurretCommand(action: TurretRadialActionId): boolean;
   adjustHoverDepth(deltaM: number): number | null;
   toggleHoverSnap(): void;
   cancel(): void;
@@ -384,6 +392,7 @@ export function createDesktopControls(options: DesktopControlsOptions): DesktopC
 
     // Space: Lock Core in calibrate phase, Launch Wave in prep / intermission
     if (key === ' ' || keyEvent.code === 'Space') {
+      if (keyEvent.target instanceof Element && keyEvent.target.closest('button')) return;
       const phase = resolvePhase();
       if (phase === 'calibrate') {
         keyEvent.preventDefault();
@@ -421,51 +430,46 @@ export function createDesktopControls(options: DesktopControlsOptions): DesktopC
       return;
     }
 
-    // Turret command hotkeys (U, T, R, X)
-    if (lower === 'u') {
-      const turretId = resolveTargetTurretId();
-      if (!turretId) return;
-      const record = placement?.getTurret(turretId);
-      if (record && getNextTurretTier(record.tier) === null) return;
-      keyEvent.preventDefault();
-      actionBus.dispatch({ type: 'turret/upgrade', turretId }, 'desktop');
-      return;
-    }
+    const command = DESKTOP_TURRET_COMMANDS[lower];
+    if (command && issueTurretCommand(command)) keyEvent.preventDefault();
+  }
 
-    if (lower === 't') {
-      const turretId = resolveTargetTurretId();
-      if (!turretId) return;
-      keyEvent.preventDefault();
-      const record = placement?.getTurret(turretId);
-      const currentPrio: TargetPriority =
-        priorityOverrides.get(turretId) ?? record?.priority ?? 'first';
-      const nextPrio = nextTargetPriority(currentPrio);
-      priorityOverrides.set(turretId, nextPrio);
-      if (record) {
-        record.priority = nextPrio;
+  function issueTurretCommand(action: TurretRadialActionId): boolean {
+    if (!enabled || disposed || resolveSettingsOpen()) return false;
+    const turretId = resolveTargetTurretId();
+    if (!turretId) return false;
+    const record = placement?.getTurret(turretId);
+    switch (action) {
+      case 'turret:upgrade':
+        if (record && getNextTurretTier(record.tier) === null) return false;
+        actionBus.dispatch({ type: 'turret/upgrade', turretId }, 'desktop');
+        return true;
+      case 'turret:priority': {
+        const currentPrio: TargetPriority =
+          priorityOverrides.get(turretId) ?? record?.priority ?? 'first';
+        const nextPrio = nextTargetPriority(currentPrio);
+        priorityOverrides.set(turretId, nextPrio);
+        if (record) {
+          record.priority = nextPrio;
+        }
+        actionBus.dispatch(
+          { type: 'turret/set-priority', turretId, priority: nextPrio },
+          'desktop',
+        );
+        return true;
       }
-      actionBus.dispatch({ type: 'turret/set-priority', turretId, priority: nextPrio }, 'desktop');
-      return;
-    }
-
-    if (lower === 'r') {
-      const turretId = resolveTargetTurretId();
-      if (!turretId) return;
-      keyEvent.preventDefault();
-      const began = placement ? placement.beginRelocate(turretId) : true;
-      if (began && lastRay && placement) {
-        placement.updateFromRay(lastRay.origin, lastRay.direction);
+      case 'turret:relocate': {
+        const began = placement ? placement.beginRelocate(turretId) : true;
+        if (began && lastRay && placement) {
+          placement.updateFromRay(lastRay.origin, lastRay.direction);
+        }
+        return began;
       }
-      return;
-    }
-
-    if (lower === 'x') {
-      const turretId = resolveTargetTurretId();
-      if (!turretId) return;
-      keyEvent.preventDefault();
-      priorityOverrides.delete(turretId);
-      setSelectedTurretInternal(null);
-      actionBus.dispatch({ type: 'turret/sell', turretId }, 'desktop');
+      case 'turret:sell':
+        priorityOverrides.delete(turretId);
+        setSelectedTurretInternal(null);
+        actionBus.dispatch({ type: 'turret/sell', turretId }, 'desktop');
+        return true;
     }
   }
 
@@ -511,6 +515,7 @@ export function createDesktopControls(options: DesktopControlsOptions): DesktopC
       internalSettingsOpen = open;
     },
     selectTurretKind,
+    issueTurretCommand,
     adjustHoverDepth(deltaM) {
       if (!placement) return null;
       return placement.adjustHoverDepth(deltaM);

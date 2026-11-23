@@ -18,6 +18,7 @@ import {
   VIRTUAL_CONSOLE_TABLE,
   VIRTUAL_ROOM_DIMENSIONS,
 } from '../mr/virtual-room.ts';
+import type { RuntimeAssetLibrary, SharedPbrMaterialId } from '../render/asset-loader.ts';
 import { configureFonts } from '../ui/fonts.ts';
 import {
   createXrSessionManager,
@@ -61,6 +62,7 @@ export type XrEntryView = Pick<XrSessionManager, 'state' | 'subscribe' | 'clearE
 export interface LaunchOverlay {
   readonly element: HTMLElement;
   readonly visible: boolean;
+  setLoadStatus?(text: string | null): void;
   show(): void;
   hide(): void;
   dispose(): void;
@@ -110,7 +112,10 @@ export function createLaunchOverlay(
     inset: '0',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingLeft: 'clamp(20px, 6vw, 88px)',
+    background:
+      'linear-gradient(90deg, rgba(6, 10, 16, 0.90) 0%, rgba(6, 10, 16, 0.62) 48%, rgba(6, 10, 16, 0.18) 100%), url("/assets/ui/desktop-title.jpg") center / cover no-repeat',
     pointerEvents: 'none',
     zIndex: '10',
   });
@@ -118,12 +123,13 @@ export function createLaunchOverlay(
   const panel = document.createElement('div');
   applyStyle(panel, {
     pointerEvents: 'auto',
-    width: 'min(360px, calc(100vw - 32px))',
+    width: 'min(370px, calc(100vw - 32px))',
     padding: '28px 26px 24px',
-    background: PALETTE.panel,
+    background: 'rgba(8, 14, 22, 0.88)',
+    backdropFilter: 'blur(8px)',
     border: '1px solid rgba(45, 226, 255, 0.35)',
     borderRadius: '10px',
-    boxShadow: '0 0 40px rgba(45, 226, 255, 0.12)',
+    boxShadow: '0 12px 48px rgba(0, 0, 0, 0.55), 0 0 36px rgba(45, 226, 255, 0.14)',
     color: PALETTE.text,
     font: '15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif',
   });
@@ -140,6 +146,15 @@ export function createLaunchOverlay(
   tagline.textContent = 'Mixed-reality tactical tower defense';
   applyStyle(tagline, { margin: '6px 0 14px', color: PALETTE.muted });
 
+  const loadStatus = document.createElement('p');
+  loadStatus.dataset.control = 'asset-load-status';
+  applyStyle(loadStatus, {
+    margin: '12px 0 0',
+    font: '500 12px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace',
+    color: PALETTE.trim,
+    display: 'none',
+  });
+
   const enterButton = makeButton(document, ENTER_XR_LABEL, 'enter-xr', true);
   const desktopButton = makeButton(document, PLAY_DESKTOP_LABEL, 'play-desktop', false);
   const settingsButton = makeButton(document, SETTINGS_LABEL, 'settings', false);
@@ -150,7 +165,7 @@ export function createLaunchOverlay(
   settingsButton.addEventListener('click', () =>
     bus.dispatch({ type: 'menu/open-settings' }, 'desktop'),
   );
-  panel.append(title, tagline, enterButton, desktopButton, settingsButton);
+  panel.append(title, tagline, enterButton, desktopButton, settingsButton, loadStatus);
 
   const notice = document.createElement('div');
   notice.dataset.control = 'xr-notice';
@@ -158,7 +173,7 @@ export function createLaunchOverlay(
   notice.setAttribute('aria-live', 'polite');
   applyStyle(notice, {
     position: 'absolute',
-    top: '16px',
+    top: '66px',
     left: '50%',
     transform: 'translateX(-50%)',
     display: 'none',
@@ -204,7 +219,9 @@ export function createLaunchOverlay(
     applyStyle(enterButton, { opacity: enterButton.disabled ? '0.5' : '1' });
     const message =
       state.error ??
-      (state.supported === false && !unsupportedDismissed ? XR_UNSUPPORTED_NOTICE : null);
+      (visible && state.supported === false && !unsupportedDismissed
+        ? XR_UNSUPPORTED_NOTICE
+        : null);
     noticeText.textContent = message ?? '';
     applyStyle(notice, { display: message ? 'flex' : 'none' });
   }
@@ -223,13 +240,29 @@ export function createLaunchOverlay(
     get visible() {
       return visible;
     },
+    setLoadStatus(text) {
+      if (!text) {
+        loadStatus.textContent = '';
+        applyStyle(loadStatus, { display: 'none' });
+      } else {
+        loadStatus.textContent = text;
+        applyStyle(loadStatus, { display: 'block' });
+      }
+    },
     show() {
       visible = true;
+      applyStyle(element, {
+        background:
+          'linear-gradient(90deg, rgba(6, 10, 16, 0.90) 0%, rgba(6, 10, 16, 0.62) 48%, rgba(6, 10, 16, 0.18) 100%), url("/assets/ui/desktop-title.jpg") center / cover no-repeat',
+      });
       applyStyle(panel, { display: 'block' });
+      render(xr.state);
     },
     hide() {
       visible = false;
+      applyStyle(element, { background: 'none' });
       applyStyle(panel, { display: 'none' });
+      render(xr.state);
     },
     dispose() {
       unsubscribe();
@@ -238,47 +271,96 @@ export function createLaunchOverlay(
   };
 }
 
-/** Builds the stylized dark tactical test room (desktop stand-in for the real room). */
+function ensureUv2(geo: THREE.BufferGeometry): THREE.BufferGeometry {
+  if (geo.attributes.uv && !geo.attributes.uv2) {
+    geo.setAttribute('uv2', geo.attributes.uv);
+  }
+  return geo;
+}
+
+function tagPbrSurface(
+  mesh: THREE.Mesh,
+  materialId: SharedPbrMaterialId,
+  repeat: readonly [number, number],
+  side?: THREE.Side,
+): void {
+  mesh.userData.pbrMaterial = materialId;
+  mesh.userData.pbrRepeat = repeat;
+  if (side !== undefined) mesh.userData.pbrSide = side;
+}
+
+/** Applies the 5 promoted shared PBR KTX2 materials to the Desktop Tactical Command Room. */
+export function applyRoomPbrMaterials(room: THREE.Group, assets: RuntimeAssetLibrary): number {
+  if (!assets.ready) return 0;
+  let applied = 0;
+  const cache = new Map<string, THREE.MeshStandardMaterial>();
+  room.traverse((node) => {
+    if (!(node instanceof THREE.Mesh)) return;
+    const matId = node.userData.pbrMaterial as SharedPbrMaterialId | undefined;
+    if (!matId) return;
+    const repeat = (node.userData.pbrRepeat as readonly [number, number] | undefined) ?? [1, 1];
+    const side = node.userData.pbrSide as THREE.Side | undefined;
+    const key = `${matId}:${repeat[0]}x${repeat[1]}:${side ?? 'front'}`;
+    let pbrMat = cache.get(key);
+    if (!pbrMat) {
+      pbrMat =
+        assets.getSharedMaterial(matId, { repeat, ...(side !== undefined ? { side } : {}) }) ??
+        undefined;
+      if (!pbrMat) return;
+      cache.set(key, pbrMat);
+    }
+    if (node.material !== pbrMat) {
+      node.material = pbrMat;
+      applied += 1;
+    }
+  });
+  return applied;
+}
+
+/** Builds the stylized dark tactical command room (desktop stand-in for the real room). */
 export function createTestRoom(): { room: THREE.Group; core: THREE.Mesh } {
   const room = new THREE.Group();
   room.name = 'test-room';
 
   const shell = new THREE.Mesh(
-    new THREE.BoxGeometry(ROOM.width, ROOM.height, ROOM.depth),
+    ensureUv2(new THREE.BoxGeometry(ROOM.width, ROOM.height, ROOM.depth)),
     new THREE.MeshStandardMaterial({
       color: PALETTE.wall,
-      roughness: 0.85,
-      metalness: 0.25,
+      roughness: 0.78,
+      metalness: 0.18,
       side: THREE.BackSide,
     }),
   );
   shell.position.y = ROOM.height / 2;
+  shell.receiveShadow = true;
   shell.name = 'room-shell';
+  tagPbrSurface(shell, 'tactical-ceramic', [4, 2], THREE.BackSide);
   room.add(shell);
 
   const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(ROOM.width, ROOM.depth),
-    new THREE.MeshStandardMaterial({ color: PALETTE.floor, roughness: 0.7, metalness: 0.35 }),
+    ensureUv2(new THREE.PlaneGeometry(ROOM.width, ROOM.depth)),
+    new THREE.MeshStandardMaterial({ color: PALETTE.floor, roughness: 0.55, metalness: 0.65 }),
   );
   floor.rotation.x = -Math.PI / 2;
   floor.position.y = -0.001;
   floor.receiveShadow = true;
   floor.name = 'room-floor';
+  tagPbrSurface(floor, 'dark-gunmetal', [6, 6]);
   room.add(floor);
 
   const grid = new THREE.GridHelper(ROOM.depth, 20, PALETTE.trim, PALETTE.trim);
   const gridMaterial = grid.material as THREE.LineBasicMaterial;
   gridMaterial.transparent = true;
-  gridMaterial.opacity = 0.12;
+  gridMaterial.opacity = 0.08;
   grid.position.y = 0.0005;
   room.add(grid);
 
   const trimMaterial = new THREE.MeshStandardMaterial({
     color: PALETTE.trim,
     emissive: PALETTE.trim,
-    emissiveIntensity: 1.6,
+    emissiveIntensity: 1.5,
   });
-  const trimHeight = 0.04;
+  const trimHeight = 0.032;
   const trims: Array<[number, number, number, number, number]> = [
     // width, depth, x, z, rotationY
     [ROOM.width, 0.02, 0, -ROOM.depth / 2 + 0.01, 0],
@@ -293,7 +375,7 @@ export function createTestRoom(): { room: THREE.Group; core: THREE.Mesh } {
       geometry = new THREE.BoxGeometry(width, trimHeight, depth);
       trimGeometries.set(width, geometry);
     }
-    for (const y of [0.12, ROOM.height - 0.12]) {
+    for (const y of [0.1, ROOM.height - 0.1]) {
       const strip = new THREE.Mesh(geometry, trimMaterial);
       strip.position.set(x, y, z);
       strip.rotation.y = rotationY;
@@ -301,23 +383,71 @@ export function createTestRoom(): { room: THREE.Group; core: THREE.Mesh } {
     }
   }
 
-  const panelMaterial = new THREE.MeshStandardMaterial({
-    color: '#1a1206',
-    emissive: PALETTE.amber,
-    emissiveIntensity: 0.55,
+  // Architectural brushed-titanium wall bulkhead ribs + rift-obsidian energy inlays
+  const metal = new THREE.MeshStandardMaterial({
+    color: '#2d3742',
+    roughness: 0.36,
+    metalness: 0.86,
   });
-  const panelGeometry = new THREE.PlaneGeometry(0.9, 0.5);
-  for (const x of [-1.6, 1.6]) {
-    const panel = new THREE.Mesh(panelGeometry, panelMaterial);
-    panel.position.set(x, 1.7, -ROOM.depth / 2 + 0.02);
-    room.add(panel);
+  const obsidianFallback = new THREE.MeshStandardMaterial({
+    color: '#241a33',
+    emissive: '#1e767e',
+    emissiveIntensity: 0.55,
+    roughness: 0.25,
+    metalness: 0.15,
+  });
+  const chitinFallback = new THREE.MeshStandardMaterial({
+    color: '#2a2230',
+    roughness: 0.42,
+    metalness: 0.1,
+  });
+
+  const ribGeo = ensureUv2(new THREE.BoxGeometry(0.14, ROOM.height - 0.22, 0.06));
+  const ribPositions: Array<[number, number, number]> = [
+    [-2.1, -ROOM.depth / 2 + 0.03, 0],
+    [0, -ROOM.depth / 2 + 0.03, 0],
+    [2.1, -ROOM.depth / 2 + 0.03, 0],
+    [-ROOM.width / 2 + 0.03, -1.6, Math.PI / 2],
+    [-ROOM.width / 2 + 0.03, 1.6, Math.PI / 2],
+    [ROOM.width / 2 - 0.03, -1.6, Math.PI / 2],
+    [ROOM.width / 2 - 0.03, 1.6, Math.PI / 2],
+  ];
+  for (const [rx, rz, rotY] of ribPositions) {
+    const rib = new THREE.Mesh(ribGeo, metal);
+    rib.position.set(rx, ROOM.height / 2, rz);
+    rib.rotation.y = rotY;
+    rib.receiveShadow = true;
+    tagPbrSurface(rib, 'dark-gunmetal', [1, 4]);
+    room.add(rib);
   }
 
-  const metal = new THREE.MeshStandardMaterial({
-    color: '#2a333d',
-    roughness: 0.4,
-    metalness: 0.8,
-  });
+  const bayFrameGeo = ensureUv2(new THREE.BoxGeometry(1.06, 0.62, 0.035));
+  const bayInlayGeo = ensureUv2(new THREE.BoxGeometry(0.92, 0.48, 0.042));
+  for (const x of [-1.25, 1.25]) {
+    const frame = new THREE.Mesh(bayFrameGeo, metal);
+    frame.position.set(x, 1.72, -ROOM.depth / 2 + 0.018);
+    frame.name = `room-bulkhead-frame-${x < 0 ? 'left' : 'right'}`;
+    tagPbrSurface(frame, 'dark-gunmetal', [2, 1]);
+    room.add(frame);
+
+    const inlay = new THREE.Mesh(bayInlayGeo, obsidianFallback);
+    inlay.position.set(x, 1.72, -ROOM.depth / 2 + 0.02);
+    inlay.name = `room-bulkhead-inlay-${x < 0 ? 'left' : 'right'}`;
+    tagPbrSurface(inlay, 'rift-obsidian', [2, 1]);
+    room.add(inlay);
+  }
+
+  // Subtle floor containment ring inlay beneath the central Core table using obsidian-chitin
+  const daisRing = new THREE.Mesh(
+    ensureUv2(new THREE.CylinderGeometry(1.18, 1.24, 0.014, 32)),
+    chitinFallback,
+  );
+  daisRing.position.set(0, 0.007, 0);
+  daisRing.receiveShadow = true;
+  daisRing.name = 'room-central-dais';
+  tagPbrSurface(daisRing, 'obsidian-chitin', [3, 3]);
+  room.add(daisRing);
+
   const addTable = (
     name: string,
     spec: {
@@ -331,15 +461,19 @@ export function createTestRoom(): { room: THREE.Group; core: THREE.Mesh } {
     table.name = name;
     table.position.set(spec.position.x, 0, spec.position.z);
     const thickness = 0.05;
-    const top = new THREE.Mesh(new THREE.BoxGeometry(spec.width, thickness, spec.depth), metal);
+    const top = new THREE.Mesh(
+      ensureUv2(new THREE.BoxGeometry(spec.width, thickness, spec.depth)),
+      metal,
+    );
     top.position.y = spec.y - thickness / 2;
     top.receiveShadow = true;
     top.castShadow = true;
+    tagPbrSurface(top, 'brushed-titanium', [2, 2]);
     table.add(top);
     const legHeight = Math.max(0.05, spec.y - thickness);
-    const legGeometry = new THREE.BoxGeometry(0.05, legHeight, 0.05);
-    const lx = Math.max(0.05, spec.width / 2 - 0.05);
-    const lz = Math.max(0.05, spec.depth / 2 - 0.05);
+    const legGeometry = ensureUv2(new THREE.BoxGeometry(0.055, legHeight, 0.055));
+    const lx = Math.max(0.05, spec.width / 2 - 0.055);
+    const lz = Math.max(0.05, spec.depth / 2 - 0.055);
     for (const [x, z] of [
       [-lx, -lz],
       [lx, -lz],
@@ -348,6 +482,9 @@ export function createTestRoom(): { room: THREE.Group; core: THREE.Mesh } {
     ] as const) {
       const leg = new THREE.Mesh(legGeometry, metal);
       leg.position.set(x, legHeight / 2, z);
+      leg.castShadow = true;
+      leg.receiveShadow = true;
+      tagPbrSurface(leg, 'dark-gunmetal', [1, 2]);
       table.add(leg);
     }
     room.add(table);

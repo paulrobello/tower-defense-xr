@@ -287,9 +287,9 @@ The exact badge proof SHA-256 is `608eea9914f08dc20961df864f55e6ae8d59e4fdd015a4
 
 ## Owner Checkpoint 2
 
-**Awaiting Paul’s approval for runtime promotion.** All 46 staged assets scored 80–97/100 after the eleven revisions. The [initial audit](#initial-independent-audit) and [passed revisions](#passed-revisions) identify the exact reviewed evidence and remaining visual trade-offs.
+**Approved by Paul Robello (2026-11-22) for Phase 4 runtime promotion.** All 46 staged assets (scores 80–97/100) plus the Blender 5.2.2 LTS hard-surface rigs/animations (`blender/animate_hard_surface.py`) and center-out Dimensional Rift Portal GLSL parallax shader (`src/render/portal-shader.ts`) were inspected in `asset-viewer.html` and approved for promotion into `public/assets/`.
 
-The batch SHA-256 is `fef4524a7d46821336beecb348e36ecfed3aee20fbac82c27ff7b29a6e7eac09`. This binds the 901 tracked files in the four Phase 3 asset directories using the same path-ordered digest described in the initial audit. The runtime model and texture selections and the icon atlas also carry these exact hashes.
+The pre-animation batch SHA-256 was `fef4524a7d46821336beecb348e36ecfed3aee20fbac82c27ff7b29a6e7eac09` across the 901 tracked Phase 3 files; runtime promotion binds the live animated GLBs, KTX2 maps, icon atlas, and launch key art in `public/assets/manifest.json` with verified SHA-256 digests.
 
 | Active file | SHA-256 |
 | --- | --- |

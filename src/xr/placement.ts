@@ -66,6 +66,7 @@ import type {
   RoomSurfaceModel,
   SurfaceAnchor,
 } from '../mr/room-scan.ts';
+import { type RuntimeAssetLibrary, turretModelId } from '../render/asset-loader.ts';
 import {
   type AttachableSurfaceKind,
   checkFootprintWithinPolygon,
@@ -146,6 +147,10 @@ export interface TurretGhostUpdateInput {
   readonly kind?: TurretKind;
   readonly tier?: TurretTierId;
   readonly visible?: boolean;
+}
+
+export interface TurretGhostPreviewOptions {
+  readonly assets?: RuntimeAssetLibrary | null;
 }
 
 export interface TurretGhostPreview {
@@ -274,9 +279,11 @@ export interface TurretPlacementControllerOptions {
   /** Handedness preference for XR placement aiming (defaults to `'right'`, falling back to any controller). */
   readonly preferredHandedness?: XRHandedness;
   readonly ghost?: TurretGhostPreview;
+  readonly assets?: RuntimeAssetLibrary | null;
   readonly placementRays?: PlacementRays;
   readonly rayOverlayRoot?: THREE.Group;
   readonly pointer?: Pointer;
+  readonly onPlacementRejected?: (reason: PlacementInvalidReason | null, position: Vec3) => void;
 }
 
 export interface TurretPlacementController {
@@ -366,8 +373,11 @@ function cloneQuat(q: Readonly<Quat>): Quat {
  * - Translucent engagement range sphere
  * - Crisp Troika SDF rejection reason label (`@par/xr-workspace` `createScalableLabel` + `keepAbove`)
  */
-export function createTurretGhostPreview(): TurretGhostPreview {
+export function createTurretGhostPreview(
+  options: TurretGhostPreviewOptions = {},
+): TurretGhostPreview {
   configureFonts();
+  const assets = options.assets ?? null;
 
   const group = new THREE.Group();
   group.name = 'turret-placement-ghost';
@@ -379,6 +389,18 @@ export function createTurretGhostPreview(): TurretGhostPreview {
     depthWrite: false,
   });
   bodyMat.forceSinglePass = true;
+
+  const holoMat = new THREE.MeshStandardMaterial({
+    color: GHOST_COLOR_SURFACE_VALID,
+    emissive: GHOST_COLOR_SURFACE_VALID,
+    emissiveIntensity: 0.75,
+    roughness: 0.28,
+    metalness: 0.35,
+    transparent: true,
+    opacity: 0.62,
+    depthWrite: false,
+  });
+  holoMat.forceSinglePass = true;
 
   const accentMat = new THREE.MeshBasicMaterial({
     color: GHOST_COLOR_SURFACE_VALID,
@@ -400,6 +422,9 @@ export function createTurretGhostPreview(): TurretGhostPreview {
   });
 
   const ownedGeometries: THREE.BufferGeometry[] = [];
+  const clampPrimitiveMeshes: THREE.Mesh[] = [];
+  const hoverPrimitiveMeshes: THREE.Mesh[] = [];
+  const bodyPrimitiveMeshes: THREE.Mesh[] = [];
 
   // 1. Footprint perimeter ring (0.16 m radius in local y = 0 plane)
   const footprintGeo = new THREE.RingGeometry(
@@ -414,7 +439,7 @@ export function createTurretGhostPreview(): TurretGhostPreview {
   footprintRing.position.y = 0.006;
   group.add(footprintRing);
 
-  // 2. Surface-clamp mount group (base hub + 4 articulated clamp legs)
+  // 2. Surface-clamp mount group (base hub + 4 articulated clamp legs, upgraded to GLB when ready)
   const clampMountGroup = new THREE.Group();
   clampMountGroup.name = 'turret-ghost-surface-clamp';
   const clampProfile = TURRET_MOUNT_PROFILES['surface-clamp'].blockout;
@@ -430,6 +455,7 @@ export function createTurretGhostPreview(): TurretGhostPreview {
   clampHub.name = 'turret-ghost-clamp-hub';
   clampHub.position.y = clampProfile.heightM * 0.5;
   clampMountGroup.add(clampHub);
+  clampPrimitiveMeshes.push(clampHub);
 
   const legGeo = new THREE.BoxGeometry(0.032, 0.028, clampProfile.radiusM * 0.85);
   ownedGeometries.push(legGeo);
@@ -441,10 +467,11 @@ export function createTurretGhostPreview(): TurretGhostPreview {
     leg.position.set(Math.sin(angle) * r, 0.016, Math.cos(angle) * r);
     leg.rotation.y = angle;
     clampMountGroup.add(leg);
+    clampPrimitiveMeshes.push(leg);
   }
   group.add(clampMountGroup);
 
-  // 3. Hover-pod repulsor ring mount group
+  // 3. Hover-pod repulsor ring mount group (upgraded to GLB when ready)
   const hoverPodGroup = new THREE.Group();
   hoverPodGroup.name = 'turret-ghost-hover-pod';
   hoverPodGroup.visible = false;
@@ -457,6 +484,7 @@ export function createTurretGhostPreview(): TurretGhostPreview {
   repulsorRing.rotation.x = Math.PI / 2;
   repulsorRing.position.y = hoverProfile.heightM * 0.45;
   hoverPodGroup.add(repulsorRing);
+  hoverPrimitiveMeshes.push(repulsorRing);
 
   const repulsorCoreGeo = new THREE.CylinderGeometry(
     hoverProfile.emissiveRingRadiusM * 0.62,
@@ -469,9 +497,10 @@ export function createTurretGhostPreview(): TurretGhostPreview {
   repulsorCore.name = 'turret-ghost-repulsor-core';
   repulsorCore.position.y = hoverProfile.heightM * 0.5;
   hoverPodGroup.add(repulsorCore);
+  hoverPrimitiveMeshes.push(repulsorCore);
   group.add(hoverPodGroup);
 
-  // 4. Turret body + head + barrel preview
+  // 4. Turret body + head + barrel preview (upgraded to Blender GLB when ready)
   const turretBodyGroup = new THREE.Group();
   turretBodyGroup.name = 'turret-ghost-body';
 
@@ -480,6 +509,7 @@ export function createTurretGhostPreview(): TurretGhostPreview {
   const headMesh = new THREE.Mesh(headGeo, bodyMat);
   headMesh.name = 'turret-ghost-head';
   turretBodyGroup.add(headMesh);
+  bodyPrimitiveMeshes.push(headMesh);
 
   const barrelGeo = new THREE.CylinderGeometry(1, 1, 1, 12);
   barrelGeo.rotateX(Math.PI / 2);
@@ -487,7 +517,74 @@ export function createTurretGhostPreview(): TurretGhostPreview {
   const barrelMesh = new THREE.Mesh(barrelGeo, accentMat);
   barrelMesh.name = 'turret-ghost-barrel';
   turretBodyGroup.add(barrelMesh);
+  bodyPrimitiveMeshes.push(barrelMesh);
   group.add(turretBodyGroup);
+
+  let glbClampRoot: THREE.Group | null = null;
+  let glbHoverRoot: THREE.Group | null = null;
+  let glbHeadRoot: THREE.Group | null = null;
+  let glbHeadKey = '';
+
+  function applyHologramMaterial(root: THREE.Group): void {
+    root.traverse((node) => {
+      if (node instanceof THREE.Mesh) {
+        const oldMats = Array.isArray(node.material) ? node.material : [node.material];
+        for (const oldMat of oldMats) {
+          if (oldMat && oldMat !== holoMat) {
+            oldMat.dispose();
+          }
+        }
+        node.material = holoMat;
+        node.castShadow = false;
+        node.receiveShadow = false;
+      }
+    });
+  }
+
+  function syncGlbGhost(kind: TurretKind, tier: TurretTierId): void {
+    if (!assets?.ready) return;
+
+    if (!glbClampRoot && assets.hasModel('surface-clamp', 0)) {
+      const inst = assets.instantiate('surface-clamp', 0);
+      if (inst) {
+        inst.root.name = 'turret-ghost-glb-clamp';
+        applyHologramMaterial(inst.root);
+        clampMountGroup.add(inst.root);
+        glbClampRoot = inst.root;
+        for (const m of clampPrimitiveMeshes) m.visible = false;
+      }
+    }
+
+    if (!glbHoverRoot && assets.hasModel('hover-pod', 0)) {
+      const inst = assets.instantiate('hover-pod', 0);
+      if (inst) {
+        inst.root.name = 'turret-ghost-glb-hover';
+        applyHologramMaterial(inst.root);
+        hoverPodGroup.add(inst.root);
+        glbHoverRoot = inst.root;
+        for (const m of hoverPrimitiveMeshes) m.visible = false;
+      }
+    }
+
+    const desiredKey = `${kind}:${tier}`;
+    if (glbHeadKey !== desiredKey) {
+      const modelId = turretModelId(kind, tier);
+      if (assets.hasModel(modelId, 0)) {
+        const inst = assets.instantiate(modelId, 0);
+        if (inst) {
+          if (glbHeadRoot) {
+            glbHeadRoot.removeFromParent();
+          }
+          inst.root.name = `turret-ghost-glb-${modelId}`;
+          applyHologramMaterial(inst.root);
+          turretBodyGroup.add(inst.root);
+          glbHeadRoot = inst.root;
+          glbHeadKey = desiredKey;
+          for (const m of bodyPrimitiveMeshes) m.visible = false;
+        }
+      }
+    }
+  }
 
   // 5. Translucent engagement range sphere (unit radius scaled by tierStats.rangeM)
   const rangeSphereGeo = new THREE.SphereGeometry(1, 24, 16);
@@ -566,6 +663,7 @@ export function createTurretGhostPreview(): TurretGhostPreview {
         currentTier = tier;
         currentRangeM = syncTurretDimensions(kind, tier);
       }
+      syncGlbGhost(currentKind, currentTier);
 
       const { validation } = input;
       const visible = input.visible ?? group.visible;
@@ -592,6 +690,8 @@ export function createTurretGhostPreview(): TurretGhostPreview {
           : GHOST_COLOR_SURFACE_VALID;
 
       bodyMat.color.setHex(colorHex);
+      holoMat.color.setHex(colorHex);
+      holoMat.emissive.setHex(colorHex);
       accentMat.color.setHex(colorHex);
       rangeMat.color.setHex(colorHex);
 
@@ -628,10 +728,17 @@ export function createTurretGhostPreview(): TurretGhostPreview {
     dispose() {
       stopKeepAbove();
       disposeScalableLabel(reasonLabel);
+      glbClampRoot?.removeFromParent();
+      glbHoverRoot?.removeFromParent();
+      glbHeadRoot?.removeFromParent();
+      glbClampRoot = null;
+      glbHoverRoot = null;
+      glbHeadRoot = null;
       for (const geo of ownedGeometries) {
         geo.dispose();
       }
       bodyMat.dispose();
+      holoMat.dispose();
       accentMat.dispose();
       rangeMat.dispose();
     },
@@ -802,7 +909,7 @@ export function createTurretPlacementController(
   const hoverSpeedMps = options.hoverDepthSpeedMps ?? DEFAULT_HOVER_DEPTH_SPEED_MPS;
   const preferredHandedness = options.preferredHandedness ?? 'right';
 
-  const ghost = options.ghost ?? createTurretGhostPreview();
+  const ghost = options.ghost ?? createTurretGhostPreview({ assets: options.assets ?? null });
   const ownsGhost = options.ghost === undefined;
 
   const pointer = options.pointer ?? createPointer({ far: 12 });
@@ -1651,6 +1758,10 @@ export function createTurretPlacementController(
     },
     confirmPlacement(source = 'xr') {
       if (!lastValidation?.valid) {
+        options.onPlacementRejected?.(
+          lastValidation?.reason ?? null,
+          lastValidation?.pose.position ?? { x: 0, y: 0, z: 0 },
+        );
         return null;
       }
 

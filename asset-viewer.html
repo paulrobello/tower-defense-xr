@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b1016" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Rift Bastion · AAA Asset &amp; Animation Viewer</title>
+    <link rel="stylesheet" href="./scripts/asset-viewer/viewer.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Asset catalog">
+        <header class="brand">
+          <div class="brand-kicker">Rift Bastion · Approved Looks + Rigs</div>
+          <h1>AAA Asset Viewer</h1>
+          <p class="brand-sub">All 21 3D models rigged &amp; animated · 47 total items</p>
+        </header>
+
+        <div class="filter-controls">
+          <label class="search-wrap">
+            <span class="sr-only">Filter assets by name</span>
+            <input
+              id="search-input"
+              type="search"
+              placeholder="Filter assets by name…"
+              autocomplete="off"
+            />
+          </label>
+          <div id="category-tabs" class="category-tabs" role="tablist" aria-label="Asset categories"></div>
+        </div>
+
+        <div id="asset-list" class="asset-list" role="listbox" aria-label="Assets"></div>
+      </aside>
+
+      <main class="stage-column">
+        <header class="topbar">
+          <div class="title-block">
+            <div class="title-meta-row">
+              <span id="asset-index" class="pill pill-index">1 / 47</span>
+              <span id="asset-category" class="pill pill-category">Core &amp; Portal</span>
+              <span id="asset-score" class="pill pill-score">Approved</span>
+            </div>
+            <h2 id="asset-name" class="asset-name">Loading…</h2>
+            <p id="asset-subtitle" class="asset-subtitle"></p>
+          </div>
+
+          <div class="nav-controls">
+            <button type="button" id="prev-btn" class="btn btn-nav" title="Previous asset (Left Arrow)">
+              ← Prev
+            </button>
+            <button type="button" id="next-btn" class="btn btn-nav btn-primary" title="Next asset (Right Arrow)">
+              Next →
+            </button>
+          </div>
+        </header>
+
+        <section class="viewport-shell" aria-label="Asset preview">
+          <div id="canvas-stage" class="canvas-stage">
+            <canvas id="viewer-canvas"></canvas>
+            <div id="loading-overlay" class="loading-overlay" hidden>
+              <div class="spinner" aria-hidden="true"></div>
+              <span id="loading-label">Loading model…</span>
+            </div>
+            <div id="error-overlay" class="error-overlay" hidden></div>
+
+            <div id="anim-bar" class="anim-bar" hidden>
+              <div id="clip-pills" class="clip-pills"></div>
+              <div class="timeline-row">
+                <button type="button" id="anim-play-btn" class="btn btn-sm btn-primary">Pause</button>
+                <input
+                  id="anim-scrubber"
+                  class="scrubber"
+                  type="range"
+                  min="0"
+                  max="1"
+                  step="0.001"
+                  value="0"
+                  aria-label="Animation timeline"
+                />
+                <span id="anim-time-label" class="time-label">0.00 / 0.00s</span>
+                <fieldset class="segmented" aria-label="Playback speed">
+                  <button type="button" data-speed="0.25" class="seg-btn">0.25×</button>
+                  <button type="button" data-speed="0.5" class="seg-btn">0.5×</button>
+                  <button type="button" data-speed="1" class="seg-btn active">1×</button>
+                  <button type="button" data-speed="2" class="seg-btn">2×</button>
+                </fieldset>
+              </div>
+            </div>
+
+            <div class="viewport-hud-bottom">
+              <div id="live-stats" class="live-stats"></div>
+              <div class="hint-text">Drag to orbit · ← / → asset · P play/pause · R show rig</div>
+            </div>
+          </div>
+
+          <div id="image-stage" class="image-stage" hidden>
+            <div id="image-stage-inner" class="image-stage-inner bg-dark"></div>
+          </div>
+        </section>
+
+        <footer class="toolbar">
+          <div id="controls-3d" class="toolbar-group">
+            <div id="lod-group" class="control-cluster" hidden>
+              <span class="cluster-label">LOD</span>
+              <fieldset class="segmented" aria-label="Level of detail">
+                <button type="button" data-lod="0" class="seg-btn active">LOD0</button>
+                <button type="button" data-lod="1" class="seg-btn">LOD1</button>
+              </fieldset>
+            </div>
+
+            <div id="mount-group" class="control-cluster" hidden>
+              <span class="cluster-label">Mount</span>
+              <fieldset class="segmented" aria-label="Turret mount">
+                <button type="button" data-mount="surface-clamp" class="seg-btn active">Clamp</button>
+                <button type="button" data-mount="hover-pod" class="seg-btn">Hover Pod</button>
+                <button type="button" data-mount="none" class="seg-btn">Head Only</button>
+              </fieldset>
+            </div>
+
+            <div id="boss-phase-group" class="control-cluster" hidden>
+              <span class="cluster-label">Boss Phase</span>
+              <fieldset class="segmented" aria-label="Broodlord phase">
+                <button type="button" data-phase="1" class="seg-btn active">Phase 1</button>
+                <button type="button" data-phase="2" class="seg-btn">Phase 2 Cracks</button>
+              </fieldset>
+            </div>
+
+            <div id="material-view-group" class="control-cluster" hidden>
+              <span class="cluster-label">Preview</span>
+              <fieldset class="segmented" aria-label="Material preview mode">
+                <button type="button" data-matview="3d" class="seg-btn active">3D Live KTX2</button>
+                <button type="button" data-matview="proof" class="seg-btn">Blender Proof</button>
+              </fieldset>
+            </div>
+
+            <div class="control-cluster">
+              <span class="cluster-label">Light</span>
+              <fieldset class="segmented" aria-label="Lighting preset">
+                <button type="button" data-light="studio" class="seg-btn active">Studio</button>
+                <button type="button" data-light="dramatic" class="seg-btn">Dramatic</button>
+                <button type="button" data-light="bright" class="seg-btn">Bright</button>
+              </fieldset>
+            </div>
+
+            <div class="control-cluster">
+              <button type="button" id="rig-btn" class="btn btn-sm" title="Show bones, pivots, and sockets (R)">
+                Show Rig
+              </button>
+              <button type="button" id="rotate-btn" class="btn btn-sm active">Turntable</button>
+              <button type="button" id="wireframe-btn" class="btn btn-sm">Wireframe</button>
+              <button type="button" id="grid-btn" class="btn btn-sm active">Grid</button>
+              <button type="button" id="reset-cam-btn" class="btn btn-sm">Reset Cam</button>
+            </div>
+          </div>
+
+          <div id="controls-2d" class="toolbar-group" hidden>
+            <div class="control-cluster">
+              <span class="cluster-label">Backdrop</span>
+              <fieldset class="segmented" aria-label="Image backdrop">
+                <button type="button" data-bg="dark" class="seg-btn active">Dark</button>
+                <button type="button" data-bg="light" class="seg-btn">Light</button>
+                <button type="button" data-bg="checker" class="seg-btn">Checker</button>
+              </fieldset>
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <script type="module" src="./scripts/asset-viewer/viewer.ts"></script>
+  </body>
+</html>

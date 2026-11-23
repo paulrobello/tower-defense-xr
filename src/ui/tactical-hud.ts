@@ -32,6 +32,7 @@ import type { ActionBus, ActionSource, PlayArc } from '../core/action-bus.ts';
 import type { GamePhase } from '../core/state.ts';
 import { forwardFromYaw, type HeadsetPose } from '../xr/calibration.ts';
 import { configureFonts, resolveFontUrls } from './fonts.ts';
+import type { TacticalAtlasResource, TacticalIconAtlas } from './tactical-atlas.ts';
 
 export type TacticalHudMode = 'desktop' | 'xr';
 
@@ -53,10 +54,12 @@ export interface TacticalHudState {
   readonly canLaunchWave: boolean;
   readonly selectedTurretKind: TurretKind | null;
   readonly mountMode: TurretMountProfileId;
+  readonly disruptedTurretCount?: number;
 }
 
 export interface TacticalHudOptions {
   readonly actionBus: ActionBus;
+  readonly atlas?: TacticalAtlasResource;
   readonly container?: HTMLElement | null;
   readonly initialMode?: TacticalHudMode;
   readonly initialVisible?: boolean;
@@ -180,7 +183,17 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
   let visible = options.initialVisible ?? true;
   let recenterCount = 0;
   let lastHeadsetPose: HeadsetPose = options.getHeadsetPose?.() ?? DEFAULT_HEADSET_POSE;
+  let loadedAtlas: TacticalIconAtlas | null = null;
   let disposed = false;
+
+  if (options.atlas) {
+    void options.atlas.get().then((resolved) => {
+      if (!disposed && resolved) {
+        loadedAtlas = resolved;
+        syncReadouts();
+      }
+    });
+  }
 
   let state: TacticalHudState = {
     phase: options.initialState?.phase ?? 'calibrate',
@@ -376,7 +389,9 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
   let desktopElement: HTMLElement | null = null;
   let coreHpEl: HTMLSpanElement | null = null;
   let creditsEl: HTMLSpanElement | null = null;
+  let waveWarningIconEl: HTMLSpanElement | null = null;
   let waveEl: HTMLSpanElement | null = null;
+  let empWarningIconEl: HTMLSpanElement | null = null;
   let turretsEl: HTMLSpanElement | null = null;
   let playArcBtn: HTMLButtonElement | null = null;
   let primaryBtn: HTMLButtonElement | null = null;
@@ -442,9 +457,25 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
       return btn;
     };
 
+    const makeIconBadge = (key: string, title: string): HTMLSpanElement => {
+      const icon = doc.createElement('span');
+      icon.dataset.hud = key;
+      icon.title = title;
+      applyStyle(icon, {
+        display: 'none',
+        width: '20px',
+        height: '20px',
+        flexShrink: '0',
+        backgroundRepeat: 'no-repeat',
+      });
+      return icon;
+    };
+
     coreHpEl = makeStat('core-hp', '#5ef2b6');
     creditsEl = makeStat('credits', '#ffd166');
+    waveWarningIconEl = makeIconBadge('wave-warning-icon', 'Wave Active');
     waveEl = makeStat('wave', '#8fd8ff');
+    empWarningIconEl = makeIconBadge('emp-disrupted-icon', 'Turret EMP Disrupted');
     turretsEl = makeStat('turrets', '#e7f4fb');
 
     playArcBtn = makeBtn('play-arc', false);
@@ -457,7 +488,17 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
     settingsBtn.textContent = 'Settings';
     settingsBtn.addEventListener('click', () => dispatchOpenSettings('desktop'));
 
-    bar.append(coreHpEl, creditsEl, waveEl, turretsEl, playArcBtn, primaryBtn, settingsBtn);
+    bar.append(
+      coreHpEl,
+      creditsEl,
+      waveWarningIconEl,
+      waveEl,
+      empWarningIconEl,
+      turretsEl,
+      playArcBtn,
+      primaryBtn,
+      settingsBtn,
+    );
     container.appendChild(bar);
     desktopElement = bar;
   }
@@ -519,6 +560,24 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
     if (creditsEl) creditsEl.textContent = nextCreditsText;
     if (waveEl) waveEl.textContent = nextWaveText;
     if (turretsEl) turretsEl.textContent = nextTurretsText;
+    const syncAtlasBadge = (el: HTMLSpanElement | null, iconId: string, active: boolean): void => {
+      if (!el) return;
+      const rect = loadedAtlas?.icons[iconId]?.rect;
+      if (!active || !loadedAtlas || !rect) {
+        applyStyle(el, { display: 'none' });
+        return;
+      }
+      const size = 20;
+      const scale = size / 128;
+      applyStyle(el, {
+        display: 'inline-block',
+        backgroundImage: `url("${loadedAtlas.url}")`,
+        backgroundSize: `${loadedAtlas.width * scale}px ${loadedAtlas.height * scale}px`,
+        backgroundPosition: `${-rect[0] * scale}px ${-rect[1] * scale}px`,
+      });
+    };
+    syncAtlasBadge(waveWarningIconEl, 'wave-warning', state.phase === 'wave');
+    syncAtlasBadge(empWarningIconEl, 'emp-disrupted', (state.disruptedTurretCount ?? 0) > 0);
     if (playArcBtn) playArcBtn.textContent = formatPlayArcDesktopBadge(state.playArc);
     if (primaryBtn) {
       primaryBtn.textContent = nextPrimaryLabel;

@@ -2,6 +2,7 @@ node_modules/
 dist/
 dist-iwer/
 public/assets/xr-hands/
+public/assets/audio/sfx/
 public/fonts/
 .local/
 output/

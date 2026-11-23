@@ -61,7 +61,9 @@ import {
 import type { ActionBus } from '../core/action-bus.ts';
 import type { GamePhase } from '../core/state.ts';
 import { configureFonts } from '../ui/fonts.ts';
+import { createTacticalAtlas, type TacticalAtlasResource } from '../ui/tactical-atlas.ts';
 import type { PlacedTurretRecord, TurretPlacementController } from './placement.ts';
+import { BASTION_RADIAL_THEME, skinRadialMenu } from './radial-skin.ts';
 
 /** Required continuous hold time for the both-thumbstick-click recovery gesture (seconds). */
 export const BOTH_STICK_RECENTER_HOLD_SEC = 1.0;
@@ -92,6 +94,7 @@ export type RadialChoiceId = RadialActionId | 'cancel';
 
 export interface RadialItemDescriptor<Action extends RadialActionId = RadialActionId>
   extends RadialMenuItem<Action> {
+  readonly icon: string;
   readonly disabled: boolean;
   readonly disabledReason?: string;
 }
@@ -135,6 +138,7 @@ export interface XrRadialControlsOptions {
   readonly stickDeadZone?: number;
   readonly renderOrder?: number;
   readonly theme?: Partial<RadialMenuTheme>;
+  readonly atlas?: TacticalAtlasResource;
   readonly onSelectBuildKind?: (kind: TurretKind) => void;
   readonly onBeginRelocate?: (turretId: string) => void;
   readonly onActionDispatched?: (action: RadialActionId, targetTurretId: string | null) => void;
@@ -174,14 +178,6 @@ export interface XrRadialControls {
   dispose(): void;
 }
 
-const DEFAULT_RADIAL_THEME: Partial<RadialMenuTheme> = {
-  glass: '#0d1a26',
-  selected: '#1e5b73',
-  cancel: '#182433',
-  text: '#e8f4fa',
-  outline: '#2de2ff',
-};
-
 const DISABLED_WEDGE_COLOR = 0x161d24;
 const DISABLED_WEDGE_OPACITY = 0.42;
 
@@ -190,6 +186,13 @@ const RADIAL_TURRET_LABELS: Readonly<Record<TurretKind, string>> = {
   'plasma-mortar': 'Helios Plasma',
   'cryo-arc': 'Glacier Cryo-Arc',
   'rail-sniper': 'Valkyrie Rail',
+};
+
+const RADIAL_TURRET_ICONS: Readonly<Record<TurretKind, string>> = {
+  autocannon: 'build-autocannon',
+  'plasma-mortar': 'build-plasma-mortar',
+  'cryo-arc': 'build-cryo-arc',
+  'rail-sniper': 'build-rail-sniper',
 };
 
 const TARGET_PRIORITY_LABELS: Readonly<Record<TargetPriority, string>> = {
@@ -253,6 +256,7 @@ export function buildBuildWheelItems(
 
     return {
       id: actionId,
+      icon: RADIAL_TURRET_ICONS[kind],
       label: `${RADIAL_TURRET_LABELS[kind]}\n${badge}`,
       disabled,
       ...(disabledReason ? { disabledReason } : {}),
@@ -267,6 +271,7 @@ export function buildBuildWheelItems(
 
   turretItems.push({
     id: 'wave:launch',
+    icon: 'wave-launch',
     label: canLaunch ? 'Launch Wave' : 'Wave Active',
     disabled: !canLaunch,
     ...(canLaunch ? {} : { disabledReason: 'WAVE ACTIVE' }),
@@ -303,21 +308,25 @@ export function buildTurretCommandWheelItems(
   const nextPrio = nextTargetPriority(target.priority);
   const relocateAffordable = available >= TURRET_RELOCATE_COST;
   const sellRefund = getTurretSellRefund(target.kind, target.tier);
+  const upgradeIcon = nextTier === 'T2' ? 'tier-2' : 'tier-3';
 
   return [
     {
       id: 'turret:upgrade',
+      icon: upgradeIcon,
       label: upgradeLabel,
       disabled: upgradeDisabled,
       ...(upgradeDisabledReason ? { disabledReason: upgradeDisabledReason } : {}),
     },
     {
       id: 'turret:priority',
+      icon: `target-${target.priority}`,
       label: `Priority: ${formatTargetPriorityLabel(target.priority)}\nNext: ${formatTargetPriorityLabel(nextPrio)}`,
       disabled: false,
     },
     {
       id: 'turret:relocate',
+      icon: 'relocate',
       label: relocateAffordable
         ? `Relocate\n${TURRET_RELOCATE_COST} CR`
         : `Relocate\n${TURRET_RELOCATE_COST} CR (LOW)`,
@@ -326,6 +335,7 @@ export function buildTurretCommandWheelItems(
     },
     {
       id: 'turret:sell',
+      icon: 'sell',
       label: `Sell (75%)\n+${sellRefund} CR`,
       disabled: false,
     },
@@ -395,7 +405,9 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   const recenterHoldSec = options.recenterHoldSec ?? BOTH_STICK_RECENTER_HOLD_SEC;
   const stickDeadZone = options.stickDeadZone ?? DEFAULT_RADIAL_STICK_DEADZONE;
   const renderOrder = options.renderOrder ?? OVERLAY_RENDER_ORDER;
-  const theme: Partial<RadialMenuTheme> = { ...DEFAULT_RADIAL_THEME, ...options.theme };
+  const theme: Partial<RadialMenuTheme> = { ...BASTION_RADIAL_THEME, ...options.theme };
+  const atlas = options.atlas ?? createTacticalAtlas();
+  let skin: ReturnType<typeof skinRadialMenu> | undefined;
 
   const root = new THREE.Group();
   root.name = 'rift-bastion-xr-radial-host';
@@ -595,6 +607,8 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   function discardMenu(): void {
     closeMenu();
     if (menu) {
+      skin?.dispose();
+      skin = undefined;
       menu.root.removeFromParent();
       menu.dispose();
       menu = null;
@@ -620,10 +634,11 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
     disabledActions = new Set(items.filter((item) => item.disabled).map((item) => item.id));
 
     menu = createRadialMenu<RadialActionId>({
-      items,
+      items: items.map((item) => ({ id: item.id, label: item.label.split('\n')[0] ?? item.label })),
       theme,
       centerLabel: nextContext === 'turret' ? 'Close' : 'Cancel',
     });
+    skin = skinRadialMenu(menu.root, items, atlas);
     root.add(menu.root);
 
     nav = createStickRadialNavigation<RadialActionId, XRInputSource>({
@@ -640,6 +655,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         menu?.open();
         if (menu) {
           applyDisabledWedgeStyling(menu.root, activeItems);
+          skin?.applyDisabled();
         }
       },
       onClose: () => {
@@ -913,6 +929,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         }
 
         if (menu.isOpen && menu.interactive) {
+          skin?.settle();
           root.updateWorldMatrix(true, true);
           const beams: PlacementRayTarget[] = [];
           rayActions.clear();
@@ -967,6 +984,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
             : nextHover;
           menu.setHovered(hoveredAction);
           applyDisabledWedgeStyling(menu.root, activeItems);
+          skin?.applyDisabled();
         }
       }
       if (!drewWheelRays) {
@@ -1098,6 +1116,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       stopKeepRaysAbove();
       root.removeFromParent();
       controllerRays.dispose();
+      if (!options.atlas) atlas.dispose();
     },
   };
 

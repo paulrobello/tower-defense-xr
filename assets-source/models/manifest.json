@@ -5906,7 +5906,7 @@
       "id": "core-bastion",
       "lod": 0,
       "file": "core-bastion/core-bastion.glb",
-      "sha256": "564ee6bc93f7fafcc12129acb95081208a1db7c51c7f9035a017bef8a99e7c05",
+      "sha256": "bd3b517b50959d8bb636340622aa8d55db8dca75ed64dc1017b87f08edc5807c",
       "limits": {
         "triangles": 14000,
         "materials": 3,
@@ -5916,7 +5916,11 @@
       },
       "sockets": {},
       "animations": [
-        "ShieldEmitterSweep"
+        "ShieldEmitterSweep",
+        "idle_pulse",
+        "hit_flinch",
+        "critical_overload",
+        "victory_surge"
       ],
       "planar_primitives": [
         {
@@ -5965,7 +5969,7 @@
       "id": "rift-portal",
       "lod": 0,
       "file": "rift-portal/rift-portal.glb",
-      "sha256": "b4550fe74e570d69f32b7f190e29fdeb68ab28591275944e0ede10de72ee2bd6",
+      "sha256": "5afdd815759675d41fe46b0f8849cd2302d479309d3e01daaeae5d86090f167b",
       "limits": {
         "triangles": 4500,
         "materials": 2,
@@ -5984,7 +5988,12 @@
           "tolerance": 0.0001
         }
       },
-      "animations": [],
+      "animations": [
+        "open_tear",
+        "spawn_surge",
+        "idle_rift",
+        "close_seal"
+      ],
       "planar_primitives": [
         {
           "node": "portalInterior",
@@ -6008,7 +6017,7 @@
       "id": "surface-clamp",
       "lod": 0,
       "file": "surface-clamp/surface-clamp-lod0.glb",
-      "sha256": "01283900c728110a9d733d9f266ce5bfbdb09d9b672e00ae113bc8c85760a0ff",
+      "sha256": "4d48e7dfed463f64aadcc8f419c8702db80ecb67314d176cbfb68a651b90c1b0",
       "limits": {
         "triangles": 6500,
         "materials": 2,
@@ -6027,7 +6036,11 @@
           "tolerance": 1e-05
         }
       },
-      "animations": [],
+      "animations": [
+        "deploy_lock",
+        "idle_locked",
+        "retract_release"
+      ],
       "planar_primitives": [
         {
           "node": "turret-clamp-hub",
@@ -6068,7 +6081,7 @@
       "id": "surface-clamp",
       "lod": 1,
       "file": "surface-clamp/surface-clamp-lod1.glb",
-      "sha256": "ce09b7647d734d5d98dd994e89142fcbc53715d4ea6735ed1070acef754bf791",
+      "sha256": "ba9364cfe745fa68e78f065901c1789c7d60e821ecc462e2db1374d4271dcd21",
       "limits": {
         "triangles": 2500,
         "materials": 2,
@@ -6087,7 +6100,11 @@
           "tolerance": 1e-05
         }
       },
-      "animations": [],
+      "animations": [
+        "deploy_lock",
+        "idle_locked",
+        "retract_release"
+      ],
       "planar_primitives": [
         {
           "node": "turret-clamp-hub",
@@ -6128,7 +6145,7 @@
       "id": "hover-pod",
       "lod": 0,
       "file": "hover-pod-revision/hover-pod-lod0.glb",
-      "sha256": "db15e31bd64698e3949d030492aac16f16a53c72d876eef38b59a650be1c6dd6",
+      "sha256": "8e7de8df7e78650702217e7b17aae35d363f50adb06553b577fd78563fd9fb2d",
       "limits": {
         "triangles": 2476,
         "materials": 1,
@@ -6147,7 +6164,12 @@
           "tolerance": 1e-05
         }
       },
-      "animations": [],
+      "animations": [
+        "hover_idle",
+        "deploy_ignite",
+        "emp_stall",
+        "retract_powerdown"
+      ],
       "material_textures": {
         "Hover Pod satin armor": {
           "basecolor": "hover-pod-revision/basecolor.ktx2",
@@ -6161,7 +6183,7 @@
       "id": "hover-pod",
       "lod": 1,
       "file": "hover-pod-revision/hover-pod-lod1.glb",
-      "sha256": "c6c39de5624169e39884b3b5867d19f3e9fb5237dde3bb0de0613dbc90af279c",
+      "sha256": "5c252e24c4594502cb70a5c479ef9390179bf1132c8d4b8b133a98cb05fe6cec",
       "limits": {
         "triangles": 1148,
         "materials": 1,
@@ -6180,7 +6202,12 @@
           "tolerance": 1e-05
         }
       },
-      "animations": [],
+      "animations": [
+        "hover_idle",
+        "deploy_ignite",
+        "emp_stall",
+        "retract_powerdown"
+      ],
       "material_textures": {
         "Hover Pod satin armor": {
           "basecolor": "hover-pod-revision/basecolor.ktx2",
@@ -6194,7 +6221,7 @@
       "id": "m44-autocannon-t1",
       "lod": 0,
       "file": "m44-autocannon-t1/m44-autocannon-t1-lod0.glb",
-      "sha256": "c237b598548f8beef31bab35212729db84dfabeedf69b53a8939b83235528f21",
+      "sha256": "224a3d075e948ff048286cac1c15c46636523724dd0ee5735386761206c37108",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -6213,7 +6240,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6244,7 +6277,7 @@
       "id": "m44-autocannon-t1",
       "lod": 1,
       "file": "m44-autocannon-t1/m44-autocannon-t1-lod1.glb",
-      "sha256": "5e4fd730ffddcedbaa8748f4e65a8585ec67fbb115962839244ab318af8cab21",
+      "sha256": "52ce57b22bff140c323d2e0fe9db5647a38f78753e09e97fa7bc95a75410e41e",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -6263,7 +6296,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6294,7 +6333,7 @@
       "id": "m44-autocannon-t2",
       "lod": 0,
       "file": "m44-autocannon-t2/m44-autocannon-t2-lod0.glb",
-      "sha256": "4b3fe2078bf8e4e07a28dd4d4f046d366bd515b09c2e18814348ac0a1332c45e",
+      "sha256": "b9b9ae75813990b2e8ed4d0407e752d4c8b2c5cf4965ae15f7c0acec96e2fbf7",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -6313,7 +6352,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6344,7 +6389,7 @@
       "id": "m44-autocannon-t2",
       "lod": 1,
       "file": "m44-autocannon-t2/m44-autocannon-t2-lod1.glb",
-      "sha256": "27da99de1ab9a74deadee565d048135ad1c309e89470c95f8bb20845d7fe4daa",
+      "sha256": "7ea99ec78170ea1cffc35723789809f661b792624f546226c76dd97edf1cf152",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -6363,7 +6408,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6394,7 +6445,7 @@
       "id": "m44-autocannon-t3",
       "lod": 0,
       "file": "m44-autocannon-t3/m44-autocannon-t3-lod0.glb",
-      "sha256": "48c31be1777178917d4c65d074a0674d7b264401d4eac98b1c4730931eb6389f",
+      "sha256": "a0ee563bc920ae5597a2e66bb21dd737edb2bc493a8a4396819909210e2dedd0",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -6413,7 +6464,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6449,7 +6506,7 @@
       "id": "m44-autocannon-t3",
       "lod": 1,
       "file": "m44-autocannon-t3/m44-autocannon-t3-lod1.glb",
-      "sha256": "705983665964b83a88c1b5823e4ca3b682af231a67ace807975f3ee99797c6fc",
+      "sha256": "0907e1177a47fbb90a623b9abcc4f72ca84225ff1fe906e2e4f88e405aca63ee",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -6468,7 +6525,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6504,7 +6567,7 @@
       "id": "helios-plasma-mortar-t1",
       "lod": 0,
       "file": "helios-plasma-mortar-t1/helios-plasma-mortar-t1-lod0.glb",
-      "sha256": "bd90a619dabd3e48157e64b0a20bb78c33fb04cf2992bbd5c02c631d95e0f7c5",
+      "sha256": "92170d20fe28b8dbda94bae17a4748b3cee68cba4bb70009497a37d72527e917",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -6523,7 +6586,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "material_textures": {
         "Helios T1 satin armor": {
           "basecolor": "helios-plasma-mortar-t1/basecolor.ktx2",
@@ -6537,7 +6606,7 @@
       "id": "helios-plasma-mortar-t1",
       "lod": 1,
       "file": "helios-plasma-mortar-t1/helios-plasma-mortar-t1-lod1.glb",
-      "sha256": "acb97ddf626e3f1b7f7e155a89165c6d3041f756b0fb66434e35b66f319b042d",
+      "sha256": "b59308ddd7a1e3eb202c199e9b117083a7ced291d313d39bb28728041f9b01be",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -6556,7 +6625,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "material_textures": {
         "Helios T1 satin armor": {
           "basecolor": "helios-plasma-mortar-t1/basecolor.ktx2",
@@ -6570,7 +6645,7 @@
       "id": "helios-plasma-mortar-t2",
       "lod": 0,
       "file": "helios-plasma-mortar-t2/helios-plasma-mortar-t2-lod0.glb",
-      "sha256": "8097ca2e710a313f8c3fc9d57a5e0b1e25aa16edfd6bf567c5ee69b1cd2875fb",
+      "sha256": "921cf7fb3ff28aec4c97a3abc6f09fdfba89780b959bfac36b992fdab5a4799c",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -6589,7 +6664,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6620,7 +6701,7 @@
       "id": "helios-plasma-mortar-t2",
       "lod": 1,
       "file": "helios-plasma-mortar-t2/helios-plasma-mortar-t2-lod1.glb",
-      "sha256": "7a9e226efa37112f588b0f5f489034d9b4b63ba2035177f07af7dc3ce3d1feba",
+      "sha256": "9eb9f31e7436574ffaa288ec117e89491259cf248a84ae0cce04ffa2b2497470",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -6639,7 +6720,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6670,7 +6757,7 @@
       "id": "helios-plasma-mortar-t3",
       "lod": 0,
       "file": "helios-plasma-mortar-t3/helios-plasma-mortar-t3-lod0.glb",
-      "sha256": "d1da2bea7abcb9f0e6d7d5fa7e5f66410204eaae5464dca1bd5474c7d9230151",
+      "sha256": "7b659e32bc6f16594024b4fec0cc5f11163b620241466ea166daeb0d38de0839",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -6689,7 +6776,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6720,7 +6813,7 @@
       "id": "helios-plasma-mortar-t3",
       "lod": 1,
       "file": "helios-plasma-mortar-t3/helios-plasma-mortar-t3-lod1.glb",
-      "sha256": "59d5148f10904f5e5874a03b74d8ff56b1968f671c8ee2122d554d17a7258309",
+      "sha256": "37f79b04ab241ebce6ed1c3484ccc9ef43af1ea7deff168518c37f99aa29eec6",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -6739,7 +6832,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6770,7 +6869,7 @@
       "id": "glacier-cryo-arc-t1",
       "lod": 0,
       "file": "glacier-cryo-arc-t1/glacier-cryo-arc-t1-lod0.glb",
-      "sha256": "24fc3d2d54cce1b68cab5225410ad812830ad9c481d068feea3f6251fd2094e5",
+      "sha256": "8e48c8bbaf7ae7b110136d5926e8ee820b2fa8527512f87814564b71dfc074f4",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -6789,7 +6888,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6820,7 +6925,7 @@
       "id": "glacier-cryo-arc-t1",
       "lod": 1,
       "file": "glacier-cryo-arc-t1/glacier-cryo-arc-t1-lod1.glb",
-      "sha256": "5af5705104840914939987c6ba95de0e591b0e5fabb8335c0a03cc1fa975d9e3",
+      "sha256": "bf99c4c8bad8be797aaefaee89b409a5a7ae2143e09e864d2fd0083a918fa057",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -6839,7 +6944,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6870,7 +6981,7 @@
       "id": "glacier-cryo-arc-t2",
       "lod": 0,
       "file": "glacier-cryo-arc-t2/glacier-cryo-arc-t2-lod0.glb",
-      "sha256": "bd46f13a9f0dd74d7a3279a62ab3a7a897a81bed1507fd66d7052f555d9cca77",
+      "sha256": "ffaa93c195dc27a7b581ac7048a9f619a49f741e1e5b36c3680ccacd22ab023f",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -6889,7 +7000,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6920,7 +7037,7 @@
       "id": "glacier-cryo-arc-t2",
       "lod": 1,
       "file": "glacier-cryo-arc-t2/glacier-cryo-arc-t2-lod1.glb",
-      "sha256": "3572096d78e177d0becbf03a0c9e859a11d107a43da296afac31e73fc2d534c1",
+      "sha256": "6ec0495bbe79b1827186e29a6af90118ab8dd1894edcce0facd0567036f11ccf",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -6939,7 +7056,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -6970,7 +7093,7 @@
       "id": "glacier-cryo-arc-t3",
       "lod": 0,
       "file": "glacier-cryo-arc-t3/glacier-cryo-arc-t3-lod0.glb",
-      "sha256": "c049268de20d996143558d19a5d64e1c084369d2b74475ba6bcb0b47433e7c89",
+      "sha256": "3057164d2f741863172bf982b61ff5986373b95fb04c42475e6f675166917bf6",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -6989,7 +7112,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -7020,7 +7149,7 @@
       "id": "glacier-cryo-arc-t3",
       "lod": 1,
       "file": "glacier-cryo-arc-t3/glacier-cryo-arc-t3-lod1.glb",
-      "sha256": "976bfe5e4b8b07112be6dc926531fe0f5f2d2ff0d647b76f843ac2272a4f1964",
+      "sha256": "7e19c6ec068e3fea459d60669329d36aa67dccbb912e623798c845499cb626a0",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -7039,7 +7168,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -7070,7 +7205,7 @@
       "id": "valkyrie-rail-sniper-t1",
       "lod": 0,
       "file": "valkyrie-rail-sniper-t1/valkyrie-rail-sniper-t1-lod0.glb",
-      "sha256": "a2bc5110f7e7a28e9685a8bb8e2533dfefe3d34a208561fe930ec1d8e45803d7",
+      "sha256": "ee99ada86eda275277331475a372c3dddbf57251798077b6d901bcdb10ab7d3f",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -7089,7 +7224,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -7120,7 +7261,7 @@
       "id": "valkyrie-rail-sniper-t1",
       "lod": 1,
       "file": "valkyrie-rail-sniper-t1/valkyrie-rail-sniper-t1-lod1.glb",
-      "sha256": "24469fd3d740aea81d548b88f1973e70afa7d218b43ca3532d023ce4897f9631",
+      "sha256": "2a736e89a0067cab2e5de4dc6708789b2b6f9069e759312cb5dc71564c571c23",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -7139,7 +7280,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -7170,7 +7317,7 @@
       "id": "valkyrie-rail-sniper-t2",
       "lod": 0,
       "file": "valkyrie-rail-sniper-t2/valkyrie-rail-sniper-t2-lod0.glb",
-      "sha256": "648513ec018d7a9413ec015a213307720d07c30cc2ba2f8de23811ebc7ee5244",
+      "sha256": "da2489e65bec28444f97734563ca10c18b45f7c0203808c59c4d2beddbcf5656",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -7189,7 +7336,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -7220,7 +7373,7 @@
       "id": "valkyrie-rail-sniper-t2",
       "lod": 1,
       "file": "valkyrie-rail-sniper-t2/valkyrie-rail-sniper-t2-lod1.glb",
-      "sha256": "e5a0707a01dcc48397ce71814a7b63043e8f1907162938534143db184554938d",
+      "sha256": "13a3d175b4e82829e632fe7ad2b85502a45dc8695adb67598034b22fd8965372",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -7239,7 +7392,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -7270,7 +7429,7 @@
       "id": "valkyrie-rail-sniper-t3",
       "lod": 0,
       "file": "valkyrie-rail-sniper-t3/valkyrie-rail-sniper-t3-lod0.glb",
-      "sha256": "95deafbe4b734b766fc80713cbaff3cdc9c13002957416a873648de3165882fc",
+      "sha256": "f682062585393c1a974ec504822d7e7d62d5042032ea12616986a505feaadee3",
       "limits": {
         "triangles": 4072,
         "materials": 1,
@@ -7289,7 +7448,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",
@@ -7320,7 +7485,7 @@
       "id": "valkyrie-rail-sniper-t3",
       "lod": 1,
       "file": "valkyrie-rail-sniper-t3/valkyrie-rail-sniper-t3-lod1.glb",
-      "sha256": "a29cd13200c44f45db35a50321cd18cafad01d58aceee78ae9991da95474614e",
+      "sha256": "8b9e7eb9ebfbd649069eea13841959fc7f2a31c92c8918b5b6035dddfae141d7",
       "limits": {
         "triangles": 1352,
         "materials": 1,
@@ -7339,7 +7504,13 @@
           "tolerance": 2e-06
         }
       },
-      "animations": [],
+      "animations": [
+        "idle_scan",
+        "deploy",
+        "emp_disrupted",
+        "upgrade_surge",
+        "fire_recoil"
+      ],
       "planar_primitives": [
         {
           "node": "forward-assembly",

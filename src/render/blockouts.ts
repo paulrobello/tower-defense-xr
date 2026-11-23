@@ -65,6 +65,10 @@ import type {
   SimPortalState,
   SimTurret,
 } from '../sim/engine.ts';
+import { enemyModelId, type RuntimeAssetLibrary, turretModelId } from './asset-loader.ts';
+import type { LightingController } from './lighting.ts';
+import { createRiftPortalShaderMaterial, type RiftPortalShaderUniforms } from './portal-shader.ts';
+import { type CombatVfxPool, createCombatVfxPool } from './vfx-pool.ts';
 
 export const MAX_INSTANCED_TRACERS = 64;
 export const MAX_INSTANCED_MORTAR_SHELLS = 32;
@@ -157,6 +161,10 @@ export interface WeaponFxCounts {
 export interface BlockoutRendererOptions {
   /** Whether to patch blockout materials with WebXR depth-sensing occlusion when `occlusion` is provided (default `true`). */
   readonly enableDepthOcclusion?: boolean;
+  /** Promoted Phase 4 GLB/KTX2 runtime asset library (falls back seamlessly to blockouts when omitted or loading). */
+  readonly assets?: RuntimeAssetLibrary | null;
+  /** Optional AAA lighting controller for transient dynamic combat explosion/impact lights. */
+  readonly lighting?: LightingController | null;
 }
 
 export interface BlockoutRenderer {
@@ -167,6 +175,7 @@ export interface BlockoutRenderer {
   readonly enemiesGroup: THREE.Group;
   readonly fxGroup: THREE.Group;
   readonly healthBarsGroup: THREE.Group;
+  readonly vfx: CombatVfxPool;
   readonly portals: ReadonlyMap<string, RiftPortalBlockout>;
   readonly turrets: ReadonlyMap<string, TurretBlockout>;
   readonly enemies: ReadonlyMap<string, EnemyBlockout>;
@@ -260,6 +269,8 @@ export function createBlockoutRenderer(
   options: BlockoutRendererOptions = {},
 ): BlockoutRenderer {
   const useDepthOcclusion = (options.enableDepthOcclusion ?? true) && Boolean(occlusion);
+  const assets = options.assets ?? null;
+  const lighting = options.lighting ?? null;
 
   const root = new THREE.Group();
   root.name = 'rift-bastion-blockouts-root';
@@ -275,6 +286,412 @@ export function createBlockoutRenderer(
   fxGroup.name = 'blockouts-weapon-fx';
   const healthBarsGroup = new THREE.Group();
   healthBarsGroup.name = 'blockouts-health-bars';
+  const vfx = createCombatVfxPool(fxGroup, useDepthOcclusion ? occlusion : null);
+
+  // ==========================================================================
+  // AAA Runtime Asset View State (upgraded live as soon as `assets.ready` is true)
+  // ==========================================================================
+  const TURRET_LOD1_DIST_SQ = 4.0 * 4.0;
+  const ENEMY_LOD1_DIST_SQ = 4.5 * 4.5;
+  const ENEMY_ANIM_THROTTLE_DIST_SQ = 6.0 * 6.0;
+  const _camWorldPos = new THREE.Vector3();
+
+  interface CoreAssetView {
+    readonly root: THREE.Group;
+    readonly mixer: THREE.AnimationMixer;
+    readonly clips: readonly THREE.AnimationClip[];
+    readonly bindings: DepthOcclusionBinding[];
+    currentClip: string;
+    oneShotRemainingSec: number;
+  }
+
+  interface PortalAssetView {
+    readonly root: THREE.Group;
+    readonly mixer: THREE.AnimationMixer;
+    readonly clips: readonly THREE.AnimationClip[];
+    readonly interiorNode: THREE.Object3D | null;
+    readonly shaderMat: THREE.ShaderMaterial | null;
+    readonly vortexMap: THREE.Texture | null;
+    readonly bindings: DepthOcclusionBinding[];
+    wasOpen: boolean;
+    shaderTime: number;
+    surgeRemainingSec: number;
+    currentClip: string;
+  }
+
+  interface TurretAssetView {
+    readonly container: THREE.Group;
+    readonly headRoot: THREE.Group;
+    readonly mountRoot: THREE.Group;
+    readonly mountMixer: THREE.AnimationMixer | null;
+    readonly mountClips: readonly THREE.AnimationClip[];
+    readonly headYawRing: THREE.Object3D | null;
+    readonly headPitchCradle: THREE.Object3D | null;
+    readonly headRecoilGroup: THREE.Object3D | null;
+    readonly headRotaryCluster: THREE.Object3D | null;
+    readonly materials: THREE.MeshStandardMaterial[];
+    readonly bindings: DepthOcclusionBinding[];
+    tier: TurretTierId;
+    mountProfile: TurretMountProfileId;
+    lod: 0 | 1;
+    mountClip: string;
+    mountDeployRemainingSec: number;
+    upgradeSpinRemainingSec: number;
+  }
+
+  interface EnemyAssetView {
+    readonly root: THREE.Group;
+    readonly mixer: THREE.AnimationMixer;
+    readonly clips: readonly THREE.AnimationClip[];
+    readonly materials: THREE.MeshStandardMaterial[];
+    readonly baseEmissiveMaps: (THREE.Texture | null)[];
+    readonly baseEmissiveColors: THREE.Color[];
+    readonly bindings: DepthOcclusionBinding[];
+    lod: 0 | 1;
+    currentClip: string;
+    oneShotRemainingSec: number;
+    phase2Applied: boolean;
+    throttleFlip: boolean;
+  }
+
+  let coreAssetView: CoreAssetView | null = null;
+  const portalAssetViews = new Map<string, PortalAssetView>();
+  const turretAssetViews = new Map<string, TurretAssetView>();
+  const enemyAssetViews = new Map<string, EnemyAssetView>();
+
+  function bindGlbMaterials(
+    obj: THREE.Object3D,
+    role: 'world-object' | 'portal-rim' | 'portal-interior',
+    outBindings: DepthOcclusionBinding[],
+    outStdMats?: THREE.MeshStandardMaterial[],
+  ): void {
+    obj.traverse((node) => {
+      if (!(node instanceof THREE.Mesh)) return;
+      const mats = Array.isArray(node.material) ? node.material : [node.material];
+      for (const mat of mats) {
+        if (!mat) continue;
+        if (outStdMats && mat instanceof THREE.MeshStandardMaterial) {
+          outStdMats.push(mat);
+        }
+        if (useDepthOcclusion && occlusion) {
+          const binding =
+            role === 'portal-rim'
+              ? configurePortalRimMaterial(mat, occlusion)
+              : role === 'portal-interior'
+                ? configurePortalInteriorMaterial(mat, occlusion)
+                : applyDepthOcclusion(mat, occlusion, { role: 'world-object' });
+          outBindings.push(binding);
+        }
+      }
+    });
+  }
+
+  function disposeClonedGlb(
+    obj: THREE.Object3D,
+    bindings: DepthOcclusionBinding[],
+    extraTextures?: readonly (THREE.Texture | null)[],
+  ): void {
+    for (const b of bindings) b.dispose();
+    bindings.length = 0;
+    obj.traverse((node) => {
+      if (!(node instanceof THREE.Mesh)) return;
+      const mats = Array.isArray(node.material) ? node.material : [node.material];
+      for (const mat of mats) mat?.dispose();
+    });
+    if (extraTextures) {
+      for (const tex of extraTextures) tex?.dispose();
+    }
+    obj.removeFromParent();
+  }
+
+  function playMixerClip(
+    mixer: THREE.AnimationMixer,
+    clips: readonly THREE.AnimationClip[],
+    name: string,
+    loop = true,
+  ): THREE.AnimationClip | null {
+    const clip = clips.find((c) => c.name === name) ?? clips[0];
+    if (!clip) return null;
+    mixer.stopAllAction();
+    const action = mixer.clipAction(clip);
+    action.reset();
+    action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce, loop ? Number.POSITIVE_INFINITY : 1);
+    action.clampWhenFinished = !loop;
+    action.play();
+    return clip;
+  }
+
+  function ensureCoreAsset(): void {
+    if (coreAssetView || !assets?.ready || !assets.hasModel('core-bastion', 0)) return;
+    const inst = assets.instantiate('core-bastion', 0);
+    if (!inst) return;
+    const bindings: DepthOcclusionBinding[] = [];
+    bindGlbMaterials(inst.root, 'world-object', bindings);
+    inst.root.name = 'aaa-core-bastion-glb';
+    coreBastion.group.add(inst.root);
+    // Hide blockout primitives while keeping contact shadow & shield dome reactive FX
+    coreBastion.pedestalMesh.visible = false;
+    coreBastion.energyCoreMesh.visible = false;
+    const collar = coreBastion.group.getObjectByName('core-bastion-collar');
+    if (collar) collar.visible = false;
+
+    const mixer = new THREE.AnimationMixer(inst.root);
+    playMixerClip(mixer, inst.animations, 'idle_pulse', true);
+    coreAssetView = {
+      root: inst.root,
+      mixer,
+      clips: inst.animations,
+      bindings,
+      currentClip: 'idle_pulse',
+      oneShotRemainingSec: 0,
+    };
+  }
+
+  function ensurePortalAsset(portal: RiftPortalBlockout): PortalAssetView | null {
+    const existing = portalAssetViews.get(portal.id);
+    if (existing) return existing;
+    if (!assets?.ready || !assets.hasModel('rift-portal', 0)) return null;
+    const inst = assets.instantiate('rift-portal', 0);
+    if (!inst) return null;
+
+    const bindings: DepthOcclusionBinding[] = [];
+    let interiorNode: THREE.Object3D | null = null;
+    let shaderMat: THREE.ShaderMaterial | null = null;
+    let vortexMap: THREE.Texture | null = null;
+
+    inst.root.traverse((node) => {
+      if (!(node instanceof THREE.Mesh)) return;
+      if (node.name === 'portalInterior') {
+        interiorNode = node;
+        const oldMat = Array.isArray(node.material) ? node.material[0] : node.material;
+        vortexMap =
+          oldMat instanceof THREE.MeshStandardMaterial
+            ? (oldMat.emissiveMap ?? oldMat.map ?? null)
+            : oldMat instanceof THREE.MeshBasicMaterial
+              ? (oldMat.map ?? null)
+              : null;
+        shaderMat = createRiftPortalShaderMaterial({
+          vortexMap,
+          initialOpen: portal.isOpen ? 1 : 0,
+        });
+        node.material = shaderMat;
+        node.castShadow = false;
+        node.receiveShadow = false;
+        if (oldMat) oldMat.dispose();
+        if (useDepthOcclusion && occlusion) {
+          bindings.push(configurePortalInteriorMaterial(shaderMat, occlusion));
+        }
+      } else {
+        const mats = Array.isArray(node.material) ? node.material : [node.material];
+        for (const mat of mats) {
+          if (mat && useDepthOcclusion && occlusion) {
+            bindings.push(configurePortalRimMaterial(mat, occlusion));
+          }
+        }
+      }
+    });
+
+    inst.root.name = `aaa-rift-portal-${portal.id}`;
+    portal.group.add(inst.root);
+    portal.frameMesh.visible = false;
+    portal.interiorMesh.visible = false;
+    portal.vortexRingMesh.visible = false;
+
+    const mixer = new THREE.AnimationMixer(inst.root);
+    const startClip = portal.isOpen ? 'idle_rift' : 'close_seal';
+    playMixerClip(mixer, inst.animations, startClip, portal.isOpen);
+    if (!portal.isOpen) {
+      mixer.update(5);
+    }
+
+    const view: PortalAssetView = {
+      root: inst.root,
+      mixer,
+      clips: inst.animations,
+      interiorNode,
+      shaderMat,
+      vortexMap,
+      bindings,
+      wasOpen: portal.isOpen,
+      shaderTime: portal.portalIndex * 1.3,
+      surgeRemainingSec: 0,
+      currentClip: startClip,
+    };
+    portalAssetViews.set(portal.id, view);
+    return view;
+  }
+
+  function disposePortalAsset(id: string): void {
+    const view = portalAssetViews.get(id);
+    if (!view) return;
+    view.mixer.stopAllAction();
+    disposeClonedGlb(view.root, view.bindings);
+    portalAssetViews.delete(id);
+  }
+
+  function disposeTurretAsset(id: string): void {
+    const view = turretAssetViews.get(id);
+    if (!view) return;
+    view.mountMixer?.stopAllAction();
+    disposeClonedGlb(view.container, view.bindings);
+    turretAssetViews.delete(id);
+  }
+
+  function ensureTurretAsset(
+    turret: TurretBlockout,
+    simTurret: SimTurret,
+    desiredLod: 0 | 1,
+  ): TurretAssetView | null {
+    if (!assets?.ready) return null;
+    const existing = turretAssetViews.get(turret.id);
+    const upgraded = Boolean(existing && existing.tier !== simTurret.tier);
+    if (
+      existing &&
+      existing.tier === simTurret.tier &&
+      existing.mountProfile === simTurret.mountProfile &&
+      existing.lod === desiredLod
+    ) {
+      return existing;
+    }
+
+    const headId = turretModelId(simTurret.kind, simTurret.tier);
+    const mountId = simTurret.mountProfile === 'hover-pod' ? 'hover-pod' : 'surface-clamp';
+    if (!assets.hasModel(headId, desiredLod) || !assets.hasModel(mountId, desiredLod)) {
+      return existing ?? null;
+    }
+
+    const prevDeploy = existing?.mountDeployRemainingSec ?? 0;
+    const isBrandNew = !existing;
+    if (existing) disposeTurretAsset(turret.id);
+
+    const headInst = assets.instantiate(headId, desiredLod);
+    const mountInst = assets.instantiate(mountId, desiredLod);
+    if (!headInst || !mountInst) return null;
+
+    const container = new THREE.Group();
+    container.name = `aaa-turret-${turret.id}`;
+    container.add(mountInst.root, headInst.root);
+
+    const bindings: DepthOcclusionBinding[] = [];
+    const materials: THREE.MeshStandardMaterial[] = [];
+    bindGlbMaterials(container, 'world-object', bindings, materials);
+
+    turret.group.add(container);
+    turret.clampMountGroup.visible = false;
+    turret.hoverPodGroup.visible = false;
+    turret.yawRing.visible = false;
+
+    const mountMixer =
+      mountInst.animations.length > 0 ? new THREE.AnimationMixer(mountInst.root) : null;
+    let mountClip = '';
+    let mountDeployRemainingSec = prevDeploy;
+    if (mountMixer) {
+      const deployName = mountId === 'hover-pod' ? 'deploy_ignite' : 'deploy_lock';
+      const idleName = mountId === 'hover-pod' ? 'hover_idle' : 'idle_locked';
+      if (isBrandNew) {
+        const clip = playMixerClip(mountMixer, mountInst.animations, deployName, false);
+        mountClip = clip?.name ?? deployName;
+        mountDeployRemainingSec = clip?.duration ?? 1.0;
+      } else {
+        const clip = playMixerClip(mountMixer, mountInst.animations, idleName, true);
+        mountClip = clip?.name ?? idleName;
+      }
+    }
+
+    const view: TurretAssetView = {
+      container,
+      headRoot: headInst.root,
+      mountRoot: mountInst.root,
+      mountMixer,
+      mountClips: mountInst.animations,
+      headYawRing: headInst.root.getObjectByName('yawRing') ?? null,
+      headPitchCradle: headInst.root.getObjectByName('pitchCradle') ?? null,
+      headRecoilGroup: headInst.root.getObjectByName('recoilGroup') ?? null,
+      headRotaryCluster: headInst.root.getObjectByName('rotaryCluster') ?? null,
+      materials,
+      bindings,
+      tier: simTurret.tier,
+      mountProfile: simTurret.mountProfile,
+      lod: desiredLod,
+      mountClip,
+      mountDeployRemainingSec,
+      upgradeSpinRemainingSec: upgraded ? 0.65 : 0,
+    };
+    turretAssetViews.set(turret.id, view);
+    return view;
+  }
+
+  function disposeEnemyAsset(id: string): void {
+    const view = enemyAssetViews.get(id);
+    if (!view) return;
+    view.mixer.stopAllAction();
+    disposeClonedGlb(view.root, view.bindings);
+    enemyAssetViews.delete(id);
+  }
+
+  function defaultEnemyLocomotionClip(simEnemy: SimEnemy): string {
+    switch (simEnemy.archetypeId) {
+      case 'skitter-crawler':
+        return Math.abs(simEnemy.normal.y) < 0.5 ? 'climb_wall' : 'crawl_floor';
+      case 'wasp-skimmer':
+        return 'hover_fly';
+      case 'carapace-brute':
+        return 'stomp_walk';
+      case 'rift-disruptor':
+        return 'hover_glide';
+      case 'apex-broodlord':
+        return 'boss_march';
+    }
+  }
+
+  function ensureEnemyAsset(
+    enemy: EnemyBlockout,
+    simEnemy: SimEnemy,
+    desiredLod: 0 | 1,
+  ): EnemyAssetView | null {
+    if (!assets?.ready) return null;
+    const existing = enemyAssetViews.get(enemy.id);
+    if (existing && existing.lod === desiredLod) return existing;
+
+    const modelId = enemyModelId(simEnemy.archetypeId);
+    if (!assets.hasModel(modelId, desiredLod)) return existing ?? null;
+    if (existing) disposeEnemyAsset(enemy.id);
+
+    const inst = assets.instantiate(modelId, desiredLod);
+    if (!inst) return null;
+
+    const bindings: DepthOcclusionBinding[] = [];
+    const materials: THREE.MeshStandardMaterial[] = [];
+    bindGlbMaterials(inst.root, 'world-object', bindings, materials);
+
+    const baseEmissiveMaps = materials.map((m) => m.emissiveMap);
+    const baseEmissiveColors = materials.map((m) => m.emissive.clone());
+
+    inst.root.name = `aaa-enemy-${enemy.id}`;
+    enemy.group.add(inst.root);
+    enemy.bodyGroup.visible = false;
+
+    const mixer = new THREE.AnimationMixer(inst.root);
+    const locoClip = defaultEnemyLocomotionClip(simEnemy);
+    playMixerClip(mixer, inst.animations, locoClip, true);
+
+    const view: EnemyAssetView = {
+      root: inst.root,
+      mixer,
+      clips: inst.animations,
+      materials,
+      baseEmissiveMaps,
+      baseEmissiveColors,
+      bindings,
+      lod: desiredLod,
+      currentClip: locoClip,
+      oneShotRemainingSec: 0,
+      phase2Applied: false,
+      throttleFlip: false,
+    };
+    enemyAssetViews.set(enemy.id, view);
+    return view;
+  }
 
   const ownedGeometries = new Set<THREE.BufferGeometry>();
   const ownedMaterials = new Set<THREE.Material>();
@@ -1403,6 +1820,38 @@ export function createBlockoutRenderer(
       switch (ev.type) {
         case 'core-hit': {
           coreBastion.hitFlashRemainingSec = 0.35;
+          if (coreAssetView) {
+            const clip = playMixerClip(
+              coreAssetView.mixer,
+              coreAssetView.clips,
+              'hit_flinch',
+              false,
+            );
+            coreAssetView.currentClip = 'hit_flinch';
+            coreAssetView.oneShotRemainingSec = clip?.duration ?? 0.8;
+          }
+          vfx.spawnShockRing(
+            {
+              x: coreBastion.group.position.x,
+              y: coreBastion.group.position.y + 0.35,
+              z: coreBastion.group.position.z,
+            },
+            { x: 0, y: 1, z: 0 },
+            CORE_BASTION_SPEC.shieldDomeRadiusM * 1.35,
+            0xff3b5c,
+            0.38,
+          );
+          lighting?.flashPoint(
+            {
+              x: coreBastion.group.position.x,
+              y: coreBastion.group.position.y + 0.5,
+              z: coreBastion.group.position.z,
+            },
+            0xff3b5c,
+            3.5,
+            3.0,
+            0.3,
+          );
           break;
         }
         case 'portal-opened':
@@ -1410,6 +1859,12 @@ export function createBlockoutRenderer(
           const portal = portalsMap.get(ev.portalId);
           if (portal) {
             portal.spawnFlashSec = 0.4;
+          }
+          const portalView = portalAssetViews.get(ev.portalId);
+          if (portalView && ev.type === 'enemy-spawned') {
+            const clip = playMixerClip(portalView.mixer, portalView.clips, 'spawn_surge', false);
+            portalView.currentClip = 'spawn_surge';
+            portalView.surgeRemainingSec = clip?.duration ?? 0.9;
           }
           break;
         }
@@ -1433,6 +1888,13 @@ export function createBlockoutRenderer(
               durationSec: 0.14,
               colorHex: 0xf59e0b,
             });
+            vfx.spawnMuzzleFlash(ev.fromPosition, 0xfbbf24, ev.tier === 'T3' ? 0.11 : 0.08);
+            const dx = ev.toPosition.x - ev.fromPosition.x;
+            const dy = ev.toPosition.y - ev.fromPosition.y;
+            const dz = ev.toPosition.z - ev.fromPosition.z;
+            const len = Math.max(0.01, Math.hypot(dx, dy, dz));
+            vfx.spawnShellCasing(ev.fromPosition, { x: dx / len, y: dy / len, z: dz / len });
+            vfx.spawnImpactBurst(ev.toPosition, 0xf59e0b, 5, 1.6, 0.013);
           } else if (ev.turretKind === 'rail-sniper') {
             if (activeRailBeams.length >= MAX_INSTANCED_RAIL_BEAMS) activeRailBeams.shift();
             activeRailBeams.push({
@@ -1443,8 +1905,15 @@ export function createBlockoutRenderer(
               thicknessM: ev.tier === 'T3' ? 0.028 : ev.tier === 'T2' ? 0.022 : 0.017,
               colorHex: 0x7dd3fc,
             });
+            vfx.spawnMuzzleFlash(ev.fromPosition, 0x7dd3fc, 0.13);
+            vfx.spawnRailRings(ev.fromPosition, ev.toPosition, 0x7dd3fc);
+            lighting?.flashPoint(ev.toPosition, 0x38bdf8, 3.2, 2.8, 0.22);
           } else if (ev.turretKind === 'cryo-arc') {
             spawnCryoJaggedLink(ev.fromPosition, ev.toPosition);
+            vfx.spawnMuzzleFlash(ev.fromPosition, 0x22d3ee, 0.09);
+            vfx.spawnImpactBurst(ev.toPosition, 0x67e8f9, 7, 1.4, 0.016);
+          } else if (ev.turretKind === 'plasma-mortar') {
+            vfx.spawnMuzzleFlash(ev.fromPosition, 0xff7b29, 0.12);
           }
           break;
         }
@@ -1455,6 +1924,7 @@ export function createBlockoutRenderer(
             const p1 = pts[i + 1];
             if (p0 && p1) {
               spawnCryoJaggedLink(p0, p1);
+              vfx.spawnImpactBurst(p1, 0x22d3ee, 4, 1.1, 0.014);
             }
           }
           break;
@@ -1468,6 +1938,8 @@ export function createBlockoutRenderer(
             durationSec: 0.38,
             colorHex: 0xff5722,
           });
+          vfx.spawnPlasmaExplosion(ev.position, Math.max(0.3, ev.aoeRadiusM));
+          lighting?.flashPoint(ev.position, 0xff5722, 4.8, 3.6, 0.36);
           break;
         }
         case 'turret-disrupted': {
@@ -1479,6 +1951,14 @@ export function createBlockoutRenderer(
             durationSec: 0.45,
             colorHex: 0x38bdf8,
           });
+          vfx.spawnShockRing(ev.position, { x: 0, y: 1, z: 0 }, 1.25, 0x38bdf8, 0.45);
+          lighting?.flashPoint(ev.position, 0x38bdf8, 3.6, 3.2, 0.35);
+          const sourceView = enemyAssetViews.get(ev.sourceEnemyId);
+          if (sourceView) {
+            const clip = playMixerClip(sourceView.mixer, sourceView.clips, 'emp_pulse', false);
+            sourceView.currentClip = 'emp_pulse';
+            sourceView.oneShotRemainingSec = clip?.duration ?? 1.0;
+          }
           break;
         }
         case 'boss-phase2': {
@@ -1490,12 +1970,37 @@ export function createBlockoutRenderer(
             durationSec: 0.6,
             colorHex: 0xff4d00,
           });
+          vfx.spawnDeathBurst(ev.position, 0xff4d00, true);
+          lighting?.flashPoint(ev.position, 0xff4d00, 6.0, 4.5, 0.65);
+          const bossView = enemyAssetViews.get(ev.bossEnemyId);
+          if (bossView) {
+            const clip = playMixerClip(bossView.mixer, bossView.clips, 'phase2_shift', false);
+            bossView.currentClip = 'phase2_shift';
+            bossView.oneShotRemainingSec = clip?.duration ?? 1.5;
+          }
           break;
         }
         case 'enemy-hit': {
           const enemyBlockout = enemiesMap.get(ev.enemyId);
           if (enemyBlockout) {
             enemyBlockout.hitFlashSec = 0.1;
+          }
+          const hitView = enemyAssetViews.get(ev.enemyId);
+          if (hitView && hitView.oneShotRemainingSec <= 0 && !enemyBlockout?.isBoss) {
+            const clip = playMixerClip(hitView.mixer, hitView.clips, 'hit', false);
+            if (clip) {
+              hitView.currentClip = 'hit';
+              hitView.oneShotRemainingSec = Math.min(clip.duration, 0.35);
+            }
+          }
+          break;
+        }
+        case 'enemy-killed': {
+          const enemyDef = ENEMIES[ev.archetypeId];
+          const burstColor = ev.archetypeId === 'apex-broodlord' ? 0xff4d00 : 0xa855f7;
+          vfx.spawnDeathBurst(ev.position, burstColor, enemyDef.isBoss);
+          if (enemyDef.isBoss) {
+            lighting?.flashPoint(ev.position, 0xff4d00, 6.5, 5.0, 0.75);
           }
           break;
         }
@@ -1516,6 +2021,7 @@ export function createBlockoutRenderer(
     enemiesGroup,
     fxGroup,
     healthBarsGroup,
+    vfx,
     get portals() {
       return portalsMap;
     },
@@ -1543,11 +2049,18 @@ export function createBlockoutRenderer(
       elapsedTotalSec += stepDt;
 
       // 1. Sync Core Bastion position, rotation, HP color, and `core-hit` shield flare
+      ensureCoreAsset();
+      if (camera) {
+        camera.getWorldPosition(_camWorldPos);
+      } else {
+        _camWorldPos.set(0, 1.65, 3.2);
+      }
       coreBastion.group.position.set(
         snapshot.corePosition.x,
         snapshot.corePosition.y,
         snapshot.corePosition.z,
       );
+      lighting?.setCorePosition(snapshot.corePosition);
       coreBastion.lastHp = snapshot.coreHp;
       coreBastion.maxHp = snapshot.maxCoreHp;
       coreBastion.energyCoreMesh.rotation.y = elapsedTotalSec * 0.9;
@@ -1563,6 +2076,29 @@ export function createBlockoutRenderer(
       const coreHitFactor = coreBastion.hitFlashRemainingSec > 0 ? 1 : 0;
       const coreHpRatio =
         snapshot.maxCoreHp > 0 ? Math.max(0, snapshot.coreHp / snapshot.maxCoreHp) : 0;
+      lighting?.setCoreState(coreHpRatio, coreHitFactor > 0);
+
+      if (coreAssetView) {
+        if (coreAssetView.oneShotRemainingSec > 0) {
+          coreAssetView.oneShotRemainingSec = Math.max(
+            0,
+            coreAssetView.oneShotRemainingSec - stepDt,
+          );
+        }
+        if (coreAssetView.oneShotRemainingSec <= 0) {
+          const desiredClip =
+            snapshot.phase === 'victory'
+              ? 'victory_surge'
+              : coreHpRatio < 0.35
+                ? 'critical_overload'
+                : 'idle_pulse';
+          if (coreAssetView.currentClip !== desiredClip) {
+            playMixerClip(coreAssetView.mixer, coreAssetView.clips, desiredClip, true);
+            coreAssetView.currentClip = desiredClip;
+          }
+        }
+        coreAssetView.mixer.update(stepDt);
+      }
 
       if (coreHitFactor > 0) {
         coreBastion.shieldMaterial.color.setHex(0xff3b5c);
@@ -1617,8 +2153,51 @@ export function createBlockoutRenderer(
           portalBlockout.spawnFlashSec = Math.max(0, portalBlockout.spawnFlashSec - stepDt);
         }
 
-        portalBlockout.interiorMesh.visible = simPortal.isOpen;
-        portalBlockout.vortexRingMesh.visible = simPortal.isOpen;
+        const portalView = ensurePortalAsset(portalBlockout);
+        if (portalView) {
+          if (simPortal.isOpen && !portalView.wasOpen) {
+            playMixerClip(portalView.mixer, portalView.clips, 'open_tear', false);
+            portalView.currentClip = 'open_tear';
+          } else if (!simPortal.isOpen && portalView.wasOpen) {
+            playMixerClip(portalView.mixer, portalView.clips, 'close_seal', false);
+            portalView.currentClip = 'close_seal';
+          }
+          portalView.wasOpen = simPortal.isOpen;
+
+          if (portalView.surgeRemainingSec > 0) {
+            portalView.surgeRemainingSec = Math.max(0, portalView.surgeRemainingSec - stepDt);
+            if (portalView.surgeRemainingSec <= 0 && simPortal.isOpen) {
+              playMixerClip(portalView.mixer, portalView.clips, 'idle_rift', true);
+              portalView.currentClip = 'idle_rift';
+            }
+          }
+          portalView.mixer.update(stepDt);
+
+          if (portalView.shaderMat) {
+            const uniforms = portalView.shaderMat.uniforms as RiftPortalShaderUniforms;
+            portalView.shaderTime += stepDt;
+            uniforms.uTime.value = portalView.shaderTime;
+            const scaleOpen = portalView.interiorNode
+              ? THREE.MathUtils.clamp(portalView.interiorNode.scale.x, 0, 1)
+              : simPortal.isOpen
+                ? 1
+                : 0;
+            uniforms.uOpen.value = simPortal.isOpen ? Math.max(0.02, scaleOpen) : scaleOpen;
+            uniforms.uSurge.value = Math.min(
+              1,
+              portalView.surgeRemainingSec > 0
+                ? Math.sin(Math.PI * Math.min(1, portalView.surgeRemainingSec / 0.9))
+                : portalBlockout.spawnFlashSec * 2.0,
+            );
+          }
+          if (portalView.interiorNode) {
+            portalView.interiorNode.visible =
+              simPortal.isOpen || portalView.interiorNode.scale.x > 0.01;
+          }
+        } else {
+          portalBlockout.interiorMesh.visible = simPortal.isOpen;
+          portalBlockout.vortexRingMesh.visible = simPortal.isOpen;
+        }
         portalBlockout.frameMaterial.emissiveIntensity = simPortal.isOpen
           ? 1.15 + 0.35 * Math.sin(portalBlockout.pulsePhase) + portalBlockout.spawnFlashSec
           : 0.35;
@@ -1629,6 +2208,7 @@ export function createBlockoutRenderer(
 
       for (const [id, record] of portalsMap.entries()) {
         if (!seenPortals.has(id)) {
+          disposePortalAsset(id);
           portalsGroup.remove(record.group);
           if (record.apertureMaskMesh) {
             portalsGroup.remove(record.apertureMaskMesh);
@@ -1670,8 +2250,18 @@ export function createBlockoutRenderer(
         turretBlockout.mountProfile = simTurret.mountProfile;
         turretBlockout.group.userData.mountProfile = simTurret.mountProfile;
         const isHover = simTurret.mountProfile === 'hover-pod';
-        turretBlockout.clampMountGroup.visible = !isHover;
-        turretBlockout.hoverPodGroup.visible = isHover;
+
+        const turretDistSq =
+          (simTurret.position.x - _camWorldPos.x) ** 2 +
+          (simTurret.position.y - _camWorldPos.y) ** 2 +
+          (simTurret.position.z - _camWorldPos.z) ** 2;
+        const desiredTurretLod: 0 | 1 = turretDistSq > TURRET_LOD1_DIST_SQ ? 1 : 0;
+        const turretView = ensureTurretAsset(turretBlockout, simTurret, desiredTurretLod);
+        if (!turretView) {
+          turretBlockout.clampMountGroup.visible = !isHover;
+          turretBlockout.hoverPodGroup.visible = isHover;
+          turretBlockout.yawRing.visible = true;
+        }
 
         turretBlockout.group.position.set(
           simTurret.position.x,
@@ -1700,8 +2290,10 @@ export function createBlockoutRenderer(
         // T3 Autocannon rotary barrel spin while targeting
         if (simTurret.kind === 'autocannon' && simTurret.tier === 'T3') {
           const rotary = turretBlockout.barrelGroup.getObjectByName('barrel-autocannon-t3-rotary');
-          if (rotary && simTurret.targetEnemyId && !simTurret.isDisrupted) {
+          if (simTurret.targetEnemyId && !simTurret.isDisrupted) {
             turretBlockout.rotarySpinAngle += stepDt * 18;
+          }
+          if (rotary) {
             rotary.rotation.z = turretBlockout.rotarySpinAngle;
           }
         }
@@ -1716,10 +2308,66 @@ export function createBlockoutRenderer(
         } else {
           turretBlockout.accentMaterial.emissiveIntensity = 1.25;
         }
+
+        // Drive AAA GLB Turret + Mount articulation & animations
+        if (turretView) {
+          if (turretView.upgradeSpinRemainingSec > 0) {
+            turretView.upgradeSpinRemainingSec = Math.max(
+              0,
+              turretView.upgradeSpinRemainingSec - stepDt,
+            );
+          }
+          const upgradeSpin =
+            turretView.upgradeSpinRemainingSec > 0
+              ? (1 - turretView.upgradeSpinRemainingSec / 0.65) * Math.PI * 2
+              : 0;
+          if (turretView.headYawRing) {
+            const empTwitch = simTurret.isDisrupted ? Math.sin(elapsedTotalSec * 19) * 0.08 : 0;
+            turretView.headYawRing.rotation.y = simTurret.yaw + upgradeSpin + empTwitch;
+          }
+          if (turretView.headPitchCradle) {
+            turretView.headPitchCradle.rotation.x = simTurret.isDisrupted
+              ? 0.34 + Math.sin(elapsedTotalSec * 14) * 0.04
+              : -simTurret.pitch;
+          }
+          if (turretView.headRecoilGroup) {
+            turretView.headRecoilGroup.position.z = -turretBlockout.recoilOffsetM;
+          }
+          if (turretView.headRotaryCluster) {
+            turretView.headRotaryCluster.rotation.z = turretBlockout.rotarySpinAngle;
+          }
+          for (const mat of turretView.materials) {
+            mat.emissiveIntensity = simTurret.isDisrupted
+              ? 0.22 + 0.12 * Math.sin(elapsedTotalSec * 22)
+              : 1.25;
+          }
+          if (turretView.mountMixer) {
+            if (turretView.mountDeployRemainingSec > 0) {
+              turretView.mountDeployRemainingSec = Math.max(
+                0,
+                turretView.mountDeployRemainingSec - stepDt,
+              );
+            }
+            if (turretView.mountDeployRemainingSec <= 0) {
+              const targetMountClip =
+                simTurret.mountProfile === 'hover-pod'
+                  ? simTurret.isDisrupted
+                    ? 'emp_stall'
+                    : 'hover_idle'
+                  : 'idle_locked';
+              if (turretView.mountClip !== targetMountClip) {
+                playMixerClip(turretView.mountMixer, turretView.mountClips, targetMountClip, true);
+                turretView.mountClip = targetMountClip;
+              }
+            }
+            turretView.mountMixer.update(stepDt);
+          }
+        }
       }
 
       for (const [id, record] of turretsMap.entries()) {
         if (!seenTurrets.has(id)) {
+          disposeTurretAsset(id);
           turretsGroup.remove(record.group);
           disposeEntityCleanup(`turret:${id}`);
           turretsMap.delete(id);
@@ -1844,6 +2492,63 @@ export function createBlockoutRenderer(
           }
         }
 
+        // Drive AAA Skinned & Animated Blender Invader GLB (with LOD & distance animation throttling)
+        const enemyDistSq =
+          (simEnemy.position.x - _camWorldPos.x) ** 2 +
+          (simEnemy.position.y - _camWorldPos.y) ** 2 +
+          (simEnemy.position.z - _camWorldPos.z) ** 2;
+        const desiredEnemyLod: 0 | 1 = enemyDistSq > ENEMY_LOD1_DIST_SQ ? 1 : 0;
+        const enemyView = ensureEnemyAsset(enemyBlockout, simEnemy, desiredEnemyLod);
+        if (enemyView) {
+          if (enemyView.oneShotRemainingSec > 0) {
+            enemyView.oneShotRemainingSec = Math.max(0, enemyView.oneShotRemainingSec - stepDt);
+          }
+          if (enemyView.oneShotRemainingSec <= 0) {
+            const targetLoco = defaultEnemyLocomotionClip(simEnemy);
+            if (enemyView.currentClip !== targetLoco) {
+              playMixerClip(enemyView.mixer, enemyView.clips, targetLoco, true);
+              enemyView.currentClip = targetLoco;
+            }
+          }
+          // Throttle distant animation ticks (>6 m) to every other frame for Quest 3 CPU headroom
+          const farThrottle = enemyDistSq > ENEMY_ANIM_THROTTLE_DIST_SQ;
+          enemyView.throttleFlip = !enemyView.throttleFlip;
+          if (!farThrottle || enemyView.throttleFlip) {
+            const animSpeed = isSlowed
+              ? 0.55
+              : 1.0 + Math.min(0.6, simEnemy.effectiveSpeedMps * 0.4);
+            enemyView.mixer.update((farThrottle ? stepDt * 2 : stepDt) * animSpeed);
+          }
+
+          // Uniform-driven material states: Hit flash, Cryo frost tint, Boss Phase-2 molten cracks
+          const wantPhase2 = simEnemy.isBoss && simEnemy.isBossPhase2;
+          for (let m = 0; m < enemyView.materials.length; m += 1) {
+            const mat = enemyView.materials[m];
+            if (!mat) continue;
+            if (wantPhase2 && !enemyView.phase2Applied && assets?.broodlordPhase2Emissive) {
+              mat.emissiveMap = assets.broodlordPhase2Emissive;
+              mat.needsUpdate = true;
+            } else if (!wantPhase2 && enemyView.phase2Applied) {
+              mat.emissiveMap = enemyView.baseEmissiveMaps[m] ?? null;
+              mat.needsUpdate = true;
+            }
+            if (enemyBlockout.hitFlashSec > 0) {
+              mat.emissive.setHex(0xffffff);
+              mat.emissiveIntensity = 1.6 + (enemyBlockout.hitFlashSec / 0.1) * 0.9;
+            } else if (isSlowed) {
+              mat.emissive.copy(CRYO_FROST_COLOR);
+              mat.emissiveIntensity = 0.85;
+            } else if (wantPhase2) {
+              mat.emissive.setHex(0xffffff);
+              mat.emissiveIntensity = Math.max(1.65, simEnemy.emissiveIntensity * 1.8);
+            } else {
+              mat.emissive.copy(enemyView.baseEmissiveColors[m] ?? BOSS_PHASE1_EMISSIVE);
+              mat.emissiveIntensity = 1.05;
+            }
+          }
+          enemyView.phase2Applied = wantPhase2;
+        }
+
         // Instanced World HP Bar above enemy (billboarded toward active camera)
         const barY = simEnemy.position.y + def.blockout.healthBarOffsetHeightM;
         // Prevent the enemy world overlay from filling the headset view near the eye.
@@ -1896,6 +2601,7 @@ export function createBlockoutRenderer(
 
       for (const [id, record] of enemiesMap.entries()) {
         if (!seenEnemies.has(id)) {
+          disposeEnemyAsset(id);
           enemiesGroup.remove(record.group);
           disposeEntityCleanup(`enemy:${id}`);
           enemiesMap.delete(id);
@@ -2030,6 +2736,8 @@ export function createBlockoutRenderer(
       railBeamInstancedMesh.count = railWrite;
       railBeamInstancedMesh.instanceMatrix.needsUpdate = true;
 
+      vfx.tick(stepDt);
+
       fxCounts = {
         activeTracers: tracerWrite,
         activeMortarShells: shellCount,
@@ -2043,6 +2751,16 @@ export function createBlockoutRenderer(
     dispose() {
       if (disposed) return;
       disposed = true;
+
+      if (coreAssetView) {
+        coreAssetView.mixer.stopAllAction();
+        disposeClonedGlb(coreAssetView.root, coreAssetView.bindings);
+        coreAssetView = null;
+      }
+      for (const id of [...portalAssetViews.keys()]) disposePortalAsset(id);
+      for (const id of [...turretAssetViews.keys()]) disposeTurretAsset(id);
+      for (const id of [...enemyAssetViews.keys()]) disposeEnemyAsset(id);
+      vfx.dispose();
 
       entityDisposers.clear();
       for (const binding of depthBindings) {

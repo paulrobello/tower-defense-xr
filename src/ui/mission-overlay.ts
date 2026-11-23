@@ -38,6 +38,7 @@ import {
 import type { SettingsStore } from '../settings/store.ts';
 import type { CombatSimulationState } from '../sim/engine.ts';
 import { configureFonts, resolveFontUrls } from './fonts.ts';
+import type { TacticalAtlasResource, TacticalIconAtlas } from './tactical-atlas.ts';
 
 export type MissionOverlayMode = 'desktop' | 'xr';
 
@@ -77,6 +78,7 @@ export interface MissionOverlayOptions {
   readonly persistStore: PersistStore;
   readonly actionBus: ActionBus;
   readonly settingsStore?: SettingsStore;
+  readonly atlas?: TacticalAtlasResource;
   readonly container?: HTMLElement | null;
   readonly initialMode?: MissionOverlayMode;
   readonly width?: number;
@@ -155,7 +157,17 @@ export function createMissionOverlay(options: MissionOverlayOptions): MissionOve
 
   let mode: MissionOverlayMode = options.initialMode ?? 'desktop';
   let lastRecordedRunKey: string | null = null;
+  let loadedAtlas: TacticalIconAtlas | null = null;
   let disposed = false;
+
+  if (options.atlas) {
+    void options.atlas.get().then((resolved) => {
+      if (!disposed && resolved) {
+        loadedAtlas = resolved;
+        syncUi();
+      }
+    });
+  }
 
   let state: MissionOverlayState = {
     open: false,
@@ -681,7 +693,50 @@ export function createMissionOverlay(options: MissionOverlayOptions): MissionOve
       applyStyle(newBestBadgeEl, { display: state.isNewBest ? 'inline-block' : 'none' });
     }
     if (starsDisplayEl) {
-      starsDisplayEl.textContent = `${starsVisual} (${state.stars} / 3 Stars)`;
+      const earnedRect = loadedAtlas?.icons['star-earned']?.rect;
+      const emptyRect = loadedAtlas?.icons['star-empty']?.rect;
+      if (loadedAtlas && earnedRect && emptyRect) {
+        const doc = starsDisplayEl.ownerDocument;
+        starsDisplayEl.replaceChildren();
+        applyStyle(starsDisplayEl, {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '10px',
+          letterSpacing: 'normal',
+        });
+        const iconSize = 42;
+        const scaleX = iconSize / 128;
+        const scaleY = iconSize / 128;
+        for (let i = 0; i < 3; i += 1) {
+          const rect = i < state.stars ? earnedRect : emptyRect;
+          const icon = doc.createElement('span');
+          icon.dataset.starSlot = i < state.stars ? 'earned' : 'empty';
+          applyStyle(icon, {
+            display: 'inline-block',
+            width: `${iconSize}px`,
+            height: `${iconSize}px`,
+            backgroundImage: `url("${loadedAtlas.url}")`,
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: `${loadedAtlas.width * scaleX}px ${loadedAtlas.height * scaleY}px`,
+            backgroundPosition: `${-rect[0] * scaleX}px ${-rect[1] * scaleY}px`,
+            filter:
+              i < state.stars ? 'drop-shadow(0 0 8px rgba(255, 209, 102, 0.55))' : 'opacity(0.6)',
+          });
+          starsDisplayEl.appendChild(icon);
+        }
+        const caption = doc.createElement('span');
+        caption.textContent = `(${state.stars} / 3 Stars)`;
+        applyStyle(caption, {
+          fontSize: '15px',
+          fontWeight: '600',
+          color: starsColor,
+          marginLeft: '4px',
+        });
+        starsDisplayEl.appendChild(caption);
+      } else {
+        starsDisplayEl.textContent = `${starsVisual} (${state.stars} / 3 Stars)`;
+      }
       starsDisplayEl.style.color = starsColor;
     }
     if (scoreValueEl) scoreValueEl.textContent = String(state.score);

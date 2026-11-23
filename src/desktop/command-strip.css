@@ -1,0 +1,114 @@
+.bastion-command-strip {
+  position: fixed;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  width: max-content;
+  max-width: calc(100% - 20px);
+  overflow-x: auto;
+  z-index: 12;
+  border: 1px solid #96a7b4;
+  border-radius: 5px;
+  background: #17212c;
+  box-shadow: 0 4px 14px #06080cab;
+  color: #edf5f7;
+  font:
+    600 13px / 1.2 system-ui,
+    sans-serif;
+}
+.bastion-command-strip[hidden] {
+  display: none;
+}
+.bastion-command-strip button {
+  display: grid;
+  grid-template-columns: minmax(18px, max-content) 30px auto;
+  grid-template-rows: auto auto;
+  gap: 2px 6px;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 8px 10px;
+  border: 0;
+  border-right: 1px solid #52636f;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+.bastion-command-strip button:last-child {
+  border-right: 0;
+}
+.bastion-command-strip button:hover:not(:disabled),
+.bastion-command-strip button:focus-visible,
+.bastion-command-strip button[aria-pressed="true"] {
+  background: #19576b;
+  color: #efffff;
+}
+.bastion-command-strip button:focus-visible {
+  outline: 2px solid #78ecff;
+  outline-offset: -2px;
+}
+.bastion-command-strip button:disabled {
+  color: #ffc7d1;
+  background: #442836;
+  cursor: default;
+}
+.bastion-command-strip kbd {
+  grid-row: span 2;
+  color: #b4c9d7;
+  font: inherit;
+}
+.bastion-command-strip .tactical-icon {
+  grid-row: span 2;
+  width: 30px;
+  height: 30px;
+}
+.bastion-command-strip button:has(.tactical-icon[hidden]) {
+  grid-template-columns: minmax(18px, max-content) auto;
+}
+.bastion-command-strip small {
+  color: #ffd278;
+  font:
+    500 11px / 1.1 system-ui,
+    sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.bastion-command-strip button:disabled small {
+  color: #ffb3bd;
+}
+@media (max-width: 860px) {
+  .bastion-command-strip {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    width: calc(100% - 20px);
+  }
+  .bastion-command-strip button {
+    grid-template-columns: minmax(12px, max-content) 24px;
+    justify-content: center;
+    grid-template-rows: auto;
+    justify-items: center;
+    align-content: start;
+    padding: 4px 2px;
+    gap: 2px;
+    text-align: center;
+    font-size: 11px;
+    overflow-wrap: anywhere;
+  }
+  .bastion-command-strip button:has(.tactical-icon[hidden]) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .bastion-command-strip button > span:not(.tactical-icon),
+  .bastion-command-strip small {
+    grid-column: 1 / -1;
+  }
+  .bastion-command-strip .tactical-icon {
+    width: 24px;
+    height: 24px;
+  }
+  .bastion-command-strip kbd,
+  .bastion-command-strip .tactical-icon {
+    grid-row: auto;
+  }
+}
