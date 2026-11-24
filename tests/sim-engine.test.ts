@@ -748,6 +748,25 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
   });
 
   describe('Starter turret balance', () => {
+    it('funds exactly two starter Autocannons in a fresh mission', () => {
+      const sim = createCombatSimulation({ seed: 0x2026 });
+      expect(sim.getState().credits).toBe(200);
+
+      const build = (x: number) =>
+        sim.placeTurret({
+          kind: 'autocannon',
+          position: { x, y: 0, z: 0.75 },
+          mountProfile: 'surface-clamp',
+          surfaceKind: 'floor',
+        });
+
+      expect(build(-0.65).ok).toBe(true);
+      expect(build(0.65).ok).toBe(true);
+      expect(build(0)).toMatchObject({ ok: false, reason: 'INSUFFICIENT_CREDITS' });
+      expect(sim.getState().credits).toBe(0);
+      expect(sim.getState().turrets).toHaveLength(2);
+    });
+
     it('lets the Core take damage before Wave 8 with four unupgraded Autocannons', () => {
       const slots: readonly Vec3[] = [
         { x: -0.65, y: 0, z: 0.75 },
@@ -861,8 +880,9 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
 
     it('supports debugJumpToWave and debugGrantCredits hooks cleanly for automated verification', () => {
       const sim = createCombatSimulation({ seed: 777 });
+      const startingBalance = sim.getState().credits;
       const newBalance = sim.debugGrantCredits(5000);
-      expect(newBalance).toBe(320 + 5000);
+      expect(newBalance).toBe(startingBalance + 5000);
 
       const wave12 = sim.debugJumpToWave(12);
       expect(wave12.waveNumber).toBe(12);

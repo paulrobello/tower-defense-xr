@@ -326,7 +326,7 @@ try {
       afterLock.phase === 'prep' &&
       afterLock.locked &&
       !afterLock.previewVisible &&
-      afterLock.credits === 320 &&
+      afterLock.credits === 200 &&
       afterLock.seed === 4242,
     { calibrateSnap, afterLock },
   );

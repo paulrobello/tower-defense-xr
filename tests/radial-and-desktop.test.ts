@@ -739,7 +739,6 @@ describe('Tactical HUD (Spatial XR + Desktop Strip + Recentering)', () => {
         phase: 'calibrate',
         coreHp: 100,
         coreMaxHp: 100,
-        credits: 320,
         wave: 0,
         totalWaves: 12,
         activeTurrets: 0,
@@ -750,7 +749,7 @@ describe('Tactical HUD (Spatial XR + Desktop Strip + Recentering)', () => {
 
     const query = (key: string) => container.querySelector(`[data-hud="${key}"]`) as HTMLElement;
     expect(query('core-hp').textContent).toBe('CORE 100/100');
-    expect(query('credits').textContent).toBe('320 CR');
+    expect(query('credits').textContent).toBe('200 CR');
     expect(query('wave').textContent).toBe('WAVE 0/12');
     expect(query('turrets').textContent).toBe('TURRETS 0/14');
     expect(query('primary-action').textContent).toBe('Lock Core');

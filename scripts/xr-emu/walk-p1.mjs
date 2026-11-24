@@ -640,6 +640,7 @@ try {
         phase: app.state.phase,
         locked: app.calibration.locked,
         waveAfter25Seconds: app.sim.getState().currentWave,
+        credits: app.sim.getState().credits,
         playArc: app.calibration.playArc,
       };
     });
@@ -649,7 +650,8 @@ try {
         seatedLocked.closedSettings === true &&
         seatedLocked.phase === 'prep' &&
         seatedLocked.locked === true &&
-        seatedLocked.waveAfter25Seconds === 0,
+        seatedLocked.waveAfter25Seconds === 0 &&
+        seatedLocked.credits === 200,
       seatedLocked,
     );
 
@@ -740,7 +742,8 @@ try {
         }
       }
 
-      app.debugGrantCredits(100);
+      // Fund all four mount checks independently of the two-turret opening budget.
+      app.debugGrantCredits(200);
       const targets = [
         { label: 'floor', expectedKind: 'floor', point: { x: -0.9, y: 0.0, z: -0.55 } },
         { label: 'table', expectedKind: 'table', point: { x: 1.6, y: 0.74, z: 0.0 } },

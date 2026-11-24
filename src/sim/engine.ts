@@ -732,7 +732,7 @@ export interface CombatSimulationConfig {
   readonly coreAnchor?: NavCoreAnchorInput | Readonly<Vec3>;
   /** Portal anchors (defaults to 4 standard wall/ceiling rift anchors `>= 2.0 m` from the Core). */
   readonly portalAnchors?: readonly NavPortalAnchorInput[];
-  /** Starting Requisition credits override (defaults to `STARTING_CREDITS = 320`). */
+  /** Starting Requisition credits override (defaults to `STARTING_CREDITS`). */
   readonly startingCredits?: number;
   /** Maximum Core HP override (defaults to `CORE_MAX_HP = 100`). */
   readonly coreMaxHp?: number;

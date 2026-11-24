@@ -330,7 +330,7 @@ describe('P2-T2 Content Data Tables & 12-Wave Mission Script', () => {
       expect(MAX_CONCURRENT_PORTALS).toBe(4);
       expect(MAX_ACTIVE_ENEMIES).toBe(25);
       expect(INTERMISSION_DURATION_SEC).toBe(15);
-      expect(STARTING_CREDITS).toBeGreaterThanOrEqual(300);
+      expect(STARTING_CREDITS).toBe(2 * getTurretBuildCost('autocannon'));
       expect(CORE_MAX_HP).toBe(100);
       expect(MISSION_CONFIG.totalWaves).toBe(12);
 
