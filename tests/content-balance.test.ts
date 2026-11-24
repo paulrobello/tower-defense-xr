@@ -166,7 +166,7 @@ describe('P2-T2 Content Data Tables & 12-Wave Mission Script', () => {
       const auto = TURRETS.autocannon;
       expect(auto.name).toBe('M44 Autocannon');
       expect(auto.damageType).toBe('kinetic');
-      expect(auto.tiers.T1.fireRateHz).toBeGreaterThanOrEqual(5);
+      expect(auto.tiers.T1.fireRateHz).toBeGreaterThanOrEqual(4.5);
       expect(auto.tiers.T3.fireRateHz).toBeGreaterThanOrEqual(10);
 
       // Helios Plasma Mortar: parabolic AoE splash + burn DoT

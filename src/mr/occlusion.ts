@@ -174,11 +174,13 @@ export interface UpdateFromXrFrameOptions {
 export interface OcclusionController {
   readonly root: THREE.Group;
   readonly roomMeshRoot: THREE.Group;
+  readonly roomMeshDebugRoot: THREE.Group;
   readonly state: Readonly<OcclusionState>;
   readonly requestedMode: RoomOcclusionOption;
   readonly effectiveMode: EffectiveOcclusionMode;
   readonly uniforms: DepthOcclusionUniforms;
   setMode(mode: RoomOcclusionOption): EffectiveOcclusionMode;
+  setRoomMeshDebugVisible(visible: boolean): void;
   setPortals(portals: readonly PortalAperture[]): void;
   getPortals(): readonly PortalAperture[];
   syncRoomSurfaces(surfaces: Iterable<OcclusionSurface>): void;
@@ -1363,6 +1365,7 @@ interface MutableDepthViewSlot {
 interface OccluderEntry {
   surface: OcclusionSurface;
   mesh: THREE.Mesh;
+  debugMesh: THREE.Mesh;
   revision: number;
   portalVersion: number;
   cutPortalIds: readonly string[];
@@ -1465,7 +1468,20 @@ export function createOcclusionController(
 
   const roomMeshRoot = new THREE.Group();
   roomMeshRoot.name = 'mr-occlusion-room-meshes';
-  root.add(roomMeshRoot);
+  const roomMeshDebugRoot = new THREE.Group();
+  roomMeshDebugRoot.name = 'mr-occlusion-room-mesh-debug';
+  roomMeshDebugRoot.visible = false;
+  root.add(roomMeshRoot, roomMeshDebugRoot);
+
+  const debugWireMaterial = new THREE.MeshBasicMaterial({
+    color: 0x50e2f0,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.55,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+    forceSinglePass: true,
+  });
 
   // Shared opaque depth-only material for room-mesh fallback occluders.
   // FrontSide prevents back-facing walls (such as a near wall behind the desktop camera) from
@@ -1760,10 +1776,12 @@ export function createOcclusionController(
     const cut = cutPortalApertures(entry.surface, activePortals, cutOptions);
     entry.mesh.geometry.dispose();
     entry.mesh.geometry = cut.geometry;
+    entry.debugMesh.geometry = cut.geometry;
     entry.revision = entry.surface.revision;
     entry.portalVersion = portalVersion;
     entry.cutPortalIds = cut.cutPortalIds;
     entry.mesh.visible = entry.surface.visible ?? true;
+    entry.debugMesh.visible = entry.mesh.visible;
   }
 
   function clearDepthAvailability(): void {
@@ -1823,6 +1841,7 @@ export function createOcclusionController(
   return {
     root,
     roomMeshRoot,
+    roomMeshDebugRoot,
     get state() {
       return lastState;
     },
@@ -1840,6 +1859,10 @@ export function createOcclusionController(
       requestedMode = mode;
       syncOutputsAndNotify();
       return resolveEffectiveMode();
+    },
+
+    setRoomMeshDebugVisible(visible) {
+      if (!disposed) roomMeshDebugRoot.visible = visible;
     },
 
     setPortals(portals) {
@@ -1876,9 +1899,16 @@ export function createOcclusionController(
           mesh.receiveShadow = false;
           mesh.visible = surface.visible ?? true;
           roomMeshRoot.add(mesh);
+
+          const debugMesh = new THREE.Mesh(cut.geometry, debugWireMaterial);
+          debugMesh.name = `room-mesh-debug:${surface.id}`;
+          debugMesh.visible = mesh.visible;
+          debugMesh.raycast = () => undefined;
+          roomMeshDebugRoot.add(debugMesh);
           occluders.set(surface.id, {
             surface,
             mesh,
+            debugMesh,
             revision: surface.revision,
             portalVersion,
             cutPortalIds: cut.cutPortalIds,
@@ -1889,6 +1919,7 @@ export function createOcclusionController(
             rebuildOccluderEntry(existing);
           } else {
             existing.mesh.visible = surface.visible ?? true;
+            existing.debugMesh.visible = existing.mesh.visible;
           }
         }
       }
@@ -1896,6 +1927,7 @@ export function createOcclusionController(
       for (const [id, entry] of occluders) {
         if (!seen.has(id)) {
           roomMeshRoot.remove(entry.mesh);
+          roomMeshDebugRoot.remove(entry.debugMesh);
           entry.mesh.geometry.dispose();
           occluders.delete(id);
         }
@@ -2062,7 +2094,9 @@ export function createOcclusionController(
         entry.mesh.geometry.dispose();
       }
       occluders.clear();
+      roomMeshDebugRoot.clear();
       roomOccluderMaterial.dispose();
+      debugWireMaterial.dispose();
       eyeBindMesh.removeFromParent();
       eyeBindGeo.dispose();
       eyeBindMat.dispose();

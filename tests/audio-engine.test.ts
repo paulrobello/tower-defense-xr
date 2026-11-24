@@ -283,4 +283,51 @@ describe('Spatial Audio Engine (P4-T5)', () => {
 
     engine.dispose();
   });
+
+  it('starts one opt-in preview music loop after unlock and respects music mute', async () => {
+    const mock = createMockAudioContext();
+    globalThis.fetch = vi.fn(async () => ({
+      ok: true,
+      arrayBuffer: async () => new ArrayBuffer(32),
+    })) as unknown as typeof fetch;
+
+    const engine = createSpatialAudioEngine({
+      previewMusic: true,
+      audioContextFactory: () => mock.ctx,
+      initialVolumes: { musicVolume: 0.4 },
+    });
+    await engine.unlock();
+    await vi.waitFor(() => expect(mock.sources.filter((source) => source.loop)).toHaveLength(1));
+    await engine.unlock();
+    expect(mock.sources.filter((source) => source.loop)).toHaveLength(1);
+
+    const source = mock.sources.find((node) => node.loop);
+    const musicGain = source?.connect.mock.calls[0]?.[0];
+    expect(musicGain.gain.setTargetAtTime).toHaveBeenLastCalledWith(0.4, 0, 0.02);
+    engine.setVolumes({ musicVolume: 0 });
+    expect(musicGain.gain.setTargetAtTime).toHaveBeenLastCalledWith(0, 0, 0.02);
+    engine.setVolumes({ musicVolume: 0.6 });
+    expect(musicGain.gain.setTargetAtTime).toHaveBeenLastCalledWith(0.6, 0, 0.02);
+    expect(mock.sources.filter((node) => node.loop)).toHaveLength(1);
+    engine.dispose();
+    expect(source?.stop).toHaveBeenCalledTimes(1);
+  });
+
+  it('silently skips the preview loop when its asset is unavailable', async () => {
+    const mock = createMockAudioContext();
+    globalThis.fetch = vi.fn(async () => ({
+      ok: false,
+      status: 404,
+      arrayBuffer: async () => new ArrayBuffer(0),
+    })) as unknown as typeof fetch;
+
+    const engine = createSpatialAudioEngine({
+      previewMusic: true,
+      audioContextFactory: () => mock.ctx,
+    });
+    await expect(engine.unlock()).resolves.toBe(true);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(mock.sources.filter((source) => source.loop)).toHaveLength(0);
+    engine.dispose();
+  });
 });

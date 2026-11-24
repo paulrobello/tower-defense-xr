@@ -246,6 +246,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
   const assets = createRuntimeAssetLibrary({ renderer: shell.renderer });
   const tacticalAtlas = createTacticalAtlas();
   const audio = createSpatialAudioEngine({
+    previewMusic: true,
     initialVolumes: {
       masterVolume: initial.masterVolume,
       sfxVolume: initial.sfxVolume,
@@ -317,6 +318,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
   const occlusion = createOcclusionController({
     initialMode: initial.roomOcclusion,
   });
+  occlusion.setRoomMeshDebugVisible(initial.showRoomMesh);
   shell.scene.add(occlusion.root);
 
   const shadowCatchers = createShadowCatcherManager();
@@ -780,6 +782,9 @@ export function mountApp(container: HTMLElement): AppRuntime {
     });
     if (next.roomOcclusion !== previous.roomOcclusion) {
       occlusion.setMode(next.roomOcclusion);
+    }
+    if (next.showRoomMesh !== previous.showRoomMesh) {
+      occlusion.setRoomMeshDebugVisible(next.showRoomMesh);
     }
     syncXrStatus();
   });

@@ -69,6 +69,7 @@ describe('settings/store', () => {
       framebufferScale: 1.15,
       playArc: 'front-180',
       roomOcclusion: 'auto-depth',
+      showRoomMesh: false,
       qualityTier: 'max-beauty',
       masterVolume: 1,
       musicVolume: 0.7,
@@ -398,6 +399,12 @@ describe('settings/panel (DOM + XR live store sync)', () => {
     expect(xrPanel.panel.page).toBe(1);
     expect(xrPanel.activate('room-occlusion')).toBe(true);
     expect(store.get().roomOcclusion).toBe('room-mesh');
+    expect(xrPanel.activate('show-room-mesh')).toBe(true);
+    expect(store.get().showRoomMesh).toBe(true);
+    expect(
+      domPanel.element.querySelector<HTMLInputElement>('[data-setting-key="showRoomMesh"]')
+        ?.checked,
+    ).toBe(true);
     expect(xrPanel.activate('master-down')).toBe(true);
     expect(store.get().masterVolume).toBe(0.9);
 

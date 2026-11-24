@@ -1065,12 +1065,12 @@ try {
       };
     });
     record(
-      'xr-half-size-world-objects',
+      'xr-scaled-world-objects',
       worldScale.coreAtAnchor &&
         worldScale.portals.length > 0 &&
         worldScale.turrets.length > 0 &&
         [worldScale.core, worldScale.preview, ...worldScale.portals, ...worldScale.turrets].every(
-          (scale) => scale.every((axis) => axis === 0.5),
+          (scale) => scale.every((axis) => Math.abs(axis - 0.45) < 1e-6),
         ) &&
         [worldScale.hud, worldScale.settings].every((scale) =>
           scale.every((axis) => Math.abs(axis - 1) < 1e-6),
@@ -1259,14 +1259,17 @@ try {
 
         const mat = mesh.material;
         const anchor = app.calibration.portalAnchors.find((entry) => entry.id === portal.id);
-        const halfScale =
-          portal.radiusX === anchor?.width / 4 && portal.radiusY === anchor?.height / 4;
+        const modelScale = app.blockouts.portals.get(portal.id)?.group.scale.x ?? 0;
+        const apertureMatchesModel =
+          Boolean(anchor) &&
+          portal.radiusX === (anchor.width * modelScale) / 2 &&
+          portal.radiusY === (anchor.height * modelScale) / 2;
         cutoutChecks.push({
           portalId: portal.id,
           hostSurfaceId: portal.hostSurfaceId,
           triCount,
           depthOnly: mat.colorWrite === false && mat.depthWrite === true,
-          halfScale,
+          apertureMatchesModel,
           centerHits,
           outsideHits,
         });
@@ -1295,7 +1298,11 @@ try {
         occlusionRoomMesh.cutoutChecks.length >= 2 &&
         occlusionRoomMesh.cutoutChecks.every(
           (c) =>
-            c.triCount > 2 && c.depthOnly && c.halfScale && c.centerHits === 0 && c.outsideHits > 0,
+            c.triCount > 2 &&
+            c.depthOnly &&
+            c.apertureMatchesModel &&
+            c.centerHits === 0 &&
+            c.outsideHits > 0,
         ),
       occlusionRoomMesh,
     );
@@ -1304,17 +1311,41 @@ try {
       const app = window.__riftBastionApp;
       await window.__p1Helpers.pressControl('settings-room-occlusion');
       const activated = app.settings.get().roomOcclusion === 'off';
-      await window.__p1Helpers.pressControl('settings-close');
+      const debugRoot = app.occlusion.roomMeshDebugRoot;
+      const debugWasHidden = !debugRoot.visible;
+      await window.__p1Helpers.pressControl('settings-show-room-mesh');
+      const debugShowsOccluders =
+        debugRoot.visible &&
+        debugRoot.children.length > 0 &&
+        debugRoot.children.every(
+          (mesh) =>
+            mesh.geometry ===
+              app.occlusion.getOccluderMesh(mesh.name.replace('room-mesh-debug:', ''))?.geometry &&
+            mesh.material.wireframe &&
+            !mesh.material.depthWrite,
+        );
+      const depthRemainedOff =
+        !app.occlusion.roomMeshRoot.visible && app.occlusion.uniforms.uRbOccEnabled.value === 0;
       return {
         activated,
+        debugWasHidden,
+        debugShowsOccluders,
+        depthRemainedOff,
         settingMode: app.settings.get().roomOcclusion,
         requestedMode: app.occlusion.requestedMode,
         effectiveMode: app.occlusion.effectiveMode,
         roomMeshVisible: app.occlusion.roomMeshRoot.visible,
         automaticDepthVisible: app.shell.renderer.xr.getDepthSensingMesh()?.visible,
         shaderDepthEnabled: app.occlusion.uniforms.uRbOccEnabled.value,
-        xrSettingsClosed: !app.xrSettings.visible,
       };
+    });
+    await snap(page, '10a-xr-room-mesh-debug.jpg');
+    const meshToggleEnd = await page.evaluate(async () => {
+      const app = window.__riftBastionApp;
+      await window.__p1Helpers.pressControl('settings-show-room-mesh');
+      const debugHiddenAgain = !app.occlusion.roomMeshDebugRoot.visible;
+      await window.__p1Helpers.pressControl('settings-close');
+      return { debugHiddenAgain, xrSettingsClosed: !app.xrSettings.visible };
     });
     await snap(page, '10-xr-occlusion-off.jpg');
     record(
@@ -1326,8 +1357,17 @@ try {
         occlusionOff.roomMeshVisible === false &&
         occlusionOff.automaticDepthVisible === false &&
         occlusionOff.shaderDepthEnabled === 0 &&
-        occlusionOff.xrSettingsClosed === true,
-      occlusionOff,
+        meshToggleEnd.xrSettingsClosed === true,
+      { ...occlusionOff, ...meshToggleEnd },
+    );
+
+    record(
+      'xr-room-mesh-overlay-independent-of-occlusion',
+      occlusionOff.debugWasHidden &&
+        occlusionOff.debugShowsOccluders &&
+        occlusionOff.depthRemainedOff &&
+        meshToggleEnd.debugHiddenAgain,
+      { ...occlusionOff, ...meshToggleEnd },
     );
 
     const inputOwnership = await page.evaluate(async () => {
@@ -1387,9 +1427,13 @@ try {
       const enemy = app.debugSpawnEnemy('skitter-crawler');
       return app.blockouts.enemies.get(enemy.id)?.group.scale.toArray() ?? null;
     });
-    record('xr-half-size-enemies', enemyScale?.every((axis) => axis === 0.5) ?? false, {
-      enemyScale,
-    });
+    record(
+      'xr-scaled-enemies',
+      enemyScale?.every((axis) => Math.abs(axis - 0.45) < 1e-6) ?? false,
+      {
+        enemyScale,
+      },
+    );
     await snap(page, '11-xr-room-mesh-controller-rays.jpg');
 
     // Clean XR session exit

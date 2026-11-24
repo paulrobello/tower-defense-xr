@@ -22,6 +22,7 @@ export interface Settings {
   framebufferScale: FramebufferScaleOption;
   playArc: PlayArcOption;
   roomOcclusion: RoomOcclusionOption;
+  showRoomMesh: boolean;
   qualityTier: QualityTierOption;
   masterVolume: number;
   musicVolume: number;
@@ -36,6 +37,7 @@ export const DEFAULT_SETTINGS: Readonly<Settings> = Object.freeze({
   framebufferScale: 1.15,
   playArc: 'front-180',
   roomOcclusion: 'auto-depth',
+  showRoomMesh: false,
   qualityTier: 'max-beauty',
   masterVolume: 1,
   musicVolume: 0.7,
@@ -75,6 +77,11 @@ export const SETTINGS_METADATA: Readonly<Record<SettingKey, SettingMetadata>> = 
   roomOcclusion: {
     key: 'roomOcclusion',
     label: 'Room Occlusion',
+    requiresXrReentry: false,
+  },
+  showRoomMesh: {
+    key: 'showRoomMesh',
+    label: 'Show Room Mesh',
     requiresXrReentry: false,
   },
   qualityTier: {
@@ -173,6 +180,7 @@ export function validateSettingValue<K extends SettingKey>(
 ): { readonly valid: true; readonly value: Settings[K] } | { readonly valid: false } {
   switch (key) {
     case 'showFps':
+    case 'showRoomMesh':
       if (typeof value === 'boolean') return { valid: true, value: value as Settings[K] };
       return { valid: false };
     case 'fixedFoveation': {

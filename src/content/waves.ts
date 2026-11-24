@@ -164,7 +164,7 @@ export const MISSION_TARGET_MIN_DURATION_SEC = 600;
 export const MISSION_TARGET_MAX_DURATION_SEC = 900;
 
 /** Scale physical gameplay objects around their room-anchored origins. */
-export const GAMEPLAY_OBJECT_SCALE = 0.5;
+export const GAMEPLAY_OBJECT_SCALE = 0.45;
 
 /** Blockout & Quest 3 budget specs for Core Bastion and Dimensional Rift Portal Frame. */
 export const CORE_BASTION_SPEC = {

@@ -373,7 +373,7 @@ export function validateSettingsStrict(input: unknown): UserSettings {
   }
 
   for (const requiredKey of ALLOWED_SETTING_KEYS) {
-    if (!(requiredKey in input)) {
+    if (requiredKey !== 'showRoomMesh' && !(requiredKey in input)) {
       throw new PersistValidationError(`Missing required settings field "${requiredKey}".`);
     }
   }
@@ -406,6 +406,10 @@ export function validateSettingsStrict(input: unknown): UserSettings {
     );
   }
 
+  if ('showRoomMesh' in input && typeof input.showRoomMesh !== 'boolean') {
+    throw new PersistValidationError('Settings "showRoomMesh" must be a boolean.');
+  }
+
   const qualityTier = matchStringOption(input.qualityTier, QUALITY_TIER_OPTIONS);
   if (qualityTier === undefined) {
     throw new PersistValidationError(
@@ -428,6 +432,7 @@ export function validateSettingsStrict(input: unknown): UserSettings {
     framebufferScale,
     playArc,
     roomOcclusion,
+    showRoomMesh: input.showRoomMesh === true,
     qualityTier,
     masterVolume: validateVolume('masterVolume', input.masterVolume),
     musicVolume: validateVolume('musicVolume', input.musicVolume),

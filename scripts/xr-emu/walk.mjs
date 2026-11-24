@@ -156,6 +156,25 @@ let xrCapture = null;
 try {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   await context.addInitScript({ content: `${iwerUmd}\n${pageHooks}` });
+  await context.addInitScript(() => {
+    const start = AudioBufferSourceNode.prototype.start;
+    AudioBufferSourceNode.prototype.start = function (...args) {
+      const result = start.apply(this, args);
+      if (this.loop && this.buffer) {
+        const samples = this.buffer.getChannelData(0);
+        let peak = 0;
+        for (let i = 0; i < samples.length; i += 257) {
+          peak = Math.max(peak, Math.abs(samples[i]));
+        }
+        window.__previewMusicPlayback = {
+          duration: this.buffer.duration,
+          running: this.context.state === 'running',
+          peak,
+        };
+      }
+      return result;
+    };
+  });
   const page = await context.newPage();
 
   page.on('console', (msg) => {
@@ -344,6 +363,11 @@ try {
 
   // Advance XR frames deterministically via session.requestAnimationFrame.
   const framesStepped = await page.evaluate(() => window.__xrEmu.frames(6));
+  await page.waitForFunction(() => window.__previewMusicPlayback?.running);
+  const musicPlayback = await page.evaluate(() => window.__previewMusicPlayback);
+  record('xr-preview-music-started', musicPlayback.duration >= 8 && musicPlayback.peak >= 0.05, {
+    ...musicPlayback,
+  });
   await snap('04-xr-immersive-ar.jpg');
 
   xrCapture = await page.evaluate(() => {

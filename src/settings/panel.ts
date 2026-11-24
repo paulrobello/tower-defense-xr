@@ -440,6 +440,16 @@ export function createDomSettingsPanel(
   });
   createRow('Room Occlusion', occlusionSelect);
 
+  const showRoomMeshInput = doc.createElement('input');
+  showRoomMeshInput.type = 'checkbox';
+  showRoomMeshInput.className = 'rb-settings-checkbox';
+  showRoomMeshInput.dataset.settingKey = 'showRoomMesh';
+  showRoomMeshInput.setAttribute('aria-label', 'Show Room Mesh');
+  showRoomMeshInput.addEventListener('change', () => {
+    store.set('showRoomMesh', showRoomMeshInput.checked);
+  });
+  createRow('Show Room Mesh', showRoomMeshInput);
+
   // Quality Tier
   const qualitySelect = doc.createElement('select');
   qualitySelect.className = 'rb-settings-select';
@@ -512,6 +522,7 @@ export function createDomSettingsPanel(
     scaleSelect.value = String(settings.framebufferScale);
     playArcSelect.value = settings.playArc;
     occlusionSelect.value = settings.roomOcclusion;
+    showRoomMeshInput.checked = settings.showRoomMesh;
     qualitySelect.value = settings.qualityTier;
 
     masterControl.input.value = String(settings.masterVolume);
@@ -630,6 +641,8 @@ export function createXrSettingsPanel(
     `Quality: ${formatQualityTier(s.qualityTier)}`;
   const formatPlayArcLabel = (s: Readonly<Settings>): string =>
     `Play Arc: ${formatPlayArcXr(s.playArc)}`;
+  const formatRoomMeshLabel = (settings: Readonly<Settings>): string =>
+    `Show Room Mesh: ${settings.showRoomMesh ? 'On' : 'Off'}`;
   const formatOcclusionLabel = (settings: Readonly<Settings>): string => {
     const requested = formatRoomOcclusion(settings.roomOcclusion);
     const occlusion = xrStatus.roomOcclusion;
@@ -709,6 +722,11 @@ export function createXrSettingsPanel(
       label: formatOcclusionLabel(initial),
       onSelect: () =>
         store.set('roomOcclusion', cycleOption(ROOM_OCCLUSION_OPTIONS, store.get().roomOcclusion)),
+    },
+    {
+      id: 'show-room-mesh',
+      label: formatRoomMeshLabel(initial),
+      onSelect: () => store.set('showRoomMesh', !store.get().showRoomMesh),
     },
     [
       {
@@ -817,6 +835,7 @@ export function createXrSettingsPanel(
     panel.setLabel('quality-tier', formatQualityLabel(settings));
     panel.setLabel('play-arc', formatPlayArcLabel(settings));
     panel.setLabel('room-occlusion', formatOcclusionLabel(settings));
+    panel.setLabel('show-room-mesh', formatRoomMeshLabel(settings));
     panel.setLabel('master-label', `Master: ${formatPercent(settings.masterVolume)}`);
     panel.setLabel('music-label', `Music: ${formatPercent(settings.musicVolume)}`);
     panel.setLabel('sfx-label', `SFX: ${formatPercent(settings.sfxVolume)}`);

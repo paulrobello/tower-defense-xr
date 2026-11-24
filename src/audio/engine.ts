@@ -310,6 +310,8 @@ export interface SpatialAudioEngineOptions {
   readonly initialVolumes?: Partial<AudioVolumes>;
   readonly audioContextFactory?: () => AudioContext;
   readonly nowMs?: () => number;
+  /** Enables the temporary local preview loop while owner music is unavailable. */
+  readonly previewMusic?: boolean;
 }
 
 export interface PlaySfxOptions {
@@ -378,10 +380,13 @@ export function createSpatialAudioEngine(
   let ctx: AudioContext | null = null;
   let masterGain: GainNode | null = null;
   let sfxBusGain: GainNode | null = null;
+  let musicBusGain: GainNode | null = null;
   let duckingGain: GainNode | null = null;
   let criticalBusGain: GainNode | null = null;
   let unlocked = false;
   let disposed = false;
+  let previewMusicSource: AudioBufferSourceNode | null = null;
+  let previewMusicLoad: Promise<AudioBuffer | null> | null = null;
 
   const cueUrls = new Map<SfxCueId, { readonly ogg: string; readonly mp3: string }>();
   const decodedBuffers = new Map<SfxCueId, AudioBuffer>();
@@ -406,11 +411,12 @@ export function createSpatialAudioEngine(
   }
 
   function applyBusVolumes(): void {
-    if (!ctx || !masterGain || !sfxBusGain || !criticalBusGain) return;
+    if (!ctx || !masterGain || !sfxBusGain || !criticalBusGain || !musicBusGain) return;
     const t = ctx.currentTime;
     masterGain.gain.setTargetAtTime(volumes.masterVolume, t, 0.02);
     sfxBusGain.gain.setTargetAtTime(volumes.sfxVolume, t, 0.02);
     criticalBusGain.gain.setTargetAtTime(volumes.sfxVolume, t, 0.02);
+    musicBusGain.gain.setTargetAtTime(volumes.musicVolume, t, 0.02);
   }
 
   function ensureContext(): AudioContext | null {
@@ -439,18 +445,69 @@ export function createSpatialAudioEngine(
       duckingGain = ctx.createGain();
       sfxBusGain = ctx.createGain();
       criticalBusGain = ctx.createGain();
+      musicBusGain = ctx.createGain();
 
       // Normal/high cues route through sfxBusGain -> duckingGain -> masterGain -> destination
       // Critical cues bypass ducking so alarms & boss roars stay crisp
       sfxBusGain.connect(duckingGain);
       duckingGain.connect(masterGain);
       criticalBusGain.connect(masterGain);
+      musicBusGain.connect(duckingGain);
       masterGain.connect(ctx.destination);
       applyBusVolumes();
       return ctx;
     } catch {
       ctx = null;
       return null;
+    }
+  }
+
+  async function decodeFirstAvailable(
+    context: AudioContext,
+    urls: readonly string[],
+  ): Promise<AudioBuffer | null> {
+    if (typeof fetch !== 'function') return null;
+    for (const url of urls) {
+      if (disposed) return null;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) continue;
+        const bytes = await response.arrayBuffer();
+        if (disposed) return null;
+        const buffer = await context.decodeAudioData(bytes);
+        return disposed ? null : buffer;
+      } catch {
+        // Try the other codec if the preferred asset cannot be read or decoded.
+      }
+    }
+    return null;
+  }
+
+  async function startPreviewMusic(): Promise<void> {
+    const context = ctx;
+    const musicBus = musicBusGain;
+    if (!options.previewMusic || disposed || !context || !musicBus || !unlocked) return;
+    if (previewMusicSource || volumes.musicVolume === 0) return;
+
+    const path = '/assets/audio/music/rift-bastion-preview';
+    const formats = preferOgg ? ['ogg', 'mp3'] : ['mp3', 'ogg'];
+    previewMusicLoad ??= decodeFirstAvailable(
+      context,
+      formats.map((format) => `${path}.${format}`),
+    );
+    const buffer = await previewMusicLoad;
+    if (!buffer || disposed || previewMusicSource || volumes.musicVolume === 0) return;
+
+    let source: AudioBufferSourceNode | undefined;
+    try {
+      source = context.createBufferSource();
+      source.buffer = buffer;
+      source.loop = true;
+      source.connect(musicBus);
+      source.start();
+      previewMusicSource = source;
+    } catch {
+      source?.disconnect();
     }
   }
 
@@ -462,29 +519,17 @@ export function createSpatialAudioEngine(
 
     const entry = cueUrls.get(cueId);
     const context = ensureContext();
-    if (!entry || !context || typeof fetch !== 'function') return null;
+    if (!entry || !context) return null;
 
     const urls = preferOgg ? [entry.ogg, entry.mp3] : [entry.mp3, entry.ogg];
-    const promise = (async (): Promise<AudioBuffer | null> => {
-      for (const url of urls) {
-        if (disposed) return null;
-        try {
-          const resp = await fetch(url);
-          if (!resp.ok) continue;
-          const bytes = await resp.arrayBuffer();
-          if (disposed || !ctx) return null;
-          const decoded = await ctx.decodeAudioData(bytes.slice(0));
-          if (disposed) return null;
-          decodedBuffers.set(cueId, decoded);
-          return decoded;
-        } catch {
-          // Try next codec fallback cleanly
-        }
-      }
-      return null;
-    })().finally(() => {
-      inflightLoads.delete(cueId);
-    });
+    const promise = decodeFirstAvailable(context, urls)
+      .then((buffer) => {
+        if (buffer && !disposed) decodedBuffers.set(cueId, buffer);
+        return buffer;
+      })
+      .finally(() => {
+        inflightLoads.delete(cueId);
+      });
 
     inflightLoads.set(cueId, promise);
     return promise;
@@ -710,6 +755,7 @@ export function createSpatialAudioEngine(
       unlocked = context.state === 'running';
       if (unlocked) {
         preloadCoreCues();
+        void startPreviewMusic();
         // Start any already-open portal ambients now that audio is unlocked
         for (const [portalId, pos] of lastOpenPortals.entries()) {
           startPortalAmbient(portalId, pos);
@@ -766,6 +812,7 @@ export function createSpatialAudioEngine(
           patch.musicVolume !== undefined ? clamp01(patch.musicVolume) : volumes.musicVolume,
       };
       applyBusVolumes();
+      if (patch.musicVolume !== undefined) void startPreviewMusic();
     },
     setVisibility(visible) {
       if (!ctx || disposed) return;
@@ -975,12 +1022,23 @@ export function createSpatialAudioEngine(
       railChargedTurrets.clear();
       decodedBuffers.clear();
       inflightLoads.clear();
+      if (previewMusicSource) {
+        try {
+          previewMusicSource.stop();
+          previewMusicSource.disconnect();
+        } catch {
+          // Already ended
+        }
+        previewMusicSource = null;
+      }
+      previewMusicLoad = null;
       if (ctx) {
         void ctx.close().catch(() => undefined);
         ctx = null;
       }
       masterGain = null;
       sfxBusGain = null;
+      musicBusGain = null;
       duckingGain = null;
       criticalBusGain = null;
     },

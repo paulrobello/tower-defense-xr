@@ -747,6 +747,49 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
     });
   });
 
+  describe('Starter turret balance', () => {
+    it('lets the Core take damage before Wave 8 with four unupgraded Autocannons', () => {
+      const slots: readonly Vec3[] = [
+        { x: -0.65, y: 0, z: 0.75 },
+        { x: 0.65, y: 0, z: 0.75 },
+        { x: -1.15, y: 0, z: 0.35 },
+        { x: 1.35, y: 0, z: 1.35 },
+      ];
+      const sim = createCombatSimulation({
+        seed: 0x2026_b45,
+        startingCredits: slots.length * getTurretBuildCost('autocannon'),
+        autoLaunchInitialWave: false,
+      });
+
+      for (const position of slots) {
+        expect(
+          sim.placeTurret({
+            kind: 'autocannon',
+            position,
+            mountProfile: 'surface-clamp',
+            surfaceKind: 'floor',
+            priority: 'first',
+          }).ok,
+        ).toBe(true);
+      }
+      expect(sim.launchWave().ok).toBe(true);
+
+      let firstHitWave: number | undefined;
+      for (let tick = 0; tick < 60 * 600; tick += 1) {
+        const { state, events } = sim.tick();
+        if (events.some((event) => event.type === 'core-hit')) {
+          firstHitWave = state.currentWave;
+          break;
+        }
+        if (state.currentWave >= 8) break;
+        if (state.phase === 'intermission') expect(sim.launchWave().ok).toBe(true);
+      }
+
+      expect(firstHitWave).toBeDefined();
+      expect(firstHitWave).toBeLessThan(8);
+    });
+  });
+
   describe('Full Deterministic 12-Wave Victory & Zero-Turret Defeat Runs', () => {
     // Two complete campaign simulations can exceed Vitest's default timeout on a shared CI runner.
     it('reaches Victory across all 12 waves with byte-identical computeStateHash() across two independent runs with the same seed', () => {

@@ -297,6 +297,7 @@ describe('persist/store (IndexedDB persistence & JSON backup)', () => {
       framebufferScale: 1.2,
       playArc: 'full-360',
       roomOcclusion: 'room-mesh',
+      showRoomMesh: true,
       qualityTier: 'max-beauty',
       masterVolume: 0.9,
       musicVolume: 0.6,
@@ -328,6 +329,11 @@ describe('persist/store (IndexedDB persistence & JSON backup)', () => {
     expect(imported.schemaVersion).toBe(PERSIST_SCHEMA_VERSION);
     expect(await storeB.loadSettings()).toEqual(expectedSettings);
     expect(await storeB.loadMissionRecords()).toEqual(expectedRecords);
+
+    const legacyBackup = JSON.parse(backupJson);
+    delete legacyBackup.settings.showRoomMesh;
+    await storeB.importBackupJson(JSON.stringify(legacyBackup));
+    expect(await storeB.loadSettings()).toEqual({ ...expectedSettings, showRoomMesh: false });
 
     storeB.close();
   });

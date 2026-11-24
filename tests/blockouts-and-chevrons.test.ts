@@ -15,7 +15,7 @@ import { createOcclusionController } from '../src/mr/occlusion.ts';
 import { createPersistStore } from '../src/persist/store.ts';
 import { createBlockoutRenderer } from '../src/render/blockouts.ts';
 import { createSettingsStore } from '../src/settings/store.ts';
-import { createCombatSimulation } from '../src/sim/engine.ts';
+import { createCombatSimulation, SIM_FIXED_DT } from '../src/sim/engine.ts';
 import { createMissionOverlay } from '../src/ui/mission-overlay.ts';
 import {
   createThreatChevrons,
@@ -353,7 +353,8 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
 
     // Put boss just above the 50% threshold and step until Rail Sniper ('strongest' priority) strikes it
     bossEntity.hp = ENEMIES['apex-broodlord'].maxHp * 0.5 + 5;
-    const bossTick = sim.runTicks(90);
+    const railInterval = getTurretTierStats('rail-sniper', 'T1').fireIntervalSec;
+    const bossTick = sim.runTicks(Math.ceil(railInterval / SIM_FIXED_DT) + 1);
     renderer.syncFromSim(bossTick.state, bossTick.events, 1 / 60);
 
     const bossBlockout = renderer.enemies.get(bossId);
