@@ -267,6 +267,17 @@ export function mountApp(container: HTMLElement): AppRuntime {
     renderOrder: OVERLAY_RENDER_ORDER + 10,
   });
   shell.xrOverlayRoot.add(perfHud.xrRoot);
+  const perfCloseButton = perfHud.gauge.root.getObjectByName('perf-gauge-close');
+  const perfHudPanel = perfCloseButton
+    ? {
+        root: perfCloseButton,
+        cellAt: () => 'close',
+        activate: () => {
+          perfHud.activate(perfCloseButton);
+          return true;
+        },
+      }
+    : null;
 
   const domSettings = createDomSettingsPanel(settings, { container });
   const xrSettings = createXrSettingsPanel(settings, {
@@ -439,10 +450,13 @@ export function mountApp(container: HTMLElement): AppRuntime {
       xrSettings.visible ? xrSettings.root : tacticalHud.xrRoot,
       perfHud.xrRoot,
     ],
-    getPanel: () => {
-      if (xrSettings.visible) return xrSettings;
-      if (missionOverlay.visible) return missionOverlayPanel;
-      return tacticalHudPanel;
+    getPanels: () => {
+      const mainPanel = xrSettings.visible
+        ? xrSettings
+        : missionOverlay.visible
+          ? missionOverlayPanel
+          : tacticalHudPanel;
+      return perfHudPanel && perfHud.xrRoot.visible ? [mainPanel, perfHudPanel] : [mainPanel];
     },
   });
 

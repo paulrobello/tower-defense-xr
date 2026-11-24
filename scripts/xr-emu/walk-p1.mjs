@@ -573,7 +573,6 @@ try {
       const settingsStayedOpen = app.xrSettings.visible;
       await controls.pressControl('settings-close');
       const fpsMoved = await controls.dragWidget(app.perfHud.xrRoot, 'perf-hud-details');
-      app.settings.set('showFps', false);
       return {
         hudMoved,
         settingsMoved,
@@ -584,6 +583,37 @@ try {
         turretCount: app.placement.placedTurrets.length,
       };
     });
+    const fpsClose = await page.evaluate(async () => {
+      const app = window.__riftBastionApp;
+      const controls = window.__p1Helpers;
+      const wasVisible = app.perfHud.xrRoot.visible;
+      const core = app.calibration.coreAnchor;
+      await controls.pressControl('perf-gauge-close');
+      const closed = !app.perfHud.xrRoot.visible && !app.settings.get().showFps;
+
+      await controls.pressControl('tactical-hud-settings');
+      await controls.pressControl('settings-show-fps');
+      const reopened = app.perfHud.xrRoot.visible && app.settings.get().showFps;
+      await controls.pressControl('perf-gauge-close');
+      const closedFromSettings = !app.perfHud.xrRoot.visible && app.xrSettings.visible;
+      await controls.pressControl('settings-close');
+      return {
+        wasVisible,
+        closed,
+        reopened,
+        closedFromSettings,
+        noWorldAction: app.calibration.coreAnchor === core && app.state.phase === 'calibrate',
+      };
+    });
+    record(
+      'xr-controller-closes-fps-widget-and-can-reopen',
+      fpsClose.wasVisible &&
+        fpsClose.closed &&
+        fpsClose.reopened &&
+        fpsClose.closedFromSettings &&
+        fpsClose.noWorldAction,
+      fpsClose,
+    );
     record(
       'xr-grip-moves-widgets-without-trigger-actions',
       widgetDrag.hudMoved &&

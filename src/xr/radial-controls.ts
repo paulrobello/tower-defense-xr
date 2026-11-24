@@ -117,8 +117,13 @@ export interface RadialBuildStateSnapshot {
 interface XrPanelTarget {
   readonly root: THREE.Object3D;
   cellAt(object: THREE.Object3D): string | null;
-  setHovered(id: string | null): void;
+  setHovered?(id: string | null): void;
   activate(id: string): boolean;
+}
+
+interface PanelHit {
+  readonly panel: XrPanelTarget;
+  readonly cell: string;
 }
 
 export interface XrRadialControlsOptions {
@@ -132,7 +137,7 @@ export interface XrRadialControlsOptions {
     rayDirection: Readonly<Vec3>,
   ) => RadialTurretTarget | null;
   readonly isBusy?: () => boolean;
-  readonly getPanel?: () => XrPanelTarget | null;
+  readonly getPanels?: () => readonly XrPanelTarget[];
   readonly getMovableWidgets?: () => readonly THREE.Object3D[];
   readonly recenterHoldSec?: number;
   readonly stickDeadZone?: number;
@@ -446,10 +451,10 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   const widgetMatrix = new THREE.Matrix4();
   const inverseParentMatrix = new THREE.Matrix4();
   const rayActions = new Map<XRInputSource, RadialChoiceId>();
-  const rayCells = new Map<XRInputSource, string>();
-  const panelPresses = new Map<XRInputSource, { panel: XrPanelTarget; cell: string }>();
+  const rayCells = new Map<XRInputSource, PanelHit>();
+  const panelPresses = new Map<XRInputSource, PanelHit>();
   const worldPresses = new Map<XRInputSource, (selection: XRInputSourceEvent) => void>();
-  let pointedPanel: XrPanelTarget | null = null;
+  let pointedPanels: readonly XrPanelTarget[] = [];
   let panelModal = false;
   const triggerStart = new Map<
     XRInputSource,
@@ -501,14 +506,20 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   }
 
   function updatePanelRays(
-    panel: XrPanelTarget | null,
     sources: readonly XRInputSource[],
     frame: XRFrame,
     referenceSpace: XRReferenceSpace,
   ): void {
-    if (pointedPanel !== panel) pointedPanel?.setHovered(null);
-    pointedPanel = panel;
-    panel?.root.updateWorldMatrix(true, true);
+    const panels = menu?.root.visible ? [] : (options.getPanels?.() ?? []);
+    const targets = panels.filter((panel) => panel.root.visible);
+    for (const panel of pointedPanels) {
+      if (!targets.includes(panel)) panel.setHovered?.(null);
+    }
+    pointedPanels = targets;
+    const roots = targets.map(({ root }) => {
+      root.updateWorldMatrix(true, true);
+      return root;
+    });
     const beams: PlacementRayTarget[] = [];
     for (const source of sources) {
       if (source.hand || !source.gamepad) continue;
@@ -518,9 +529,10 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       const { position, orientation } = pose.transform;
       aimObject.position.set(position.x, position.y, position.z);
       aimObject.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
-      const hit = panel ? pointer.castFrom(aimObject, [panel.root]) : null;
+      const hit = roots.length ? pointer.castFrom(aimObject, roots) : null;
+      const panel = hit && targets.find((target) => target.root === hit.root);
       const cell = hit && panel?.cellAt(hit.object);
-      if (cell) rayCells.set(source, cell);
+      if (panel && cell) rayCells.set(source, { panel, cell });
       if (
         cell ||
         !placement?.active ||
@@ -539,7 +551,15 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         });
       }
     }
-    panel?.setHovered(rayCells.values().next().value ?? null);
+    for (const panel of targets) {
+      let hoveredCell: string | null = null;
+      for (const hit of rayCells.values()) {
+        if (hit.panel !== panel) continue;
+        hoveredCell = hit.cell;
+        break;
+      }
+      panel.setHovered?.(hoveredCell);
+    }
     controllerRays.update(beams);
   }
 
@@ -733,6 +753,11 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
     }
   }
 
+  function clearPanelHover(): void {
+    for (const panel of pointedPanels) panel.setHovered?.(null);
+    pointedPanels = [];
+  }
+
   function reset(): void {
     discardMenu();
     stickPressedBySource.clear();
@@ -743,8 +768,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
     panelPresses.clear();
     worldPresses.clear();
     rayCells.clear();
-    pointedPanel?.setHovered(null);
-    pointedPanel = null;
+    clearPanelHover();
     panelModal = false;
     anyGripHeld = false;
     bothStickHoldSec = 0;
@@ -989,12 +1013,9 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       }
       if (!drewWheelRays) {
         if (!menu?.root.visible) hoveredAction = null;
-        const panel = menu?.root.visible ? null : (options.getPanel?.() ?? null);
-        updatePanelRays(panel?.root.visible ? panel : null, inputSources, frame, referenceSpace);
-      }
-      if (menu?.root.visible && pointedPanel) {
-        pointedPanel.setHovered(null);
-        pointedPanel = null;
+        updatePanelRays(inputSources, frame, referenceSpace);
+      } else {
+        clearPanelHover();
       }
     },
     handleSelectStart(source) {
@@ -1006,9 +1027,9 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         return true;
       }
       if (!menu?.root.visible) {
-        const cell = rayCells.get(source);
-        if (!pointedPanel || !cell) return false;
-        panelPresses.set(source, { panel: pointedPanel, cell });
+        const hit = rayCells.get(source);
+        if (!hit) return false;
+        panelPresses.set(source, hit);
         return true;
       }
       const aimed = rayActions.get(source) ?? null;
@@ -1041,11 +1062,13 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       }
 
       if (panelPress) {
+        const hit = rayCells.get(source);
         if (
           !menu?.root.visible &&
-          options.getPanel?.() === panelPress.panel &&
+          options.getPanels?.().includes(panelPress.panel) &&
           panelPress.panel.root.visible &&
-          rayCells.get(source) === panelPress.cell
+          hit?.panel === panelPress.panel &&
+          hit.cell === panelPress.cell
         )
           panelPress.panel.activate(panelPress.cell);
         return true;
