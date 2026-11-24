@@ -279,9 +279,12 @@ describe('MR Occlusion Controller — mode transitions and fallback detection', 
     expect(controller.roomMeshRoot.visible).toBe(false);
     expect(controller.uniforms.uRbOccEnabled.value).toBe(0);
 
-    expect(controller.setMode('auto-depth')).toBe('depth-sensing');
-    expect(controller.roomMeshRoot.visible).toBe(false);
-    expect(controller.uniforms.uRbOccEnabled.value).toBe(1);
+    expect(controller.setMode('auto-depth')).toBe('room-mesh');
+    expect(controller.roomMeshRoot.visible).toBe(true);
+    expect(controller.uniforms.uRbOccEnabled.value).toBe(0);
+    expect(controller.updateFromXrFrame(withDepth.frame, withDepth.referenceSpace)).toBe(
+      'depth-sensing',
+    );
 
     // Depth loss (returns null) falls back to room-mesh immediately.
     const emptyMap = new Map<XRView, XRCPUDepthInformation | null>();
@@ -297,6 +300,7 @@ describe('MR Occlusion Controller — mode transitions and fallback detection', 
       'depth-sensing',
       'room-mesh',
       'off',
+      'room-mesh',
       'depth-sensing',
       'room-mesh',
     ]);

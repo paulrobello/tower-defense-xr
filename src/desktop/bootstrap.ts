@@ -12,6 +12,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { Text } from 'troika-three-text';
+import { GAMEPLAY_OBJECT_SCALE } from '../content/waves.ts';
 import type { ActionBus } from '../core/action-bus.ts';
 import {
   VIRTUAL_CENTRAL_TABLE,
@@ -503,6 +504,7 @@ export function createTestRoom(): { room: THREE.Group; core: THREE.Mesh } {
     }),
   );
   core.name = 'core-placeholder';
+  core.scale.setScalar(GAMEPLAY_OBJECT_SCALE);
   core.position.set(0, 0.95, 0);
   room.add(core);
 

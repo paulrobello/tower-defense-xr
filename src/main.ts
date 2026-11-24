@@ -1,7 +1,7 @@
 import { OVERLAY_RENDER_ORDER } from '@par/xr-workspace';
 import * as THREE from 'three';
 import { createSpatialAudioEngine, type SpatialAudioEngine } from './audio/engine.ts';
-import { RIFT_PORTAL_SPEC } from './content/index.ts';
+import { GAMEPLAY_OBJECT_SCALE, RIFT_PORTAL_SPEC } from './content/index.ts';
 import { type ActionBus, createActionBus } from './core/action-bus.ts';
 import { createSeededStreams, resolveSeed } from './core/prng.ts';
 import { createGameStateMachine, type GameStateMachine } from './core/state.ts';
@@ -140,8 +140,8 @@ function toPortalApertures(portals: readonly PortalAnchor[]): PortalAperture[] {
   const defaultRx = RIFT_PORTAL_SPEC.apertureWidthM * 0.5;
   const defaultRy = RIFT_PORTAL_SPEC.apertureHeightM * 0.5;
   return portals.map((p) => {
-    const radiusX = p.width > 0 ? p.width * 0.5 : defaultRx;
-    const radiusY = p.height > 0 ? p.height * 0.5 : defaultRy;
+    const radiusX = (p.width > 0 ? p.width * 0.5 : defaultRx) * GAMEPLAY_OBJECT_SCALE;
+    const radiusY = (p.height > 0 ? p.height * 0.5 : defaultRy) * GAMEPLAY_OBJECT_SCALE;
     return {
       id: p.id,
       center: new THREE.Vector3(p.position.x, p.position.y, p.position.z),
@@ -305,21 +305,27 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
   const occlusion = createOcclusionController({
     initialMode: initial.roomOcclusion,
-    missingDepthFallback: 'off',
   });
   shell.scene.add(occlusion.root);
 
   const shadowCatchers = createShadowCatcherManager();
   shell.scene.add(shadowCatchers.root);
 
-  const syncRoomGeometryToMr = (surfaces: readonly RoomSurface[]): void => {
-    const occSurfaces = toOcclusionSurfaces(surfaces);
+  const syncRoomOccluders = (surfaces: readonly OcclusionSurface[]): void => {
+    const useVirtualRoom = !shell.xr.presenting || roomModel.usingVirtualFallback;
     occlusion.syncRoomSurfaces(
-      occlusion.effectiveMode === 'room-mesh'
-        ? occSurfaces.filter((surface) => surface.kind !== 'other')
-        : [],
+      surfaces.filter(
+        (surface) =>
+          (surface.kind !== 'other' || (surface.vertices && surface.indices)) &&
+          (surface.source === 'virtual') === useVirtualRoom,
+      ),
     );
-    shadowCatchers.sync(occSurfaces);
+  };
+
+  const syncRoomGeometryToMr = (surfaces: readonly RoomSurface[]): void => {
+    const occlusionSurfaces = toOcclusionSurfaces(surfaces);
+    syncRoomOccluders(occlusionSurfaces);
+    shadowCatchers.sync(occlusionSurfaces);
   };
   syncRoomGeometryToMr(roomModel.surfaces);
 
@@ -663,10 +669,13 @@ export function mountApp(container: HTMLElement): AppRuntime {
       inSession: xrState.presenting,
       appliedFramebufferScale: xrState.appliedFramebufferScale,
       reportedFoveation: xrState.presenting ? xrState.foveation : null,
+      roomOcclusion: occlusion.state,
     };
     domSettings.setXrStatus(status);
     xrSettings.setXrStatus(status);
   };
+
+  const unsubOcclusion = occlusion.subscribe(syncXrStatus);
 
   let detachRadialSession: (() => void) | null = null;
   let pendingXrCalibrationPose = false;
@@ -687,6 +696,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
         if (shell.xr.session) {
           roomModel.setSession(shell.xr.session);
+          syncRoomOccluders(toOcclusionSurfaces(roomModel.surfaces));
           detachRadialSession?.();
           detachRadialSession = radialControls.attachSession(shell.xr.session, (start) => {
             const reference = shell.xr.reference;
@@ -726,6 +736,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
         radialControls.reset();
         roomModel.setSession(null);
         occlusion.resetDepth();
+        syncRoomOccluders(toOcclusionSurfaces(roomModel.surfaces));
 
         perfRecorder.onXrSessionEnd();
         perfHud.setMode('desktop');
@@ -755,7 +766,6 @@ export function mountApp(container: HTMLElement): AppRuntime {
     });
     if (next.roomOcclusion !== previous.roomOcclusion) {
       occlusion.setMode(next.roomOcclusion);
-      syncRoomGeometryToMr(roomModel.surfaces);
     }
     syncXrStatus();
   });
@@ -1003,7 +1013,18 @@ export function mountApp(container: HTMLElement): AppRuntime {
       );
 
       roomModel.updateFromFrame(frame, shell.xr.reference, { nowMs: timeMs, resumeLiveScan: true });
-      occlusion.updateFromXrFrame(frame, shell.xr.reference);
+      const xrRenderer = shell.renderer.xr;
+      const gpuDepth =
+        frame.session.enabledFeatures?.includes('depth-sensing') &&
+        frame.session.depthUsage === 'gpu-optimized';
+      if (gpuDepth) {
+        // The app's per-material pass owns room depth, including portal apertures.
+        const automaticDepthMesh = xrRenderer.getDepthSensingMesh();
+        if (automaticDepthMesh) automaticDepthMesh.visible = false;
+      }
+      occlusion.updateFromXrFrame(frame, shell.xr.reference, {
+        glBinding: gpuDepth ? xrRenderer.getBinding() : null,
+      });
 
       if (state.phase === 'prep' || state.phase === 'wave' || state.phase === 'intermission') {
         placement.updateFromXrFrame(
@@ -1178,6 +1199,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
       unsubSettings();
       unsubState();
       unsubRoomModel();
+      unsubOcclusion();
       unsubCalibration();
       unsubAssets();
       detachRadialSession?.();

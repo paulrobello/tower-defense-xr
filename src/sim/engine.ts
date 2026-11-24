@@ -47,6 +47,7 @@ import {
   ENEMY_IDS,
   type EnemyDefinition,
   type EnemyId,
+  GAMEPLAY_OBJECT_SCALE,
   getEnemyDefinition,
   getNextTurretTier,
   getTurretBuildCost,
@@ -1680,7 +1681,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
 
     // 2. Reject targets blocked by any scanned room wall/ceiling/floor surface along the sightline.
     const blockout = turret.stats.blockout;
-    const pivotHeight = blockout.baseHeightM + blockout.headHeightM / 2;
+    const pivotHeight = (blockout.baseHeightM + blockout.headHeightM / 2) * GAMEPLAY_OBJECT_SCALE;
     const ax = turret.position.x + up.x * pivotHeight;
     const ay = turret.position.y + up.y * pivotHeight;
     const az = turret.position.z + up.z * pivotHeight;
@@ -1773,7 +1774,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
   } {
     const blockout = turret.stats.blockout;
     const { right, up, forward } = turret.pose;
-    const pivotHeight = blockout.baseHeightM + blockout.headHeightM / 2;
+    const pivotHeight = (blockout.baseHeightM + blockout.headHeightM / 2) * GAMEPLAY_OBJECT_SCALE;
     const pivot = {
       x: turret.position.x + up.x * pivotHeight,
       y: turret.position.y + up.y * pivotHeight,
@@ -1794,7 +1795,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
     turret.pitch = Math.atan2(localY, Math.hypot(localX, localZ));
     const barrelReach =
       blockout.headLengthM * TURRET_BARREL_START_FRACTION + blockout.barrelLengthM;
-    const muzzleScale = barrelReach / (Math.hypot(dx, dy, dz) || 1);
+    const muzzleScale = (barrelReach * GAMEPLAY_OBJECT_SCALE) / (Math.hypot(dx, dy, dz) || 1);
     return {
       muzzle: {
         x: pivot.x + dx * muzzleScale,

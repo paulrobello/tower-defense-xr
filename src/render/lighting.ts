@@ -13,7 +13,7 @@
 
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import type { Vec3 } from '../content/index.ts';
+import { GAMEPLAY_OBJECT_SCALE, type Vec3 } from '../content/index.ts';
 
 export const MAX_TRANSIENT_POINT_LIGHTS = 2;
 
@@ -125,7 +125,7 @@ export function createLightingController(
       return envRenderTarget?.texture ?? null;
     },
     setCorePosition(position) {
-      coreGlowLight.position.set(position.x, position.y + 0.56, position.z);
+      coreGlowLight.position.set(position.x, position.y + 0.56 * GAMEPLAY_OBJECT_SCALE, position.z);
       keyLight.target.position.set(position.x, position.y, position.z);
       keyLight.position.set(
         position.x + keyLightOffset.x,

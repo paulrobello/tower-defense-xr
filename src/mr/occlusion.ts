@@ -211,6 +211,7 @@ const DEPTH_ENCODING_CPU_RG8_UINT16 = 0;
 const DEPTH_ENCODING_GPU_LA8_UINT16 = 1;
 const DEPTH_ENCODING_FLOAT32_R = 2;
 const DEPTH_ENCODING_GPU_ARRAY_R = 3;
+const DEPTH_ENCODING_GPU_ARRAY_LA8_UINT16 = 4;
 
 const CLIP_EPS = 1e-6;
 const DEGENERATE_AREA_SQ = 1e-12;
@@ -962,7 +963,11 @@ float rbSampleRawDepthMeters( vec2 depthUv ) {
     return texture2D( uRbDepthTex, depthUv ).r * uRbRawValueToMeters;
   }
   #if __VERSION__ >= 300
-  return texture( uRbDepthArrayTex, vec3( depthUv, uRbDepthArrayLayer ) ).r * uRbRawValueToMeters;
+  vec4 sampleValue = texture( uRbDepthArrayTex, vec3( depthUv, uRbDepthArrayLayer ) );
+  float raw = uRbDepthEncoding < 3.5
+    ? sampleValue.r
+    : sampleValue.r * 255.0 + sampleValue.a * 65280.0;
+  return raw * uRbRawValueToMeters;
   #else
   return texture2D( uRbDepthTex, depthUv ).r * uRbRawValueToMeters;
   #endif
@@ -1690,16 +1695,22 @@ export function createOcclusionController(
     viewIndex: number,
     sessionFormat?: string,
   ): boolean {
-    if (!depthInfo.texture || !(depthInfo.width > 0 && depthInfo.height > 0)) {
+    if (
+      ('isValid' in depthInfo && depthInfo.isValid === false) ||
+      !depthInfo.texture ||
+      !(depthInfo.width > 0 && depthInfo.height > 0)
+    ) {
       return false;
     }
+    const format = detectGpuDepthFormat(sessionFormat);
+    // R16UI needs a separate integer sampler, so let Auto Depth fall back if one is returned.
+    if (format === 'unsigned-short') return false;
     if (!slot.gpuTexture) {
       slot.gpuTexture = new THREE.ExternalTexture(depthInfo.texture);
     } else {
       slot.gpuTexture.sourceTexture = depthInfo.texture;
     }
 
-    const format = detectGpuDepthFormat(sessionFormat);
     const isArray = depthInfo.textureType === 'texture-array';
     slot.source = 'gpu';
     slot.format = format;
@@ -1708,11 +1719,15 @@ export function createOcclusionController(
     slot.rawValueToMeters = depthInfo.rawValueToMeters;
     slot.normDepthBufferFromNormView.fromArray(depthInfo.normDepthBufferFromNormView.matrix);
     slot.arrayLayer = isArray ? (depthInfo.imageIndex ?? viewIndex) : 0;
-    slot.encoding = isArray
-      ? DEPTH_ENCODING_GPU_ARRAY_R
-      : format === 'float32'
-        ? DEPTH_ENCODING_FLOAT32_R
-        : DEPTH_ENCODING_GPU_LA8_UINT16;
+    if (isArray) {
+      slot.encoding =
+        format === 'luminance-alpha'
+          ? DEPTH_ENCODING_GPU_ARRAY_LA8_UINT16
+          : DEPTH_ENCODING_GPU_ARRAY_R;
+    } else {
+      slot.encoding =
+        format === 'luminance-alpha' ? DEPTH_ENCODING_GPU_LA8_UINT16 : DEPTH_ENCODING_FLOAT32_R;
+    }
     slot.activeTexture = slot.gpuTexture;
     return true;
   }
@@ -1725,7 +1740,7 @@ export function createOcclusionController(
     }
 
     uniforms.uRbOccEnabled.value = resolveEffectiveMode() === 'depth-sensing' ? 1 : 0;
-    if (slot.encoding === DEPTH_ENCODING_GPU_ARRAY_R) {
+    if (slot.encoding >= DEPTH_ENCODING_GPU_ARRAY_R) {
       uniforms.uRbDepthArrayTex.value = slot.activeTexture;
       uniforms.uRbDepthTex.value = dummyDepth2D;
     } else {
@@ -1821,6 +1836,7 @@ export function createOcclusionController(
 
     setMode(mode) {
       if (disposed) return resolveEffectiveMode();
+      if (mode !== requestedMode) clearDepthAvailability();
       requestedMode = mode;
       syncOutputsAndNotify();
       return resolveEffectiveMode();

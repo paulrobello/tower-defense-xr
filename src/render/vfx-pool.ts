@@ -17,6 +17,7 @@
 
 import * as THREE from 'three';
 import type { Vec3 } from '../content/index.ts';
+import { GAMEPLAY_OBJECT_SCALE } from '../content/waves.ts';
 import {
   applyDepthOcclusion,
   type DepthOcclusionBinding,
@@ -490,7 +491,8 @@ export function createCombatVfxPool(
       const life = 1 - s.elapsedSec / s.durationSec;
       _obj.position.set(s.px, s.py, s.pz);
       _obj.rotation.set(s.rotY * 0.6, s.rotY, 0);
-      _obj.scale.set(s.scaleX * life, s.scaleY * life, s.scaleZ * life);
+      const scale = life * GAMEPLAY_OBJECT_SCALE;
+      _obj.scale.set(s.scaleX * scale, s.scaleY * scale, s.scaleZ * scale);
       _obj.updateMatrix();
       sparkMesh.setMatrixAt(activeSparks, _obj.matrix);
       _color.setHex(s.colorHex).multiplyScalar(0.5 + 0.5 * life);
@@ -515,7 +517,7 @@ export function createCombatVfxPool(
       const s = f.maxScale * Math.sin(Math.PI * p);
       _obj.position.set(f.px, f.py, f.pz);
       _obj.rotation.set(f.rotZ, f.rotZ * 1.3, f.rotZ);
-      _obj.scale.setScalar(Math.max(0.001, s));
+      _obj.scale.setScalar(Math.max(0.001, s * GAMEPLAY_OBJECT_SCALE));
       _obj.updateMatrix();
       flashMesh.setMatrixAt(activeFlashes, _obj.matrix);
       _color.setHex(f.colorHex);
@@ -567,7 +569,7 @@ export function createCombatVfxPool(
       const fade = 1 - THREE.MathUtils.smoothstep(d.elapsedSec / d.durationSec, 0.55, 1.0);
       _obj.position.set(d.px, d.py, d.pz);
       _obj.rotation.set(0, 0, 0);
-      _obj.scale.setScalar(d.radius * (0.85 + 0.15 * fade));
+      _obj.scale.setScalar(d.radius * (0.85 + 0.15 * fade) * GAMEPLAY_OBJECT_SCALE);
       _obj.updateMatrix();
       decalMesh.setMatrixAt(activeDecals, _obj.matrix);
       _color.setHex(d.colorHex).multiplyScalar(fade);

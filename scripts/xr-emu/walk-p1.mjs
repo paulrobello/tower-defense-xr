@@ -1017,17 +1017,49 @@ try {
       capCheck,
     );
 
-    // 5. Cycle Room Occlusion (`auto-depth` -> `room-mesh` -> `off`) via XR Settings panel
-    //    and verify portal aperture cutouts exist in `room-mesh` mode.
+    const worldScale = await page.evaluate(() => {
+      const app = window.__riftBastionApp;
+      const core = app.blockouts.coreBastion.group;
+      const portals = [...app.blockouts.portals.values()];
+      const turrets = [...app.blockouts.turrets.values()];
+      const ghost = app.placement.ghost;
+      const { x, y, z } = app.sim.getState().corePosition;
+      return {
+        core: core.scale.toArray(),
+        coreAtAnchor: core.position.x === x && core.position.y === y && core.position.z === z,
+        portals: portals.map((portal) => portal.group.scale.toArray()),
+        turrets: turrets.map((turret) => turret.group.scale.toArray()),
+        preview: ghost.group.getObjectByName('turret-ghost-body').scale.toArray(),
+        hud: app.tacticalHud.xrRoot.scale.toArray(),
+        settings: app.xrSettings.root.scale.toArray(),
+      };
+    });
+    record(
+      'xr-half-size-world-objects',
+      worldScale.coreAtAnchor &&
+        worldScale.portals.length > 0 &&
+        worldScale.turrets.length > 0 &&
+        [worldScale.core, worldScale.preview, ...worldScale.portals, ...worldScale.turrets].every(
+          (scale) => scale.every((axis) => axis === 0.5),
+        ) &&
+        [worldScale.hud, worldScale.settings].every((scale) =>
+          scale.every((axis) => Math.abs(axis - 1) < 1e-6),
+        ),
+      worldScale,
+    );
+
+    // 5. Exercise room-mesh fallback, GPU sensor data, and live switching via the XR controller.
     const occlusionStart = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
       app.placement.cancelPlacement();
       await window.__p1Helpers.pressControl('tactical-hud-settings');
+      await window.__p1Helpers.pressControl('settings-next');
       return {
         xrSettingsVisible: app.xrSettings.visible,
         settingMode: app.settings.get().roomOcclusion,
         requestedMode: app.occlusion.requestedMode,
         effectiveMode: app.occlusion.effectiveMode,
+        label: app.xrSettings.root.getObjectByName('settings-room-occlusion')?.userData.labelText,
       };
     });
     record(
@@ -1035,13 +1067,75 @@ try {
       occlusionStart.xrSettingsVisible === true &&
         occlusionStart.settingMode === 'auto-depth' &&
         occlusionStart.requestedMode === 'auto-depth' &&
-        occlusionStart.effectiveMode === 'off',
+        occlusionStart.effectiveMode === 'room-mesh' &&
+        occlusionStart.label === 'Auto Depth · Room Mesh',
       occlusionStart,
+    );
+
+    const gpuDepth = await page.evaluate(async () => {
+      const app = window.__riftBastionApp;
+      const xr = app.shell.renderer.xr;
+      const gl = app.shell.renderer.getContext();
+      const binding = xr.getBinding();
+      const texture = gl.createTexture();
+      const priorTexture = gl.getParameter(gl.TEXTURE_BINDING_2D_ARRAY);
+      gl.bindTexture(gl.TEXTURE_2D_ARRAY, texture);
+      gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D_ARRAY, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texImage3D(
+        gl.TEXTURE_2D_ARRAY,
+        0,
+        gl.R32F,
+        1,
+        1,
+        2,
+        0,
+        gl.RED,
+        gl.FLOAT,
+        new Float32Array([0.25, 0.35]),
+      );
+      gl.bindTexture(gl.TEXTURE_2D_ARRAY, priorTexture);
+
+      const transform = new XRRigidTransform();
+      binding.getDepthInformation = (view) => ({
+        texture,
+        textureType: 'texture-array',
+        imageIndex: view.eye === 'right' ? 1 : 0,
+        width: 1,
+        height: 1,
+        normDepthBufferFromNormView: transform,
+        rawValueToMeters: 1,
+        depthNear: app.shell.xr.session.renderState.depthNear,
+        depthFar: app.shell.xr.session.renderState.depthFar,
+        isValid: true,
+      });
+      // The runtime owns its depth texture until XR ends, just as it would on the device.
+      app.shell.xr.session.addEventListener('end', () => gl.deleteTexture(texture), { once: true });
+      await window.__xrEmu.frames(3);
+      return {
+        mode: app.occlusion.effectiveMode,
+        source: app.occlusion.state.depthSource,
+        viewLayers: [0, 1].map((view) => app.occlusion.getViewDepthState(view)?.arrayLayer),
+        roomMeshVisible: app.occlusion.roomMeshRoot.visible,
+        automaticDepthVisible: xr.getDepthSensingMesh()?.visible,
+        label: app.xrSettings.root.getObjectByName('settings-room-occlusion')?.userData.labelText,
+      };
+    });
+    await snap(page, '09a-xr-occlusion-sensor.jpg');
+    record(
+      'xr-occlusion-auto-uses-stereo-gpu-sensor',
+      gpuDepth.mode === 'depth-sensing' &&
+        gpuDepth.source === 'gpu' &&
+        gpuDepth.viewLayers[0] === 0 &&
+        gpuDepth.viewLayers[1] === 1 &&
+        gpuDepth.roomMeshVisible === false &&
+        gpuDepth.automaticDepthVisible === false &&
+        gpuDepth.label === 'Auto Depth · Sensor active',
+      gpuDepth,
     );
 
     const occlusionRoomMesh = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
-      await window.__p1Helpers.pressControl('settings-next');
       await window.__p1Helpers.pressControl('settings-room-occlusion');
       const activated = app.settings.get().roomOcclusion === 'room-mesh';
 
@@ -1134,11 +1228,15 @@ try {
         }
 
         const mat = mesh.material;
+        const anchor = app.calibration.portalAnchors.find((entry) => entry.id === portal.id);
+        const halfScale =
+          portal.radiusX === anchor?.width / 4 && portal.radiusY === anchor?.height / 4;
         cutoutChecks.push({
           portalId: portal.id,
           hostSurfaceId: portal.hostSurfaceId,
           triCount,
           depthOnly: mat.colorWrite === false && mat.depthWrite === true,
+          halfScale,
           centerHits,
           outsideHits,
         });
@@ -1166,7 +1264,8 @@ try {
         occlusionRoomMesh.portalCount >= 2 &&
         occlusionRoomMesh.cutoutChecks.length >= 2 &&
         occlusionRoomMesh.cutoutChecks.every(
-          (c) => c.triCount > 2 && c.depthOnly && c.centerHits === 0 && c.outsideHits > 0,
+          (c) =>
+            c.triCount > 2 && c.depthOnly && c.halfScale && c.centerHits === 0 && c.outsideHits > 0,
         ),
       occlusionRoomMesh,
     );
@@ -1182,6 +1281,8 @@ try {
         requestedMode: app.occlusion.requestedMode,
         effectiveMode: app.occlusion.effectiveMode,
         roomMeshVisible: app.occlusion.roomMeshRoot.visible,
+        automaticDepthVisible: app.shell.renderer.xr.getDepthSensingMesh()?.visible,
+        shaderDepthEnabled: app.occlusion.uniforms.uRbOccEnabled.value,
         xrSettingsClosed: !app.xrSettings.visible,
       };
     });
@@ -1193,6 +1294,8 @@ try {
         occlusionOff.requestedMode === 'off' &&
         occlusionOff.effectiveMode === 'off' &&
         occlusionOff.roomMeshVisible === false &&
+        occlusionOff.automaticDepthVisible === false &&
+        occlusionOff.shaderDepthEnabled === 0 &&
         occlusionOff.xrSettingsClosed === true,
       occlusionOff,
     );
@@ -1249,6 +1352,14 @@ try {
         inputOwnership.turretCountUnchanged,
       inputOwnership,
     );
+    const enemyScale = await page.evaluate(() => {
+      const app = window.__riftBastionApp;
+      const enemy = app.debugSpawnEnemy('skitter-crawler');
+      return app.blockouts.enemies.get(enemy.id)?.group.scale.toArray() ?? null;
+    });
+    record('xr-half-size-enemies', enemyScale?.every((axis) => axis === 0.5) ?? false, {
+      enemyScale,
+    });
     await snap(page, '11-xr-room-mesh-controller-rays.jpg');
 
     // Clean XR session exit

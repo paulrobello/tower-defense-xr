@@ -33,9 +33,8 @@ export const TARGET_FRAME_RATE = 72;
 
 /** Depth-sensing preferences. Without this dictionary the UA must not grant `depth-sensing`. */
 export const DEFAULT_DEPTH_SENSING: XRDepthStateInit = {
-  // GPU negotiation also enables Three's whole-frame depth pass, outside app occlusion control.
-  usagePreference: ['cpu-optimized'],
-  dataFormatPreference: ['luminance-alpha', 'float32'],
+  usagePreference: ['gpu-optimized', 'cpu-optimized'],
+  dataFormatPreference: ['float32', 'luminance-alpha'],
 };
 
 export const XR_UNAVAILABLE_MESSAGE =

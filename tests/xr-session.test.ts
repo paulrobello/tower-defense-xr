@@ -123,7 +123,7 @@ describe('XR session manager entry', () => {
     expect(new Set(init.optionalFeatures).size).toBe(init.optionalFeatures?.length);
     expect(init.optionalFeatures).not.toContain('hand-tracking');
     expect(init.depthSensing).toEqual(DEFAULT_DEPTH_SENSING);
-    expect(init.depthSensing?.usagePreference).toEqual(['cpu-optimized']);
+    expect(init.depthSensing?.usagePreference).toEqual(['gpu-optimized', 'cpu-optimized']);
     expect(harness.rendererXr.setReferenceSpaceType).toHaveBeenCalledWith('local-floor');
     expect(xr.presenting).toBe(true);
     expect(xr.state).toMatchObject({

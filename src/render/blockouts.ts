@@ -36,6 +36,7 @@ import {
   CORE_BASTION_SPEC,
   ENEMIES,
   type EnemyId,
+  GAMEPLAY_OBJECT_SCALE,
   getEnemyDefinition,
   getTurretDefinition,
   getTurretTierStats,
@@ -794,6 +795,7 @@ export function createBlockoutRenderer(
   function createCoreBastion(): CoreBastionBlockout {
     const group = new THREE.Group();
     group.name = 'blockout-core-bastion';
+    group.scale.setScalar(GAMEPLAY_OBJECT_SCALE);
     const shadowDiameter = CORE_BASTION_SPEC.shieldDomeRadiusM * 2.15;
     // Skip low-res WebXR depth-row discard on the grounded contact shadow so Quest depth rows
     // never slice horizontal banding lines across the Core floor shadow.
@@ -940,6 +942,7 @@ export function createBlockoutRenderer(
 
     const group = new THREE.Group();
     group.name = `blockout-portal-${portal.id}`;
+    group.scale.setScalar(GAMEPLAY_OBJECT_SCALE);
     group.userData.portalId = portal.id;
     group.userData.portalIndex = portal.portalIndex;
 
@@ -1020,7 +1023,15 @@ export function createBlockoutRenderer(
     // Create explicit portal aperture stencil mask mesh matching the exact elliptical opening
     let apertureMaskMesh: THREE.Mesh | null = null;
     if (occlusion) {
-      apertureMaskMesh = createPortalApertureMaskMesh(portalAperture, occlusion);
+      apertureMaskMesh = createPortalApertureMaskMesh(
+        {
+          ...portalAperture,
+          radius: apertureRadius * GAMEPLAY_OBJECT_SCALE,
+          radiusX: radiusX * GAMEPLAY_OBJECT_SCALE,
+          radiusY: radiusY * GAMEPLAY_OBJECT_SCALE,
+        },
+        occlusion,
+      );
       ownedGeometries.add(apertureMaskMesh.geometry);
       entityGeos.push(apertureMaskMesh.geometry);
       const maskMat = apertureMaskMesh.material as THREE.Material;
@@ -1269,6 +1280,7 @@ export function createBlockoutRenderer(
 
     const group = new THREE.Group();
     group.name = `blockout-turret-${simTurret.id}`;
+    group.scale.setScalar(GAMEPLAY_OBJECT_SCALE);
     group.userData.turretId = simTurret.id;
     group.userData.turretKind = simTurret.kind;
     group.userData.turretTier = simTurret.tier;
@@ -1448,6 +1460,7 @@ export function createBlockoutRenderer(
 
     const group = new THREE.Group();
     group.name = `blockout-enemy-${simEnemy.id}`;
+    group.scale.setScalar(GAMEPLAY_OBJECT_SCALE);
     group.userData.enemyId = simEnemy.id;
     group.userData.archetypeId = simEnemy.archetypeId;
     group.userData.isBoss = simEnemy.isBoss;
@@ -1854,18 +1867,18 @@ export function createBlockoutRenderer(
           vfx.spawnShockRing(
             {
               x: coreBastion.group.position.x,
-              y: coreBastion.group.position.y + 0.35,
+              y: coreBastion.group.position.y + 0.35 * GAMEPLAY_OBJECT_SCALE,
               z: coreBastion.group.position.z,
             },
             { x: 0, y: 1, z: 0 },
-            CORE_BASTION_SPEC.shieldDomeRadiusM * 1.35,
+            CORE_BASTION_SPEC.shieldDomeRadiusM * 1.35 * GAMEPLAY_OBJECT_SCALE,
             0xff3b5c,
             0.38,
           );
           lighting?.flashPoint(
             {
               x: coreBastion.group.position.x,
-              y: coreBastion.group.position.y + 0.5,
+              y: coreBastion.group.position.y + 0.5 * GAMEPLAY_OBJECT_SCALE,
               z: coreBastion.group.position.z,
             },
             0xff3b5c,
@@ -2586,7 +2599,8 @@ export function createBlockoutRenderer(
         }
 
         // Instanced World HP Bar above enemy (billboarded toward active camera)
-        const barY = simEnemy.position.y + def.blockout.healthBarOffsetHeightM;
+        const barY =
+          simEnemy.position.y + def.blockout.healthBarOffsetHeightM * GAMEPLAY_OBJECT_SCALE;
         // Prevent the enemy world overlay from filling the headset view near the eye.
         if (
           hpBarIndex < MAX_INSTANCED_HP_BARS &&
@@ -2601,12 +2615,13 @@ export function createBlockoutRenderer(
             0.02,
             1,
           );
-          const barScaleWidth = simEnemy.isBoss ? 1.85 : 1.0;
+          const barScaleWidth = (simEnemy.isBoss ? 1.85 : 1.0) * GAMEPLAY_OBJECT_SCALE;
+          const barScaleHeight = (simEnemy.isBoss ? 1.35 : 1.0) * GAMEPLAY_OBJECT_SCALE;
 
           _dummyObj.position.set(simEnemy.position.x, barY, simEnemy.position.z);
           if (hasBillboardCam) _dummyObj.quaternion.copy(_quat);
           else _dummyObj.quaternion.identity();
-          _dummyObj.scale.set(barScaleWidth, simEnemy.isBoss ? 1.35 : 1, 1);
+          _dummyObj.scale.set(barScaleWidth, barScaleHeight, 1);
           _dummyObj.updateMatrix();
           hpBgInstancedMesh.setMatrixAt(hpBarIndex, _dummyObj.matrix);
 
@@ -2617,7 +2632,7 @@ export function createBlockoutRenderer(
             barY + _vecMid.y * fillOffset + _dir.y * 0.003,
             simEnemy.position.z + _vecMid.z * fillOffset + _dir.z * 0.003,
           );
-          _dummyObj.scale.set(barScaleWidth * hpRatio, simEnemy.isBoss ? 1.35 : 1, 1);
+          _dummyObj.scale.set(barScaleWidth * hpRatio, barScaleHeight, 1);
           _dummyObj.updateMatrix();
           hpFillInstancedMesh.setMatrixAt(hpBarIndex, _dummyObj.matrix);
 
@@ -2689,7 +2704,7 @@ export function createBlockoutRenderer(
           y: tr.from.y + (tr.to.y - tr.from.y) * t1,
           z: tr.from.z + (tr.to.z - tr.from.z) * t1,
         };
-        orientSegmentMatrix(segStart, segEnd, 0.014, _mat4);
+        orientSegmentMatrix(segStart, segEnd, 0.014 * GAMEPLAY_OBJECT_SCALE, _mat4);
         tracerInstancedMesh.setMatrixAt(tracerWrite, _mat4);
         activeTracers[tracerWrite] = tr;
         tracerWrite += 1;
@@ -2713,7 +2728,7 @@ export function createBlockoutRenderer(
         );
         _dummyObj.quaternion.identity();
         const radius = proj.tier === 'T3' ? 0.068 : proj.tier === 'T2' ? 0.056 : 0.046;
-        _dummyObj.scale.setScalar(radius);
+        _dummyObj.scale.setScalar(radius * GAMEPLAY_OBJECT_SCALE);
         _dummyObj.updateMatrix();
         mortarShellInstancedMesh.setMatrixAt(shellCount, _dummyObj.matrix);
         shellCount += 1;
@@ -2761,7 +2776,12 @@ export function createBlockoutRenderer(
         seg.elapsedSec += stepDt;
         if (seg.elapsedSec >= seg.durationSec) continue;
         const fade = 1 - seg.elapsedSec / seg.durationSec;
-        orientSegmentMatrix(seg.from, seg.to, seg.thicknessM * (0.5 + 0.5 * fade), _mat4);
+        orientSegmentMatrix(
+          seg.from,
+          seg.to,
+          seg.thicknessM * (0.5 + 0.5 * fade) * GAMEPLAY_OBJECT_SCALE,
+          _mat4,
+        );
         cryoArcInstancedMesh.setMatrixAt(cryoWrite, _mat4);
         activeCryoSegments[cryoWrite] = seg;
         cryoWrite += 1;
@@ -2778,7 +2798,12 @@ export function createBlockoutRenderer(
         beam.elapsedSec += stepDt;
         if (beam.elapsedSec >= beam.durationSec) continue;
         const fade = 1 - beam.elapsedSec / beam.durationSec;
-        orientSegmentMatrix(beam.from, beam.to, beam.thicknessM * (0.45 + 0.55 * fade), _mat4);
+        orientSegmentMatrix(
+          beam.from,
+          beam.to,
+          beam.thicknessM * (0.45 + 0.55 * fade) * GAMEPLAY_OBJECT_SCALE,
+          _mat4,
+        );
         railBeamInstancedMesh.setMatrixAt(railWrite, _mat4);
         activeRailBeams[railWrite] = beam;
         railWrite += 1;

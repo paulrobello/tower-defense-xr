@@ -6,6 +6,7 @@ import {
   OVERLAY_RENDER_ORDER,
 } from '@par/xr-workspace';
 import * as THREE from 'three';
+import type { OcclusionState } from '../mr/occlusion.ts';
 import {
   FIXED_FOVEATION_OPTIONS,
   type FixedFoveationOption,
@@ -26,6 +27,7 @@ export interface SettingsXrStatus {
   readonly inSession?: boolean;
   readonly appliedFramebufferScale?: number | null;
   readonly reportedFoveation?: number | null;
+  readonly roomOcclusion?: Readonly<OcclusionState>;
 }
 
 export interface DomSettingsPanelOptions {
@@ -628,8 +630,23 @@ export function createXrSettingsPanel(
     `Quality: ${formatQualityTier(s.qualityTier)}`;
   const formatPlayArcLabel = (s: Readonly<Settings>): string =>
     `Play Arc: ${formatPlayArcXr(s.playArc)}`;
-  const formatOcclusionLabel = (s: Readonly<Settings>): string =>
-    `Occlusion: ${formatRoomOcclusion(s.roomOcclusion)}`;
+  const formatOcclusionLabel = (settings: Readonly<Settings>): string => {
+    const requested = formatRoomOcclusion(settings.roomOcclusion);
+    const occlusion = xrStatus.roomOcclusion;
+    if (!xrStatus.inSession || occlusion?.requestedMode !== settings.roomOcclusion) {
+      return `Occlusion: ${requested}`;
+    }
+
+    if (occlusion.effectiveMode === 'depth-sensing') return 'Auto Depth · Sensor active';
+    const hasRoomMesh = occlusion.occluderMeshCount > 0;
+    if (settings.roomOcclusion === 'auto-depth') {
+      return hasRoomMesh ? 'Auto Depth · Room Mesh' : 'Auto Depth · Unavailable';
+    }
+    if (settings.roomOcclusion === 'room-mesh' && !hasRoomMesh) {
+      return 'Room Mesh · Unavailable';
+    }
+    return `Occlusion: ${requested}`;
+  };
 
   const initial = store.get();
 

@@ -59,6 +59,7 @@ import {
   type TurretTierId,
   type Vec3,
 } from '../content/turrets.ts';
+import { GAMEPLAY_OBJECT_SCALE } from '../content/waves.ts';
 import type { ActionBus, ActionSource } from '../core/action-bus.ts';
 import type {
   AnchorColliderTarget,
@@ -524,6 +525,10 @@ export function createTurretGhostPreview(
   bodyPrimitiveMeshes.push(barrelMesh);
   group.add(turretBodyGroup);
 
+  for (const part of [clampMountGroup, hoverPodGroup, turretBodyGroup]) {
+    part.scale.setScalar(GAMEPLAY_OBJECT_SCALE);
+  }
+
   let glbClampRoot: THREE.Group | null = null;
   let glbHoverRoot: THREE.Group | null = null;
   let glbHeadRoot: THREE.Group | null = null;
@@ -627,7 +632,7 @@ export function createTurretGhostPreview(
     );
 
     rangeSphere.scale.setScalar(stats.rangeM);
-    currentLabelHeightM = b.totalHeightM + 0.14;
+    currentLabelHeightM = b.totalHeightM * GAMEPLAY_OBJECT_SCALE + 0.14;
     reasonLabel.position.set(0, currentLabelHeightM, 0);
     return stats.rangeM;
   }
@@ -1930,6 +1935,7 @@ export function createTurretPlacementController(
       const def = getTurretDefinition(kind);
       const priority = input.priority ?? def.defaultPriority;
       const visual = buildPlacedTurretVisual(id, kind, tier, validation.mountProfile);
+      visual.scale.setScalar(GAMEPLAY_OBJECT_SCALE);
       placedTurretsGroup.add(visual);
 
       const collider: PlacedTurretCollider = {
@@ -2147,10 +2153,11 @@ export function createTurretPlacementController(
       for (const record of placedTurretsMap.values()) {
         if (!record.visible) continue;
         // Sphere intersection around turret base + head center
-        const cx = record.position.x + record.normal.x * 0.12;
-        const cy = record.position.y + record.normal.y * 0.12;
-        const cz = record.position.z + record.normal.z * 0.12;
-        const radius = record.collider.radiusM * 1.15;
+        const centerOffset = 0.12 * GAMEPLAY_OBJECT_SCALE;
+        const cx = record.position.x + record.normal.x * centerOffset;
+        const cy = record.position.y + record.normal.y * centerOffset;
+        const cz = record.position.z + record.normal.z * centerOffset;
+        const radius = record.collider.radiusM * 1.15 * GAMEPLAY_OBJECT_SCALE;
 
         const ocx = rayOrigin.x - cx;
         const ocy = rayOrigin.y - cy;

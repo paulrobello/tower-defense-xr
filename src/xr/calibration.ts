@@ -14,7 +14,7 @@
  * - plans/phase-1-room-mr-and-placement.md (P1-T3)
  */
 import * as THREE from 'three';
-import { CORE_BASTION_SPEC, RIFT_PORTAL_SPEC } from '../content/waves.ts';
+import { CORE_BASTION_SPEC, GAMEPLAY_OBJECT_SCALE, RIFT_PORTAL_SPEC } from '../content/waves.ts';
 import type { ActionBus, PlayArc, Vec3 } from '../core/action-bus.ts';
 import type { GameStateMachine } from '../core/state.ts';
 import type { RoomSurface, RoomSurfaceModel, SurfaceAnchor, SurfaceKind } from '../mr/room-scan.ts';
@@ -1452,6 +1452,7 @@ export function createCalibrationPreview(): CalibrationPreview {
     coreRingMat,
   );
   coreRing.name = 'calibration-core-anchor';
+  coreRing.scale.setScalar(GAMEPLAY_OBJECT_SCALE);
   coreRing.rotation.x = -Math.PI / 2;
 
   const coreBeacon = new THREE.Mesh(
