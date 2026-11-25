@@ -1439,6 +1439,75 @@ try {
     );
     await snap(page, '11-xr-room-mesh-controller-rays.jpg');
 
+    const airborneBlast = await page.evaluate(async () => {
+      const app = window.__riftBastionApp;
+      const { device, frames } = window.__xrEmu;
+      const blockouts = app.blockouts;
+      const sync = blockouts.syncFromSim;
+      app.settings.set('roomOcclusion', 'off');
+      const position = {
+        x: device.position.x - 0.4,
+        y: device.position.y + 0.3,
+        z: device.position.z - 1.65,
+      };
+      sync(
+        app.sim.getState(),
+        [
+          {
+            type: 'projectile-impact',
+            tick: 1,
+            timeSec: 0.016,
+            projectileId: 'test-shell',
+            turretId: 'test-mortar',
+            turretKind: 'plasma-mortar',
+            damageType: 'plasma',
+            position,
+            aoeRadiusM: 0.65,
+            hitEnemyIds: [],
+          },
+        ],
+        0.09,
+      );
+      // Hold the explosion mid-frame so capture latency can't hide its silhouette.
+      blockouts.syncFromSim = () => undefined;
+      window.__restoreBlastSync = () => {
+        blockouts.syncFromSim = sync;
+      };
+      await frames(3);
+      const blast = app.blockouts.vfx.group.getObjectByName('vfx-instanced-blast-spheres');
+      return {
+        active: blast?.count ?? 0,
+        type: blast?.geometry.type ?? null,
+        alpha: blast?.geometry.getAttribute('aBlastOpacity').getX(0) ?? 0,
+      };
+    });
+    await snap(page, '12-xr-airborne-blast.jpg');
+    const blastFromAbove = await page.evaluate(async () => {
+      const { device, frames } = window.__xrEmu;
+      window.__p1Helpers.setHeadPose(
+        device.position.x,
+        device.position.y + 0.75,
+        device.position.z,
+        -0.29,
+      );
+      await frames(3);
+      const blast = window.__riftBastionApp.blockouts.vfx.group.getObjectByName(
+        'vfx-instanced-blast-spheres',
+      );
+      return blast?.count ?? 0;
+    });
+    await snap(page, '13-xr-airborne-blast-from-above.jpg');
+    await page.evaluate(() => window.__restoreBlastSync());
+    record(
+      'xr-airborne-blast-is-a-spherical-burst',
+      airborneBlast.active > 0 &&
+        airborneBlast.type === 'SphereGeometry' &&
+        airborneBlast.alpha > 0 &&
+        airborneBlast.alpha < 1 &&
+        blastFromAbove > 0,
+      { ...airborneBlast, blastFromAbove },
+    );
+
     // Clean XR session exit
     await page.evaluate(() => window.__riftBastionApp?.shell.xr.exit());
     await page.waitForFunction(

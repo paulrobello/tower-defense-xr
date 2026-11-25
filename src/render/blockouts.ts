@@ -26,8 +26,8 @@
  *      rotating EMP field ring, and Apex Broodlord Boss Phase-2 molten armor-crack emissive shift.
  *    - Pre-allocated GPU-instanced world health bars (`hpBgInstancedMesh` + `hpFillInstancedMesh`).
  * 5. **GPU-Instanced Weapon FX Pools (zero per-frame geometry allocation, <= 6 instanced draw calls):**
- *    - Pooled kinetic tracers, mortar plasma shells + expanding AoE blast rings, cryo-arc jagged
- *      chain-lightning beams, rail sniper piercing beams, and EMP/roar shockwave rings driven by
+ *    - Pooled kinetic tracers, mortar plasma shells and spherical blasts, cryo-arc jagged
+ *      chain-lightning beams, rail sniper piercing beams, and EMP pulses driven by
  *      `SimEvent[]`.
  */
 
@@ -73,7 +73,6 @@ import { type CombatVfxPool, createCombatVfxPool } from './vfx-pool.ts';
 
 export const MAX_INSTANCED_TRACERS = 64;
 export const MAX_INSTANCED_MORTAR_SHELLS = 32;
-export const MAX_INSTANCED_BLAST_RINGS = 24;
 export const MAX_INSTANCED_CRYO_SEGMENTS = 64;
 export const MAX_INSTANCED_RAIL_BEAMS = 24;
 export const MAX_INSTANCED_HP_BARS = MAX_ACTIVE_ENEMIES + 8;
@@ -155,7 +154,7 @@ export interface EnemyBlockout {
 export interface WeaponFxCounts {
   readonly activeTracers: number;
   readonly activeMortarShells: number;
-  readonly activeBlastRings: number;
+  readonly activeBlastSpheres: number;
   readonly activeCryoSegments: number;
   readonly activeRailBeams: number;
   readonly activeHpBars: number;
@@ -185,7 +184,6 @@ export interface BlockoutRenderer {
   readonly fxCounts: Readonly<WeaponFxCounts>;
   readonly tracerInstancedMesh: THREE.InstancedMesh;
   readonly mortarShellInstancedMesh: THREE.InstancedMesh;
-  readonly blastRingInstancedMesh: THREE.InstancedMesh;
   readonly cryoArcInstancedMesh: THREE.InstancedMesh;
   readonly railBeamInstancedMesh: THREE.InstancedMesh;
   readonly hpBgInstancedMesh: THREE.InstancedMesh;
@@ -202,14 +200,6 @@ export interface BlockoutRenderer {
 interface ActiveTracerFx {
   from: Vec3;
   to: Vec3;
-  elapsedSec: number;
-  durationSec: number;
-  colorHex: number;
-}
-
-interface ActiveBlastRingFx {
-  position: Vec3;
-  maxRadiusM: number;
   elapsedSec: number;
   durationSec: number;
   colorHex: number;
@@ -1697,8 +1687,6 @@ export function createBlockoutRenderer(
   // Weapon FX InstancedMeshes (all pre-allocated once at startup)
   const unitSegmentCylGeo = trackGeo(new THREE.CylinderGeometry(1, 1, 1, 8));
   const unitSphereGeo = trackGeo(new THREE.SphereGeometry(1, 12, 10));
-  const unitBlastRingGeo = trackGeo(new THREE.RingGeometry(0.82, 1.0, 28));
-  unitBlastRingGeo.rotateX(-Math.PI / 2);
 
   const tracerMat = trackMat(
     new THREE.MeshBasicMaterial({
@@ -1711,18 +1699,6 @@ export function createBlockoutRenderer(
   const mortarShellMat = trackMat(
     new THREE.MeshBasicMaterial({
       color: 0xff5722,
-    }),
-  );
-  const blastRingMat = trackMat(
-    new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.82,
-      side: THREE.DoubleSide,
-      depthWrite: false,
-      polygonOffset: true,
-      polygonOffsetFactor: -2,
-      polygonOffsetUnits: -2,
     }),
   );
   const cryoBeamMat = trackMat(
@@ -1760,15 +1736,6 @@ export function createBlockoutRenderer(
   mortarShellInstancedMesh.count = 0;
   mortarShellInstancedMesh.frustumCulled = false;
 
-  const blastRingInstancedMesh = new THREE.InstancedMesh(
-    unitBlastRingGeo,
-    blastRingMat,
-    MAX_INSTANCED_BLAST_RINGS,
-  );
-  blastRingInstancedMesh.name = 'instanced-fx-blast-rings';
-  blastRingInstancedMesh.count = 0;
-  blastRingInstancedMesh.frustumCulled = false;
-
   const cryoArcInstancedMesh = new THREE.InstancedMesh(
     unitSegmentCylGeo,
     cryoBeamMat,
@@ -1790,13 +1757,11 @@ export function createBlockoutRenderer(
   fxGroup.add(
     tracerInstancedMesh,
     mortarShellInstancedMesh,
-    blastRingInstancedMesh,
     cryoArcInstancedMesh,
     railBeamInstancedMesh,
   );
 
   const activeTracers: ActiveTracerFx[] = [];
-  const activeBlastRings: ActiveBlastRingFx[] = [];
   const activeCryoSegments: ActiveBeamSegmentFx[] = [];
   const activeRailBeams: ActiveBeamSegmentFx[] = [];
   const mortarVisualOffsets = new Map<string, Vec3>();
@@ -1814,7 +1779,7 @@ export function createBlockoutRenderer(
   let fxCounts: WeaponFxCounts = {
     activeTracers: 0,
     activeMortarShells: 0,
-    activeBlastRings: 0,
+    activeBlastSpheres: 0,
     activeCryoSegments: 0,
     activeRailBeams: 0,
     activeHpBars: 0,
@@ -1977,28 +1942,12 @@ export function createBlockoutRenderer(
           break;
         }
         case 'projectile-impact': {
-          if (activeBlastRings.length >= MAX_INSTANCED_BLAST_RINGS) activeBlastRings.shift();
-          activeBlastRings.push({
-            position: { ...ev.position },
-            maxRadiusM: Math.max(0.25, ev.aoeRadiusM),
-            elapsedSec: 0,
-            durationSec: 0.38,
-            colorHex: 0xff5722,
-          });
           vfx.spawnPlasmaExplosion(ev.position, Math.max(0.3, ev.aoeRadiusM));
           lighting?.flashPoint(ev.position, 0xff5722, 4.8, 3.6, 0.36);
           break;
         }
         case 'turret-disrupted': {
-          if (activeBlastRings.length >= MAX_INSTANCED_BLAST_RINGS) activeBlastRings.shift();
-          activeBlastRings.push({
-            position: { ...ev.position },
-            maxRadiusM: 1.2,
-            elapsedSec: 0,
-            durationSec: 0.45,
-            colorHex: 0x38bdf8,
-          });
-          vfx.spawnShockRing(ev.position, { x: 0, y: 1, z: 0 }, 1.25, 0x38bdf8, 0.45);
+          vfx.spawnBlastSphere(ev.position, 1.25, 0x38bdf8, 0.45);
           lighting?.flashPoint(ev.position, 0x38bdf8, 3.6, 3.2, 0.35);
           const sourceView = enemyAssetViews.get(ev.sourceEnemyId);
           if (sourceView) {
@@ -2009,14 +1958,6 @@ export function createBlockoutRenderer(
           break;
         }
         case 'boss-phase2': {
-          if (activeBlastRings.length >= MAX_INSTANCED_BLAST_RINGS) activeBlastRings.shift();
-          activeBlastRings.push({
-            position: { ...ev.position },
-            maxRadiusM: 1.6,
-            elapsedSec: 0,
-            durationSec: 0.6,
-            colorHex: 0xff4d00,
-          });
           vfx.spawnDeathBurst(ev.position, 0xff4d00, true);
           lighting?.flashPoint(ev.position, 0xff4d00, 6.0, 4.5, 0.65);
           const bossView = enemyAssetViews.get(ev.bossEnemyId);
@@ -2083,7 +2024,6 @@ export function createBlockoutRenderer(
     },
     tracerInstancedMesh,
     mortarShellInstancedMesh,
-    blastRingInstancedMesh,
     cryoArcInstancedMesh,
     railBeamInstancedMesh,
     hpBgInstancedMesh,
@@ -2741,34 +2681,7 @@ export function createBlockoutRenderer(
       mortarShellInstancedMesh.count = shellCount;
       mortarShellInstancedMesh.instanceMatrix.needsUpdate = true;
 
-      // 5c. Mortar AoE Blast & EMP Shockwave Rings
-      let ringWrite = 0;
-      for (let i = 0; i < activeBlastRings.length; i += 1) {
-        const ring = activeBlastRings[i];
-        if (!ring) continue;
-        ring.elapsedSec += stepDt;
-        if (ring.elapsedSec >= ring.durationSec) continue;
-
-        const progress = THREE.MathUtils.clamp(ring.elapsedSec / ring.durationSec, 0.08, 1);
-        const radius = ring.maxRadiusM * progress;
-        _dummyObj.position.set(ring.position.x, ring.position.y + 0.02, ring.position.z);
-        _dummyObj.quaternion.identity();
-        _dummyObj.scale.setScalar(radius);
-        _dummyObj.updateMatrix();
-        blastRingInstancedMesh.setMatrixAt(ringWrite, _dummyObj.matrix);
-        _color.setHex(ring.colorHex);
-        blastRingInstancedMesh.setColorAt(ringWrite, _color);
-        activeBlastRings[ringWrite] = ring;
-        ringWrite += 1;
-      }
-      activeBlastRings.length = ringWrite;
-      blastRingInstancedMesh.count = ringWrite;
-      blastRingInstancedMesh.instanceMatrix.needsUpdate = true;
-      if (blastRingInstancedMesh.instanceColor) {
-        blastRingInstancedMesh.instanceColor.needsUpdate = true;
-      }
-
-      // 5d. Cryo-Arc Jagged Chain-Lightning Beams
+      // 5c. Cryo-Arc Jagged Chain-Lightning Beams
       let cryoWrite = 0;
       for (let i = 0; i < activeCryoSegments.length; i += 1) {
         const seg = activeCryoSegments[i];
@@ -2790,7 +2703,7 @@ export function createBlockoutRenderer(
       cryoArcInstancedMesh.count = cryoWrite;
       cryoArcInstancedMesh.instanceMatrix.needsUpdate = true;
 
-      // 5e. Rail Sniper Piercing Beams
+      // 5d. Rail Sniper Piercing Beams
       let railWrite = 0;
       for (let i = 0; i < activeRailBeams.length; i += 1) {
         const beam = activeRailBeams[i];
@@ -2817,7 +2730,7 @@ export function createBlockoutRenderer(
       fxCounts = {
         activeTracers: tracerWrite,
         activeMortarShells: shellCount,
-        activeBlastRings: ringWrite,
+        activeBlastSpheres: vfx.stats.activeBlasts,
         activeCryoSegments: cryoWrite,
         activeRailBeams: railWrite,
         activeHpBars: hpBarIndex,
@@ -2854,7 +2767,6 @@ export function createBlockoutRenderer(
 
       tracerInstancedMesh.dispose();
       mortarShellInstancedMesh.dispose();
-      blastRingInstancedMesh.dispose();
       cryoArcInstancedMesh.dispose();
       railBeamInstancedMesh.dispose();
       hpBgInstancedMesh.dispose();
@@ -2865,7 +2777,6 @@ export function createBlockoutRenderer(
       turretsMap.clear();
       enemiesMap.clear();
       activeTracers.length = 0;
-      activeBlastRings.length = 0;
       activeCryoSegments.length = 0;
       activeRailBeams.length = 0;
       mortarVisualOffsets.clear();

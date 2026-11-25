@@ -8,11 +8,9 @@
  *   shatters, brass shell-casing ejections, and cryo ice-crystal bursts.
  * - **Muzzle Flash Starbursts (`flashPool`, up to 160 instances):**
  *   short high-energy glowing bursts at firing muzzles and rail impact exit flashes.
- * - **Shockwave & Ionized Smoke Rings (`ringPool`, up to 120 instances):**
- *   expanding plasma detonations, rail sniper ionized rings along the beam, Disruptor EMP pulses,
- *   and Core Bastion shield ripples.
- * - **Scorch / Burn / Frost Floor Decals (`decalPool`, up to 96 instances):**
- *   lingering molten ember marks from Plasma Mortar impacts and frost patches from Cryo-Arc hits.
+ * - **Shockwave Rings (`rings`, up to 120 instances):** Rail ionization and Core shield ripples.
+ * - **Spherical Blast Waves (`blasts`, up to 48 instances):** Plasma explosions, enemy bursts,
+ *   and Disruptor EMP pulses.
  */
 
 import * as THREE from 'three';
@@ -27,8 +25,8 @@ import {
 export const MAX_VFX_SPARKS = 1400;
 export const MAX_VFX_FLASHES = 160;
 export const MAX_VFX_RINGS = 120;
-export const MAX_VFX_DECALS = 96;
-export const MAX_TOTAL_VFX_CAP = MAX_VFX_SPARKS + MAX_VFX_FLASHES + MAX_VFX_RINGS + MAX_VFX_DECALS;
+export const MAX_VFX_BLASTS = 48;
+export const MAX_TOTAL_VFX_CAP = MAX_VFX_SPARKS + MAX_VFX_FLASHES + MAX_VFX_RINGS + MAX_VFX_BLASTS;
 
 interface SparkSlot {
   active: boolean;
@@ -76,12 +74,12 @@ interface RingSlot {
   colorHex: number;
 }
 
-interface DecalSlot {
+interface BlastSlot {
   active: boolean;
   px: number;
   py: number;
   pz: number;
-  radius: number;
+  endRadius: number;
   elapsedSec: number;
   durationSec: number;
   colorHex: number;
@@ -91,7 +89,7 @@ export interface VfxPoolStats {
   readonly activeSparks: number;
   readonly activeFlashes: number;
   readonly activeRings: number;
-  readonly activeDecals: number;
+  readonly activeBlasts: number;
   readonly totalActive: number;
 }
 
@@ -110,6 +108,12 @@ export interface CombatVfxPool {
   ): void;
   spawnDeathBurst(position: Readonly<Vec3>, colorHex: number, isBoss?: boolean): void;
   spawnPlasmaExplosion(position: Readonly<Vec3>, radiusM: number): void;
+  spawnBlastSphere(
+    position: Readonly<Vec3>,
+    endRadiusM: number,
+    colorHex: number,
+    durationSec: number,
+  ): void;
   spawnRailRings(from: Readonly<Vec3>, to: Readonly<Vec3>, colorHex?: number): void;
   spawnShockRing(
     position: Readonly<Vec3>,
@@ -198,26 +202,75 @@ export function createCombatVfxPool(
   ringMesh.count = 0;
   ringMesh.frustumCulled = false;
 
-  // 4. Lingering scorch/ember/frost surface decals
-  const decalGeo = new THREE.CircleGeometry(1, 20);
-  decalGeo.rotateX(-Math.PI / 2);
-  const decalMat = trackMat(
-    new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: 0.42,
-      depthWrite: false,
-      polygonOffset: true,
-      polygonOffsetFactor: -3,
-      polygonOffsetUnits: -3,
-    }),
-  );
-  const decalMesh = new THREE.InstancedMesh(decalGeo, decalMat, MAX_VFX_DECALS);
-  decalMesh.name = 'vfx-instanced-decals';
-  decalMesh.count = 0;
-  decalMesh.frustumCulled = false;
+  // 4. Expanding blasts with a bright center, curved rim, and per-instance fade.
+  const blastGeo = new THREE.SphereGeometry(1, 16, 12);
+  const blastOpacity = new THREE.InstancedBufferAttribute(
+    new Float32Array(MAX_VFX_BLASTS),
+    1,
+  ).setUsage(THREE.DynamicDrawUsage);
+  blastGeo.setAttribute('aBlastOpacity', blastOpacity);
+  const blastMat = new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    transparent: true,
+    depthWrite: false,
+    toneMapped: false,
+  });
+  const blastVaryings = /* glsl */ `
+    varying float vBlastOpacity;
+    varying vec3 vBlastNormal;
+    varying vec3 vBlastView;
+    varying vec3 vBlastSurface;
+  `;
+  blastMat.customProgramCacheKey = () => 'rb-spherical-blast';
+  blastMat.onBeforeCompile = (shader) => {
+    shader.vertexShader = shader.vertexShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        attribute float aBlastOpacity;
+        ${blastVaryings}`,
+      )
+      .replace(
+        '#include <project_vertex>',
+        `#include <project_vertex>
+        vBlastOpacity = aBlastOpacity;
+        vBlastNormal = mat3(modelViewMatrix) * mat3(instanceMatrix) * position;
+        vBlastView = -mvPosition.xyz;
+        vBlastSurface = position;
+      `,
+      );
 
-  group.add(sparkMesh, flashMesh, ringMesh, decalMesh);
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        '#include <common>',
+        `#include <common>
+        ${blastVaryings}`,
+      )
+      .replace(
+        '#include <color_fragment>',
+        `#include <color_fragment>
+        float facing = clamp(dot(normalize(vBlastNormal), normalize(vBlastView)), 0.0, 1.0);
+        float center = facing * facing * facing;
+        float rim = (1.0 - facing) * (1.0 - facing);
+        float folds = sin(dot(vBlastSurface, vec3(13.0, 8.0, 11.0)) +
+          1.4 * sin(dot(vBlastSurface, vec3(-6.0, 10.0, 7.0))) - 4.0 * vBlastOpacity);
+        float heat = smoothstep(-0.4, 1.0, folds);
+        float glow = (0.15 * rim + 0.60 * center + 0.22 * heat) * vBlastOpacity;
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(1.0), glow);
+        diffuseColor.a *= vBlastOpacity * (0.16 + 0.40 * center + 0.28 * rim + 0.32 * heat);
+      `,
+      );
+  };
+  trackMat(blastMat);
+  const blastMesh = new THREE.InstancedMesh(blastGeo, blastMat, MAX_VFX_BLASTS);
+  blastMesh.name = 'vfx-instanced-blast-spheres';
+  blastMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+  blastMesh.setColorAt(0, _color.setHex(0xffffff));
+  blastMesh.instanceColor?.setUsage(THREE.DynamicDrawUsage);
+  blastMesh.count = 0;
+  blastMesh.frustumCulled = false;
+
+  group.add(sparkMesh, flashMesh, ringMesh, blastMesh);
 
   // Pre-allocate ring buffers (zero runtime allocations in steady-state tick!)
   const sparks: SparkSlot[] = Array.from({ length: MAX_VFX_SPARKS }, () => ({
@@ -263,21 +316,21 @@ export function createCombatVfxPool(
     durationSec: 0.32,
     colorHex: 0xffffff,
   }));
-  const decals: DecalSlot[] = Array.from({ length: MAX_VFX_DECALS }, () => ({
+  const blasts: BlastSlot[] = Array.from({ length: MAX_VFX_BLASTS }, () => ({
     active: false,
     px: 0,
     py: 0,
     pz: 0,
-    radius: 0.3,
+    endRadius: 0.5,
     elapsedSec: 0,
-    durationSec: 4.5,
+    durationSec: 0.42,
     colorHex: 0xff5722,
   }));
 
   let sparkCursor = 0;
   let flashCursor = 0;
   let ringCursor = 0;
-  let decalCursor = 0;
+  let blastCursor = 0;
   let rngState = 0x9e3779b9;
   let disposed = false;
 
@@ -285,7 +338,7 @@ export function createCombatVfxPool(
     activeSparks: 0,
     activeFlashes: 0,
     activeRings: 0,
-    activeDecals: 0,
+    activeBlasts: 0,
     totalActive: 0,
   };
 
@@ -313,14 +366,6 @@ export function createCombatVfxPool(
   function allocRing(): RingSlot {
     const slot = rings[ringCursor] as RingSlot;
     ringCursor = (ringCursor + 1) % MAX_VFX_RINGS;
-    slot.active = true;
-    slot.elapsedSec = 0;
-    return slot;
-  }
-
-  function allocDecal(): DecalSlot {
-    const slot = decals[decalCursor] as DecalSlot;
-    decalCursor = (decalCursor + 1) % MAX_VFX_DECALS;
     slot.active = true;
     slot.elapsedSec = 0;
     return slot;
@@ -366,20 +411,23 @@ export function createCombatVfxPool(
     count = 8,
     speed = 1.9,
     scale = 0.018,
+    spherical = false,
   ): void {
     if (disposed) return;
     for (let i = 0; i < count; i += 1) {
       const slot = allocSpark();
       const theta = nextRand() * Math.PI * 2;
-      const elev = (nextRand() - 0.15) * Math.PI * 0.55;
+      const sample = nextRand();
+      const unitY = spherical ? sample * 2 - 1 : Math.sin((sample - 0.15) * Math.PI * 0.55);
+      const horizontal = Math.sqrt(1 - unitY * unitY);
       const spd = speed * (0.45 + nextRand() * 0.75);
       slot.px = position.x;
       slot.py = position.y;
       slot.pz = position.z;
-      slot.vx = Math.cos(theta) * Math.cos(elev) * spd;
-      slot.vy = Math.sin(elev) * spd + 0.35;
-      slot.vz = Math.sin(theta) * Math.cos(elev) * spd;
-      slot.gravity = -4.6;
+      slot.vx = Math.cos(theta) * horizontal * spd;
+      slot.vy = unitY * spd + (spherical ? 0 : 0.35);
+      slot.vz = Math.sin(theta) * horizontal * spd;
+      slot.gravity = spherical ? -2.3 : -4.6;
       slot.scaleX = scale;
       slot.scaleY = scale;
       slot.scaleZ = scale * 2.2;
@@ -390,33 +438,39 @@ export function createCombatVfxPool(
     }
   }
 
+  function spawnBlastSphere(
+    position: Readonly<Vec3>,
+    endRadiusM: number,
+    colorHex: number,
+    durationSec: number,
+  ): void {
+    if (disposed) return;
+    const slot = blasts[blastCursor] as BlastSlot;
+    blastCursor = (blastCursor + 1) % MAX_VFX_BLASTS;
+    slot.active = true;
+    slot.px = position.x;
+    slot.py = position.y;
+    slot.pz = position.z;
+    slot.endRadius = endRadiusM;
+    slot.elapsedSec = 0;
+    slot.durationSec = durationSec;
+    slot.colorHex = colorHex;
+  }
+
   function spawnDeathBurst(position: Readonly<Vec3>, colorHex: number, isBoss = false): void {
     if (disposed) return;
     const count = isBoss ? 36 : 16;
     spawnMuzzleFlash(position, colorHex, isBoss ? 0.34 : 0.14);
-    spawnImpactBurst(position, colorHex, count, isBoss ? 3.2 : 2.1, isBoss ? 0.036 : 0.022);
-    spawnShockRing(
-      position,
-      { x: 0, y: 1, z: 0 },
-      isBoss ? 1.45 : 0.45,
-      colorHex,
-      isBoss ? 0.65 : 0.32,
-    );
+    spawnImpactBurst(position, colorHex, count, isBoss ? 3.2 : 2.1, isBoss ? 0.036 : 0.022, true);
+    spawnBlastSphere(position, isBoss ? 1.55 : 0.45, colorHex, isBoss ? 0.65 : 0.32);
   }
 
   function spawnPlasmaExplosion(position: Readonly<Vec3>, radiusM: number): void {
     if (disposed) return;
     spawnMuzzleFlash(position, 0xff7b29, Math.min(0.45, radiusM * 0.35));
-    spawnImpactBurst(position, 0xff5722, 18, 2.8, 0.026);
-    spawnImpactBurst(position, 0xfbbf24, 10, 1.8, 0.018);
-    spawnShockRing(position, { x: 0, y: 1, z: 0 }, Math.max(0.35, radiusM), 0xff5722, 0.42);
-    const decal = allocDecal();
-    decal.px = position.x;
-    decal.py = position.y + 0.008;
-    decal.pz = position.z;
-    decal.radius = Math.min(0.65, radiusM * 0.52);
-    decal.durationSec = 4.2;
-    decal.colorHex = 0x7c2d12;
+    spawnImpactBurst(position, 0xff5722, 18, 2.8, 0.026, true);
+    spawnImpactBurst(position, 0xfbbf24, 10, 1.8, 0.018, true);
+    spawnBlastSphere(position, Math.max(0.35, radiusM), 0xff5722, 0.46);
   }
 
   function spawnRailRings(from: Readonly<Vec3>, to: Readonly<Vec3>, colorHex = 0x7dd3fc): void {
@@ -556,36 +610,37 @@ export function createCombatVfxPool(
     ringMesh.instanceMatrix.needsUpdate = true;
     if (ringMesh.instanceColor) ringMesh.instanceColor.needsUpdate = true;
 
-    // 4. Update decals
-    let activeDecals = 0;
-    for (let i = 0; i < MAX_VFX_DECALS; i += 1) {
-      const d = decals[i] as DecalSlot;
-      if (!d.active) continue;
-      d.elapsedSec += stepDt;
-      if (d.elapsedSec >= d.durationSec) {
-        d.active = false;
+    // 4. Expand each sphere uniformly around its impact point, then fade it out.
+    let activeBlasts = 0;
+    for (const blast of blasts) {
+      if (!blast.active) continue;
+      blast.elapsedSec += stepDt;
+      if (blast.elapsedSec >= blast.durationSec) {
+        blast.active = false;
         continue;
       }
-      const fade = 1 - THREE.MathUtils.smoothstep(d.elapsedSec / d.durationSec, 0.55, 1.0);
-      _obj.position.set(d.px, d.py, d.pz);
-      _obj.rotation.set(0, 0, 0);
-      _obj.scale.setScalar(d.radius * (0.85 + 0.15 * fade) * GAMEPLAY_OBJECT_SCALE);
+      const remaining = 1 - blast.elapsedSec / blast.durationSec;
+      const radius = blast.endRadius * (1 - 0.86 * remaining * remaining);
+      _obj.position.set(blast.px, blast.py, blast.pz);
+      _obj.quaternion.identity();
+      _obj.scale.setScalar(radius);
       _obj.updateMatrix();
-      decalMesh.setMatrixAt(activeDecals, _obj.matrix);
-      _color.setHex(d.colorHex).multiplyScalar(fade);
-      decalMesh.setColorAt(activeDecals, _color);
-      activeDecals += 1;
+      blastMesh.setMatrixAt(activeBlasts, _obj.matrix);
+      blastMesh.setColorAt(activeBlasts, _color.setHex(blast.colorHex));
+      blastOpacity.setX(activeBlasts, remaining * remaining);
+      activeBlasts += 1;
     }
-    decalMesh.count = activeDecals;
-    decalMesh.instanceMatrix.needsUpdate = true;
-    if (decalMesh.instanceColor) decalMesh.instanceColor.needsUpdate = true;
+    blastMesh.count = activeBlasts;
+    blastMesh.instanceMatrix.needsUpdate = true;
+    if (blastMesh.instanceColor) blastMesh.instanceColor.needsUpdate = true;
+    blastOpacity.needsUpdate = true;
 
     stats = {
       activeSparks,
       activeFlashes,
       activeRings,
-      activeDecals,
-      totalActive: activeSparks + activeFlashes + activeRings + activeDecals,
+      activeBlasts,
+      totalActive: activeSparks + activeFlashes + activeRings + activeBlasts,
     };
   }
 
@@ -593,16 +648,16 @@ export function createCombatVfxPool(
     for (const s of sparks) s.active = false;
     for (const f of flashes) f.active = false;
     for (const r of rings) r.active = false;
-    for (const d of decals) d.active = false;
+    for (const blast of blasts) blast.active = false;
     sparkMesh.count = 0;
     flashMesh.count = 0;
     ringMesh.count = 0;
-    decalMesh.count = 0;
+    blastMesh.count = 0;
     stats = {
       activeSparks: 0,
       activeFlashes: 0,
       activeRings: 0,
-      activeDecals: 0,
+      activeBlasts: 0,
       totalActive: 0,
     };
   }
@@ -618,6 +673,7 @@ export function createCombatVfxPool(
     spawnImpactBurst,
     spawnDeathBurst,
     spawnPlasmaExplosion,
+    spawnBlastSphere,
     spawnRailRings,
     spawnShockRing,
     tick,
@@ -636,9 +692,9 @@ export function createCombatVfxPool(
       ringGeo.dispose();
       ringMat.dispose();
       ringMesh.dispose();
-      decalGeo.dispose();
-      decalMat.dispose();
-      decalMesh.dispose();
+      blastGeo.dispose();
+      blastMat.dispose();
+      blastMesh.dispose();
       group.clear();
       group.removeFromParent();
     },

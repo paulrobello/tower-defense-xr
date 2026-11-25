@@ -372,7 +372,61 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
     expect(scene.getObjectByName('rift-bastion-blockouts-root')).toBeUndefined();
   });
 
-  it('keeps HP bar fill above background, billboards HP bars toward camera, preserves blast ring instance colors, and hides closed portal vortex rings', () => {
+  it('expands and fades a spherical Plasma Mortar blast centered on an airborne impact', () => {
+    const scene = new THREE.Scene();
+    const renderer = createBlockoutRenderer(scene);
+    const snapshot = createCombatSimulation({ seed: 7 }).getState();
+    const position = new THREE.Vector3(0.2, 1.4, -0.7);
+
+    renderer.syncFromSim(
+      snapshot,
+      [
+        {
+          type: 'projectile-impact',
+          tick: 1,
+          timeSec: 0.016,
+          projectileId: 'plasma-shell',
+          turretId: 'mortar',
+          turretKind: 'plasma-mortar',
+          damageType: 'plasma',
+          position,
+          aoeRadiusM: 0.65,
+          hitEnemyIds: [],
+        },
+      ],
+      0.05,
+    );
+    const blastMesh = renderer.vfx.group.getObjectByName(
+      'vfx-instanced-blast-spheres',
+    ) as THREE.InstancedMesh<THREE.SphereGeometry, THREE.MeshBasicMaterial>;
+    expect(blastMesh.geometry).toBeInstanceOf(THREE.SphereGeometry);
+    expect(blastMesh.material.color.getHex()).toBe(0xffffff);
+    expect(blastMesh.material.depthWrite).toBe(false);
+    expect(renderer.fxCounts.activeBlastSpheres).toBe(1);
+    expect(renderer.vfx.stats.activeRings).toBe(0);
+
+    const matrix = new THREE.Matrix4();
+    blastMesh.getMatrixAt(0, matrix);
+    const scale = new THREE.Vector3().setFromMatrixScale(matrix);
+    expect(scale.x).toBeCloseTo(scale.y);
+    expect(scale.x).toBeCloseTo(scale.z);
+    expect(new THREE.Vector3().setFromMatrixPosition(matrix).distanceTo(position)).toBeLessThan(
+      1e-6,
+    );
+
+    const opacity = blastMesh.geometry.getAttribute('aBlastOpacity');
+    const startOpacity = opacity.getX(0);
+    renderer.syncFromSim(snapshot, [], 0.1);
+    blastMesh.getMatrixAt(0, matrix);
+
+    expect(new THREE.Vector3().setFromMatrixScale(matrix).x).toBeGreaterThan(scale.x);
+    expect(opacity.getX(0)).toBeLessThan(startOpacity);
+    for (let frame = 0; frame < 4; frame += 1) renderer.syncFromSim(snapshot, [], 0.1);
+    expect(blastMesh.count).toBe(0);
+    renderer.dispose();
+  });
+
+  it('keeps HP bar fill above background, billboards HP bars toward camera and hides closed portal vortex rings', () => {
     const scene = new THREE.Scene();
     const renderer = createBlockoutRenderer(scene);
     const sim = createCombatSimulation({ seed: 7 });
@@ -418,11 +472,6 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
     expect(renderer.hpFillInstancedMesh.renderOrder).toBeGreaterThan(
       renderer.hpBgInstancedMesh.renderOrder,
     );
-
-    // Blast ring base material is white so instanceColor isn't darkened/tinted muddy
-    expect(
-      (renderer.blastRingInstancedMesh.material as THREE.MeshBasicMaterial).color.getHex(),
-    ).toBe(0xffffff);
 
     // HP bar matrix adopts camera orientation (not identity) when camera is rotated
     const hpMat = new THREE.Matrix4();
