@@ -747,6 +747,64 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
     });
   });
 
+  it('keeps ground and flying attackers alive at the shield until turret fire kills them', () => {
+    for (const { enemyId, coreY } of [
+      { enemyId: 'skitter-crawler', coreY: 0 },
+      { enemyId: 'skitter-crawler', coreY: 0.78 },
+      { enemyId: 'wasp-skimmer', coreY: 0 },
+    ] as const) {
+      const sim = createCombatSimulation({
+        seed: 42,
+        autoLaunchInitialWave: false,
+        coreAnchor: { x: 0, y: coreY, z: 1.5 },
+      });
+      const core = sim.getState().corePosition;
+      expect(sim.launchWave().ok).toBe(true);
+      const attacker = sim.debugSpawnEnemy(enemyId, {
+        position: { x: core.x + 0.6, y: 0, z: core.z },
+      });
+
+      const approach = sim.runTicks(170);
+      expect(
+        approach.events.filter(
+          (event) => event.type === 'core-hit' && event.enemyId === attacker.id,
+        ).length,
+      ).toBeGreaterThanOrEqual(2);
+      expect(sim.getEnemy(attacker.id)).toBe(attacker);
+      expect(attacker.attackingCore).toBe(true);
+      expect(attacker.effectiveSpeedMps).toBe(0);
+      expect(
+        Math.hypot(
+          attacker.position.x - core.x,
+          attacker.position.y - core.y,
+          attacker.position.z - core.z,
+        ),
+      ).toBeCloseTo(0.234 + attacker.collisionRadiusM * 0.45, 3);
+
+      const before = { ...attacker.position };
+      sim.runTicks(30);
+      expect(attacker.position).toEqual(before);
+
+      // Put a ready turret in range and leave the attacker one shot from death.
+      attacker.hp = 1;
+      const defense = sim.placeTurret({
+        kind: 'autocannon',
+        position: { x: 0.65, y: 0, z: 0.75 },
+        mountProfile: 'surface-clamp',
+        surfaceKind: 'floor',
+        priority: 'closest',
+      });
+      expect(defense.ok).toBe(true);
+      const resolution = sim.runTicks(12);
+      expect(
+        resolution.events.some(
+          (event) => event.type === 'enemy-killed' && event.enemyId === attacker.id,
+        ),
+      ).toBe(true);
+      expect(sim.getEnemy(attacker.id)).toBeUndefined();
+    }
+  });
+
   describe('Starter turret balance', () => {
     it('funds exactly two starter Autocannons in a fresh mission', () => {
       const sim = createCombatSimulation({ seed: 0x2026 });

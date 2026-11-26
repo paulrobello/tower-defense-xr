@@ -353,6 +353,10 @@ export interface TurretPlacementController {
   ): PlacedTurretRecord | null;
   removeTurret(turretId: string): boolean;
   getTurret(turretId: string): PlacedTurretRecord | undefined;
+  pickPlacedTurretHit(
+    rayOrigin: Readonly<Vec3>,
+    rayDirection: Readonly<Vec3>,
+  ): { record: PlacedTurretRecord; distance: number } | null;
   pickPlacedTurret(
     rayOrigin: Readonly<Vec3>,
     rayDirection: Readonly<Vec3>,
@@ -1057,6 +1061,46 @@ export function createTurretPlacementController(
   const buttonEdgesBySource = new Map<XRInputSource, ButtonEdges>();
   const listeners = new Set<PlacementControllerListener>();
   const unsubscribers: Array<() => void> = [];
+
+  function pickPlacedTurretHit(
+    rayOrigin: Readonly<Vec3>,
+    rayDirection: Readonly<Vec3>,
+  ): { record: PlacedTurretRecord; distance: number } | null {
+    const dirLen = Math.hypot(rayDirection.x, rayDirection.y, rayDirection.z);
+    if (dirLen < 1e-8) return null;
+    const dx = rayDirection.x / dirLen;
+    const dy = rayDirection.y / dirLen;
+    const dz = rayDirection.z / dirLen;
+    let best: { record: PlacedTurretRecord; distance: number } | null = null;
+
+    for (const record of placedTurretsMap.values()) {
+      if (!record.visible) continue;
+      const centerOffset = 0.12 * GAMEPLAY_OBJECT_SCALE;
+      const cx = record.position.x + record.normal.x * centerOffset;
+      const cy = record.position.y + record.normal.y * centerOffset;
+      const cz = record.position.z + record.normal.z * centerOffset;
+      // While placing, only a direct hit takes priority over the nearby build surface.
+      // With no placement active, give the body more tolerance for distant selection.
+      const pickMargin = active ? 1.15 : 1.65;
+      const radius = record.collider.radiusM * pickMargin * GAMEPLAY_OBJECT_SCALE;
+      const ocx = rayOrigin.x - cx;
+      const ocy = rayOrigin.y - cy;
+      const ocz = rayOrigin.z - cz;
+      const b = ocx * dx + ocy * dy + ocz * dz;
+      const c = ocx * ocx + ocy * ocy + ocz * ocz - radius * radius;
+      const disc = b * b - c;
+      if (disc < 0) continue;
+      const root = Math.sqrt(disc);
+      const near = -b - root;
+      const hitT = near >= 0 ? near : -b + root;
+      if (hitT < 0.05 || !Number.isFinite(hitT)) continue;
+      if (!best || hitT < best.distance) best = { record, distance: hitT };
+    }
+    if (!best) return null;
+    const surface = raycastSurfaceInternal(rayOrigin, rayDirection, false);
+    // Leave room for tracked plane drift immediately behind a flush-mounted turret.
+    return surface && surface.distance + 0.055 < best.distance ? null : best;
+  }
 
   ghost.setVisible(active);
 
@@ -1802,14 +1846,20 @@ export function createTurretPlacementController(
             activeValidation.mountProfile === 'hover-pod'
               ? hoverDepthM
               : (lastSurfaceHit?.distance ?? hoverDepthM);
+          const turretHit = pickPlacedTurretHit(origin, direction);
+          const effectiveRayDistance =
+            turretHit?.distance ?? Math.min(SURFACE_SNAP_MAX_RANGE_M, rayDistance);
 
           rayTargets.push({
             source,
             origin,
             direction,
-            distance: Math.max(0.2, Math.min(SURFACE_SNAP_MAX_RANGE_M, rayDistance)),
-            contact: activeValidation.mountProfile === 'hover-pod' || lastSurfaceHit !== null,
-            valid: activeValidation.valid,
+            distance: Math.max(0.05, effectiveRayDistance),
+            contact:
+              turretHit !== null ||
+              activeValidation.mountProfile === 'hover-pod' ||
+              lastSurfaceHit !== null,
+            valid: turretHit !== null || activeValidation.valid,
           });
         } else {
           const hit = raycastSurfaceInternal(
@@ -1817,12 +1867,15 @@ export function createTurretPlacementController(
             { x: direction.x, y: direction.y, z: direction.z },
             true,
           );
+          const turretHit = pickPlacedTurretHit(origin, direction);
+          const effectiveDistance =
+            turretHit?.distance ?? Math.min(SURFACE_SNAP_MAX_RANGE_M, hit?.distance ?? 1.5);
           rayTargets.push({
             source,
             origin,
             direction,
-            distance: hit ? Math.min(SURFACE_SNAP_MAX_RANGE_M, hit.distance) : 1.5,
-            contact: hit !== null,
+            distance: effectiveDistance,
+            contact: hit !== null || turretHit !== null,
             valid: true,
           });
         }
@@ -2156,40 +2209,9 @@ export function createTurretPlacementController(
     getTurret(turretId) {
       return placedTurretsMap.get(turretId);
     },
+    pickPlacedTurretHit,
     pickPlacedTurret(rayOrigin, rayDirection) {
-      const dirLen = Math.hypot(rayDirection.x, rayDirection.y, rayDirection.z);
-      if (dirLen < 1e-8) return null;
-      const dx = rayDirection.x / dirLen;
-      const dy = rayDirection.y / dirLen;
-      const dz = rayDirection.z / dirLen;
-
-      let bestRecord: PlacedTurretRecord | null = null;
-      let bestT = Number.POSITIVE_INFINITY;
-
-      for (const record of placedTurretsMap.values()) {
-        if (!record.visible) continue;
-        // Sphere intersection around turret base + head center
-        const centerOffset = 0.12 * GAMEPLAY_OBJECT_SCALE;
-        const cx = record.position.x + record.normal.x * centerOffset;
-        const cy = record.position.y + record.normal.y * centerOffset;
-        const cz = record.position.z + record.normal.z * centerOffset;
-        const radius = record.collider.radiusM * 1.15 * GAMEPLAY_OBJECT_SCALE;
-
-        const ocx = rayOrigin.x - cx;
-        const ocy = rayOrigin.y - cy;
-        const ocz = rayOrigin.z - cz;
-        const b = ocx * dx + ocy * dy + ocz * dz;
-        const c = ocx * ocx + ocy * ocy + ocz * ocz - radius * radius;
-        const disc = b * b - c;
-        if (disc < 0) continue;
-        const t = -b - Math.sqrt(disc);
-        const hitT = t >= 0 ? t : -b + Math.sqrt(disc);
-        if (hitT >= 0.05 && hitT <= SURFACE_SNAP_MAX_RANGE_M && hitT < bestT) {
-          bestT = hitT;
-          bestRecord = record;
-        }
-      }
-      return bestRecord;
+      return pickPlacedTurretHit(rayOrigin, rayDirection)?.record ?? null;
     },
     subscribe(listener) {
       listeners.add(listener);

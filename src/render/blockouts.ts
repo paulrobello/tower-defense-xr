@@ -81,6 +81,19 @@ const CRYO_SUBSEGMENTS_PER_LINK = 3;
 /** Helios Plasma Mortar GLBs are authored with their crucible tilted +35° upward at rest. */
 const HELIOS_MORTAR_REST_ASCENT_RAD = (35 * Math.PI) / 180;
 
+/**
+ * Approximate distance covered by one authored locomotion cycle. These values use the
+ * approved neutral envelopes as the stride reference, keeping clip playback in the
+ * same scale as the simulation instead of adding an arbitrary speed multiplier.
+ */
+const ENEMY_LOCOMOTION_STRIDE_M: Readonly<Record<EnemyId, number>> = {
+  'skitter-crawler': 0.34,
+  'wasp-skimmer': 0.42,
+  'carapace-brute': 0.52,
+  'rift-disruptor': 0.32,
+  'apex-broodlord': 0.92,
+};
+
 export interface CoreBastionBlockout {
   readonly group: THREE.Group;
   readonly pedestalMesh: THREE.Mesh;
@@ -149,6 +162,7 @@ export interface EnemyBlockout {
   emissiveIntensity: number;
   hitFlashSec: number;
   locomotionPhase: number;
+  readonly lastTangent: THREE.Vector3;
 }
 
 export interface WeaponFxCounts {
@@ -629,7 +643,7 @@ export function createBlockoutRenderer(
   function defaultEnemyLocomotionClip(simEnemy: SimEnemy): string {
     switch (simEnemy.archetypeId) {
       case 'skitter-crawler':
-        return Math.abs(simEnemy.normal.y) < 0.5 ? 'climb_wall' : 'crawl_floor';
+        return simEnemy.locomotionMode === 'climb' ? 'climb_wall' : 'crawl_floor';
       case 'wasp-skimmer':
         return 'hover_fly';
       case 'carapace-brute':
@@ -639,6 +653,14 @@ export function createBlockoutRenderer(
       case 'apex-broodlord':
         return 'boss_march';
     }
+  }
+
+  function enemyLocomotionSpeed(simEnemy: SimEnemy, clip: THREE.AnimationClip | undefined): number {
+    const strideM = ENEMY_LOCOMOTION_STRIDE_M[simEnemy.archetypeId];
+    if (!clip || !Number.isFinite(strideM) || strideM <= 0 || clip.duration <= 0) return 1;
+    return (
+      (Math.max(0, simEnemy.effectiveSpeedMps) * clip.duration) / (strideM * GAMEPLAY_OBJECT_SCALE)
+    );
   }
 
   function ensureEnemyAsset(
@@ -1644,6 +1666,7 @@ export function createBlockoutRenderer(
       emissiveIntensity: simEnemy.emissiveIntensity,
       hitFlashSec: 0,
       locomotionPhase: 0,
+      lastTangent: new THREE.Vector3(),
     };
   }
 
@@ -2418,11 +2441,36 @@ export function createBlockoutRenderer(
           simEnemy.position.z,
         );
 
-        // Orient invader along its locomotion tangent & surface normal
-        _upAxis.set(simEnemy.normal.x, simEnemy.normal.y, simEnemy.normal.z).normalize();
+        // Surface crawlers follow the host normal. Aerial units stay upright and only
+        // turn toward travel, so a portal's ceiling normal cannot invert their model.
+        if (simEnemy.movementLayer === 'air') {
+          _upAxis.set(0, 1, 0);
+        } else {
+          _upAxis.set(simEnemy.normal.x, simEnemy.normal.y, simEnemy.normal.z).normalize();
+        }
         if (_upAxis.lengthSq() < 1e-6) _upAxis.set(0, 1, 0);
-        _vecA.set(simEnemy.tangent.x, simEnemy.tangent.y, simEnemy.tangent.z).normalize();
-        if (_vecA.lengthSq() < 1e-6) _vecA.set(0, 0, 1);
+        _vecA.set(simEnemy.tangent.x, simEnemy.tangent.y, simEnemy.tangent.z);
+        _vecA.addScaledVector(_upAxis, -_vecA.dot(_upAxis));
+        if (_vecA.lengthSq() < 1e-6 && enemyBlockout.lastTangent.lengthSq() < 1e-6) {
+          // A vertical entry tangent has no heading in the mount plane. Use the next
+          // route tangent that does, so the loaded model faces the exit path on frame one.
+          for (const waypoint of simEnemy.path.waypoints) {
+            if (waypoint.cumulativeDistance < simEnemy.distanceAlongPath) continue;
+            const { x, y, z } = waypoint.tangent;
+            _vecA.set(x, y, z).addScaledVector(_upAxis, -_vecA.dot(_upAxis));
+            if (_vecA.lengthSq() >= 1e-6) break;
+          }
+        }
+        if (_vecA.lengthSq() < 1e-6) {
+          _vecA.copy(enemyBlockout.lastTangent);
+          _vecA.addScaledVector(_upAxis, -_vecA.dot(_upAxis));
+        }
+        if (_vecA.lengthSq() < 1e-6) {
+          _vecA.set(0, 0, 1);
+          _vecA.addScaledVector(_upAxis, -_vecA.dot(_upAxis));
+        }
+        if (_vecA.lengthSq() < 1e-6) _vecA.set(1, 0, 0);
+        _vecA.normalize();
         _vecB.crossVectors(_upAxis, _vecA);
         if (_vecB.lengthSq() < 1e-6) {
           _vecB.set(1, 0, 0);
@@ -2430,6 +2478,7 @@ export function createBlockoutRenderer(
           _vecB.normalize();
         }
         _vecA.crossVectors(_vecB, _upAxis).normalize();
+        enemyBlockout.lastTangent.copy(_vecA);
         _mat4.makeBasis(_vecB, _upAxis, _vecA);
         enemyBlockout.group.quaternion.setFromRotationMatrix(_mat4);
         _upAxis.set(0, 1, 0);
@@ -2504,20 +2553,26 @@ export function createBlockoutRenderer(
           if (enemyView.oneShotRemainingSec > 0) {
             enemyView.oneShotRemainingSec = Math.max(0, enemyView.oneShotRemainingSec - stepDt);
           }
+          const locomotionClip = defaultEnemyLocomotionClip(simEnemy);
           if (enemyView.oneShotRemainingSec <= 0) {
-            const targetLoco = defaultEnemyLocomotionClip(simEnemy);
-            if (enemyView.currentClip !== targetLoco) {
-              playMixerClip(enemyView.mixer, enemyView.clips, targetLoco, true);
-              enemyView.currentClip = targetLoco;
+            const hasAttackClip =
+              simEnemy.attackingCore && enemyView.clips.some((clip) => clip.name === 'attack');
+            const targetClip = hasAttackClip ? 'attack' : locomotionClip;
+            if (targetClip && enemyView.currentClip !== targetClip) {
+              playMixerClip(enemyView.mixer, enemyView.clips, targetClip, true);
+              enemyView.currentClip = targetClip;
             }
           }
           // Throttle distant animation ticks (>6 m) to every other frame for Quest 3 CPU headroom
           const farThrottle = enemyDistSq > ENEMY_ANIM_THROTTLE_DIST_SQ;
           enemyView.throttleFlip = !enemyView.throttleFlip;
           if (!farThrottle || enemyView.throttleFlip) {
-            const animSpeed = isSlowed
-              ? 0.55
-              : 1.0 + Math.min(0.6, simEnemy.effectiveSpeedMps * 0.4);
+            const activeClip = enemyView.clips.find((clip) => clip.name === enemyView.currentClip);
+            const isSurfaceLocomotion =
+              simEnemy.movementLayer === 'surface' &&
+              enemyView.oneShotRemainingSec <= 0 &&
+              enemyView.currentClip === locomotionClip;
+            const animSpeed = isSurfaceLocomotion ? enemyLocomotionSpeed(simEnemy, activeClip) : 1;
             enemyView.mixer.update((farThrottle ? stepDt * 2 : stepDt) * animSpeed);
           }
 

@@ -36,6 +36,7 @@ import {
   type AttachableSurfaceKind,
   CORE_KEEP_OUT_RADIUS_M,
   CORE_MAX_HP,
+  CORE_SHIELD_RADIUS_M,
   type CombatMusicCueId,
   computeEarlyLaunchBonus,
   computeEffectiveDamageMultiplier,
@@ -126,6 +127,8 @@ import { SpatialHash3D } from './spatial-hash.ts';
 
 /** Fixed 60 Hz simulation timestep in seconds (`1 / 60`). */
 export const SIM_FIXED_DT = 1 / 60;
+/** Core contact cadence for non-suicide enemies that hold the shield perimeter. */
+const CORE_ATTACK_INTERVAL_SEC = 1.0;
 export const SIM_TICK_RATE_HZ = 60;
 
 /** Canonical content table aliases for simulation consumers. */
@@ -289,6 +292,8 @@ export interface SimEnemy {
   readonly maxHp: number;
   readonly speedMps: number;
   effectiveSpeedMps: number;
+  /** True while the enemy is holding at the visible Core shield perimeter. */
+  attackingCore: boolean;
   readonly movementLayer: MovementLayer;
   position: Vec3;
   tangent: Vec3;
@@ -328,6 +333,8 @@ export interface SimEnemy {
   /** Seconds remaining before the Apex Broodlord emits its next turret-suppressing roar pulse. */
   bossSuppressionTimerSec: number;
   readonly spawnTick: number;
+  /** Seconds until this enemy's next Core strike while attacking. */
+  coreAttackCooldownSec: number;
 }
 
 export interface SimProjectile {
@@ -1347,6 +1354,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       maxHp,
       speedMps: def.speedMps,
       effectiveSpeedMps: def.speedMps,
+      attackingCore: false,
       movementLayer: def.movementLayer,
       position: startPosition,
       tangent: cloneVec3(initialSample.tangent),
@@ -1378,6 +1386,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       bossSummonTimerSec: def.bossAbility?.summonIntervalSec ?? 8.5,
       bossSuppressionTimerSec: def.bossAbility?.suppressionPulseIntervalSec ?? 10.5,
       spawnTick: tickCount,
+      coreAttackCooldownSec: 0,
     };
 
     enemies.push(enemy);
@@ -2276,23 +2285,46 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
         }
       }
 
-      // 3. Advance enemy along its navigation path
+      // 3. Advance enemy along its navigation path until the visible shield perimeter.
       const def = getEnemyDefinition(enemy.enemyId);
       const phase2Mult =
         enemy.isBoss && enemy.isBossPhase2 && def.bossAbility
           ? def.bossAbility.phase2SpeedMultiplier
           : 1.0;
       const effectiveSpeed = enemy.speedMps * phase2Mult * (1 - enemy.slowFactor);
-      enemy.effectiveSpeedMps = effectiveSpeed;
-      enemy.distanceAlongPath += effectiveSpeed * dt;
-
-      const sample = samplePathAtDistance(enemy.path, enemy.distanceAlongPath);
-      enemy.position = cloneVec3(sample.position);
-      enemy.tangent = cloneVec3(sample.tangent);
-      enemy.normal = cloneVec3(sample.normal);
-      enemy.locomotionMode = sample.locomotionMode;
-      enemy.distanceToCore = sample.distanceToCore;
-      enemy.progress = sample.progress;
+      if (!enemy.attackingCore) {
+        const previousDistance = enemy.distanceAlongPath;
+        enemy.effectiveSpeedMps = effectiveSpeed;
+        enemy.distanceAlongPath += effectiveSpeed * dt;
+        let sample = samplePathAtDistance(enemy.path, enemy.distanceAlongPath);
+        const corePosition = currentNavGraph.corePosition;
+        // Contact is between the shield and the enemy body, whose art is scaled in XR.
+        const contactDistance =
+          CORE_SHIELD_RADIUS_M + enemy.collisionRadiusM * GAMEPLAY_OBJECT_SCALE;
+        const nextCoreDistance = distanceVec3(sample.position, corePosition);
+        if (nextCoreDistance <= contactDistance + 1e-7) {
+          // Clamp the crossing tick to the visible dome for floor and elevated Core routes.
+          const priorCoreDistance = distanceVec3(enemy.position, corePosition);
+          if (priorCoreDistance > contactDistance) {
+            const fraction =
+              (priorCoreDistance - contactDistance) /
+              Math.max(1e-7, priorCoreDistance - nextCoreDistance);
+            enemy.distanceAlongPath =
+              previousDistance +
+              (enemy.distanceAlongPath - previousDistance) * Math.max(0, Math.min(1, fraction));
+            sample = samplePathAtDistance(enemy.path, enemy.distanceAlongPath);
+          }
+          enemy.attackingCore = true;
+          enemy.effectiveSpeedMps = 0;
+          enemy.coreAttackCooldownSec = 0;
+        }
+        enemy.position = cloneVec3(sample.position);
+        enemy.tangent = cloneVec3(sample.tangent);
+        enemy.normal = cloneVec3(sample.normal);
+        enemy.locomotionMode = sample.locomotionMode;
+        enemy.distanceToCore = enemy.attackingCore ? 0 : sample.distanceToCore;
+        enemy.progress = sample.progress;
+      }
 
       // 4. Rift Disruptor EMP pulse check (1.2 m radius, 4.0 s disable, 5.0 s post-recovery immunity)
       if (def.disruptorAbility) {
@@ -2362,8 +2394,12 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
         }
       }
 
-      // 6. Core arrival check
-      if (sample.reachedCore) {
+      // 6. Core shield attack. Enemies hold the perimeter and strike repeatedly until killed.
+      if (enemy.attackingCore) {
+        enemy.coreAttackCooldownSec = Math.max(0, enemy.coreAttackCooldownSec - dt);
+      }
+      if (enemy.attackingCore && enemy.coreAttackCooldownSec <= 1e-7 && coreHp > 0) {
+        enemy.coreAttackCooldownSec = CORE_ATTACK_INTERVAL_SEC;
         coreHp = Math.max(0, coreHp - enemy.coreDamage);
         emitEvent({
           type: 'core-hit',
@@ -2376,12 +2412,6 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
           maxCoreHp,
           position: cloneVec3(currentNavGraph.corePosition),
         });
-
-        const idx = enemies.indexOf(enemy);
-        if (idx !== -1) {
-          enemies.splice(idx, 1);
-        }
-        enemySpatialHash.remove(enemy, enemy.position);
 
         if (coreHp <= 0 && phase !== 'defeat') {
           phase = 'defeat';
@@ -3065,7 +3095,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
 
     for (const e of state.enemies) {
       parts.push(
-        `E:${e.id}:${e.enemyId}:${quantize(e.hp)}:${quantize(e.distanceAlongPath)}:${quantize(e.position.x)},${quantize(e.position.y)},${quantize(e.position.z)}:${quantize(e.slowFactor)}:${quantize(e.slowRemainingSec)}:${e.burnStacks}:${quantize(e.burnDps)}:${quantize(e.burnRemainingSec)}:${e.bossPhase}`,
+        `E:${e.id}:${e.enemyId}:${quantize(e.hp)}:${quantize(e.distanceAlongPath)}:${quantize(e.position.x)},${quantize(e.position.y)},${quantize(e.position.z)}:${quantize(e.slowFactor)}:${quantize(e.slowRemainingSec)}:${e.burnStacks}:${quantize(e.burnDps)}:${quantize(e.burnRemainingSec)}:${e.bossPhase}:${e.attackingCore ? 1 : 0}:${quantize(e.coreAttackCooldownSec)}`,
       );
     }
 

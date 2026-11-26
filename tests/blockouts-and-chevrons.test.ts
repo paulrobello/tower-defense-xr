@@ -421,6 +421,47 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
     expect(scene.getObjectByName('rift-bastion-blockouts-root')).toBeUndefined();
   });
 
+  it('orients a ceiling crawler along its exit heading and keeps flyers upright on frame one', () => {
+    const sim = createCombatSimulation({
+      seed: 42,
+      portalAnchors: [
+        {
+          id: 'ceiling-rift',
+          position: { x: -1.2, y: 2.8, z: -0.7 },
+          normal: { x: 0, y: -1, z: 0 },
+          hostKind: 'ceiling',
+        },
+      ],
+    });
+    const ceiling = sim.debugSpawnEnemy('carapace-brute');
+    const flyer = sim.debugSpawnEnemy('wasp-skimmer');
+    const portalNormal = { x: 0, y: -1, z: 0 };
+    ceiling.normal = portalNormal;
+    ceiling.tangent = portalNormal;
+    flyer.normal = portalNormal;
+    flyer.tangent = portalNormal;
+    const exit = ceiling.path.waypoints.find(
+      ({ tangent }) => Math.hypot(tangent.x, tangent.z) > 0.001,
+    );
+    expect(exit).toBeDefined();
+
+    const scene = new THREE.Scene();
+    const renderer = createBlockoutRenderer(scene);
+    renderer.syncFromSim(sim.getState(), [], 0);
+    const ceilingRotation = renderer.enemies.get(ceiling.id)?.group.quaternion;
+    const flyerRotation = renderer.enemies.get(flyer.id)?.group.quaternion;
+    expect(ceilingRotation).toBeDefined();
+    expect(flyerRotation).toBeDefined();
+    if (!ceilingRotation || !flyerRotation || !exit) return;
+
+    const facing = new THREE.Vector3(0, 0, 1).applyQuaternion(ceilingRotation);
+    const exitHeading = new THREE.Vector3(exit.tangent.x, 0, exit.tangent.z).normalize();
+    expect(facing.dot(exitHeading)).toBeGreaterThan(0.99);
+    expect(new THREE.Vector3(0, 1, 0).applyQuaternion(ceilingRotation).y).toBeLessThan(-0.99);
+    expect(new THREE.Vector3(0, 1, 0).applyQuaternion(flyerRotation).y).toBeGreaterThan(0.99);
+    renderer.dispose();
+  });
+
   it('expands and fades a spherical Plasma Mortar blast centered on an airborne impact', () => {
     const scene = new THREE.Scene();
     const renderer = createBlockoutRenderer(scene);

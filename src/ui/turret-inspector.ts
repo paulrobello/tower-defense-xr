@@ -47,7 +47,9 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
     transparent: true,
     opacity: 0.46,
     depthWrite: false,
+    depthTest: false,
   });
+  rangeMaterial.toneMapped = false;
   const rangeBoundary = new THREE.Group();
   rangeBoundary.name = 'turret-inspector-range-boundary';
   for (let axis = 0; axis < 3; axis += 1) {
@@ -57,7 +59,46 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
     if (axis === 2) line.rotation.y = Math.PI / 2;
     rangeBoundary.add(line);
   }
-  rangeRoot.add(rangeBoundary);
+  // Spokes leave a readable in-room cue even when the true boundary is beyond a wall.
+  // Their endpoints still use the actual range, so the guide never implies a shorter reach.
+  const spokePositions: number[] = [];
+  for (let axis = 0; axis < 3; axis += 1) {
+    for (let index = 0; index < 8; index += 1) {
+      const angle = (2 * Math.PI * index) / 8;
+      const x = Math.cos(angle);
+      const y = Math.sin(angle);
+      const start = 0.06;
+      const end = 1;
+      if (axis === 0) spokePositions.push(start * x, start * y, 0, end * x, end * y, 0);
+      if (axis === 1) spokePositions.push(start * x, 0, start * y, end * x, 0, end * y);
+      if (axis === 2) spokePositions.push(0, start * x, start * y, 0, end * x, end * y);
+    }
+  }
+  const spokeGeometry = new THREE.BufferGeometry();
+  spokeGeometry.setAttribute('position', new THREE.Float32BufferAttribute(spokePositions, 3));
+  const spokes = new THREE.LineSegments(spokeGeometry, rangeMaterial);
+  spokes.name = 'turret-inspector-range-spokes';
+  spokes.raycast = () => undefined;
+
+  const markerMaterial = new THREE.MeshBasicMaterial({
+    color: RANGE_COLOR,
+    transparent: true,
+    opacity: 0.95,
+    depthWrite: false,
+    depthTest: false,
+    toneMapped: false,
+  });
+  const markerGeometry = new THREE.TorusGeometry(0.115, 0.012, 8, 24);
+  const selectionMarker = new THREE.Group();
+  selectionMarker.name = 'turret-inspector-selected-marker';
+  for (let axis = 0; axis < 3; axis += 1) {
+    const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+    marker.raycast = () => undefined;
+    if (axis === 1) marker.rotation.x = Math.PI / 2;
+    if (axis === 2) marker.rotation.y = Math.PI / 2;
+    selectionMarker.add(marker);
+  }
+  rangeRoot.add(rangeBoundary, spokes, selectionMarker);
 
   let mode: 'desktop' | 'xr' = 'desktop';
   let selected: Readonly<SimTurret> | null = null;
@@ -147,6 +188,7 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
     const { position, stats: tier } = turret;
     rangeRoot.position.set(position.x, position.y, position.z);
     rangeBoundary.scale.setScalar(tier.rangeM);
+    spokes.scale.setScalar(tier.rangeM);
     const titleText = `${turret.name} · ${turret.tier}`;
     const rangeText = `Range ${tier.rangeM} m`;
     const damageText = `${tier.damage} damage · ${tier.fireRateHz}/s`;
@@ -184,7 +226,10 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
       stopKeepAbove();
       panel.dispose();
       rangeGeometry.dispose();
+      spokeGeometry.dispose();
       rangeMaterial.dispose();
+      markerGeometry.dispose();
+      markerMaterial.dispose();
       backing.geometry.dispose();
       backing.material.dispose();
       trim.geometry.dispose();

@@ -176,6 +176,9 @@ export const CORE_BASTION_SPEC = {
   textureSizePx: 2048,
 } as const;
 
+/** Radius of the visible Core shield in the room. */
+export const CORE_SHIELD_RADIUS_M = CORE_BASTION_SPEC.shieldDomeRadiusM * GAMEPLAY_OBJECT_SCALE;
+
 export const RIFT_PORTAL_SPEC = {
   apertureWidthM: 0.95,
   apertureHeightM: 1.35,

@@ -1571,7 +1571,17 @@ try {
         y: device.position.y - 0.23,
         z: device.position.z,
       };
-      for (const t of app.placement.placedTurrets) {
+      app.placement.cancelPlacement();
+      const distanceFromController = (turret) =>
+        Math.hypot(
+          turret.position.x - origin.x,
+          turret.position.y - origin.y,
+          turret.position.z - origin.z,
+        );
+      const farthestFirst = [...app.placement.placedTurrets].sort(
+        (first, second) => distanceFromController(second) - distanceFromController(first),
+      );
+      for (const t of farthestFirst) {
         const point = {
           x: t.position.x + t.normal.x * 0.054,
           y: t.position.y + t.normal.y * 0.054,
@@ -1579,13 +1589,39 @@ try {
         };
         controls.aimController('right', origin, point);
         await frames(3);
+        const ray = app.shell.xrOverlayRoot
+          .getObjectByName('rift-bastion-radial-rays')
+          ?.getObjectByName('placement-ray-right');
+        const beam = ray?.getObjectByName('placement-ray-beam');
+        const contact = ray?.getObjectByName('placement-ray-contact');
+        const targetDistance = distanceFromController(t);
+        const beamLength = beam?.scale.y ?? 0;
+        const laserReached = Boolean(
+          ray?.visible &&
+            contact?.visible &&
+            targetDistance > 1.5 &&
+            Math.abs(beamLength - targetDistance) < 0.35,
+        );
+        if (!laserReached) continue;
         await controls.pressButton('right', 'trigger', 2, 3);
         const selected = app.turretInspector.turret;
         if (!selected) continue;
         const range = app.turretInspector.rangeRoot;
         const boundary = range.getObjectByName('turret-inspector-range-boundary');
+        const marker = range.getObjectByName('turret-inspector-selected-marker');
+        const spokes = range.getObjectByName('turret-inspector-range-spokes');
         return {
+          selectedMarkerVisible: Boolean(marker?.visible && marker.children.length > 0),
+          rangeGuideVisible: Boolean(
+            spokes?.visible &&
+              spokes.scale.x === selected.stats.rangeM &&
+              !spokes.material.depthTest,
+          ),
           turretId: selected.id,
+          selectedAimedTurret: selected.id === t.id,
+          laserReached,
+          beamLength,
+          targetDistance,
           inspectorVisible: app.turretInspector.xrRoot.visible,
           rangeVisible: range.visible,
           renderedRange: boundary?.scale.x,
@@ -1619,6 +1655,10 @@ try {
       'xr-inspect-range-and-sell-placed-turret',
       Boolean(
         selection?.inspectorVisible &&
+          selection.selectedAimedTurret &&
+          selection.laserReached &&
+          selection.selectedMarkerVisible &&
+          selection.rangeGuideVisible &&
           selection.rangeVisible &&
           selection.centeredOnTurret &&
           selection.renderedRange === selection.expectedRange &&
@@ -1628,6 +1668,61 @@ try {
           sale.rangeHidden,
       ),
       { selection, sale },
+    );
+
+    const assault = await page.evaluate(async () => {
+      const app = window.__riftBastionApp;
+      const sim = app.sim;
+      const core = sim.getState().corePosition;
+      const attacker = app.debugSpawnEnemy('skitter-crawler', {
+        hp: 50000,
+        position: { x: core.x + 0.6, y: core.y, z: core.z },
+      });
+      const hitPositions = [];
+      for (let tick = 0; tick < 360; tick += 1) {
+        const result = sim.tick();
+        if (
+          result.events.some((event) => event.type === 'core-hit' && event.enemyId === attacker.id)
+        ) {
+          const current = sim.getEnemy(attacker.id);
+          if (current) hitPositions.push({ ...current.position });
+        }
+      }
+      const current = sim.getEnemy(attacker.id);
+      const stationary = hitPositions.every(
+        (position) =>
+          Math.hypot(
+            position.x - hitPositions[0].x,
+            position.y - hitPositions[0].y,
+            position.z - hitPositions[0].z,
+          ) < 1e-5,
+      );
+      await window.__xrEmu.frames(4);
+      return {
+        hitCount: hitPositions.length,
+        surviving: Boolean(current),
+        attackingCore: current?.attackingCore ?? false,
+        effectiveSpeed: current?.effectiveSpeedMps ?? null,
+        stationary,
+        shieldDistance: current
+          ? Math.hypot(
+              current.position.x - core.x,
+              current.position.y - core.y,
+              current.position.z - core.z,
+            )
+          : null,
+      };
+    });
+    record(
+      'xr-surviving-enemy-keeps-attacking-from-the-shield',
+      assault.hitCount >= 2 &&
+        assault.surviving &&
+        assault.attackingCore &&
+        assault.effectiveSpeed === 0 &&
+        assault.stationary &&
+        assault.shieldDistance >= 0.22 &&
+        assault.shieldDistance < 0.46,
+      assault,
     );
 
     // Clean XR session exit

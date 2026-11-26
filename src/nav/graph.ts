@@ -28,6 +28,7 @@
  */
 
 import type { MovementLayer, Vec3 } from '../content/turrets.ts';
+import { CORE_SHIELD_RADIUS_M } from '../content/waves.ts';
 
 export type { MovementLayer, Vec3 };
 
@@ -288,6 +289,44 @@ export function vec3(x: number, y: number, z: number): Vec3 {
 
 export function cloneVec3(v: Readonly<Vec3>): Vec3 {
   return { x: v.x, y: v.y, z: v.z };
+}
+
+function coreShieldApproachPoint(
+  from: Readonly<Vec3>,
+  core: Readonly<Vec3>,
+  airborne = false,
+): Vec3 {
+  const dx = from.x - core.x;
+  const dy = airborne ? Math.max(0, from.y - core.y) : 0;
+  const dz = from.z - core.z;
+  const length = Math.hypot(dx, dy, dz);
+  if (length <= EPSILON) return { x: core.x + CORE_SHIELD_RADIUS_M, y: core.y, z: core.z };
+  const scale = CORE_SHIELD_RADIUS_M / length;
+  return { x: core.x + dx * scale, y: core.y + dy * scale, z: core.z + dz * scale };
+}
+
+function finishCrawlerAtShield(
+  specs: RawWaypointSpec[],
+  core: Readonly<Vec3>,
+  firstFloorIndex: number,
+): void {
+  // Route the terminal approach in from the Core's support elevation. The floor path
+  // can approach under an elevated Core; trim any points already inside its footprint.
+  let from = specs[firstFloorIndex]?.position ?? core;
+  for (let index = specs.length - 2; index > firstFloorIndex; index -= 1) {
+    const position = specs[index]?.position;
+    if (!position || Math.hypot(position.x - core.x, position.z - core.z) <= CORE_SHIELD_RADIUS_M) {
+      continue;
+    }
+    from = position;
+    specs.length = index + 2;
+    break;
+  }
+  specs[specs.length - 1] = {
+    position: coreShieldApproachPoint(from, core),
+    normal: UP_NORMAL,
+    locomotionMode: 'floor',
+  };
 }
 
 export function addVec3(a: Readonly<Vec3>, b: Readonly<Vec3>): Vec3 {
@@ -1980,6 +2019,8 @@ function buildCrawlerSurfacePath(params: {
     }
   }
 
+  finishCrawlerAtShield(allSpecs, corePos, landingSpecIndex);
+
   return buildNavigationPathFromSpecs({
     id: `surface-${portal.id}`,
     portalId: portal.id,
@@ -2037,11 +2078,7 @@ function buildAerialCorridorPath(params: {
   } = params;
 
   const startPos = cloneVec3(portal.position);
-  const endPos: Vec3 = {
-    x: corePos.x,
-    y: Math.max(floorY + 0.45, corePos.y + 0.15),
-    z: corePos.z,
-  };
+  const endPos = coreShieldApproachPoint(startPos, corePos, true);
 
   const dx = endPos.x - startPos.x;
   const dz = endPos.z - startPos.z;
@@ -2171,11 +2208,7 @@ export function computeDisruptorDetourPath(
     floorY + (options.flightAltitudeM ?? DEFAULT_DISRUPTOR_FLIGHT_ALTITUDE_M),
   );
 
-  const endPos: Vec3 = {
-    x: targetCore.x,
-    y: Math.max(floorY + 0.45, targetCore.y + 0.15),
-    z: targetCore.z,
-  };
+  const endPos = coreShieldApproachPoint(fromPos, targetCore, true);
 
   const turrets = turretPositions.map(extractPlainVec3);
 
@@ -2321,6 +2354,7 @@ export function recoverStuckCrawler(
         normal: UP_NORMAL,
         locomotionMode: 'floor',
       }));
+      finishCrawlerAtShield(specs, corePosition, 0);
       const basePath = buildNavigationPathFromSpecs({
         id: 'recovered-crawler-path',
         portalId: 'recovery',
@@ -2375,6 +2409,7 @@ export function recoverStuckCrawler(
     });
   }
 
+  finishCrawlerAtShield(allSpecs, corePosition, landingSpecIndex);
   const basePath = buildNavigationPathFromSpecs({
     id: 'recovered-crawler-leap-path',
     portalId: 'recovery',

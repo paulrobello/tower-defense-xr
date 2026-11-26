@@ -543,12 +543,17 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         options.isBusy?.() ||
         menu?.root.visible
       ) {
+        const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(aimObject.quaternion);
+        const turretHit =
+          !hit && !panelModal
+            ? placement?.pickPlacedTurretHit(aimObject.position, direction)
+            : null;
         beams.push({
           source,
           origin: aimObject.position.clone(),
-          direction: new THREE.Vector3(0, 0, -1).applyQuaternion(aimObject.quaternion),
-          distance: hit?.distance ?? 0.85,
-          contact: Boolean(hit),
+          direction,
+          distance: hit?.distance ?? turretHit?.distance ?? 0.85,
+          contact: Boolean(hit || turretHit),
           valid: true,
         });
       }

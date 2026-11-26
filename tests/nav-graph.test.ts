@@ -178,12 +178,11 @@ describe('P2-T1 Hybrid 3D Room Navigation Graph (src/nav/graph.ts)', () => {
         expect(floorSeg.normal.y).toBeCloseTo(1, 4);
       }
 
-      // Terminates at the Core Bastion XZ position on the floor
+      // Terminates at the outer shield without crossing the floor-mounted Core.
       const endSample = samplePathAtDistance(path, path.totalLength);
       expect(endSample.reachedCore).toBe(true);
       expect(endSample.distanceToCore).toBe(0);
-      expect(endSample.position.x).toBeCloseTo(coreAnchor.position.x, 3);
-      expect(endSample.position.z).toBeCloseTo(coreAnchor.position.z, 3);
+      expect(distanceVec3(endSample.position, coreAnchor.position)).toBeCloseTo(0.234, 6);
     }
   });
 
@@ -368,7 +367,7 @@ describe('P2-T1 Hybrid 3D Room Navigation Graph (src/nav/graph.ts)', () => {
     const finalSample = samplePathAtDistance(detourPath, detourPath.totalLength);
     expect(finalSample.reachedCore).toBe(true);
     expect(finalSample.distanceToCore).toBe(0);
-    expect(distanceXZ2D(finalSample.position, corePos)).toBeLessThan(1e-4);
+    expect(distanceVec3(finalSample.position, corePos)).toBeCloseTo(0.234, 6);
   });
 
   it('recovers stuck crawlers via a 3D leap bridge when a furniture obstacle completely splits the floor', () => {
@@ -451,7 +450,7 @@ describe('P2-T1 Hybrid 3D Room Navigation Graph (src/nav/graph.ts)', () => {
       const endSample = samplePathAtDistance(recovered, recovered.totalLength);
       expect(endSample.reachedCore).toBe(true);
       expect(endSample.distanceToCore).toBe(0);
-      expect(distanceXZ2D(endSample.position, coreAnchor.position)).toBeLessThan(1e-4);
+      expect(distanceVec3(endSample.position, coreAnchor.position)).toBeCloseTo(0.234, 6);
     }
   });
 
