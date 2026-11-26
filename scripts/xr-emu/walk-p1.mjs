@@ -1385,6 +1385,46 @@ try {
       { ...occlusionOff, ...meshToggleEnd },
     );
 
+    const wallFlash = await page.evaluate(async () => {
+      const app = window.__riftBastionApp;
+      const surfaces = app.roomModel.surfaces;
+      const wall = surfaces.find((surface) => surface.kind === 'wall');
+      if (!wall) return null;
+      app.lighting.syncRoomSurfaces([{ ...wall, source: 'plane' }]);
+      try {
+        const point = wall.center.clone().addScaledVector(wall.normal, 0.35);
+        app.lighting.flashPoint(point, 0xff5722, 4.8, 3.6, 0.35);
+        const flash = app.lighting.group.children.find(
+          (node) => node.name.startsWith('aaa-mr-wall-flash-') && node.visible,
+        );
+        if (!flash) return null;
+        const peak = flash.material.uniforms.uOpacity.value;
+        await window.__xrEmu.frames(3);
+        app.lighting.update(0.03);
+        const stillVisible = flash.visible;
+        const faded = flash.material.uniforms.uOpacity.value < peak;
+        const followsWall =
+          flash.geometry.index.count > 0 &&
+          flash.geometry.getAttribute('position').count === wall.localPolygon.length;
+        const usesDepth = flash.material.depthTest && !flash.material.depthWrite;
+        app.lighting.update(0.5);
+        return { stillVisible, faded, followsWall, usesDepth, expired: !flash.visible };
+      } finally {
+        app.lighting.syncRoomSurfaces(surfaces);
+      }
+    });
+    record(
+      'xr-wall-flash-follows-scanned-surface',
+      Boolean(
+        wallFlash?.stillVisible &&
+          wallFlash.faded &&
+          wallFlash.followsWall &&
+          wallFlash.usesDepth &&
+          wallFlash.expired,
+      ),
+      wallFlash,
+    );
+
     const inputOwnership = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
       const controls = window.__p1Helpers;
@@ -1578,18 +1618,27 @@ try {
       const placementCancelled =
         wasPlacing && !app.placement.active && !app.placement.ghost.group.visible;
 
-      let idleBeamLength = 0;
-      for (const x of [-2.2, 2.2, -1.5]) {
-        controls.aimController('right', origin, { x, y: 1.9, z: -2.4 });
-        await frames(3);
-        const idleRay = app.shell.xrOverlayRoot
-          .getObjectByName('rift-bastion-radial-rays')
-          ?.getObjectByName('placement-ray-right');
-        if (!idleRay?.visible || idleRay.getObjectByName('placement-ray-contact')?.visible) {
-          continue;
+      const roomBeamWitnesses = [];
+      for (const hand of ['left', 'right']) {
+        for (const x of [-2.2, 2.2, -1.5]) {
+          const point = { x, y: 1.9, z: -2.4 };
+          controls.aimController(hand, origin, point);
+          await frames(3);
+          const ray = app.shell.xrOverlayRoot
+            .getObjectByName('rift-bastion-radial-rays')
+            ?.getObjectByName(`placement-ray-${hand}`);
+          const distance = app.placement.raycastRoomDistance(origin, {
+            x: point.x - origin.x,
+            y: point.y - origin.y,
+            z: point.z - origin.z,
+          });
+          const reach = ray?.getObjectByName('placement-ray-beam')?.scale.y;
+          const contact = ray?.getObjectByName('placement-ray-contact')?.visible;
+          if (ray?.visible && contact && distance !== null && Math.abs(reach - distance) < 0.025) {
+            roomBeamWitnesses.push({ hand, distance, reach });
+            break;
+          }
         }
-        idleBeamLength = idleRay.getObjectByName('placement-ray-beam')?.scale.y ?? 0;
-        break;
       }
       const distanceFromController = (turret) =>
         Math.hypot(
@@ -1637,7 +1686,7 @@ try {
               !spokes.material.depthTest,
           ),
           placementCancelled,
-          idleBeamLength,
+          roomBeamWitnesses,
           aimPoint: point,
           origin,
           turretId: selected.id,
@@ -1646,6 +1695,12 @@ try {
           beamLength,
           targetDistance,
           inspectorVisible: app.turretInspector.xrRoot.visible,
+          framedTelemetry: Boolean(
+            app.turretInspector.xrRoot.getObjectByName('turret-inspector-telemetry'),
+          ),
+          wireframeMarker: range
+            .getObjectByName('turret-inspector-selected-marker')
+            ?.children.every((marker) => marker.isLineLoop),
           rangeVisible: range.visible,
           renderedRange: boundary?.scale.x,
           expectedRange: selected.stats.rangeM,
@@ -1679,15 +1734,15 @@ try {
       };
     }, selection);
     record(
-      'xr-full-reach-and-y-cancels-placement-and-selection',
+      'xr-room-mesh-clips-both-beams-and-y-cancels-placement-and-selection',
       Boolean(
         selection?.placementCancelled &&
-          selection.idleBeamLength > 1.5 &&
+          selection.roomBeamWitnesses.length === 2 &&
           cancel?.selectionCancelled &&
           cancel.reselected,
       ),
       {
-        idleBeamLength: selection?.idleBeamLength,
+        roomBeamWitnesses: selection?.roomBeamWitnesses,
         placementCancelled: selection?.placementCancelled,
         cancel,
       },
@@ -1709,6 +1764,8 @@ try {
       'xr-inspect-range-and-sell-placed-turret',
       Boolean(
         selection?.inspectorVisible &&
+          selection.framedTelemetry &&
+          selection.wireframeMarker &&
           selection.selectedAimedTurret &&
           selection.laserReached &&
           selection.selectedMarkerVisible &&

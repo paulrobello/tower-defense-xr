@@ -61,6 +61,7 @@ import {
 } from '../content/turrets.ts';
 import { GAMEPLAY_OBJECT_SCALE } from '../content/waves.ts';
 import type { ActionBus, ActionSource } from '../core/action-bus.ts';
+import { createRoomMeshRaycast } from '../mr/mesh-raycast.ts';
 import type {
   AnchorColliderTarget,
   RoomSurface,
@@ -291,6 +292,8 @@ export interface TurretPlacementControllerOptions {
   readonly onPlacementRejected?: (reason: PlacementInvalidReason | null, position: Vec3) => void;
 }
 
+export const XR_CONTROLLER_RAY_REACH_M = 8;
+
 export interface TurretPlacementController {
   readonly active: boolean;
   readonly state: Readonly<PlacementControllerState>;
@@ -353,9 +356,11 @@ export interface TurretPlacementController {
   ): PlacedTurretRecord | null;
   removeTurret(turretId: string): boolean;
   getTurret(turretId: string): PlacedTurretRecord | undefined;
+  raycastRoomDistance(rayOrigin: Readonly<Vec3>, rayDirection: Readonly<Vec3>): number | null;
   pickPlacedTurretHit(
     rayOrigin: Readonly<Vec3>,
     rayDirection: Readonly<Vec3>,
+    roomDistance?: number | null,
   ): { record: PlacedTurretRecord; distance: number } | null;
   pickPlacedTurret(
     rayOrigin: Readonly<Vec3>,
@@ -1062,9 +1067,28 @@ export function createTurretPlacementController(
   const listeners = new Set<PlacementControllerListener>();
   const unsubscribers: Array<() => void> = [];
 
+  const raycastTrackedMesh = createRoomMeshRaycast(roomModel);
+
+  function raycastRoomDistance(
+    rayOrigin: Readonly<Vec3>,
+    rayDirection: Readonly<Vec3>,
+  ): number | null {
+    const raw = raycastTrackedMesh(rayOrigin, rayDirection, XR_CONTROLLER_RAY_REACH_M);
+    if (raw !== null) return raw;
+
+    const plane = raycastSurfaceInternal(
+      rayOrigin,
+      rayDirection,
+      false,
+      (surface) => surface.source !== 'mesh',
+    );
+    return plane && plane.distance <= XR_CONTROLLER_RAY_REACH_M ? plane.distance : null;
+  }
+
   function pickPlacedTurretHit(
     rayOrigin: Readonly<Vec3>,
     rayDirection: Readonly<Vec3>,
+    roomDistance?: number | null,
   ): { record: PlacedTurretRecord; distance: number } | null {
     const dirLen = Math.hypot(rayDirection.x, rayDirection.y, rayDirection.z);
     if (dirLen < 1e-8) return null;
@@ -1095,13 +1119,14 @@ export function createTurretPlacementController(
       const root = Math.sqrt(disc);
       const near = -b - root;
       const hitT = near >= 0 ? near : -b + root;
-      if (hitT < 0.05 || !Number.isFinite(hitT)) continue;
+      if (hitT < 0.05 || hitT > XR_CONTROLLER_RAY_REACH_M || !Number.isFinite(hitT)) continue;
       if (!best || hitT < best.distance) best = { record, distance: hitT };
     }
     if (!best) return null;
-    const surface = raycastSurfaceInternal(rayOrigin, rayDirection, false);
-    // Leave room for tracked plane drift immediately behind a flush-mounted turret.
-    return surface && surface.distance + 0.055 < best.distance ? null : best;
+    const wall =
+      roomDistance === undefined ? raycastRoomDistance(rayOrigin, rayDirection) : roomDistance;
+    // Leave room for tracking drift immediately behind a flush-mounted turret.
+    return wall !== null && wall + 0.055 < best.distance ? null : best;
   }
 
   ghost.setVisible(active);
@@ -1713,7 +1738,8 @@ export function createTurretPlacementController(
           normal: hoverPose.normal,
           rayOrigin,
           rayDistanceM: hoverDepthM,
-          blockingSurfaceDistanceM: solidHit?.distance,
+          blockingSurfaceDistanceM:
+            raycastRoomDistance(rayOrigin, rayDirection) ?? solidHit?.distance,
           depthM: hoverDepthM,
           forwardHint,
         };
@@ -1829,6 +1855,10 @@ export function createTurretPlacementController(
         );
         const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(quat).normalize();
 
+        const roomDistance = raycastRoomDistance(origin, direction);
+        const roomLimit = roomDistance ?? XR_CONTROLLER_RAY_REACH_M;
+        const turretHit = pickPlacedTurretHit(origin, direction, roomDistance);
+
         if (source === aimingSource) {
           // A/X or right-hand B re-snaps; left-hand Y is reserved for cancel.
           const resnapPressed =
@@ -1849,9 +1879,10 @@ export function createTurretPlacementController(
             activeValidation.mountProfile === 'hover-pod'
               ? hoverDepthM
               : (lastSurfaceHit?.distance ?? hoverDepthM);
-          const turretHit = pickPlacedTurretHit(origin, direction);
-          const effectiveRayDistance =
-            turretHit?.distance ?? Math.min(SURFACE_SNAP_MAX_RANGE_M, rayDistance);
+          const effectiveRayDistance = Math.min(
+            roomLimit,
+            turretHit?.distance ?? Math.min(SURFACE_SNAP_MAX_RANGE_M, rayDistance),
+          );
 
           rayTargets.push({
             source,
@@ -1860,25 +1891,18 @@ export function createTurretPlacementController(
             distance: Math.max(0.05, effectiveRayDistance),
             contact:
               turretHit !== null ||
+              (roomDistance !== null && roomDistance <= effectiveRayDistance) ||
               activeValidation.mountProfile === 'hover-pod' ||
               lastSurfaceHit !== null,
             valid: turretHit !== null || activeValidation.valid,
           });
         } else {
-          const hit = raycastSurfaceInternal(
-            { x: origin.x, y: origin.y, z: origin.z },
-            { x: direction.x, y: direction.y, z: direction.z },
-            true,
-          );
-          const turretHit = pickPlacedTurretHit(origin, direction);
-          const effectiveDistance =
-            turretHit?.distance ?? Math.min(SURFACE_SNAP_MAX_RANGE_M, hit?.distance ?? 1.5);
           rayTargets.push({
             source,
             origin,
             direction,
-            distance: effectiveDistance,
-            contact: hit !== null || turretHit !== null,
+            distance: Math.min(roomLimit, turretHit?.distance ?? roomLimit),
+            contact: roomDistance !== null || turretHit !== null,
             valid: true,
           });
         }
@@ -2212,6 +2236,7 @@ export function createTurretPlacementController(
     getTurret(turretId) {
       return placedTurretsMap.get(turretId);
     },
+    raycastRoomDistance,
     pickPlacedTurretHit,
     pickPlacedTurret(rayOrigin, rayDirection) {
       return pickPlacedTurretHit(rayOrigin, rayDirection)?.record ?? null;

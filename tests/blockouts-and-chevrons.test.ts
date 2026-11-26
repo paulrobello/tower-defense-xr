@@ -381,7 +381,7 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
       renderer.fxCounts.activeRailBeams;
     expect(totalActiveFx).toBeGreaterThan(0);
 
-    // Verify cryo-slowed enemy exhibits cyan frost ring and frost tint
+    // Cryo keeps its frost tint and status without a ground ring.
     const slowedSimEnemy = stepRes.state.enemies.find(
       (e) => e.slowFactor > 0 && e.slowRemainingSec > 0,
     );
@@ -389,7 +389,7 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
     if (slowedSimEnemy) {
       const slowedBlockout = renderer.enemies.get(slowedSimEnemy.id);
       expect(slowedBlockout?.isCryoSlowed).toBe(true);
-      expect(slowedBlockout?.frostRingMesh.visible).toBe(true);
+      expect(slowedBlockout?.group.getObjectByName('enemy-cryo-frost-ring')).toBeUndefined();
     }
 
     // Drive Apex Broodlord Boss below 50% HP via a live Rail Sniper hit to trigger Phase-2 molten armor-crack transition

@@ -56,7 +56,9 @@ import { type ActionEnvelope, createActionBus, type GameAction } from '../src/co
 import { createGameStateMachine } from '../src/core/state.ts';
 import { createDesktopControls } from '../src/desktop/controls.ts';
 import { createVirtualRoomModel } from '../src/mr/virtual-room.ts';
+import { createCombatSimulation } from '../src/sim/engine.ts';
 import { createTacticalHud } from '../src/ui/tactical-hud.ts';
+import { createTurretInspector } from '../src/ui/turret-inspector.ts';
 import { createCalibrationController, type HeadsetPose } from '../src/xr/calibration.ts';
 import { createTurretPlacementController } from '../src/xr/placement.ts';
 import {
@@ -1108,5 +1110,48 @@ describe('Desktop Controls (1:1 ActionBus Parity for Calibration, Placement, Whe
 
     desktop.dispose();
     placement.dispose();
+  });
+});
+
+describe('Turret inspector readouts', () => {
+  it('shows the current range and keeps Sell and Close available in desktop and XR', () => {
+    const simulation = createCombatSimulation();
+    const placed = simulation.placeTurret({
+      kind: 'autocannon',
+      position: { x: -1.4, y: 0, z: 0.5 },
+      mountProfile: 'surface-clamp',
+      surfaceKind: 'floor',
+    });
+    expect(placed.ok).toBe(true);
+    const turret = simulation.getState().turrets[0];
+    if (!turret) throw new Error('Expected a placed Autocannon');
+
+    const onSell = vi.fn();
+    const onClose = vi.fn();
+    const container = document.createElement('div');
+    const inspector = createTurretInspector({ container, onSell, onClose });
+    inspector.setTurret(turret);
+    expect(inspector.desktopElement.hidden).toBe(false);
+    const values = Array.from(
+      inspector.desktopElement.querySelectorAll('dd'),
+      (value) => value.textContent,
+    );
+    expect(values).toEqual(['2.16 m', String(turret.stats.damage), `${turret.stats.fireRateHz}/s`]);
+    inspector.desktopElement
+      .querySelector<HTMLButtonElement>('[data-turret-action="close"]')
+      ?.click();
+    expect(onClose).toHaveBeenCalledTimes(1);
+    inspector.setMode('xr');
+    expect(inspector.desktopElement.hidden).toBe(true);
+    expect(inspector.xrRoot.visible).toBe(true);
+    expect(inspector.xrRoot.getObjectByName('turret-inspector-telemetry')).toBeDefined();
+    const marker = inspector.rangeRoot.getObjectByName('turret-inspector-selected-marker');
+    expect(marker?.children.every((line) => line instanceof THREE.LineLoop)).toBe(true);
+    expect(inspector.panel.activate('sell')).toBe(true);
+    expect(onSell).toHaveBeenCalledWith(turret);
+    inspector.setTurret(null);
+    expect(inspector.xrRoot.visible).toBe(false);
+    expect(inspector.rangeRoot.visible).toBe(false);
+    inspector.dispose();
   });
 });

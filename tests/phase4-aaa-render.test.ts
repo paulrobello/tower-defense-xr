@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import * as THREE from 'three';
 import { describe, expect, it } from 'vitest';
 import { applyRoomPbrMaterials, createTestRoom } from '../src/desktop/bootstrap.ts';
+import { buildRoomSurfaceFromLocalPolygon, makeSurfaceBasisMatrix } from '../src/mr/room-scan.ts';
 import type {
   RuntimeAssetLibrary,
   RuntimeAssetManifest,
@@ -126,6 +127,54 @@ describe('Phase 4 AAA Runtime Pipeline (P4-T1, P4-T2, P4-T3)', () => {
 
     lighting.update(0.5);
     expect(transientLights.every((l) => l.intensity === 0)).toBe(true);
+    lighting.dispose();
+  });
+
+  it('lights the tracked wall polygon near a flash and fades quickly', () => {
+    const scene = new THREE.Scene();
+    const lighting = createLightingController(scene);
+    const wall = buildRoomSurfaceFromLocalPolygon({
+      id: 'scan-wall',
+      source: 'plane',
+      semanticLabel: 'wall',
+      revision: 1,
+      lastChangedTime: 1,
+      worldMatrix: makeSurfaceBasisMatrix(
+        new THREE.Vector3(0, 1.1, -2),
+        new THREE.Vector3(0, 0, 1),
+        new THREE.Vector3(1, 0, 0),
+      ),
+      localPolygon: [
+        { x: -1, z: -1 },
+        { x: 1, z: -1 },
+        { x: 1, z: 0 },
+        { x: 0, z: 0 },
+        { x: 0, z: 1 },
+        { x: -1, z: 1 },
+      ],
+    });
+    lighting.syncRoomSurfaces([wall]);
+    const flashes = lighting.group.children.filter(
+      (node): node is THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial> =>
+        node instanceof THREE.Mesh && node.name.startsWith('aaa-mr-wall-flash-'),
+    );
+    lighting.flashPoint({ x: 0, y: 1, z: 2 }, 0xff5722, 4.8, 3.6, 0.35);
+    expect(flashes.every((flash) => !flash.visible)).toBe(true);
+
+    lighting.flashPoint({ x: -0.4, y: 1, z: -1.6 }, 0xff5722, 4.8, 3.6, 0.35);
+    const active = flashes.find((flash) => flash.visible);
+    if (!active) throw new Error('Expected the nearby wall to receive a flash');
+    expect(active.geometry.getAttribute('position').count).toBe(wall.localPolygon.length);
+    expect(active.geometry.index?.count).toBe(12);
+    expect(active.material.depthTest).toBe(true);
+    expect(active.material.depthWrite).toBe(false);
+    expect(active.material.blending).toBe(THREE.AdditiveBlending);
+    const peak = Number(active.material.uniforms.uOpacity.value);
+    lighting.update(0.15);
+    expect(Number(active.material.uniforms.uOpacity.value)).toBeLessThan(peak);
+    expect(active.visible).toBe(true);
+    lighting.syncRoomSurfaces([]);
+    expect(active.visible).toBe(false);
     lighting.dispose();
   });
 

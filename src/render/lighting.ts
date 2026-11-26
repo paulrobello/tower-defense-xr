@@ -14,6 +14,7 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GAMEPLAY_OBJECT_SCALE, type Vec3 } from '../content/index.ts';
+import type { RoomSurface } from '../mr/room-scan.ts';
 
 export const MAX_TRANSIENT_POINT_LIGHTS = 2;
 
@@ -22,6 +23,64 @@ interface TransientLightSlot {
   elapsedSec: number;
   durationSec: number;
   peakIntensity: number;
+}
+
+interface WallFlashSlot {
+  readonly mesh: THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>;
+  elapsedSec: number;
+  durationSec: number;
+  peakOpacity: number;
+  wallId: string | null;
+}
+
+interface WallReceiver {
+  readonly surface: RoomSurface;
+  readonly geometry: THREE.BufferGeometry;
+  readonly worldToWall: THREE.Matrix4;
+}
+
+function createReceiverGeometry(surface: RoomSurface): THREE.BufferGeometry {
+  const outline = surface.localPolygon.map(({ x, z }) => new THREE.Vector2(x, z));
+  const triangles = THREE.ShapeUtils.triangulateShape(outline, []);
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute(
+    'position',
+    new THREE.Float32BufferAttribute(
+      surface.localPolygon.flatMap(({ x, z }) => [x, 0, z]),
+      3,
+    ),
+  );
+  geometry.setIndex(triangles.flat());
+  return geometry;
+}
+
+function closestPolygonPoint(
+  x: number,
+  z: number,
+  polygon: readonly { readonly x: number; readonly z: number }[],
+): { x: number; z: number; distanceSq: number } {
+  let best = { x, z, distanceSq: Number.POSITIVE_INFINITY };
+  for (let i = 0; i < polygon.length; i += 1) {
+    const a = polygon[i] as { x: number; z: number };
+    const b = polygon[(i + 1) % polygon.length] as { x: number; z: number };
+    const dx = b.x - a.x;
+    const dz = b.z - a.z;
+    const t = Math.max(
+      0,
+      Math.min(1, ((x - a.x) * dx + (z - a.z) * dz) / (dx * dx + dz * dz || 1)),
+    );
+    const px = a.x + dx * t;
+    const pz = a.z + dz * t;
+    const distanceSq = (x - px) ** 2 + (z - pz) ** 2;
+    if (distanceSq < best.distanceSq) best = { x: px, z: pz, distanceSq };
+  }
+  let inside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const a = polygon[i] as { x: number; z: number };
+    const b = polygon[j] as { x: number; z: number };
+    if (a.z > z !== b.z > z && x < ((b.x - a.x) * (z - a.z)) / (b.z - a.z) + a.x) inside = !inside;
+  }
+  return inside ? { x, z, distanceSq: 0 } : best;
 }
 
 export interface LightingController {
@@ -38,6 +97,7 @@ export interface LightingController {
     distanceM?: number,
     durationSec?: number,
   ): void;
+  syncRoomSurfaces(surfaces: readonly RoomSurface[]): void;
   update(dt: number): void;
   dispose(): void;
 }
@@ -97,6 +157,55 @@ export function createLightingController(
     });
   }
 
+  const emptyWallGeometry = new THREE.BufferGeometry();
+  const wallFlashes: WallFlashSlot[] = [];
+  for (let i = 0; i < MAX_TRANSIENT_POINT_LIGHTS; i += 1) {
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        uColor: { value: new THREE.Color(0x55dfff) },
+        uOpacity: { value: 0 },
+        uSource: { value: new THREE.Vector3() },
+        uRadius: { value: 1 },
+      },
+      vertexShader: `
+        varying vec3 vWall;
+        void main() {
+          vWall = position;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 uColor;
+        uniform float uOpacity;
+        uniform vec3 uSource;
+        uniform float uRadius;
+        varying vec3 vWall;
+        void main() {
+          vec3 delta = uSource - vWall;
+          float metres = length(delta);
+          float edge = 1.0 - smoothstep(0.0, uRadius, metres);
+          float incidence = abs(delta.y) / max(metres, 0.06);
+          float intensity = uOpacity * edge * edge * mix(0.6, 1.0, incidence);
+          gl_FragColor = vec4(uColor, intensity);
+        }
+      `,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      depthTest: true,
+      side: THREE.DoubleSide,
+      toneMapped: false,
+    });
+    material.forceSinglePass = true;
+    const mesh = new THREE.Mesh(emptyWallGeometry, material);
+    mesh.name = `aaa-mr-wall-flash-${i}`;
+    mesh.visible = false;
+    mesh.renderOrder = 2;
+    mesh.raycast = () => undefined;
+    group.add(mesh);
+    wallFlashes.push({ mesh, elapsedSec: 1, durationSec: 1, peakOpacity: 0, wallId: null });
+  }
+
   scene.add(group);
 
   let envRenderTarget: THREE.WebGLRenderTarget | null = null;
@@ -115,7 +224,30 @@ export function createLightingController(
   }
 
   let nextSlot = 0;
+  let nextWallFlashSlot = 0;
   let disposed = false;
+  const walls = new Map<string, WallReceiver>();
+  const wallWorldPoint = new THREE.Vector3();
+  const wallLocalPoint = new THREE.Vector3();
+
+  function attachFlash(slot: WallFlashSlot, wall: WallReceiver): void {
+    slot.mesh.geometry = wall.geometry;
+    slot.mesh.position
+      .setFromMatrixPosition(wall.surface.worldMatrix)
+      .addScaledVector(
+        wall.surface.normal,
+        0.004 * (slot.mesh.material.uniforms.uSource.value.y < 0 ? -1 : 1),
+      );
+    slot.mesh.quaternion.setFromRotationMatrix(wall.surface.worldMatrix);
+  }
+
+  function hideFlash(slot: WallFlashSlot): void {
+    slot.wallId = null;
+    slot.mesh.visible = false;
+    slot.mesh.geometry = emptyWallGeometry;
+    slot.mesh.material.uniforms.uOpacity.value = 0;
+    slot.elapsedSec = slot.durationSec;
+  }
 
   return {
     group,
@@ -160,6 +292,67 @@ export function createLightingController(
       slot.peakIntensity = peakIntensity;
       slot.elapsedSec = 0;
       slot.durationSec = Math.max(0.05, durationSec);
+
+      const radius = Math.min(1.7, Math.max(0.55, distanceM * 0.48));
+      wallWorldPoint.set(position.x, position.y, position.z);
+      let wall: WallReceiver | undefined;
+      let nearestDistanceSq = radius * radius;
+      for (const candidate of walls.values()) {
+        wallLocalPoint.copy(wallWorldPoint).applyMatrix4(candidate.worldToWall);
+        const nearest = closestPolygonPoint(
+          wallLocalPoint.x,
+          wallLocalPoint.z,
+          candidate.surface.localPolygon,
+        );
+        const distanceSq = wallLocalPoint.y ** 2 + nearest.distanceSq;
+        if (distanceSq < nearestDistanceSq) {
+          nearestDistanceSq = distanceSq;
+          wall = candidate;
+        }
+      }
+      if (!wall) return;
+      const wallSlot =
+        wallFlashes.find((candidate) => !candidate.mesh.visible) ??
+        (wallFlashes[nextWallFlashSlot++ % wallFlashes.length] as WallFlashSlot);
+      const uniforms = wallSlot.mesh.material.uniforms;
+      uniforms.uSource.value.copy(wallWorldPoint).applyMatrix4(wall.worldToWall);
+      uniforms.uColor.value.setHex(colorHex);
+      uniforms.uRadius.value = radius;
+      wallSlot.peakOpacity = Math.min(0.22, peakIntensity * 0.042);
+      uniforms.uOpacity.value = wallSlot.peakOpacity;
+      wallSlot.wallId = wall.surface.id;
+      wallSlot.elapsedSec = 0;
+      wallSlot.durationSec = Math.max(0.08, durationSec);
+      attachFlash(wallSlot, wall);
+      wallSlot.mesh.visible = true;
+    },
+    syncRoomSurfaces(surfaces) {
+      const seenWalls = new Set<string>();
+      for (const surface of surfaces) {
+        if (
+          surface.kind !== 'wall' ||
+          surface.source === 'virtual' ||
+          surface.localPolygon.length < 3
+        )
+          continue;
+        seenWalls.add(surface.id);
+        const current = walls.get(surface.id);
+        if (current?.surface === surface) continue;
+        current?.geometry.dispose();
+        const wall = {
+          surface,
+          geometry: createReceiverGeometry(surface),
+          worldToWall: surface.worldMatrix.clone().invert(),
+        };
+        walls.set(surface.id, wall);
+        for (const slot of wallFlashes) if (slot.wallId === surface.id) attachFlash(slot, wall);
+      }
+      for (const [id, wall] of walls) {
+        if (seenWalls.has(id)) continue;
+        for (const slot of wallFlashes) if (slot.wallId === id) hideFlash(slot);
+        wall.geometry.dispose();
+        walls.delete(id);
+      }
     },
     update(dt) {
       if (disposed || dt <= 0) return;
@@ -173,6 +366,14 @@ export function createLightingController(
           slot.light.intensity = 0;
         }
       }
+      for (const slot of wallFlashes) {
+        if (!slot.mesh.visible) continue;
+        slot.elapsedSec += dt;
+        if (slot.elapsedSec >= slot.durationSec) hideFlash(slot);
+        else
+          slot.mesh.material.uniforms.uOpacity.value =
+            slot.peakOpacity * (1 - slot.elapsedSec / slot.durationSec) ** 2;
+      }
     },
     dispose() {
       if (disposed) return;
@@ -184,6 +385,10 @@ export function createLightingController(
         envRenderTarget.dispose();
         envRenderTarget = null;
       }
+      emptyWallGeometry.dispose();
+      for (const wall of walls.values()) wall.geometry.dispose();
+      walls.clear();
+      for (const slot of wallFlashes) slot.mesh.material.dispose();
       group.clear();
       group.removeFromParent();
     },

@@ -1,34 +1,11 @@
-import { Box3, Ray, Triangle, Vector3 } from 'three';
-import { Octree } from 'three/addons/math/Octree.js';
+import { Box3, Ray, type Triangle, Vector3 } from 'three';
+import { getRoomMeshTree } from './mesh-raycast.ts';
 import type { RoomSurface } from './room-scan.ts';
 
 const FLAT_DEPTH_TOLERANCE_M = 0.035;
 const HOST_PLANE_TOLERANCE_M = 0.065;
 const PROTRUSION_CHECK_M = 0.24;
 const REQUIRED_NORMAL_DOT = 0.92;
-
-const localTrees = new WeakMap<
-  Float32Array,
-  { indices: Uint32Array; revision: number; tree: Octree }
->();
-
-function meshTree(vertices: Float32Array, indices: Uint32Array, revision: number): Octree {
-  const cached = localTrees.get(vertices);
-  if (cached?.indices === indices && cached.revision === revision) return cached.tree;
-  const points = Array.from({ length: Math.floor(vertices.length / 3) }, (_, i) =>
-    new Vector3().fromArray(vertices, i * 3),
-  );
-  const tree = new Octree();
-  for (let i = 0; i + 2 < indices.length; i += 3) {
-    const a = points[indices[i] as number];
-    const b = points[indices[i + 1] as number];
-    const c = points[indices[i + 2] as number];
-    if (a && b && c) tree.addTriangle(new Triangle(a, b, c));
-  }
-  if (tree.triangles.length > 0) tree.build();
-  localTrees.set(vertices, { indices, revision, tree });
-  return tree;
-}
 
 /** Checks the room-facing geometry in front of the fitted wall or ceiling plane. */
 export function createPortalSupportProbe(surfaces: readonly RoomSurface[]) {
@@ -43,7 +20,7 @@ export function createPortalSupportProbe(surfaces: readonly RoomSurface[]) {
         bounds: surface.bounds,
         broadMesh: surface.kind === 'other' && broadFace,
         worldToMesh: meshWorldMatrix.clone().invert(),
-        tree: meshTree(meshVertices, meshIndices, surface.lastChangedTime),
+        tree: getRoomMeshTree(meshVertices, meshIndices, surface.lastChangedTime),
       },
     ];
   });

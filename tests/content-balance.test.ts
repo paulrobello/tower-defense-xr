@@ -5,6 +5,7 @@ import {
   assertValidContentTables,
   COMBAT_MUSIC_CUE_IDS,
   CORE_MAX_HP,
+  CORE_SHIELD_RADIUS_M,
   computeEarlyLaunchBonus,
   computeEffectiveDamageMultiplier,
   computeEffectiveSlowFactor,
@@ -324,6 +325,13 @@ describe('P2-T2 Content Data Tables & 12-Wave Mission Script', () => {
   });
 
   describe('Waves, Quest 3 Caps, Suno Music Mapping, Pacing & Economy Balance', () => {
+    it('uses the reduced Autocannon range at all three tiers', () => {
+      const ranges = (['T1', 'T2', 'T3'] as const).map(
+        (tier) => getTurretTierStats('autocannon', tier).rangeM,
+      );
+      expect(ranges).toEqual([2.16, 2.43, 2.7]);
+    });
+
     it('enforces <=4 concurrent portals, <=25 concurrent enemies, 15s intermissions, and exact Suno music cues', () => {
       expect(WAVES).toHaveLength(12);
       expect(TOTAL_WAVES).toBe(12);
@@ -491,7 +499,9 @@ describe('P2-T2 Content Data Tables & 12-Wave Mission Script', () => {
                   ? Math.min(group.count, stats.chainCount) * 0.8
                   : 1.0;
 
-            const rangeEngagementRatio = Math.min(1.0, stats.rangeM / 3.0);
+            // The modeled three-meter approach ends at the shield face.
+            const approachLengthM = 3.0 - CORE_SHIELD_RADIUS_M;
+            const rangeEngagementRatio = Math.min(1.0, stats.rangeM / approachLengthM);
             squadDpsAgainstGroup +=
               stats.nominalSingleTargetDps *
               dmgMult *

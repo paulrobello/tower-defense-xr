@@ -155,7 +155,6 @@ export interface EnemyBlockout {
   readonly primaryMaterial: THREE.MeshStandardMaterial;
   readonly accentMaterial: THREE.MeshStandardMaterial;
   readonly crackMaterial: THREE.MeshBasicMaterial | null;
-  readonly frostRingMesh: THREE.Mesh;
   isCryoSlowed: boolean;
   isBossPhase2: boolean;
   slowFactor: number;
@@ -1623,31 +1622,7 @@ export function createBlockoutRenderer(
       bodyGroup.add(crackSeams);
     }
 
-    // Cryo-slow frost ring indicator at enemy base
-    const frostMat = trackMat(
-      new THREE.MeshBasicMaterial({
-        color: CRYO_FROST_COLOR,
-        transparent: true,
-        opacity: 0.8,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-        polygonOffset: true,
-        polygonOffsetFactor: -2,
-        polygonOffsetUnits: -2,
-      }),
-      'world-object',
-      entityMats,
-      entityBindings,
-    );
     registerEntityCleanup(`enemy:${simEnemy.id}`, [], entityMats, entityBindings);
-    const frostRingMesh = new THREE.Mesh(sharedRingGeo, frostMat);
-    frostRingMesh.name = 'enemy-cryo-frost-ring';
-    frostRingMesh.rotation.x = -Math.PI / 2;
-    frostRingMesh.scale.setScalar(Math.max(b.widthM, b.lengthM) * 0.55);
-    frostRingMesh.position.y = 0.015;
-    frostRingMesh.visible = false;
-    group.add(frostRingMesh);
-
     enemiesGroup.add(group);
 
     return {
@@ -1659,7 +1634,6 @@ export function createBlockoutRenderer(
       primaryMaterial,
       accentMaterial,
       crackMaterial,
-      frostRingMesh,
       isCryoSlowed: simEnemy.slowFactor > 0,
       isBossPhase2: simEnemy.isBossPhase2,
       slowFactor: simEnemy.slowFactor,
@@ -2509,7 +2483,6 @@ export function createBlockoutRenderer(
         const isSlowed = simEnemy.slowFactor > 0 && simEnemy.slowRemainingSec > 0;
         enemyBlockout.isCryoSlowed = isSlowed;
         enemyBlockout.slowFactor = simEnemy.slowFactor;
-        enemyBlockout.frostRingMesh.visible = isSlowed;
         if (isSlowed) {
           enemyBlockout.primaryMaterial.color
             .set(def.primaryColorHex)

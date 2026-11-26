@@ -341,6 +341,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
   };
 
   const syncRoomGeometryToMr = (surfaces: readonly RoomSurface[]): void => {
+    lighting.syncRoomSurfaces(surfaces);
     const occlusionSurfaces = toOcclusionSurfaces(surfaces);
     syncRoomOccluders(occlusionSurfaces);
     shadowCatchers.sync(occlusionSurfaces);

@@ -62,7 +62,11 @@ import type { ActionBus } from '../core/action-bus.ts';
 import type { GamePhase } from '../core/state.ts';
 import { configureFonts } from '../ui/fonts.ts';
 import { createTacticalAtlas, type TacticalAtlasResource } from '../ui/tactical-atlas.ts';
-import type { PlacedTurretRecord, TurretPlacementController } from './placement.ts';
+import {
+  type PlacedTurretRecord,
+  type TurretPlacementController,
+  XR_CONTROLLER_RAY_REACH_M,
+} from './placement.ts';
 import { BASTION_RADIAL_THEME, skinRadialMenu } from './radial-skin.ts';
 
 /** Required continuous hold time for the both-thumbstick-click recovery gesture (seconds). */
@@ -494,6 +498,9 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       aimObject.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
       const hit = pointer.castFrom(aimObject, widgets);
       if (!hit) return;
+      const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(aimObject.quaternion);
+      const wall = placement?.raycastRoomDistance(aimObject.position, direction);
+      if (wall != null && hit.distance > wall) return;
       widgetGrab = { source, root: hit.root };
       widgetFromGrip.copy(gripMatrix).invert().multiply(hit.root.matrixWorld);
     }
@@ -532,7 +539,11 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       const { position, orientation } = pose.transform;
       aimObject.position.set(position.x, position.y, position.z);
       aimObject.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
-      const hit = roots.length ? pointer.castFrom(aimObject, roots) : null;
+      const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(aimObject.quaternion);
+      const roomDistance = placement?.raycastRoomDistance(aimObject.position, direction) ?? null;
+      const roomLimit = roomDistance ?? XR_CONTROLLER_RAY_REACH_M;
+      const panelHit = roots.length ? pointer.castFrom(aimObject, roots) : null;
+      const hit = panelHit && panelHit.distance <= roomLimit ? panelHit : null;
       if (hit) panelRayHits.add(source);
       const panel = hit && targets.find((target) => target.root === hit.root);
       const cell = hit && panel?.cellAt(hit.object);
@@ -545,18 +556,16 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         options.isBusy?.() ||
         menu?.root.visible
       ) {
-        const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(aimObject.quaternion);
         const turretHit =
           !hit && !panelModal
-            ? placement?.pickPlacedTurretHit(aimObject.position, direction)
+            ? placement?.pickPlacedTurretHit(aimObject.position, direction, roomDistance)
             : null;
-        // A near miss still casts across the room, so players can use the beam to aim.
         beams.push({
           source,
           origin: aimObject.position.clone(),
           direction,
-          distance: hit?.distance ?? turretHit?.distance ?? 8,
-          contact: Boolean(hit || turretHit),
+          distance: Math.min(roomLimit, hit?.distance ?? turretHit?.distance ?? roomLimit),
+          contact: Boolean(hit || turretHit || roomDistance !== null),
           valid: true,
         });
       }
@@ -1006,7 +1015,14 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
             );
             aimObject.updateMatrixWorld(true);
 
-            const hit = pointer.castFrom(aimObject, [menu.root]);
+            const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(aimObject.quaternion);
+            const roomDistance =
+              placement?.raycastRoomDistance(aimObject.position, direction) ?? null;
+            const menuHit = pointer.castFrom(aimObject, [menu.root]);
+            const hit =
+              menuHit && menuHit.distance <= (roomDistance ?? XR_CONTROLLER_RAY_REACH_M)
+                ? menuHit
+                : null;
             const hitAction = hit ? menu.actionAt(hit.object) : null;
             if (hitAction) {
               rayActions.set(source, hitAction);
@@ -1018,9 +1034,9 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
             beams.push({
               source,
               origin: aimObject.position.clone(),
-              direction: new THREE.Vector3(0, 0, -1).applyQuaternion(aimObject.quaternion),
-              distance: hit?.distance ?? 0.85,
-              contact: hitAction !== null,
+              direction,
+              distance: hit?.distance ?? roomDistance ?? 0.85,
+              contact: hitAction !== null || roomDistance !== null,
               valid: !isDisabledHit,
             });
           }

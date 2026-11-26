@@ -1,4 +1,5 @@
 import {
+  CachedTextBatch,
   createMenuPanel,
   keepAbove,
   type MenuPanel,
@@ -7,6 +8,8 @@ import {
 import * as THREE from 'three';
 import { TURRET_SELL_REFUND_RATIO } from '../content/turrets.ts';
 import type { SimTurret } from '../sim/engine.ts';
+import { configureFonts } from './fonts.ts';
+import { createBatchedTextMember, createChamferPlate, TACTICAL_PLATE } from './tactical-style.ts';
 
 interface TurretInspectorOptions {
   readonly container: HTMLElement;
@@ -80,22 +83,15 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
   spokes.name = 'turret-inspector-range-spokes';
   spokes.raycast = () => undefined;
 
-  const markerMaterial = new THREE.MeshBasicMaterial({
-    color: RANGE_COLOR,
-    transparent: true,
-    opacity: 0.95,
-    depthWrite: false,
-    depthTest: false,
-    toneMapped: false,
-  });
-  const markerGeometry = new THREE.TorusGeometry(0.115, 0.012, 8, 24);
+  const markerMaterial = rangeMaterial.clone();
+  markerMaterial.opacity = 0.88;
   const selectionMarker = new THREE.Group();
   selectionMarker.name = 'turret-inspector-selected-marker';
-  for (let axis = 0; axis < 3; axis += 1) {
-    const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+  selectionMarker.scale.setScalar(0.115);
+  for (const ring of rangeBoundary.children) {
+    const marker = new THREE.LineLoop(rangeGeometry, markerMaterial);
+    marker.quaternion.copy(ring.quaternion);
     marker.raycast = () => undefined;
-    if (axis === 1) marker.rotation.x = Math.PI / 2;
-    if (axis === 2) marker.rotation.y = Math.PI / 2;
     selectionMarker.add(marker);
   }
   rangeRoot.add(rangeBoundary, spokes, selectionMarker);
@@ -107,39 +103,125 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
     if (selected) options.onSell(selected);
   };
   const width = 0.56;
+  const telemetryHeight = 0.143;
   const panel = createMenuPanel({
     name: 'turret-inspector',
     width,
     rowHeight: 0.057,
-    rowGap: 0.008,
-    hoverColor: RANGE_COLOR,
+    cellGap: 0.014,
+    hoverColor: 0x86f9ff,
     rows: [
-      { id: 'turret-name', label: '', backplate: false },
-      { id: 'range', label: '', backplate: false },
-      { id: 'damage-rate', label: '', backplate: false },
       [
         { id: 'sell', label: 'Sell', onSelect: activateSell },
         { id: 'close', label: 'Close', onSelect: options.onClose },
       ],
     ],
   });
-  const backing = new THREE.Mesh(
-    new THREE.PlaneGeometry(width + 0.05, panel.height + 0.05),
-    new THREE.MeshBasicMaterial({
-      color: 0x071823,
-      transparent: true,
-      opacity: 0.96,
-      depthWrite: false,
-    }),
+  panel.root.position.set(0, -telemetryHeight, 0.002);
+
+  const plateWidth = width + 0.05;
+  const bodyHeight = telemetryHeight + panel.height;
+  const frameHeight = bodyHeight + 0.034;
+  const plates: THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>[] = [];
+  function plate(
+    geometry: THREE.BufferGeometry,
+    color: number,
+    x: number,
+    y: number,
+    z: number,
+    opacity = 1,
+  ): THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial> {
+    const mesh = new THREE.Mesh(
+      geometry,
+      new THREE.MeshBasicMaterial({ color, transparent: true, opacity, depthWrite: false }),
+    );
+    mesh.position.set(x, y, z);
+    mesh.raycast = () => undefined;
+    plates.push(mesh);
+    return mesh;
+  }
+
+  const centerY = -bodyHeight / 2;
+  plate(
+    createChamferPlate(plateWidth, frameHeight, 0.018),
+    TACTICAL_PLATE.frame,
+    0,
+    centerY,
+    -0.007,
+    0.98,
   );
-  backing.position.set(0, -panel.height / 2, -0.004);
-  const trim = new THREE.Mesh(
-    new THREE.PlaneGeometry(width + 0.05, 0.004),
-    new THREE.MeshBasicMaterial({ color: RANGE_COLOR, transparent: true, depthWrite: false }),
+  const backing = plate(
+    createChamferPlate(plateWidth - 0.006, frameHeight - 0.006, 0.016),
+    TACTICAL_PLATE.backing,
+    0,
+    centerY,
+    -0.004,
+    0.96,
   );
-  trim.position.set(0, 0.024, -0.002);
-  trim.raycast = () => undefined;
-  xrRoot.add(backing, trim, panel.root);
+  backing.name = 'turret-inspector-backing';
+  backing.raycast = THREE.Mesh.prototype.raycast;
+  backing.userData.inputAction = 'grabWidget';
+  plate(
+    new THREE.PlaneGeometry(width * 0.36, 0.004),
+    TACTICAL_PLATE.trim,
+    -width * 0.28,
+    0.013,
+    -0.002,
+  );
+  plate(createChamferPlate(width, 0.078, 0.01), TACTICAL_PLATE.inset, 0, -0.094, -0.002);
+  plate(
+    createChamferPlate(0.085, 0.035, 0.006),
+    TACTICAL_PLATE.inset,
+    width / 2 - 0.043,
+    -0.023,
+    -0.002,
+  );
+  for (const x of [-width / 6, width / 6]) {
+    plate(new THREE.PlaneGeometry(0.0014, 0.054), TACTICAL_PLATE.frame, x, -0.094, -0.001);
+  }
+
+  const statLabels = ['Range', 'Damage', 'Fire rate'];
+  const fontUrl = configureFonts().main;
+  const textBatch = new CachedTextBatch();
+  textBatch.name = 'turret-inspector-telemetry';
+  textBatch.frustumCulled = false;
+  textBatch.raycast = () => undefined;
+  const nameText = createBatchedTextMember(
+    '',
+    fontUrl,
+    0.039,
+    '#e9f8ff',
+    -width / 2,
+    -0.023,
+    'left',
+  );
+  const tierText = createBatchedTextMember(
+    '',
+    fontUrl,
+    0.021,
+    '#8fd8ff',
+    width / 2 - 0.043,
+    -0.023,
+    'center',
+  );
+  const stats = statLabels.map((label, index) => {
+    const x = ((index - 1) * width) / 3;
+    const caption = createBatchedTextMember(
+      label.toUpperCase(),
+      fontUrl,
+      0.018,
+      '#b6dce6',
+      x,
+      -0.076,
+      'center',
+    );
+    const value = createBatchedTextMember('', fontUrl, 0.035, '#e9f8ff', x, -0.107, 'center');
+    return { caption, value };
+  });
+  const members = [nameText, tierText, ...stats.flatMap(({ caption, value }) => [caption, value])];
+  for (const member of members) textBatch.addText(member);
+  textBatch.revision += 1;
+  xrRoot.add(...plates, textBatch, panel.root);
   const stopKeepAbove = keepAbove(xrRoot, options.renderOrder ?? OVERLAY_RENDER_ORDER);
 
   const doc = options.container.ownerDocument;
@@ -147,28 +229,54 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
   desktopElement.dataset.turretInspector = 'true';
   desktopElement.setAttribute('aria-label', 'Selected turret');
   desktopElement.style.cssText =
-    'position:absolute;right:16px;top:72px;z-index:7001;padding:12px 16px;' +
-    'background:#0b2531;border-top:2px solid #35d6e8;color:#e6fbff;' +
-    'font:600 13px/1.5 "SF Mono",Consolas,monospace;min-width:220px;';
+    'position:absolute;right:16px;top:72px;z-index:7001;padding:14px 15px;' +
+    'box-sizing:border-box;width:min(294px,calc(100% - 32px));' +
+    'clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);' +
+    'background:linear-gradient(115deg,#102e3b,#081822 58%,#12323b);' +
+    'border-top:2px solid #53e4f2;border-bottom:1px solid #438592;color:#e9f8ff;' +
+    'font:600 12px/1.4 "SF Mono",Consolas,monospace;font-variant-numeric:tabular-nums;';
+  const heading = doc.createElement('header');
+  heading.style.cssText = 'display:flex;align-items:center;justify-content:space-between;gap:10px;';
   const title = doc.createElement('strong');
-  title.style.color = '#72e5ec';
-  const stats = doc.createElement('div');
-  stats.style.margin = '5px 0 12px';
+  title.style.cssText = 'font-size:16px;line-height:1.15;';
+  const tierBadge = doc.createElement('span');
+  tierBadge.style.cssText = 'padding:3px 7px;background:#153644;color:#8fd8ff;';
+  heading.append(title, tierBadge);
+  const metricStrip = doc.createElement('dl');
+  metricStrip.style.cssText =
+    'display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:12px 0;' +
+    'border:1px solid #346979;background:#143342;';
+  const desktopValues = statLabels.map((label, index) => {
+    const metric = doc.createElement('div');
+    metric.style.cssText = 'text-align:center;padding:7px 2px;';
+    if (index > 0) metric.style.borderLeft = '1px solid #346979';
+    const caption = doc.createElement('dt');
+    caption.textContent = label.toUpperCase();
+    caption.style.cssText = 'font-size:9px;letter-spacing:.05em;color:#b6dce6;';
+    const value = doc.createElement('dd');
+    value.style.cssText = 'font-size:15px;line-height:1.3;margin:0;';
+    metric.append(caption, value);
+    metricStrip.append(metric);
+    return value;
+  });
+  const actions = doc.createElement('div');
+  actions.style.cssText = 'display:flex;gap:7px;';
   const sell = doc.createElement('button');
   sell.type = 'button';
   sell.dataset.turretAction = 'sell';
-  sell.style.cssText =
-    'background:#542e1a;color:#ffe0a1;border:1px solid #bd8e47;padding:5px 9px;cursor:pointer;';
+  const actionStyle =
+    'flex:1;min-height:30px;border-radius:1px 7px 1px 7px;padding:5px 9px;cursor:pointer;' +
+    'font:600 12px/1.2 system-ui,-apple-system,sans-serif;letter-spacing:.04em;';
+  sell.style.cssText = `${actionStyle}background:#463525;color:#ffd166;border:1px solid #bd8e47;`;
   sell.addEventListener('click', activateSell);
   const close = doc.createElement('button');
   close.type = 'button';
   close.dataset.turretAction = 'close';
   close.textContent = 'Close';
-  close.style.cssText =
-    'margin-left:8px;background:#103641;color:#e6fbff;border:1px solid #438592;' +
-    'padding:5px 9px;cursor:pointer;';
+  close.style.cssText = `${actionStyle}background:#102934;color:#eef8fc;border:1px solid #346979;`;
   close.addEventListener('click', options.onClose);
-  desktopElement.append(title, stats, sell, close);
+  actions.append(sell, close);
+  desktopElement.append(heading, metricStrip, actions);
   options.container.append(desktopElement);
 
   const syncVisibility = (): void => {
@@ -189,19 +297,25 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
     rangeRoot.position.set(position.x, position.y, position.z);
     rangeBoundary.scale.setScalar(tier.rangeM);
     spokes.scale.setScalar(tier.rangeM);
-    const titleText = `${turret.name} · ${turret.tier}`;
-    const rangeText = `Range ${tier.rangeM} m`;
-    const damageText = `${tier.damage} damage · ${tier.fireRateHz}/s`;
+    const values = [`${tier.rangeM} m`, String(tier.damage), `${tier.fireRateHz}/s`];
     const sellText = `Sell +${Math.round(turret.investedCredits * TURRET_SELL_REFUND_RATIO)} CR`;
-    const nextReadout = `${titleText} ${rangeText} ${damageText} ${sellText}`;
+    const nextReadout = `${turret.name} ${turret.tier} ${values.join(' ')} ${sellText}`;
     if (readout === nextReadout) return;
     readout = nextReadout;
-    panel.setLabel('turret-name', titleText);
-    panel.setLabel('range', rangeText);
-    panel.setLabel('damage-rate', damageText);
+    nameText.text = turret.name;
+    nameText.sync();
+    tierText.text = turret.tier;
+    tierText.sync();
+    for (const [index, { value }] of stats.entries()) {
+      value.text = values[index] ?? '';
+      value.sync();
+      const desktopValue = desktopValues[index];
+      if (desktopValue) desktopValue.textContent = value.text;
+    }
+    textBatch.revision += 1;
     panel.setLabel('sell', sellText);
-    title.textContent = titleText;
-    stats.textContent = `${rangeText} · ${damageText}`;
+    title.textContent = turret.name;
+    tierBadge.textContent = turret.tier;
     sell.textContent = sellText;
   }
 
@@ -228,12 +342,16 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
       rangeGeometry.dispose();
       spokeGeometry.dispose();
       rangeMaterial.dispose();
-      markerGeometry.dispose();
       markerMaterial.dispose();
-      backing.geometry.dispose();
-      backing.material.dispose();
-      trim.geometry.dispose();
-      trim.material.dispose();
+      for (const member of members) {
+        textBatch.removeText(member);
+        member.dispose();
+      }
+      textBatch.dispose();
+      for (const mesh of plates) {
+        mesh.geometry.dispose();
+        mesh.material.dispose();
+      }
       desktopElement.remove();
       xrRoot.removeFromParent();
       rangeRoot.removeFromParent();

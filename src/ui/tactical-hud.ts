@@ -25,7 +25,7 @@ import {
   OVERLAY_RENDER_ORDER,
 } from '@par/xr-workspace';
 import * as THREE from 'three';
-import { Text } from 'troika-three-text';
+import type { Text } from 'troika-three-text';
 import { HARD_TURRET_CAP, type TurretKind, type TurretMountProfileId } from '../content/turrets.ts';
 import { CORE_MAX_HP, STARTING_CREDITS, TOTAL_WAVES } from '../content/waves.ts';
 import type { ActionBus, ActionSource, PlayArc } from '../core/action-bus.ts';
@@ -33,6 +33,7 @@ import type { GamePhase } from '../core/state.ts';
 import { forwardFromYaw, type HeadsetPose } from '../xr/calibration.ts';
 import { configureFonts, resolveFontUrls } from './fonts.ts';
 import type { TacticalAtlasResource, TacticalIconAtlas } from './tactical-atlas.ts';
+import { createBatchedTextMember, createChamferPlate, TACTICAL_PLATE } from './tactical-style.ts';
 
 export type TacticalHudMode = 'desktop' | 'xr';
 
@@ -149,44 +150,6 @@ function formatRemainingEnemies(state: Readonly<TacticalHudState>): string {
   if (state.phase === 'intermission') return '0';
   if (state.phase !== 'wave') return '—';
   return String(state.enemiesRemaining);
-}
-
-function createChamferPlate(width: number, height: number, bevel: number): THREE.ShapeGeometry {
-  const x = width / 2;
-  const y = height / 2;
-  const outline = new THREE.Shape();
-  outline.moveTo(-x + bevel, y);
-  outline.lineTo(x - bevel, y);
-  outline.lineTo(x, y - bevel);
-  outline.lineTo(x, -y + bevel);
-  outline.lineTo(x - bevel, -y);
-  outline.lineTo(-x + bevel, -y);
-  outline.lineTo(-x, -y + bevel);
-  outline.lineTo(-x, y - bevel);
-  outline.closePath();
-  return new THREE.ShapeGeometry(outline);
-}
-
-function createBatchedTextMember(
-  text: string,
-  fontUrl: string,
-  fontSize: number,
-  color: string,
-  x: number,
-  y: number,
-  anchorX: 'left' | 'center' | 'right',
-): Text {
-  const member = new Text();
-  member.text = text;
-  member.font = fontUrl;
-  member.fontSize = fontSize;
-  member.color = color;
-  member.anchorX = anchorX;
-  member.anchorY = 'middle';
-  member.position.set(x, y, 0.004);
-  member.updateMatrix();
-  member.sync();
-  return member;
 }
 
 /**
@@ -403,10 +366,10 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
   const createPlateMaterial = (color: number, opacity = 1): THREE.MeshBasicMaterial =>
     new THREE.MeshBasicMaterial({ color, opacity, transparent: true, depthWrite: false });
 
-  const frameMat = createPlateMaterial(0x438592, 0.98);
-  const backingMat = createPlateMaterial(0x071823, 0.96);
-  const insetMat = createPlateMaterial(0x153644);
-  const trimMat = createPlateMaterial(0x53e4f2);
+  const frameMat = createPlateMaterial(TACTICAL_PLATE.frame, 0.98);
+  const backingMat = createPlateMaterial(TACTICAL_PLATE.backing, 0.96);
+  const insetMat = createPlateMaterial(TACTICAL_PLATE.inset);
+  const trimMat = createPlateMaterial(TACTICAL_PLATE.trim);
   const healthTrackMat = createPlateMaterial(0x254750);
   const healthMat = createPlateMaterial(0x5ef2b6);
 

@@ -91,6 +91,65 @@ function makeXrPose(
   };
 }
 
+describe('Controller rays and scanned room geometry', () => {
+  it('uses transformed raw triangles before the fitted plane and blocks turret selection behind them', () => {
+    const wall = makeRectSurface({
+      id: 'back-wall',
+      semanticLabel: 'wall',
+      orientation: 'vertical',
+      center: new THREE.Vector3(0, 1.4, -3),
+      normal: new THREE.Vector3(0, 0, 1),
+      right: new THREE.Vector3(1, 0, 0),
+      width: 4.8,
+      depth: 2.8,
+    });
+    const scan: RoomSurface = {
+      ...wall,
+      id: 'unlabeled-mesh',
+      kind: 'other',
+      source: 'mesh',
+      semanticLabel: null,
+      meshWorldMatrix: new THREE.Matrix4().makeTranslation(0.08, 0, -1.4),
+      meshVertices: new Float32Array([-0.3, 0.6, 0, 0.3, 0.6, 0, 0.3, 1.8, 0, -0.3, 1.8, 0]),
+      meshIndices: new Uint32Array([0, 1, 2, 0, 2, 3]),
+      bounds: new THREE.Box3(
+        new THREE.Vector3(-0.22, 0.6, -1.4),
+        new THREE.Vector3(0.38, 1.8, -1.4),
+      ),
+    };
+    const roomModel = createRoomSurfaceModel({
+      initialMode: 'virtual-fallback',
+      virtualSurfacesProvider: () => [wall, scan],
+    });
+    const controller = createTurretPlacementController({
+      roomModel,
+      initialCredits: 1000,
+      initialActive: false,
+    });
+    const direction = { x: 0, y: 0, z: -1 };
+    const origin = { x: 0, y: 1.1, z: 0 };
+    expect(controller.raycastRoomDistance(origin, direction)).toBeCloseTo(1.4);
+    expect(controller.raycastRoomDistance({ ...origin, x: 0.9 }, direction)).toBeCloseTo(3);
+    const obscured = controller.placeTurret({
+      kind: 'autocannon',
+      surfaceId: wall.id,
+      position: { ...origin, z: -3 },
+      normal: { x: 0, y: 0, z: 1 },
+    });
+    const visible = controller.placeTurret({
+      kind: 'autocannon',
+      surfaceId: wall.id,
+      position: { x: 0.9, y: 1.1, z: -3 },
+      normal: { x: 0, y: 0, z: 1 },
+    });
+    expect(obscured).not.toBeNull();
+    expect(visible).not.toBeNull();
+    expect(controller.pickPlacedTurret(origin, direction)).toBeNull();
+    expect(controller.pickPlacedTurret({ ...origin, x: 0.9 }, direction)?.id).toBe(visible?.id);
+    controller.dispose();
+  });
+});
+
 describe('src/sim/placement-rules.ts pure TypeScript boundary', () => {
   it('contains zero Three.js imports or THREE namespace references', () => {
     const filePath = resolve(__dirname, '../src/sim/placement-rules.ts');
