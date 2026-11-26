@@ -1930,22 +1930,26 @@ export function createBlockoutRenderer(
 
   function processEvents(events: readonly SimEvent[]): void {
     for (const ev of events) {
-      if ((ev as SimEvent & { type: string }).type === 'enemy-ranged-fired') {
-        const rangedEvent = ev as SimEvent & {
-          fromPosition: Vec3;
-          toPosition: Vec3;
-        };
-        if (activeTracers.length >= MAX_INSTANCED_TRACERS) activeTracers.shift();
-        activeTracers.push({
-          from: { ...rangedEvent.fromPosition },
-          to: { ...rangedEvent.toPosition },
-          elapsedSec: 0,
-          durationSec: 0.2,
-          colorHex: 0xa3e635,
-        });
-        continue;
-      }
       switch (ev.type) {
+        case 'enemy-ranged-fired': {
+          if (activeTracers.length >= MAX_INSTANCED_TRACERS) activeTracers.shift();
+          activeTracers.push({
+            from: { ...ev.fromPosition },
+            to: { ...ev.toPosition },
+            elapsedSec: 0,
+            durationSec: 0.2,
+            colorHex: 0xa3e635,
+          });
+          const enemyView = enemyAssetViews.get(ev.enemyId);
+          if (enemyView) {
+            const clip = playMixerClip(enemyView.mixer, enemyView.clips, 'attack', false);
+            if (clip) {
+              enemyView.currentClip = 'attack';
+              enemyView.oneShotRemainingSec = clip.duration;
+            }
+          }
+          break;
+        }
         case 'core-hit': {
           coreBastion.hitFlashRemainingSec = 0.35;
           if (coreAssetView) {
@@ -2730,7 +2734,9 @@ export function createBlockoutRenderer(
           const locomotionClip = defaultEnemyLocomotionClip(simEnemy);
           if (enemyView.oneShotRemainingSec <= 0) {
             const hasAttackClip =
-              simEnemy.attackingCore && enemyView.clips.some((clip) => clip.name === 'attack');
+              simEnemy.archetypeId !== 'rift-spitter' &&
+              simEnemy.attackingCore &&
+              enemyView.clips.some((clip) => clip.name === 'attack');
             const targetClip = hasAttackClip ? 'attack' : locomotionClip;
             if (targetClip && enemyView.currentClip !== targetClip) {
               playMixerClip(enemyView.mixer, enemyView.clips, targetClip, true);

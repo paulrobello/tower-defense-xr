@@ -1,0 +1,387 @@
+{
+  "bake": {
+    "basecolor": {
+      "sha256": "4add2461e4564ce7098bd8e40f99d6ec3f7bb500cccf9c2110c908ecf1126a6f",
+      "samples": [
+        {
+          "surface": "Chitin | obsidian flanks",
+          "x": 128,
+          "y": 767,
+          "rgb": [
+            30,
+            38,
+            32
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | satin olive",
+          "x": 384,
+          "y": 767,
+          "rgb": [
+            54,
+            62,
+            44
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | worn corneous edge",
+          "x": 640,
+          "y": 767,
+          "rgb": [
+            77,
+            78,
+            56
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Gland | mottled phosphor membrane",
+          "x": 896,
+          "y": 767,
+          "rgb": [
+            98,
+            132,
+            42
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Keratin | smoked graphite",
+          "x": 128,
+          "y": 255,
+          "rgb": [
+            45,
+            46,
+            41
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lumen | pale ion charge",
+          "x": 384,
+          "y": 255,
+          "rgb": [
+            154,
+            208,
+            81
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Muscle | violaceous elastomer",
+          "x": 640,
+          "y": 255,
+          "rgb": [
+            44,
+            32,
+            36
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Oropharynx | absorption",
+          "x": 896,
+          "y": 255,
+          "rgb": [
+            24,
+            32,
+            26
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "normal": {
+      "sha256": "3a89e787667cffadfbf8611dfb9463bab6e6d842f8f60831f78824fcb08d4371",
+      "samples": [
+        {
+          "surface": "Chitin | obsidian flanks",
+          "x": 128,
+          "y": 767,
+          "rgb": [
+            137,
+            129,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | satin olive",
+          "x": 384,
+          "y": 767,
+          "rgb": [
+            137,
+            129,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | worn corneous edge",
+          "x": 640,
+          "y": 767,
+          "rgb": [
+            137,
+            129,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Gland | mottled phosphor membrane",
+          "x": 896,
+          "y": 767,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Keratin | smoked graphite",
+          "x": 128,
+          "y": 255,
+          "rgb": [
+            137,
+            129,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lumen | pale ion charge",
+          "x": 384,
+          "y": 255,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Muscle | violaceous elastomer",
+          "x": 640,
+          "y": 255,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Oropharynx | absorption",
+          "x": 896,
+          "y": 255,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "orm": {
+      "sha256": "36f7b9f9b30669f6705336fcbb3d00a81d3b8a2337b93ea6f3e918d3584ed317",
+      "samples": [
+        {
+          "surface": "Chitin | obsidian flanks",
+          "x": 128,
+          "y": 767,
+          "rgb": [
+            255,
+            98,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | satin olive",
+          "x": 384,
+          "y": 767,
+          "rgb": [
+            255,
+            104,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | worn corneous edge",
+          "x": 640,
+          "y": 767,
+          "rgb": [
+            255,
+            101,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Gland | mottled phosphor membrane",
+          "x": 896,
+          "y": 767,
+          "rgb": [
+            255,
+            84,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Keratin | smoked graphite",
+          "x": 128,
+          "y": 255,
+          "rgb": [
+            255,
+            71,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lumen | pale ion charge",
+          "x": 384,
+          "y": 255,
+          "rgb": [
+            255,
+            56,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Muscle | violaceous elastomer",
+          "x": 640,
+          "y": 255,
+          "rgb": [
+            255,
+            148,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Oropharynx | absorption",
+          "x": 896,
+          "y": 255,
+          "rgb": [
+            255,
+            120,
+            18
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    "emissive": {
+      "sha256": "9e0ceee8e8afd8bfc31b2d1cb5d603769e7ca41156eeb13feecfc744ae0b5164",
+      "samples": [
+        {
+          "surface": "Chitin | obsidian flanks",
+          "x": 128,
+          "y": 767,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | satin olive",
+          "x": 384,
+          "y": 767,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | worn corneous edge",
+          "x": 640,
+          "y": 767,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Gland | mottled phosphor membrane",
+          "x": 896,
+          "y": 767,
+          "rgb": [
+            53,
+            88,
+            15
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Keratin | smoked graphite",
+          "x": 128,
+          "y": 255,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lumen | pale ion charge",
+          "x": 384,
+          "y": 255,
+          "rgb": [
+            160,
+            255,
+            70
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Muscle | violaceous elastomer",
+          "x": 640,
+          "y": 255,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Oropharynx | absorption",
+          "x": 896,
+          "y": 255,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        }
+      ]
+    }
+  },
+  "blender": "5.2.2 LTS",
+  "sculpt_sha256": "210a25294783f6ae9ac368ce6b3bf77a393a5d5b4910267c72edb159dad61316",
+  "rig_and_actions_sha256": "288dcbcdb4d4ab75e2dbf581652c8c422a71199c5c8e53adc038c23b26388574",
+  "lod0": {
+    "triangles": 4380,
+    "sha256": "1acf58ce79e14df4947d7893f8212321e9793660776a9d008fe79759e780245a"
+  },
+  "lod1": {
+    "triangles": 2070,
+    "sha256": "24e26196b06d9bc23a483feda9984dc9be9d189b1e13a4c1c0c0811933684bdd"
+  }
+}

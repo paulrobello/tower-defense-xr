@@ -5899,6 +5899,394 @@
           "tolerance": 8
         }
       ]
+    },
+    {
+      "file": "rift-spitter/basecolor.ktx2",
+      "role": "basecolor",
+      "sha256": "cc2464dfeafd35b369959299f22263772c0809db9b311c1854103a61eeb9a742",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Chitin | obsidian flanks",
+          "x": 128,
+          "y": 767,
+          "rgb": [
+            30,
+            38,
+            32
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | satin olive",
+          "x": 384,
+          "y": 767,
+          "rgb": [
+            54,
+            62,
+            44
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | worn corneous edge",
+          "x": 640,
+          "y": 767,
+          "rgb": [
+            77,
+            78,
+            56
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Gland | mottled phosphor membrane",
+          "x": 896,
+          "y": 767,
+          "rgb": [
+            98,
+            132,
+            42
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Keratin | smoked graphite",
+          "x": 128,
+          "y": 255,
+          "rgb": [
+            45,
+            46,
+            41
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lumen | pale ion charge",
+          "x": 384,
+          "y": 255,
+          "rgb": [
+            154,
+            208,
+            81
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Muscle | violaceous elastomer",
+          "x": 640,
+          "y": 255,
+          "rgb": [
+            44,
+            32,
+            36
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Oropharynx | absorption",
+          "x": 896,
+          "y": 255,
+          "rgb": [
+            24,
+            32,
+            26
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "rift-spitter/normal.ktx2",
+      "role": "normal",
+      "sha256": "39470266df32a76b1f99e31f7da31a2be4a231c115db45c0997d08f417a5b1dd",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Chitin | obsidian flanks",
+          "x": 128,
+          "y": 767,
+          "rgb": [
+            137,
+            129,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | satin olive",
+          "x": 384,
+          "y": 767,
+          "rgb": [
+            137,
+            129,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | worn corneous edge",
+          "x": 640,
+          "y": 767,
+          "rgb": [
+            137,
+            129,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Gland | mottled phosphor membrane",
+          "x": 896,
+          "y": 767,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Keratin | smoked graphite",
+          "x": 128,
+          "y": 255,
+          "rgb": [
+            137,
+            129,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lumen | pale ion charge",
+          "x": 384,
+          "y": 255,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Muscle | violaceous elastomer",
+          "x": 640,
+          "y": 255,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Oropharynx | absorption",
+          "x": 896,
+          "y": 255,
+          "rgb": [
+            127,
+            127,
+            255
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "rift-spitter/orm.ktx2",
+      "role": "orm",
+      "sha256": "84cf9f14d0a95b3e920a1500acbbb6455aa3fbfeb52865a6b981012ae8e7cdba",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Chitin | obsidian flanks",
+          "x": 128,
+          "y": 767,
+          "rgb": [
+            255,
+            98,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | satin olive",
+          "x": 384,
+          "y": 767,
+          "rgb": [
+            255,
+            104,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | worn corneous edge",
+          "x": 640,
+          "y": 767,
+          "rgb": [
+            255,
+            101,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Gland | mottled phosphor membrane",
+          "x": 896,
+          "y": 767,
+          "rgb": [
+            255,
+            84,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Keratin | smoked graphite",
+          "x": 128,
+          "y": 255,
+          "rgb": [
+            255,
+            71,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lumen | pale ion charge",
+          "x": 384,
+          "y": 255,
+          "rgb": [
+            255,
+            56,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Muscle | violaceous elastomer",
+          "x": 640,
+          "y": 255,
+          "rgb": [
+            255,
+            148,
+            18
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Oropharynx | absorption",
+          "x": 896,
+          "y": 255,
+          "rgb": [
+            255,
+            120,
+            18
+          ],
+          "tolerance": 16
+        }
+      ]
+    },
+    {
+      "file": "rift-spitter/emissive.ktx2",
+      "role": "emissive",
+      "sha256": "111fc3a3fc5118e56b4dd1e77f41dec3f61c419c32daa2821ec517be9cf063b4",
+      "width": 1024,
+      "height": 1024,
+      "samples": [
+        {
+          "surface": "Chitin | obsidian flanks",
+          "x": 128,
+          "y": 767,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | satin olive",
+          "x": 384,
+          "y": 767,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Chitin | worn corneous edge",
+          "x": 640,
+          "y": 767,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Gland | mottled phosphor membrane",
+          "x": 896,
+          "y": 767,
+          "rgb": [
+            53,
+            88,
+            15
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Keratin | smoked graphite",
+          "x": 128,
+          "y": 255,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Lumen | pale ion charge",
+          "x": 384,
+          "y": 255,
+          "rgb": [
+            160,
+            255,
+            70
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Muscle | violaceous elastomer",
+          "x": 640,
+          "y": 255,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        },
+        {
+          "surface": "Oropharynx | absorption",
+          "x": 896,
+          "y": 255,
+          "rgb": [
+            0,
+            0,
+            0
+          ],
+          "tolerance": 16
+        }
+      ]
     }
   ],
   "models": [
@@ -7834,6 +8222,66 @@
           "normal": "apex-broodlord/normal.ktx2",
           "orm": "apex-broodlord/orm.ktx2",
           "emissive": "apex-broodlord/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "rift-spitter",
+      "lod": 0,
+      "file": "rift-spitter/rift-spitter-lod0.glb",
+      "sha256": "75d893aab39a2055b11425327bcc541391c3a53a533f93de7f280ca29235b8b4",
+      "limits": {
+        "triangles": 4500,
+        "materials": 1,
+        "bones": 24,
+        "sockets": 0,
+        "texture_size": 1024
+      },
+      "sockets": {},
+      "animations": [
+        "attack",
+        "climb_wall",
+        "crawl_floor",
+        "death",
+        "hit"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Spitter chitin and phosphor": {
+          "basecolor": "rift-spitter/basecolor.ktx2",
+          "normal": "rift-spitter/normal.ktx2",
+          "orm": "rift-spitter/orm.ktx2",
+          "emissive": "rift-spitter/emissive.ktx2"
+        }
+      }
+    },
+    {
+      "id": "rift-spitter",
+      "lod": 1,
+      "file": "rift-spitter/rift-spitter-lod1.glb",
+      "sha256": "5a777900f53840d509166aefa0cfee5117f86d0a99fa2a973f07b1f221f5f52f",
+      "limits": {
+        "triangles": 2200,
+        "materials": 1,
+        "bones": 24,
+        "sockets": 0,
+        "texture_size": 1024
+      },
+      "sockets": {},
+      "animations": [
+        "attack",
+        "climb_wall",
+        "crawl_floor",
+        "death",
+        "hit"
+      ],
+      "planar_primitives": [],
+      "material_textures": {
+        "Spitter chitin and phosphor": {
+          "basecolor": "rift-spitter/basecolor.ktx2",
+          "normal": "rift-spitter/normal.ktx2",
+          "orm": "rift-spitter/orm.ktx2",
+          "emissive": "rift-spitter/emissive.ktx2"
         }
       }
     }

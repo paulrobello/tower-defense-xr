@@ -1,0 +1,17 @@
+{
+  "original_glb_sha256": "d2d21222d79596855672f91462890ae281ee6361df6c77f6a35b756df10c9f83",
+  "glb_sha256": "75d893aab39a2055b11425327bcc541391c3a53a533f93de7f280ca29235b8b4",
+  "all_bytes_outside_repaired_xyz_sha256": "d2d21222d79596855672f91462890ae281ee6361df6c77f6a35b756df10c9f83",
+  "repair_count": 1,
+  "repaired_cap_corners": [
+    {
+      "vertex": 423,
+      "triangle": [423, 433, 438],
+      "uv": [0.481105238199234, 0.2506551146507263],
+      "original_length": 0,
+      "uv_derivative_projected_length": 0.0014504245324850281,
+      "normalized_tangent": [-0.0038072056914771205, 0.9683503788737937, 0.2495657206424853],
+      "stored_handedness": -1.0
+    }
+  ]
+}

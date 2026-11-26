@@ -555,6 +555,34 @@
         "hit",
         "death"
       ]
+    },
+    {
+      "id": "rift-spitter",
+      "lod": 0,
+      "path": "/assets/models/rift-spitter-lod0.glb",
+      "sha256": "75d893aab39a2055b11425327bcc541391c3a53a533f93de7f280ca29235b8b4",
+      "bytes": 4461552,
+      "animations": [
+        "attack",
+        "climb_wall",
+        "crawl_floor",
+        "death",
+        "hit"
+      ]
+    },
+    {
+      "id": "rift-spitter",
+      "lod": 1,
+      "path": "/assets/models/rift-spitter-lod1.glb",
+      "sha256": "5a777900f53840d509166aefa0cfee5117f86d0a99fa2a973f07b1f221f5f52f",
+      "bytes": 4269528,
+      "animations": [
+        "attack",
+        "climb_wall",
+        "crawl_floor",
+        "death",
+        "hit"
+      ]
     }
   ],
   "materials": [

@@ -27,11 +27,18 @@ import {
 const ROOT = resolve(import.meta.dirname, '..');
 
 describe('Phase 4 AAA Runtime Pipeline (P4-T1, P4-T2, P4-T3)', () => {
-  it('promotes all 40 animated GLBs and UI assets into public/assets with verified SHA-256 hashes', () => {
+  it('promotes all 42 animated GLBs and UI assets into public/assets with verified SHA-256 hashes', () => {
     const manifestPath = resolve(ROOT, 'public/assets/manifest.json');
     const manifest = JSON.parse(readFileSync(manifestPath, 'utf8')) as RuntimeAssetManifest;
     expect(manifest.version).toBe(1);
-    expect(manifest.models.length).toBe(40);
+    expect(manifest.models.length).toBe(42);
+    const spitterLods = manifest.models.filter(({ id }) => id === 'rift-spitter');
+    expect(spitterLods.map(({ lod }) => lod).sort()).toEqual([0, 1]);
+    for (const model of spitterLods) {
+      expect(model.animations).toEqual(
+        expect.arrayContaining(['crawl_floor', 'climb_wall', 'attack', 'hit', 'death']),
+      );
+    }
 
     for (const entry of manifest.models) {
       expect(entry.animations.length).toBeGreaterThanOrEqual(3);

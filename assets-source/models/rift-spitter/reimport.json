@@ -1,0 +1,146 @@
+{
+  "lod0": {
+    "sha256": "75d893aab39a2055b11425327bcc541391c3a53a533f93de7f280ca29235b8b4",
+    "rest_extent_xyz_m": [
+      0.30000001192092896,
+      0.40000006556510925,
+      0.24000003933906555
+    ],
+    "min_z_m": -5.226308275041447e-08,
+    "claw_rest_z_m": [
+      1.2575704921857778e-08,
+      -3.105871826392104e-08,
+      -5.226308275041447e-08,
+      -2.555387546010479e-08,
+      -2.4744924331798757e-08,
+      7.076041974585223e-09
+    ],
+    "joints": 23,
+    "materials": 1,
+    "triangles": 4380,
+    "clips": {
+      "crawl_floor": {
+        "duration_s": 0.8,
+        "samples": 49,
+        "max_vertex_travel_m": 0.04086516052484512,
+        "root_matrix_drift": 0,
+        "first_last_vertex_error_m": 8.462232869987929e-08,
+        "min_foot_z_m": -2.0192381271044724e-05,
+        "third_closest_foot_max_plane_error_m": 2.0192381271044724e-05,
+        "minimum_across_six_peak_foot_heights_m": 0.024996105581521988
+      },
+      "climb_wall": {
+        "duration_s": 1.0666666666666667,
+        "samples": 65,
+        "max_vertex_travel_m": 0.029391886666417122,
+        "root_matrix_drift": 0,
+        "first_last_vertex_error_m": 1.0700081531922478e-07,
+        "min_foot_z_m": -6.193556146172341e-06,
+        "third_closest_foot_max_plane_error_m": 6.193556146172341e-06,
+        "minimum_across_six_peak_foot_heights_m": 0.014935793355107307
+      },
+      "attack": {
+        "duration_s": 0.7333333333333333,
+        "samples": 45,
+        "max_vertex_travel_m": 0.06208447366952896,
+        "root_matrix_drift": 0,
+        "first_last_vertex_error_m": 8.33000246558413e-09,
+        "min_foot_z_m": -9.171199053525925e-06,
+        "third_closest_foot_max_plane_error_m": 9.108567610383034e-06,
+        "minimum_across_six_peak_foot_heights_m": 4.889443516731262e-08
+      },
+      "hit": {
+        "duration_s": 0.4666666666666667,
+        "samples": 29,
+        "max_vertex_travel_m": 0.053063470870256424,
+        "root_matrix_drift": 0,
+        "first_last_vertex_error_m": 0.0,
+        "min_foot_z_m": -6.794544304966621e-08,
+        "third_closest_foot_max_plane_error_m": 0.0029999827966094017,
+        "minimum_across_six_peak_foot_heights_m": 0.002999938325956464
+      },
+      "death": {
+        "duration_s": 1.0666666666666667,
+        "samples": 65,
+        "max_vertex_travel_m": 0.12155679613351822,
+        "root_matrix_drift": 0,
+        "first_last_vertex_error_m": 0.12155679613351822,
+        "min_foot_z_m": -7.107853889465332e-06,
+        "third_closest_foot_max_plane_error_m": 2.0526349544525146e-06,
+        "minimum_across_six_peak_foot_heights_m": 3.6263372749090195e-08
+      }
+    }
+  },
+  "lod1": {
+    "sha256": "5a777900f53840d509166aefa0cfee5117f86d0a99fa2a973f07b1f221f5f52f",
+    "rest_extent_xyz_m": [
+      0.30000001192092896,
+      0.40000006556510925,
+      0.24000002443790436
+    ],
+    "min_z_m": -5.31342507770205e-08,
+    "claw_rest_z_m": [
+      1.2584707498319858e-08,
+      -3.1874591854830214e-08,
+      -5.31342507770205e-08,
+      -2.5536813552662352e-08,
+      -2.45603892778945e-08,
+      7.528303314074947e-09
+    ],
+    "joints": 23,
+    "materials": 1,
+    "triangles": 2070,
+    "clips": {
+      "crawl_floor": {
+        "duration_s": 0.8,
+        "samples": 49,
+        "max_vertex_travel_m": 0.04052089899778366,
+        "root_matrix_drift": 0,
+        "first_last_vertex_error_m": 9.570444348128149e-08,
+        "min_foot_z_m": -2.0204159227432683e-05,
+        "third_closest_foot_max_plane_error_m": 2.0204159227432683e-05,
+        "minimum_across_six_peak_foot_heights_m": 0.024650106206536293
+      },
+      "climb_wall": {
+        "duration_s": 1.0666666666666667,
+        "samples": 65,
+        "max_vertex_travel_m": 0.029164472594857216,
+        "root_matrix_drift": 0,
+        "first_last_vertex_error_m": 1.0700081531922478e-07,
+        "min_foot_z_m": -6.210477295098826e-06,
+        "third_closest_foot_max_plane_error_m": 6.210477295098826e-06,
+        "minimum_across_six_peak_foot_heights_m": 0.014591217041015625
+      },
+      "attack": {
+        "duration_s": 0.7333333333333333,
+        "samples": 45,
+        "max_vertex_travel_m": 0.06219680979847908,
+        "root_matrix_drift": 0,
+        "first_last_vertex_error_m": 8.33000246558413e-09,
+        "min_foot_z_m": -0.0002451445907354355,
+        "third_closest_foot_max_plane_error_m": 0.0002450495958328247,
+        "minimum_across_six_peak_foot_heights_m": -3.417102689695639e-08
+      },
+      "hit": {
+        "duration_s": 0.4666666666666667,
+        "samples": 29,
+        "max_vertex_travel_m": 0.05312380567193031,
+        "root_matrix_drift": 0,
+        "first_last_vertex_error_m": 0.0,
+        "min_foot_z_m": -6.793469964350152e-08,
+        "third_closest_foot_max_plane_error_m": 0.0029999827966094017,
+        "minimum_across_six_peak_foot_heights_m": 0.002999938325956464
+      },
+      "death": {
+        "duration_s": 1.0666666666666667,
+        "samples": 65,
+        "max_vertex_travel_m": 0.12163218855857849,
+        "root_matrix_drift": 0,
+        "first_last_vertex_error_m": 0.12163218855857849,
+        "min_foot_z_m": -0.0010692775249481201,
+        "third_closest_foot_max_plane_error_m": 0.0006659496575593948,
+        "minimum_across_six_peak_foot_heights_m": -6.793469964350152e-08
+      }
+    }
+  }
+}
