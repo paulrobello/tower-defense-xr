@@ -14,7 +14,7 @@
  * Features:
  * - Live & intermission turret commands: `placeTurret`, `upgradeTurret` (`T1->T2->T3`),
  *   `setTurretPriority` (`first | strongest | closest | air | air-priority`),
- *   `relocateTurret` (`25` credit fee + `1.5 s` redeploy cooldown), `sellTurret` (`75%` total invested refund).
+ *   `relocateTurret` (`25` credit fee + `1.5 s` redeploy cooldown), `sellTurret` (`50%` total invested refund).
  * - 4 distinct weapon roles:
  *   1. `autocannon`: rapid kinetic tracer hits (reduced by `Carapace Brute` 50% kinetic armor).
  *   2. `plasma-mortar`: parabolic projectile flight -> AoE splash damage + thermal burn DoT stacks/refresh.
@@ -251,7 +251,7 @@ export interface SimTurret {
   stats: TurretTierStats;
   /** Cumulative build + upgrade credits invested in this turret. */
   investedCredits: number;
-  /** Current 75% sell refund in Requisition credits. */
+  /** Current 50% sell refund in Requisition credits. */
   sellRefundCredits: number;
   /** Seconds remaining before the next weapon discharge (`0` = ready). */
   fireCooldownSec: number;

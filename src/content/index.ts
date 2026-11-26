@@ -75,8 +75,8 @@ export function validateContentTables(): ContentValidationResult {
   if (TURRET_MIN_SPACING_M !== 0.35) {
     errors.push(`Expected TURRET_MIN_SPACING_M === 0.35, found ${TURRET_MIN_SPACING_M}`);
   }
-  if (TURRET_SELL_REFUND_RATIO !== 0.75) {
-    errors.push(`Expected TURRET_SELL_REFUND_RATIO === 0.75, found ${TURRET_SELL_REFUND_RATIO}`);
+  if (TURRET_SELL_REFUND_RATIO !== 0.5) {
+    errors.push(`Expected TURRET_SELL_REFUND_RATIO === 0.5, found ${TURRET_SELL_REFUND_RATIO}`);
   }
 
   for (const kind of TURRET_KINDS) {

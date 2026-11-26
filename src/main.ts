@@ -54,6 +54,7 @@ import { createMissionOverlay, type MissionOverlay } from './ui/mission-overlay.
 import { createTacticalAtlas } from './ui/tactical-atlas.ts';
 import { createTacticalHud, type TacticalHud } from './ui/tactical-hud.ts';
 import { createThreatChevrons, type ThreatChevrons } from './ui/threat-chevrons.ts';
+import { createTurretInspector, type TurretInspector } from './ui/turret-inspector.ts';
 import { createVersionWatcher, type VersionWatcher } from './ui/version-check.ts';
 import { createVersionNotice, type VersionNotice } from './ui/version-notice.ts';
 import {
@@ -95,6 +96,7 @@ export interface AppRuntime {
   readonly placement: TurretPlacementController;
   readonly radialControls: XrRadialControls;
   readonly tacticalHud: TacticalHud;
+  readonly turretInspector: TurretInspector;
   readonly desktopControls: DesktopControls;
   readonly assets: RuntimeAssetLibrary;
   readonly lighting: LightingController;
@@ -427,6 +429,32 @@ export function mountApp(container: HTMLElement): AppRuntime {
   // BlockoutRenderer renders the articulated tier-specific turrets; keep placement records for ray picking
   placement.placedTurretsGroup.visible = false;
 
+  let selectedXrTurretId: string | null = null;
+  const turretInspector = createTurretInspector({
+    container,
+    renderOrder: OVERLAY_RENDER_ORDER + 12,
+    onClose: () => {
+      selectedXrTurretId = null;
+      if (!shell.xr.presenting) desktopControls.setSelectedTurret(null);
+      syncTacticalHud();
+    },
+    onSell: (turret) => {
+      if (selectedXrTurretId === turret.id) selectedXrTurretId = null;
+      bus.dispatch(
+        { type: 'turret/sell', turretId: turret.id },
+        shell.xr.presenting ? 'xr' : 'desktop',
+      );
+    },
+  });
+  shell.scene.add(turretInspector.rangeRoot);
+  xrHudRoot.add(turretInspector.xrRoot);
+  const turretInspectorPanel = {
+    root: turretInspector.xrRoot,
+    cellAt: turretInspector.panel.cellAt,
+    setHovered: turretInspector.panel.setHovered,
+    activate: turretInspector.panel.activate,
+  };
+
   const radialControls = createXrRadialControls({
     scene: shell.scene,
     overlayRoot: shell.xrOverlayRoot,
@@ -447,17 +475,21 @@ export function mountApp(container: HTMLElement): AppRuntime {
         phase: state.phase,
       };
     },
-    isBusy: () => xrSettings.visible || state.phase === 'calibrate',
+    isBusy: () =>
+      xrSettings.visible || turretInspector.xrRoot.visible || state.phase === 'calibrate',
     getMovableWidgets: () => [
-      xrSettings.visible ? xrSettings.root : tacticalHud.xrRoot,
+      xrSettings.visible
+        ? xrSettings.root
+        : turretInspector.xrRoot.visible
+          ? turretInspector.xrRoot
+          : tacticalHud.xrRoot,
       perfHud.xrRoot,
     ],
     getPanels: () => {
-      const mainPanel = xrSettings.visible
-        ? xrSettings
-        : missionOverlay.visible
-          ? missionOverlayPanel
-          : tacticalHudPanel;
+      let mainPanel = tacticalHudPanel;
+      if (turretInspector.xrRoot.visible) mainPanel = turretInspectorPanel;
+      if (missionOverlay.visible) mainPanel = missionOverlayPanel;
+      if (xrSettings.visible) mainPanel = xrSettings;
       return perfHudPanel && perfHud.xrRoot.visible ? [mainPanel, perfHudPanel] : [mainPanel];
     },
   });
@@ -496,6 +528,8 @@ export function mountApp(container: HTMLElement): AppRuntime {
     xrHudRoot.quaternion.copy(quaternion);
     xrSettings.root.position.set(0, 0, 0);
     xrSettings.root.quaternion.identity();
+    turretInspector.xrRoot.position.set(0, 0, 0);
+    turretInspector.xrRoot.quaternion.identity();
     perfHud.xrRoot.position.set(0.55, 0.25, 0).applyQuaternion(quaternion).add(position);
     perfHud.xrRoot.quaternion.copy(quaternion);
   };
@@ -577,8 +611,19 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
   const syncTacticalHud = (): void => {
     const simState = currentSim.getState();
-    const showHud = shell.xr.presenting
-      ? !xrSettings.visible && !missionOverlay.visible
+    const inXr = shell.xr.presenting;
+    const canInspect =
+      state.phase === 'prep' || state.phase === 'wave' || state.phase === 'intermission';
+    const inspectorId =
+      canInspect && !xrSettings.visible && !domSettings.open && !missionOverlay.visible
+        ? inXr
+          ? selectedXrTurretId
+          : desktopControls.state.selectedTurretId
+        : null;
+    turretInspector.setTurret(inspectorId ? (currentSim.getTurret(inspectorId) ?? null) : null);
+
+    const showHud = inXr
+      ? !xrSettings.visible && !missionOverlay.visible && !turretInspector.xrRoot.visible
       : state.phase !== 'title';
     tacticalHud.setVisible(showHud);
     tacticalHud.updateState({
@@ -588,6 +633,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
       credits: simState.credits,
       wave: simState.currentWave,
       totalWaves: simState.totalWaves,
+      enemiesRemaining: simState.pendingWaveSpawns + simState.enemies.length,
       activeTurrets: simState.turrets.length,
       maxTurrets: HARD_TURRET_CAP,
       playArc: calibration.playArc,
@@ -705,6 +751,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
         perfRecorder.onXrSessionStart();
         perfHud.setMode('xr');
         tacticalHud.setMode('xr');
+        turretInspector.setMode('xr');
         threatChevrons.setMode('xr');
         missionOverlay.setMode('xr');
         domSettings.hide();
@@ -728,6 +775,32 @@ export function mountApp(container: HTMLElement): AppRuntime {
                   new THREE.Quaternion(orientation.x, orientation.y, orientation.z, orientation.w),
                 );
                 calibration.moveCoreByRay(position, direction);
+              };
+            }
+            if (
+              phaseAtPress !== 'prep' &&
+              phaseAtPress !== 'wave' &&
+              phaseAtPress !== 'intermission'
+            ) {
+              return null;
+            }
+
+            const pickTurret = (event: XRInputSourceEvent): string | null => {
+              const pose = event.frame.getPose(event.inputSource.targetRaySpace, reference);
+              if (!pose) return null;
+              const { position, orientation } = pose.transform;
+              const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(
+                new THREE.Quaternion(orientation.x, orientation.y, orientation.z, orientation.w),
+              );
+              return placement.pickPlacedTurret(position, direction)?.id ?? null;
+            };
+            const turretId = pickTurret(start);
+            if (turretId) {
+              return (event) => {
+                if (state.phase !== phaseAtPress || pickTurret(event) !== turretId) return;
+                placement.cancelPlacement();
+                selectedXrTurretId = turretId;
+                syncTacticalHud();
               };
             }
             if (!placement.active) return null;
@@ -757,6 +830,8 @@ export function mountApp(container: HTMLElement): AppRuntime {
         perfRecorder.onXrSessionEnd();
         perfHud.setMode('desktop');
         tacticalHud.setMode('desktop');
+        selectedXrTurretId = null;
+        turretInspector.setMode('desktop');
         threatChevrons.setMode('desktop');
         missionOverlay.setMode('desktop');
         xrSettings.hide();
@@ -792,6 +867,8 @@ export function mountApp(container: HTMLElement): AppRuntime {
   const unsubState = state.subscribe((change) => {
     versionNotice.refresh();
     if (change.to === 'calibrate') {
+      selectedXrTurretId = null;
+      desktopControls.setSelectedTurret(null);
       missionOverlay.hide();
       threatChevrons.clear();
       placement.cancelPlacement();
@@ -1028,7 +1105,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
         frame,
         shell.xr.reference,
         timeMs,
-        xrSettings.visible || missionOverlay.visible,
+        xrSettings.visible || missionOverlay.visible || turretInspector.xrRoot.visible,
       );
 
       roomModel.updateFromFrame(frame, shell.xr.reference, { nowMs: timeMs, resumeLiveScan: true });
@@ -1158,6 +1235,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
     placement,
     radialControls,
     tacticalHud,
+    turretInspector,
     desktopControls,
     assets,
     lighting,
@@ -1232,6 +1310,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
       missionOverlay.dispose();
       threatChevrons.dispose();
       tacticalHud.dispose();
+      turretInspector.dispose();
       radialControls.dispose();
       tacticalAtlas.dispose();
       placement.dispose();

@@ -582,13 +582,13 @@ describe('Placement constraints: 0.35 m spacing, 14-turret hard cap, Core & Port
     expect(controller.ghost.state.reasonLabelText).toBe('CAP 14/14');
     expect(controller.ghost.reasonLabel.visible).toBe(true);
 
-    // Selling 1 turret frees a slot and refunds 75% credits
+    // Selling 1 turret frees a slot and refunds 50% credits
     const firstTurret = controller.placedTurrets[0];
     if (!firstTurret) throw new Error('Expected first turret');
     const creditsBeforeSell = controller.credits ?? 0;
     const refund = controller.sellTurret(firstTurret.id);
-    expect(refund).toBe(75);
-    expect(controller.credits).toBe(creditsBeforeSell + 75);
+    expect(refund).toBe(100);
+    expect(controller.credits).toBe(creditsBeforeSell + 100);
     expect(controller.turretCount).toBe(13);
 
     // Now the 14th slot can be filled again
@@ -657,7 +657,7 @@ describe('Placement constraints: 0.35 m spacing, 14-turret hard cap, Core & Port
 
     const noCreditsCheck = validateTurretPlacement(
       {
-        kind: 'rail-sniper', // costs 150
+        kind: 'rail-sniper', // costs 300
         mountProfile: 'surface-clamp',
         position: { x: 1.5, y: 0, z: -1.5 },
         surface: floorSurface,
@@ -871,6 +871,23 @@ describe('Surface-relative & Core-relative anchor tracking sync and XR controlle
     expect(v1?.mountProfile).toBe('surface-clamp');
     expect(controller.turretCount).toBe(0);
 
+    // A panel/menu hit owns the aiming ray for that frame. Hide the stale
+    // placement preview and rejection label, then restore placement on exit.
+    const suppressed = controller.updateFromXrFrame(
+      xrFrame,
+      referenceSpace,
+      1 / 72,
+      (source) => source === rightSource,
+    );
+    expect(suppressed).toBeNull();
+    expect(controller.ghost.group.visible).toBe(false);
+    expect(controller.ghost.reasonLabel.visible).toBe(false);
+    expect(controller.lastValidation).toBeNull();
+
+    const restored = controller.updateFromXrFrame(xrFrame, referenceSpace, 1 / 72, () => false);
+    expect(restored?.valid).toBe(true);
+    expect(controller.ghost.group.visible).toBe(true);
+
     // Frame 2: Hold Grip + press Trigger -> must be suppressed per webxr.md Controller Contract
     gripPressed = true;
     triggerPressed = true;
@@ -952,7 +969,7 @@ describe('Surface-relative & Core-relative anchor tracking sync and XR controlle
           mountProfile: 'surface-clamp',
           surfaceId: 'surf',
           surfaceKind: 'wall',
-          cost: 100,
+          cost: 200,
           activeTurretCount: 1,
           hardTurretCap: 14,
           distanceM: 1.5,

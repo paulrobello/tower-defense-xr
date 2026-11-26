@@ -281,7 +281,7 @@ try {
       lockCheck.phase === 'prep' &&
       lockCheck.locked === true &&
       lockCheck.previewVisible === false &&
-      lockCheck.credits === 200,
+      lockCheck.credits === 400,
     { calibrationCheck, lockCheck },
   );
 

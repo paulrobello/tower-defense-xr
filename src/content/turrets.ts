@@ -44,7 +44,7 @@ export const HARD_TURRET_CAP = 14;
 export const MAX_ACTIVE_TURRETS = HARD_TURRET_CAP;
 
 /** Credit refund ratio when selling a turret (applied to cumulative invested credits). */
-export const TURRET_SELL_REFUND_RATIO = 0.75;
+export const TURRET_SELL_REFUND_RATIO = 0.5;
 
 /** Flat Requisition credit fee to relocate an existing turret live or between waves. */
 export const TURRET_RELOCATE_COST = 25;
@@ -188,7 +188,7 @@ export interface TurretTierStats {
   readonly cost: number;
   /** Total Requisition credits invested to reach this tier from scratch. */
   readonly cumulativeCost: number;
-  /** Exact 75% sell refund in Requisition credits at this tier. */
+  /** Exact 50% sell refund in Requisition credits at this tier. */
   readonly sellRefundCredits: number;
   /** Effective engagement range (meters). */
   readonly rangeM: number;
@@ -261,9 +261,9 @@ const AUTOCANNON_TIERS: Record<TurretTierId, TurretTierStats> = {
     level: 1,
     label: 'T1 Single Barrel',
     summary: 'Rapid single-barrel kinetic autocannon firing amber tracer bursts.',
-    cost: 100,
-    cumulativeCost: 100,
-    sellRefundCredits: 75,
+    cost: 200,
+    cumulativeCost: 200,
+    sellRefundCredits: 100,
     rangeM: 2.4,
     fireRateHz: 4.5,
     fireIntervalSec: 1 / 4.5,
@@ -302,9 +302,9 @@ const AUTOCANNON_TIERS: Record<TurretTierId, TurretTierStats> = {
     level: 2,
     label: 'T2 Twin Linked Barrels',
     summary: 'Alternating twin-linked titanium barrels with higher cyclic rate and velocity.',
-    cost: 130,
-    cumulativeCost: 230,
-    sellRefundCredits: 173,
+    cost: 260,
+    cumulativeCost: 460,
+    sellRefundCredits: 230,
     rangeM: 2.7,
     fireRateHz: 8.0,
     fireIntervalSec: 1 / 8.0,
@@ -344,9 +344,9 @@ const AUTOCANNON_TIERS: Record<TurretTierId, TurretTierStats> = {
     label: 'T3 Rotary Gatling',
     summary:
       'Six-barrel rotary gatling assembly with glowing thermal shroud and tungsten core rounds.',
-    cost: 190,
-    cumulativeCost: 420,
-    sellRefundCredits: 315,
+    cost: 380,
+    cumulativeCost: 840,
+    sellRefundCredits: 420,
     rangeM: 3.0,
     fireRateHz: 11.0,
     fireIntervalSec: 1 / 11.0,
@@ -388,9 +388,9 @@ const PLASMA_MORTAR_TIERS: Record<TurretTierId, TurretTierStats> = {
     level: 1,
     label: 'T1 Single Tube Mortar',
     summary: 'High-arcing plasma mortar launching explosive molten shells with lingering burn.',
-    cost: 135,
-    cumulativeCost: 135,
-    sellRefundCredits: 101,
+    cost: 270,
+    cumulativeCost: 270,
+    sellRefundCredits: 135,
     rangeM: 2.6,
     fireRateHz: 0.7,
     fireIntervalSec: 1 / 0.7,
@@ -430,9 +430,9 @@ const PLASMA_MORTAR_TIERS: Record<TurretTierId, TurretTierStats> = {
     label: 'T2 Dual-Chamber Mortar',
     summary:
       'Twin pressurized magnetic plasma tubes with expanded blast radius and hotter napalm slag.',
-    cost: 175,
-    cumulativeCost: 310,
-    sellRefundCredits: 233,
+    cost: 350,
+    cumulativeCost: 620,
+    sellRefundCredits: 310,
     rangeM: 2.9,
     fireRateHz: 1.05,
     fireIntervalSec: 1 / 1.05,
@@ -472,9 +472,9 @@ const PLASMA_MORTAR_TIERS: Record<TurretTierId, TurretTierStats> = {
     label: 'T3 Heavy Siege Mortar',
     summary:
       'Heavy thermonuclear siege emitter detaching shockwave rings that melt armored columns.',
-    cost: 250,
-    cumulativeCost: 560,
-    sellRefundCredits: 420,
+    cost: 500,
+    cumulativeCost: 1120,
+    sellRefundCredits: 560,
     rangeM: 3.2,
     fireRateHz: 1.25,
     fireIntervalSec: 1 / 1.25,
@@ -516,9 +516,9 @@ const CRYO_ARC_TIERS: Record<TurretTierId, TurretTierStats> = {
     level: 1,
     label: 'T1 Single Cryo Coil',
     summary: 'Emits sub-zero electrical arcs that chill movement by 35% and jump across 2 targets.',
-    cost: 125,
-    cumulativeCost: 125,
-    sellRefundCredits: 94,
+    cost: 250,
+    cumulativeCost: 250,
+    sellRefundCredits: 125,
     rangeM: 2.1,
     fireRateHz: 1.5,
     fireIntervalSec: 1 / 1.5,
@@ -558,9 +558,9 @@ const CRYO_ARC_TIERS: Record<TurretTierId, TurretTierStats> = {
     label: 'T2 Dual Arcing Prongs',
     summary:
       'Twin superconducting cryo-prongs imposing a 45% slow across 3 ground or aerial targets.',
-    cost: 160,
-    cumulativeCost: 285,
-    sellRefundCredits: 214,
+    cost: 320,
+    cumulativeCost: 570,
+    sellRefundCredits: 285,
     rangeM: 2.35,
     fireRateHz: 2.4,
     fireIntervalSec: 1 / 2.4,
@@ -599,9 +599,9 @@ const CRYO_ARC_TIERS: Record<TurretTierId, TurretTierStats> = {
     level: 3,
     label: 'T3 Tri-Pylon Cryo Conduit',
     summary: 'Tri-pylon flash-freeze conduit locking down 4 chained targets at 55% movement slow.',
-    cost: 225,
-    cumulativeCost: 510,
-    sellRefundCredits: 383,
+    cost: 450,
+    cumulativeCost: 1020,
+    sellRefundCredits: 510,
     rangeM: 2.6,
     fireRateHz: 2.8,
     fireIntervalSec: 1 / 2.8,
@@ -644,9 +644,9 @@ const RAIL_SNIPER_TIERS: Record<TurretTierId, TurretTierStats> = {
     label: 'T1 Compact Capacitor Rail',
     summary:
       'Long-range hypervelocity rail slug that punches through armor and deals bonus anti-air and boss damage.',
-    cost: 150,
-    cumulativeCost: 150,
-    sellRefundCredits: 113,
+    cost: 300,
+    cumulativeCost: 300,
+    sellRefundCredits: 150,
     rangeM: 3.5,
     fireRateHz: 0.6,
     fireIntervalSec: 1 / 0.6,
@@ -685,9 +685,9 @@ const RAIL_SNIPER_TIERS: Record<TurretTierId, TurretTierStats> = {
     level: 2,
     label: 'T2 Extended Capacitor Rails',
     summary: 'Overcharged dual-stage capacitor rails delivering near-total armor penetration.',
-    cost: 195,
-    cumulativeCost: 345,
-    sellRefundCredits: 259,
+    cost: 390,
+    cumulativeCost: 690,
+    sellRefundCredits: 345,
     rangeM: 4.0,
     fireRateHz: 0.9,
     fireIntervalSec: 1 / 0.9,
@@ -727,9 +727,9 @@ const RAIL_SNIPER_TIERS: Record<TurretTierId, TurretTierStats> = {
     label: 'T3 Twin-Rail Accelerator',
     summary:
       'Twin magnetic accelerator rails with 100% armor bypass, 1.8x anti-air lethality, and 1.7x boss damage.',
-    cost: 275,
-    cumulativeCost: 620,
-    sellRefundCredits: 465,
+    cost: 550,
+    cumulativeCost: 1240,
+    sellRefundCredits: 620,
     rangeM: 4.5,
     fireRateHz: 1.1,
     fireIntervalSec: 1 / 1.1,

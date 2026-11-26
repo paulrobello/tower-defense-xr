@@ -42,7 +42,7 @@
 - **Dependencies:** `P2-T1`, `P2-T2`, `plans/phase-1-room-mr-and-placement.md` (`P1-T4`)
 - **Scope:**
   - Implement `src/sim/engine.ts` with fixed-timestep (`dt = 1/60 s`) accumulator, spatial hash grid for fast neighbor queries (AoE splash, Cryo-Arc chains, Disruptor EMP radius), and seeded PRNG tie-breaking:
-    - Live & intermission build, upgrade (`T1→T2→T3`), target-priority switch, relocate (with brief redeploy cooldown), and sell (`75%` refund).
+    - Live & intermission build, upgrade (`T1→T2→T3`), target-priority switch, relocate (with brief redeploy cooldown), and sell (`50%` refund).
     - All 4 weapon systems: Autocannon rapid tracers, Plasma Mortar parabolic splash + burn DoT, Cryo-Arc slow (`35–55%`) + chain lightning (`2–4` jumps), Rail Sniper instant piercing line-of-sight beam with armor penetration & anti-air bonus.
     - Enemy spawning from active portals, path advancement, Disruptor turret-EMP status (`4 s` disable + immunity cooldown so a single disruptor cannot permastun), Broodlord Phase 2 transition + add spawns, Core damage, Victory/Defeat transitions, and typed event stream (`TurretFired`, `EnemyHit`, `EnemyKilled`, `TurretDisrupted`, `PortalOpened`, `CoreHit`, `WaveStarted`, `BossPhase2`, `MissionEnded`) for rendering and audio consumers.
 - **Verification:** Headless `vitest` suite runs a full deterministic 12-wave scripted defense to Victory AND a zero-turret run to Defeat, asserting identical final state hashes across repeated runs with the same seed, plus targeted unit tests for every turret role, armor reduction, cryo slow/chain, disruptor stun/recovery, and Boss Phase 2; `make checkall` passes.

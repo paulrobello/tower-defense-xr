@@ -994,6 +994,9 @@ export function createSpatialAudioEngine(
           case 'wave-started':
             play('wave-incoming');
             break;
+          case 'wave-cleared':
+            if (!simState.victory) play('mission-confirm');
+            break;
           default:
             break;
         }

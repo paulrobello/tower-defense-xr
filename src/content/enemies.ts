@@ -147,7 +147,7 @@ export const ENEMIES: Readonly<Record<EnemyId, EnemyDefinition>> = {
     archetypeLabel: 'Fast Swarm',
     summary:
       'Agile chitinous swarm unit that climbs down wall and ceiling rift splines onto floors and furniture, sprinting in packs toward the Core.',
-    maxHp: 80,
+    maxHp: 160,
     speedMps: 0.65,
     movementLayer: 'surface',
     canDescendWallToFloor: true,
@@ -190,7 +190,7 @@ export const ENEMIES: Readonly<Record<EnemyId, EnemyDefinition>> = {
     archetypeLabel: 'Aerial Striker',
     summary:
       'High-speed bio-mechanical flyer that darts directly from wall and ceiling portals through 3D open-air room corridors, bypassing floor furniture.',
-    maxHp: 105,
+    maxHp: 210,
     speedMps: 0.72,
     movementLayer: 'air',
     canDescendWallToFloor: false,
@@ -233,7 +233,7 @@ export const ENEMIES: Readonly<Record<EnemyId, EnemyDefinition>> = {
     archetypeLabel: 'Armored Heavy',
     summary:
       'Heavy floor-stomping siege organism plated in dense frontal chitin that reduces kinetic damage by 50%, requiring Rail Sniper or Plasma Mortar fire.',
-    maxHp: 440,
+    maxHp: 880,
     speedMps: 0.34,
     movementLayer: 'surface',
     canDescendWallToFloor: true,
@@ -276,7 +276,7 @@ export const ENEMIES: Readonly<Record<EnemyId, EnemyDefinition>> = {
     archetypeLabel: 'Aerial Tactical Support',
     summary:
       'Hovering dimensional support unit that glides toward turret clusters and emits a 1.2 m EMP field disabling turrets for 4 s (with recovery immunity cooldown).',
-    maxHp: 250,
+    maxHp: 500,
     speedMps: 0.45,
     movementLayer: 'air',
     canDescendWallToFloor: false,
@@ -325,7 +325,7 @@ export const ENEMIES: Readonly<Record<EnemyId, EnemyDefinition>> = {
     archetypeLabel: 'Wave 12 Boss Matriarch',
     summary:
       'Massive bio-mechanical matriarch emerging from the Wave 12 super-rift; spawns Skitter adds, pulses turret-suppressing roars, and enters an armor-cracked Phase 2 frenzy at 50% HP.',
-    maxHp: 5600,
+    maxHp: 11200,
     speedMps: 0.12,
     movementLayer: 'surface',
     canDescendWallToFloor: true,

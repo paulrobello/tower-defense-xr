@@ -241,14 +241,14 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
     });
   });
 
-  describe('Turret Commands (place, upgrade T1->T2->T3, priority, relocate cooldown, sell 75% refund)', () => {
-    it('places, upgrades T1->T2->T3, switches priorities, relocates with 1.5s cooldown, and sells for 75% total invested refund', () => {
+  describe('Turret Commands (place, upgrade T1->T2->T3, priority, relocate cooldown, sell 50% refund)', () => {
+    it('places, upgrades T1->T2->T3, switches priorities, relocates with 1.5s cooldown, and sells for 50% total invested refund', () => {
       const sim = createCombatSimulation({ seed: 0x1234_5678, startingCredits: 1000 });
       expect(TURRET_DEFS.autocannon.name).toBe('M44 Autocannon');
       expect(ENEMY_DEFS['carapace-brute'].armor.kineticReduction).toBe(0.5);
       expect(MISSION_WAVES).toHaveLength(12);
 
-      // 1. Place T1 Autocannon (cost 100)
+      // 1. Place T1 Autocannon (cost 200)
       const placed = sim.placeTurret({
         id: 'turret-alpha',
         kind: 'autocannon',
@@ -259,8 +259,8 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       expect(placed.ok).toBe(true);
       expect(placed.turret?.tier).toBe('T1');
       expect(placed.turret?.level).toBe(1);
-      expect(placed.turret?.investedCredits).toBe(100);
-      expect(placed.remainingCredits).toBe(900);
+      expect(placed.turret?.investedCredits).toBe(200);
+      expect(placed.remainingCredits).toBe(800);
 
       // 2. Reject placement violating minimum 0.35 m spacing (`TOO_CLOSE`)
       const tooClose = sim.placeTurret({
@@ -272,22 +272,22 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       expect(tooClose.ok).toBe(false);
       expect(tooClose.reason).toBe('TOO_CLOSE');
 
-      // 3. Upgrade T1 -> T2 (cost 130, cumulative 230) and T2 -> T3 (cost 190, cumulative 420)
+      // 3. Upgrade T1 -> T2 (cost 260, cumulative 460) and T2 -> T3 (cost 380, cumulative 840)
       const upT2 = sim.upgradeTurret('turret-alpha');
       expect(upT2.ok).toBe(true);
       expect(upT2.previousTier).toBe('T1');
       expect(upT2.tier).toBe('T2');
-      expect(upT2.cost).toBe(130);
-      expect(upT2.turret?.investedCredits).toBe(230);
-      expect(upT2.remainingCredits).toBe(770);
+      expect(upT2.cost).toBe(260);
+      expect(upT2.turret?.investedCredits).toBe(460);
+      expect(upT2.remainingCredits).toBe(540);
 
       const upT3 = sim.upgradeTurret('turret-alpha');
       expect(upT3.ok).toBe(true);
       expect(upT3.previousTier).toBe('T2');
       expect(upT3.tier).toBe('T3');
-      expect(upT3.cost).toBe(190);
-      expect(upT3.turret?.investedCredits).toBe(420);
-      expect(upT3.remainingCredits).toBe(580);
+      expect(upT3.cost).toBe(380);
+      expect(upT3.turret?.investedCredits).toBe(840);
+      expect(upT3.remainingCredits).toBe(160);
 
       // Further upgrade at T3 is rejected with MAX_TIER
       const upMax = sim.upgradeTurret('turret-alpha');
@@ -306,7 +306,7 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       expect(relocated.ok).toBe(true);
       expect(relocated.cost).toBe(TURRET_RELOCATE_COST);
       expect(relocated.redeployCooldownSec).toBe(TURRET_REDEPLOY_COOLDOWN_SEC);
-      expect(relocated.remainingCredits).toBe(580 - TURRET_RELOCATE_COST);
+      expect(relocated.remainingCredits).toBe(160 - TURRET_RELOCATE_COST);
       expect(relocated.turret?.position).toEqual({ x: 0.85, y: 0, z: 0.35 });
       expect(relocated.turret?.isRedeploying).toBe(true);
 
@@ -327,21 +327,21 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       expect(sim.getTurret('turret-alpha')?.shotsFired).toBeGreaterThan(0);
       expect(testEnemy.hp).toBeLessThan(500);
 
-      // 6. Sell turret: refunds 75% of total invested credits (420 * 0.75 = 315)
+      // 6. Sell turret: refunds 50% of total invested credits (840 * 0.5 = 420)
       const creditsBeforeSell = sim.getState().credits;
       const expectedRefund = getTurretSellRefund('autocannon', 'T3');
-      expect(expectedRefund).toBe(315);
+      expect(expectedRefund).toBe(420);
 
       const sold = sim.sellTurret('turret-alpha');
       expect(sold.ok).toBe(true);
-      expect(sold.refundCredits).toBe(315);
-      expect(sold.remainingCredits).toBe(creditsBeforeSell + 315);
+      expect(sold.refundCredits).toBe(420);
+      expect(sold.remainingCredits).toBe(creditsBeforeSell + 420);
       expect(sim.getState().turrets).toHaveLength(0);
     });
 
     it('routes turret and wave commands through the shared ActionBus', () => {
       const bus = createActionBus();
-      const sim = createCombatSimulation({ seed: 42, startingCredits: 600 });
+      const sim = createCombatSimulation({ seed: 42, startingCredits: 1000 });
       const detach = sim.attachActionBus(bus);
 
       bus.dispatch({
@@ -750,7 +750,7 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
   describe('Starter turret balance', () => {
     it('funds exactly two starter Autocannons in a fresh mission', () => {
       const sim = createCombatSimulation({ seed: 0x2026 });
-      expect(sim.getState().credits).toBe(200);
+      expect(sim.getState().credits).toBe(400);
 
       const build = (x: number) =>
         sim.placeTurret({

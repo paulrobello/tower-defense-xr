@@ -230,6 +230,8 @@ const _color = new THREE.Color();
 const CRYO_FROST_COLOR = new THREE.Color(0x22d3ee);
 const BOSS_PHASE1_EMISSIVE = new THREE.Color(0xec4899);
 const BOSS_PHASE2_MOLTEN_EMISSIVE = new THREE.Color(0xff4d00);
+/** Small room-side bias after the scaled rim's back face meets the host plane. */
+const PORTAL_HOST_CONTACT_BIAS_M = 0.002;
 
 function orientSegmentMatrix(
   from: Readonly<Vec3>,
@@ -2115,12 +2117,17 @@ export function createBlockoutRenderer(
         }
 
         portalBlockout.isOpen = simPortal.isOpen;
+        const portalView = ensurePortalAsset(portalBlockout);
         _dir.set(simPortal.normal.x, simPortal.normal.y, simPortal.normal.z).normalize();
         if (_dir.lengthSq() < 1e-6) _dir.set(0, 0, 1);
         _vecA.set(simPortal.position.x, simPortal.position.y, simPortal.position.z);
-        if (simPortal.hostKind !== 'virtual-rift') {
-          // Keep the entire rim on the room side even at grazing angles.
-          _vecA.addScaledVector(_dir, RIFT_PORTAL_SPEC.rimThicknessM / 2 + 0.03);
+        if (!portalView && simPortal.hostKind !== 'virtual-rift') {
+          // The procedural torus straddles its origin; the GLB flange is authored at Z=0.
+          _vecA.addScaledVector(
+            _dir,
+            RIFT_PORTAL_SPEC.rimThicknessM * GAMEPLAY_OBJECT_SCALE * 0.5 +
+              PORTAL_HOST_CONTACT_BIAS_M,
+          );
         }
         buildPortalWorldMatrix(
           {
@@ -2135,7 +2142,13 @@ export function createBlockoutRenderer(
         _mat4.decompose(portalBlockout.group.position, portalBlockout.group.quaternion, _scale);
 
         if (portalBlockout.apertureMaskMesh) {
-          portalBlockout.apertureMaskMesh.position.copy(portalBlockout.group.position);
+          // The mask belongs on the scanned host plane. Only the visual rim is recessed
+          // room-side, otherwise the occlusion cutout inherits the visual contact offset.
+          portalBlockout.apertureMaskMesh.position.set(
+            simPortal.position.x,
+            simPortal.position.y,
+            simPortal.position.z,
+          );
           portalBlockout.apertureMaskMesh.quaternion.copy(portalBlockout.group.quaternion);
           portalBlockout.apertureMaskMesh.visible = simPortal.isOpen;
         }
@@ -2145,7 +2158,6 @@ export function createBlockoutRenderer(
           portalBlockout.spawnFlashSec = Math.max(0, portalBlockout.spawnFlashSec - stepDt);
         }
 
-        const portalView = ensurePortalAsset(portalBlockout);
         if (portalView) {
           if (simPortal.isOpen && !portalView.wasOpen) {
             playMixerClip(portalView.mixer, portalView.clips, 'open_tear', false);

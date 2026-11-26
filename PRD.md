@@ -100,7 +100,7 @@ All repos surveyed via `parsight` and direct inspection; each entry specifies ex
   2. **Helios Plasma Mortar (AoE):** High-arcing explosive plasma shells with splash damage and brief burn DoT; counters clustered crawlers; Tier 2 dual-chamber, Tier 3 heavy siege mortar + shockwave ring.
   3. **Glacier Cryo-Arc (Slow + Chain):** Emits continuous/pulsed cryo-electric arcs that slow movement by 35–55% and chain across 2–4 nearby enemies (ground and air); Tier 2 dual coils, Tier 3 tri-pylon cryo conduit.
   4. **Valkyrie Rail Sniper (Anti-Air + Armor-Piercing):** Long-range high-velocity rail slug that pierces armor and deals bonus damage to flying units, Disruptors, and the Boss; Tier 2 extended capacitor rails, Tier 3 twin-rail accelerator.
-  Players can build, upgrade (3 tiers), change target priority, relocate (for a small credit fee), or sell (75% refund) both between waves and live mid-wave.
+  Players can build, upgrade (3 tiers), change target priority, relocate (for a small credit fee), or sell (50% refund) both between waves and live mid-wave.
 - **D8 — 5 Rigged Invader Archetypes & 12-Wave Mission.**
   1. **Skitter Crawler** (Fast Swarm): Climbs out of wall/ceiling portals down onto floors/furniture and sprints in packs toward the Core.
   2. **Wasp Skimmer** (Aerial Striker): Flies directly from wall/ceiling portals through 3D room corridors; ignores floor obstacles.

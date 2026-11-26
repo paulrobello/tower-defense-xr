@@ -129,7 +129,7 @@ export const MUSIC_CUES: Readonly<Record<MusicCueId, MusicCueDefinition>> = {
 };
 
 /** Player's initial Requisition credits at Wave 1 prep phase. */
-export const STARTING_CREDITS = 200;
+export const STARTING_CREDITS = 400;
 
 /** Core Bastion maximum hit points (`100` makes percentage star ratings exact). */
 export const CORE_MAX_HP = 100;

@@ -3,8 +3,8 @@
  *
  * - **Spatial XR HUD (`xrRoot`):** Built on `@par/xr-workspace` public exports (`createMenuPanel`,
  *   `CachedTextBatch`, `keepAbove`, `OVERLAY_RENDER_ORDER`) with local bundled Troika SDF fonts
- *   (`configureFonts()`). Displays Core HP, Requisition Credits, Wave `N/12`, Active Turrets
- *   `N/14`, Play Arc badge (`180°` / `360°`), contextual primary button (`Lock Core` in `calibrate`,
+ *   (`configureFonts()`). Displays Core HP, Requisition Credits, wave progress, remaining enemies,
+ *   active turrets, Play Arc (`180°` / `360°`), contextual primary button (`Lock Core` in `calibrate`,
  *   `Launch Wave` in `prep`/`intermission`, `Wave Active` in `wave`, `Recalibrate` on end screens),
  *   and `Settings` button. Marked `rootUIgrabbable` so Universal Manipulation can move/rotate/scale
  *   it cleanly as one unit.
@@ -47,6 +47,7 @@ export interface TacticalHudState {
   readonly credits: number;
   readonly wave: number;
   readonly totalWaves: number;
+  readonly enemiesRemaining: number;
   readonly activeTurrets: number;
   readonly maxTurrets: number;
   readonly playArc: PlayArc;
@@ -144,6 +145,28 @@ function formatTurretsText(state: Readonly<TacticalHudState>): string {
   return `TURRETS ${Math.max(0, Math.floor(state.activeTurrets))}/${Math.max(1, Math.floor(state.maxTurrets))}`;
 }
 
+function formatRemainingEnemies(state: Readonly<TacticalHudState>): string {
+  if (state.phase === 'intermission') return '0';
+  if (state.phase !== 'wave') return '—';
+  return String(state.enemiesRemaining);
+}
+
+function createChamferPlate(width: number, height: number, bevel: number): THREE.ShapeGeometry {
+  const x = width / 2;
+  const y = height / 2;
+  const outline = new THREE.Shape();
+  outline.moveTo(-x + bevel, y);
+  outline.lineTo(x - bevel, y);
+  outline.lineTo(x, y - bevel);
+  outline.lineTo(x, -y + bevel);
+  outline.lineTo(x - bevel, -y);
+  outline.lineTo(-x + bevel, -y);
+  outline.lineTo(-x, -y + bevel);
+  outline.lineTo(-x, y - bevel);
+  outline.closePath();
+  return new THREE.ShapeGeometry(outline);
+}
+
 function createBatchedTextMember(
   text: string,
   fontUrl: string,
@@ -202,6 +225,7 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
     credits: options.initialState?.credits ?? STARTING_CREDITS,
     wave: options.initialState?.wave ?? 0,
     totalWaves: options.initialState?.totalWaves ?? TOTAL_WAVES,
+    enemiesRemaining: options.initialState?.enemiesRemaining ?? 0,
     activeTurrets: options.initialState?.activeTurrets ?? 0,
     maxTurrets: options.initialState?.maxTurrets ?? HARD_TURRET_CAP,
     playArc: options.initialState?.playArc ?? 'front-180',
@@ -280,7 +304,8 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
     width,
     rowHeight: buttonRowHeight,
     rowGap: 0.01,
-    cellGap: 0.018,
+    cellGap: 0.014,
+    hoverColor: 0x86f9ff,
   });
   panel.root.position.set(0, -telemetryHeight - 0.012, 0.002);
 
@@ -291,8 +316,8 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
   textBatch.frustumCulled = false;
   textBatch.raycast = () => undefined;
 
-  const topLineY = -0.024;
-  const bottomLineY = -0.058;
+  const topLineY = -0.02;
+  const bottomLineY = -0.063;
   const leftX = -width / 2 + 0.012;
   const rightX = width / 2 - 0.012;
 
@@ -332,50 +357,87 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
     bottomLineY,
     'right',
   );
-  const arcBadgeText = createBatchedTextMember(
-    state.playArc === 'front-180' ? '180° ARC' : '360° ARC',
+  const enemyCaption = createBatchedTextMember(
+    'ENEMIES LEFT',
     fontUrl,
-    0.019,
-    '#2de2ff',
+    0.017,
+    '#b6dce6',
     0,
-    topLineY,
+    -0.023,
     'center',
   );
+  const enemyCountText = createBatchedTextMember(
+    formatRemainingEnemies(state),
+    fontUrl,
+    0.033,
+    '#fff4b9',
+    0,
+    -0.054,
+    'center',
+  );
+  enemyCountText.name = 'tactical-hud-enemies-left';
 
-  const batchMembers = [coreHpText, creditsText, waveText, turretsText, arcBadgeText];
+  const batchMembers = [
+    coreHpText,
+    creditsText,
+    waveText,
+    turretsText,
+    enemyCaption,
+    enemyCountText,
+  ];
   for (const member of batchMembers) {
     textBatch.addText(member);
   }
   textBatch.revision += 1;
 
   const totalHeight = telemetryHeight + 0.012 + panel.height;
-  const backingGeo = new THREE.PlaneGeometry(width + padX * 2, totalHeight + padY * 2);
-  const backingMat = new THREE.MeshBasicMaterial({
-    color: 0x09131d,
-    transparent: true,
-    opacity: 0.88,
-    depthWrite: false,
-  });
-  backingMat.forceSinglePass = true;
+  const panelWidth = width + padX * 2;
+  const panelHeight = totalHeight + padY * 2;
+  const frameGeo = createChamferPlate(panelWidth, panelHeight, 0.018);
+  const backingGeo = createChamferPlate(panelWidth - 0.006, panelHeight - 0.006, 0.016);
+  const insetGeo = createChamferPlate(width * 0.32, 0.074, 0.009);
+  const trimGeo = new THREE.PlaneGeometry(width * 0.36, 0.004);
+  const barWidth = width * 0.24;
+  const healthGeo = new THREE.PlaneGeometry(barWidth, 0.006);
+
+  const createPlateMaterial = (color: number, opacity = 1): THREE.MeshBasicMaterial =>
+    new THREE.MeshBasicMaterial({ color, opacity, transparent: true, depthWrite: false });
+
+  const frameMat = createPlateMaterial(0x438592, 0.98);
+  const backingMat = createPlateMaterial(0x071823, 0.96);
+  const insetMat = createPlateMaterial(0x153644);
+  const trimMat = createPlateMaterial(0x53e4f2);
+  const healthTrackMat = createPlateMaterial(0x254750);
+  const healthMat = createPlateMaterial(0x5ef2b6);
+
+  const frame = new THREE.Mesh(frameGeo, frameMat);
+  frame.position.set(0, -totalHeight / 2, -0.007);
+  frame.raycast = () => undefined;
+
   const backing = new THREE.Mesh(backingGeo, backingMat);
   backing.name = 'tactical-hud-backing';
   backing.position.set(0, -totalHeight / 2, -0.004);
   backing.userData.inputAction = 'grabWidget';
 
-  const trimGeo = new THREE.PlaneGeometry(width + padX * 2, 0.004);
-  const trimMat = new THREE.MeshBasicMaterial({
-    color: 0x2de2ff,
-    transparent: true,
-    opacity: 0.85,
-    depthWrite: false,
-  });
-  trimMat.forceSinglePass = true;
+  const enemyInset = new THREE.Mesh(insetGeo, insetMat);
+  enemyInset.position.set(0, -0.039, -0.002);
+  enemyInset.raycast = () => undefined;
+
   const trim = new THREE.Mesh(trimGeo, trimMat);
   trim.name = 'tactical-hud-top-trim';
-  trim.position.set(0, padY - 0.002, -0.002);
+  trim.position.set(-width * 0.28, padY - 0.004, -0.002);
   trim.raycast = () => undefined;
 
-  xrRoot.add(backing, trim, textBatch, panel.root);
+  const healthTrack = new THREE.Mesh(healthGeo, healthTrackMat);
+  healthTrack.position.set(leftX + barWidth / 2, -0.039, -0.001);
+  healthTrack.raycast = () => undefined;
+  const healthFill = new THREE.Mesh(healthGeo, healthMat);
+  healthFill.name = 'tactical-hud-core-fill';
+  healthFill.position.copy(healthTrack.position);
+  healthFill.position.z = 0.001;
+  healthFill.raycast = () => undefined;
+
+  xrRoot.add(frame, backing, trim, enemyInset, healthTrack, healthFill, textBatch, panel.root);
   const stopKeepAbove = keepAbove(xrRoot, renderOrder);
 
   // --- Desktop HUD Strip (strict CSSOM styling, no inline <style> injection) ---
@@ -391,6 +453,7 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
   let creditsEl: HTMLSpanElement | null = null;
   let waveWarningIconEl: HTMLSpanElement | null = null;
   let waveEl: HTMLSpanElement | null = null;
+  let enemiesEl: HTMLSpanElement | null = null;
   let empWarningIconEl: HTMLSpanElement | null = null;
   let turretsEl: HTMLSpanElement | null = null;
   let playArcBtn: HTMLButtonElement | null = null;
@@ -411,17 +474,21 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
       zIndex: '7000',
       display: 'flex',
       alignItems: 'center',
-      gap: '10px',
-      padding: '8px 14px',
-      borderRadius: '10px',
-      background: 'rgba(8, 16, 25, 0.88)',
-      border: '1px solid rgba(45, 226, 255, 0.4)',
-      boxShadow: '0 8px 28px rgba(0, 0, 0, 0.45)',
-      color: '#e7f4fb',
-      fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      fontSize: '13px',
+      justifyContent: 'center',
+      flexWrap: 'wrap',
+      maxWidth: 'calc(100% - 24px)',
+      gap: '7px',
+      padding: '10px 16px',
+      clipPath:
+        'polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px)',
+      background: 'linear-gradient(115deg, #102e3b, #081822 58%, #12323b)',
+      borderTop: '2px solid #53e4f2',
+      borderBottom: '1px solid #438592',
+      color: '#e9f8ff',
+      fontFamily: '"SF Mono", Consolas, monospace',
+      fontSize: '12px',
       fontWeight: '600',
-      letterSpacing: '0.03em',
+      letterSpacing: '0.05em',
       pointerEvents: 'auto',
       whiteSpace: 'nowrap',
     });
@@ -431,9 +498,8 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
       span.dataset.hud = key;
       applyStyle(span, {
         padding: '4px 8px',
-        borderRadius: '6px',
-        background: 'rgba(18, 34, 48, 0.9)',
-        border: '1px solid rgba(72, 118, 146, 0.45)',
+        backgroundColor: '#143342',
+        borderLeft: '2px solid #346979',
         color: accent,
         fontVariantNumeric: 'tabular-nums',
       });
@@ -446,9 +512,9 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
       btn.dataset.hud = key;
       applyStyle(btn, {
         padding: '5px 11px',
-        borderRadius: '6px',
-        border: primary ? '1px solid #2de2ff' : '1px solid rgba(72, 118, 146, 0.6)',
-        background: primary ? '#145870' : '#132433',
+        borderRadius: '1px 7px 1px 7px',
+        border: primary ? '1px solid #53e4f2' : '1px solid #346979',
+        background: primary ? '#0a5362' : '#102934',
         color: '#eef8fc',
         font: '600 12px/1.2 system-ui, -apple-system, sans-serif',
         letterSpacing: '0.04em',
@@ -475,6 +541,7 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
     creditsEl = makeStat('credits', '#ffd166');
     waveWarningIconEl = makeIconBadge('wave-warning-icon', 'Wave Active');
     waveEl = makeStat('wave', '#8fd8ff');
+    enemiesEl = makeStat('enemies-left', '#fff4b9');
     empWarningIconEl = makeIconBadge('emp-disrupted-icon', 'Turret EMP Disrupted');
     turretsEl = makeStat('turrets', '#e7f4fb');
 
@@ -493,6 +560,7 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
       creditsEl,
       waveWarningIconEl,
       waveEl,
+      enemiesEl,
       empWarningIconEl,
       turretsEl,
       playArcBtn,
@@ -519,32 +587,36 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
     const nextCreditsText = formatCreditsText(state);
     const nextWaveText = formatWaveText(state);
     const nextTurretsText = formatTurretsText(state);
-    const nextArcShort = state.playArc === 'front-180' ? '180° ARC' : '360° ARC';
+    const remainingEnemies = formatRemainingEnemies(state);
     const nextPrimaryLabel = formatPrimaryButtonLabel(state);
     const nextArcPanelLabel = formatPlayArcXrBadge(state.playArc);
-    const hpRatio = state.coreMaxHp > 0 ? state.coreHp / state.coreMaxHp : 0;
+    const hpRatio =
+      state.coreMaxHp > 0 ? THREE.MathUtils.clamp(state.coreHp / state.coreMaxHp, 0, 1) : 0;
     const hpColor = hpRatio <= 0.3 ? '#ff5c72' : hpRatio <= 0.6 ? '#ffd166' : '#5ef2b6';
 
     let batchDirty = false;
     const updateBatchMember = (member: Text, nextText: string, nextColor?: string): void => {
-      if (member.text !== nextText) {
-        member.text = nextText;
-        batchDirty = true;
-      }
-      if (nextColor !== undefined && member.color !== nextColor) {
-        member.color = nextColor;
-        batchDirty = true;
-      }
-      if (batchDirty) {
-        member.sync();
-      }
+      if (member.text === nextText && (nextColor === undefined || member.color === nextColor))
+        return;
+      member.text = nextText;
+      if (nextColor !== undefined) member.color = nextColor;
+      member.sync();
+      batchDirty = true;
     };
 
     updateBatchMember(coreHpText, nextCoreText, hpColor);
     updateBatchMember(creditsText, nextCreditsText);
     updateBatchMember(waveText, nextWaveText);
     updateBatchMember(turretsText, nextTurretsText);
-    updateBatchMember(arcBadgeText, nextArcShort);
+    updateBatchMember(
+      enemyCountText,
+      remainingEnemies,
+      state.phase === 'wave' ? '#fff4b9' : '#a8c8d0',
+    );
+    healthFill.visible = hpRatio > 0;
+    healthFill.scale.x = hpRatio;
+    healthFill.position.x = leftX + (barWidth * hpRatio) / 2;
+    healthMat.color.set(hpColor);
 
     if (batchDirty) {
       textBatch.revision += 1;
@@ -556,9 +628,15 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
     if (coreHpEl) {
       coreHpEl.textContent = nextCoreText;
       coreHpEl.style.color = hpColor;
+      const percentage = hpRatio * 100;
+      coreHpEl.style.backgroundImage = `linear-gradient(to right, ${hpColor} ${percentage}%, #254750 ${percentage}%)`;
+      coreHpEl.style.backgroundSize = '100% 2px';
+      coreHpEl.style.backgroundRepeat = 'no-repeat';
+      coreHpEl.style.backgroundPosition = 'bottom';
     }
     if (creditsEl) creditsEl.textContent = nextCreditsText;
     if (waveEl) waveEl.textContent = nextWaveText;
+    if (enemiesEl) enemiesEl.textContent = `ENEMIES LEFT ${remainingEnemies}`;
     if (turretsEl) turretsEl.textContent = nextTurretsText;
     const syncAtlasBadge = (el: HTMLSpanElement | null, iconId: string, active: boolean): void => {
       if (!el) return;
@@ -683,10 +761,12 @@ export function createTacticalHud(options: TacticalHudOptions): TacticalHud {
       }
       textBatch.dispose();
       panel.dispose();
-      backingGeo.dispose();
-      backingMat.dispose();
-      trimGeo.dispose();
-      trimMat.dispose();
+      for (const geometry of [frameGeo, backingGeo, insetGeo, trimGeo, healthGeo]) {
+        geometry.dispose();
+      }
+      for (const material of [frameMat, backingMat, insetMat, trimMat, healthTrackMat, healthMat]) {
+        material.dispose();
+      }
       xrRoot.clear();
       xrRoot.removeFromParent();
       desktopElement?.remove();

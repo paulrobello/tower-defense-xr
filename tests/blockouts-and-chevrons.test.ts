@@ -5,7 +5,9 @@ import {
   CORE_BASTION_SPEC,
   ENEMIES,
   ENEMY_IDS,
+  GAMEPLAY_OBJECT_SCALE,
   getTurretTierStats,
+  RIFT_PORTAL_SPEC,
   TURRET_BARREL_START_FRACTION,
   TURRET_KINDS,
   type TurretKind,
@@ -121,6 +123,53 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
     expect(renderer.coreBastion.hitFlashRemainingSec).toBeGreaterThan(0);
     expect(renderer.coreBastion.shieldMaterial.color.getHex()).toBe(0xff3b5c);
 
+    renderer.dispose();
+    occlusion.dispose();
+  });
+
+  it('puts scaled wall and ceiling portal rims against their host plane while keeping masks on the anchor', () => {
+    const scene = new THREE.Scene();
+    const occlusion = createOcclusionController({ initialMode: 'auto-depth' });
+    const renderer = createBlockoutRenderer(scene, occlusion);
+    const sim = createCombatSimulation({ seed: 20261120 });
+    const baseState = sim.getState();
+    const portals = baseState.portals.map((portal, index) =>
+      index < 2
+        ? {
+            ...portal,
+            position: { x: index === 0 ? -0.9 : 0.9, y: index === 1 ? 2.5 : 1.4, z: -2.1 },
+            normal: index === 1 ? { x: 0, y: -1, z: 0 } : { x: 0, y: 0, z: 1 },
+            hostKind: index === 1 ? ('ceiling' as const) : ('wall' as const),
+          }
+        : portal,
+    );
+
+    renderer.syncFromSim({ ...baseState, portals }, [], 1 / 60);
+    scene.updateMatrixWorld(true);
+
+    for (const anchor of portals.slice(0, 2)) {
+      const blockout = renderer.portals.get(anchor.id);
+      expect(blockout).toBeDefined();
+      if (!blockout) continue;
+      const normal = new THREE.Vector3(anchor.normal.x, anchor.normal.y, anchor.normal.z);
+      const backOfRim = blockout.group.localToWorld(
+        new THREE.Vector3(0, 0, -RIFT_PORTAL_SPEC.rimThicknessM * 0.5),
+      );
+      const anchorPoint = new THREE.Vector3(
+        anchor.position.x,
+        anchor.position.y,
+        anchor.position.z,
+      );
+      expect(backOfRim.clone().sub(anchorPoint).dot(normal)).toBeCloseTo(0.002, 4);
+      expect(blockout.apertureMaskMesh).not.toBeNull();
+      if (blockout.apertureMaskMesh) {
+        expect(
+          blockout.apertureMaskMesh.getWorldPosition(new THREE.Vector3()).distanceTo(anchorPoint),
+        ).toBeLessThan(1e-6);
+      }
+    }
+
+    expect(GAMEPLAY_OBJECT_SCALE).toBe(0.45);
     renderer.dispose();
     occlusion.dispose();
   });

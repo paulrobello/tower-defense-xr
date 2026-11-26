@@ -8,7 +8,7 @@
  * 1. Clicks `Play Desktop` and locks the Core Anchor during Calibration.
  * 2. Builds all 4 turret types (`autocannon`, `plasma-mortar`, `cryo-arc`, `rail-sniper`) including
  *    a mid-air `hover-pod`, upgrades a turret (`T1 -> T2`), relocates a turret (charging 25 CR and
- *    entering 1.5 s redeploy cooldown), and sells a turret (verifying exact 75% refund).
+ *    entering 1.5 s redeploy cooldown), and sells a turret (verifying exact 50% refund).
  * 3. Launches Wave 1, steps real frames, and asserts enemies spawn, turrets fire, enemy kill occurs,
  *    and Requisition credits increase.
  * 4. Uses `?debug` shortcuts (`debugGrantCredits` + `debugJumpToWave(12)` + full turret defense) to
@@ -326,18 +326,18 @@ try {
       afterLock.phase === 'prep' &&
       afterLock.locked &&
       !afterLock.previewVisible &&
-      afterLock.credits === 200 &&
+      afterLock.credits === 400 &&
       afterLock.seed === 4242,
     { calibrateSnap, afterLock },
   );
 
   // =========================================================================
   // 2. Build all 4 turret types (including mid-air hover-pod), upgrade T1->T2,
-  //    relocate, and sell (verifying exact 75% refund)
+  //    relocate, and sell (verifying exact 50% refund)
   // =========================================================================
-  // Grant 450 credits so we can build all 4 turrets + a 5th temp turret + upgrade + relocate in prep
+  // Grant 1,200 credits so we can build all 4 turrets + a 5th temp turret + upgrade + relocate in prep
   await page.evaluate(() => {
-    window.__riftBastionApp?.debugGrantCredits(450);
+    window.__riftBastionApp?.debugGrantCredits(1200);
   });
 
   const buildDesktopSurfaceTurret = async (
@@ -367,7 +367,7 @@ try {
   await page.mouse.click(hoverAimPt.clientX, hoverAimPt.clientY);
   await waitAnimationFrames(page, 2);
 
-  // Toggle back to surface-clamp mode and build a 5th temporary T1 Autocannon (100 CR) for 75% sell refund test
+  // Toggle back to surface-clamp mode and build a 5th temporary T1 Autocannon for the sell refund test
   await page.keyboard.press('h');
   await buildDesktopSurfaceTurret('1', { x: -1.35, y: 0, z: 0.65 });
   await page.keyboard.press('Escape');
@@ -444,7 +444,7 @@ try {
     'desktop-turret-upgrade-t1-to-t2',
     upgradeSummary.tier === 'T2' &&
       upgradeSummary.level === 2 &&
-      upgradeSummary.investedCredits === 230 &&
+      upgradeSummary.investedCredits === 460 &&
       upgradeSummary.blockoutTier === 'T2' &&
       upgradeSummary.barrelCount === 2,
     upgradeSummary,
@@ -510,7 +510,7 @@ try {
     relocateSummary,
   );
 
-  // 2f. Sell the 5th temporary T1 Autocannon (invested 100 CR) via hotkey 'x' and verify 75% refund (75 CR)
+  // 2f. Sell the 5th temporary T1 Autocannon and verify a 50% refund
   const tempAutocannon = builtSummary.turrets.find(
     (t) => t.kind === 'autocannon' && t.id !== autocannonTurret.id,
   );
@@ -523,18 +523,24 @@ try {
     return {
       creditsBefore: app?.sim.getState().credits ?? 0,
       investedCredits: t?.investedCredits ?? 0,
-      expectedRefund: Math.round((t?.investedCredits ?? 0) * 0.75),
+      expectedRefund: Math.round((t?.investedCredits ?? 0) * 0.5),
     };
   }, tempAutocannon.id);
 
   const sellSelectPt = await projectWorldToClient(page, {
     x: tempAutocannon.position.x,
-    y: tempAutocannon.position.y + 0.12,
+    y: tempAutocannon.position.y + 0.054,
     z: tempAutocannon.position.z,
   });
   await page.mouse.move(sellSelectPt.clientX, sellSelectPt.clientY);
   await page.mouse.click(sellSelectPt.clientX, sellSelectPt.clientY);
-  await page.keyboard.press('x');
+  const inspector = page.locator('[data-turret-inspector="true"]');
+  await inspector.waitFor({ state: 'visible' });
+  const selectedPreview = await page.evaluate(() => {
+    const inspector = window.__riftBastionApp?.turretInspector;
+    return { id: inspector?.turret?.id, rangeVisible: inspector?.rangeRoot.visible };
+  });
+  await inspector.locator('[data-turret-action="sell"]').click();
   await waitAnimationFrames(page, 2);
 
   const sellSummary = await page.evaluate(
@@ -556,11 +562,13 @@ try {
   );
 
   record(
-    'desktop-turret-sell-75pct-refund',
-    !sellSummary.stillExists &&
+    'desktop-turret-sell-50pct-refund',
+    selectedPreview.id === tempAutocannon.id &&
+      selectedPreview.rangeVisible === true &&
+      !sellSummary.stillExists &&
       sellSummary.remainingTurretCount === 4 &&
       sellSummary.refundReceived === sellSummary.expectedRefund &&
-      Math.abs(sellSummary.refundRatio - 0.75) < 1e-6,
+      Math.abs(sellSummary.refundRatio - 0.5) < 1e-6,
     sellSummary,
   );
 
@@ -769,7 +777,7 @@ try {
             sawPhase2Event || app.sim.getEventHistory().some((e) => e.type === 'boss-phase2'),
           bossId: boss?.id ?? null,
           hp: boss?.hp ?? 0,
-          maxHp: boss?.maxHp ?? 5600,
+          maxHp: boss?.maxHp ?? 11200,
           bossPhase: boss?.bossPhase ?? 2,
           isBossPhase2: boss?.isBossPhase2 ?? true,
           blockoutPhase2: blockout?.isBossPhase2 ?? false,
@@ -841,6 +849,8 @@ try {
       newBestText: newBestEl?.textContent ?? '',
       newBestVisible: newBestEl instanceof HTMLElement ? !newBestEl.hidden : false,
       starsText: starsEl?.textContent ?? '',
+      atlasEarned: starsEl?.querySelectorAll('[data-star-slot="earned"]').length ?? 0,
+      atlasEmpty: starsEl?.querySelectorAll('[data-star-slot="empty"]').length ?? 0,
       scoreText: scoreEl?.textContent ?? '',
       wavesText: wavesEl?.textContent ?? '',
     };
@@ -858,7 +868,10 @@ try {
       victoryOverlaySnap.titleText.includes('VICTORY') &&
       victoryOverlaySnap.newBestVisible === true &&
       victoryOverlaySnap.newBestText === 'NEW BEST' &&
-      victoryOverlaySnap.starsText.includes('★') &&
+      victoryOverlaySnap.starsText.includes(`${victoryOverlaySnap.stars} / 3 Stars`) &&
+      (victoryOverlaySnap.starsText.includes('★') ||
+        (victoryOverlaySnap.atlasEarned === victoryOverlaySnap.stars &&
+          victoryOverlaySnap.atlasEmpty === 3 - victoryOverlaySnap.stars)) &&
       victoryOverlaySnap.wavesText === '12 / 12',
     victoryOverlaySnap,
   );

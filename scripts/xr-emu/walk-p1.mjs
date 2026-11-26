@@ -387,14 +387,14 @@ try {
         mountedRiftsInRoom: st.portalAnchors
           .filter((portal) => portal.hostKind !== 'virtual-rift')
           .every((portal) => {
-            const rendered = app.blockouts.portals.get(portal.id)?.group.position;
-            if (!rendered) return false;
-            return (
-              (rendered.x - portal.position.x) * portal.normal.x +
-                (rendered.y - portal.position.y) * portal.normal.y +
-                (rendered.z - portal.position.z) * portal.normal.z >
-              0.06
-            );
+            const group = app.blockouts.portals.get(portal.id)?.group;
+            if (!group) return false;
+            const offset =
+              (group.position.x - portal.position.x) * portal.normal.x +
+              (group.position.y - portal.position.y) * portal.normal.y +
+              (group.position.z - portal.position.z) * portal.normal.z;
+            const hasGlb = Boolean(group.getObjectByName(`aaa-rift-portal-${portal.id}`));
+            return hasGlb ? Math.abs(offset) < 1e-5 : offset > 0 && offset < 0.04;
           }),
         minPortalDistM: Number(
           Math.min(...st.portalAnchors.map((p) => p.distanceFromCore)).toFixed(3),
@@ -651,7 +651,7 @@ try {
         seatedLocked.phase === 'prep' &&
         seatedLocked.locked === true &&
         seatedLocked.waveAfter25Seconds === 0 &&
-        seatedLocked.credits === 200,
+        seatedLocked.credits === 400,
       seatedLocked,
     );
 
@@ -743,7 +743,7 @@ try {
       }
 
       // Fund all four mount checks independently of the two-turret opening budget.
-      app.debugGrantCredits(200);
+      app.debugGrantCredits(400);
       const targets = [
         { label: 'floor', expectedKind: 'floor', point: { x: -0.9, y: 0.0, z: -0.55 } },
         { label: 'table', expectedKind: 'table', point: { x: 1.6, y: 0.74, z: 0.0 } },
@@ -1262,7 +1262,17 @@ try {
 
         const mat = mesh.material;
         const anchor = app.calibration.portalAnchors.find((entry) => entry.id === portal.id);
-        const modelScale = app.blockouts.portals.get(portal.id)?.group.scale.x ?? 0;
+        const portalModel = app.blockouts.portals.get(portal.id)?.group;
+        const modelScale = portalModel?.scale.x ?? 0;
+        const onHostPlane = Boolean(
+          anchor &&
+            portalModel?.getObjectByName(`aaa-rift-portal-${portal.id}`) &&
+            Math.hypot(
+              portalModel.position.x - anchor.position.x,
+              portalModel.position.y - anchor.position.y,
+              portalModel.position.z - anchor.position.z,
+            ) < 1e-5,
+        );
         const apertureMatchesModel =
           Boolean(anchor) &&
           portal.radiusX === (anchor.width * modelScale) / 2 &&
@@ -1273,6 +1283,7 @@ try {
           triCount,
           depthOnly: mat.colorWrite === false && mat.depthWrite === true,
           apertureMatchesModel,
+          onHostPlane,
           centerHits,
           outsideHits,
         });
@@ -1304,6 +1315,7 @@ try {
             c.triCount > 2 &&
             c.depthOnly &&
             c.apertureMatchesModel &&
+            c.onHostPlane &&
             c.centerHits === 0 &&
             c.outsideHits > 0,
         ),
@@ -1398,15 +1410,39 @@ try {
       // A press that starts in the room may not activate the HUD if the controller crosses it.
       app.placement.beginBuild('autocannon');
       await frames(3);
+      const ghost = app.placement.ghost;
+      const previewVisibleInWorld = ghost.group.visible;
       right.updateButtonValue('trigger', 1);
       await frames(3);
       const noCommitOnPress = app.placement.turretCount === count;
       await controls.aimControl('tactical-hud-primary-action');
+      const previewHiddenOverButton =
+        !ghost.group.visible && !ghost.reasonLabel.visible && app.placement.active;
       right.updateButtonValue('trigger', 0);
       await frames(3);
       const crossedHudWithoutLaunch = app.state.phase === 'prep';
+      const hud = app.tacticalHud.xrRoot;
+      const nonButton = hud.localToWorld(hud.position.clone().set(0, -0.035, 0));
+      const head = device.position;
+      const origin = { x: head.x + 0.2, y: head.y - 0.23, z: head.z };
+      controls.aimController('right', origin, nonButton);
+      await frames(3);
+      const previewHiddenOverPanel = !ghost.group.visible && app.placement.active;
+      controls.aimController('right', origin, { x: 2, y: 0.5, z: -0.6 });
+      await frames(3);
+      const previewResumed = ghost.group.visible && app.placement.active;
+
       await controls.pressControl('tactical-hud-primary-action');
+      const combat = app.sim.getState();
+      const enemiesCount = app.tacticalHud.state.enemiesRemaining;
       return {
+        previewVisibleInWorld,
+        previewHiddenOverButton,
+        previewHiddenOverPanel,
+        previewResumed,
+        enemiesCount,
+        waveEnemies: combat.enemies.length + combat.pendingWaveSpawns,
+        queuedEnemies: combat.pendingWaveSpawns,
         stillPreparing,
         idleBeamWitnesses,
         noCommitOnPress,
@@ -1423,6 +1459,21 @@ try {
         inputOwnership.crossedHudWithoutLaunch &&
         inputOwnership.deliberateLaunch &&
         inputOwnership.turretCountUnchanged,
+      inputOwnership,
+    );
+    record(
+      'xr-menu-aim-hides-and-resumes-placement-preview',
+      inputOwnership.previewVisibleInWorld &&
+        inputOwnership.previewHiddenOverButton &&
+        inputOwnership.previewHiddenOverPanel &&
+        inputOwnership.previewResumed,
+      inputOwnership,
+    );
+    record(
+      'xr-hud-counts-active-and-queued-enemies',
+      inputOwnership.enemiesCount > 0 &&
+        inputOwnership.queuedEnemies > 0 &&
+        inputOwnership.enemiesCount === inputOwnership.waveEnemies,
       inputOwnership,
     );
     const enemyScale = await page.evaluate(() => {
@@ -1506,6 +1557,77 @@ try {
         airborneBlast.alpha < 1 &&
         blastFromAbove > 0,
       { ...airborneBlast, blastFromAbove },
+    );
+
+    const selection = await page.evaluate(async () => {
+      const app = window.__riftBastionApp;
+      const { device, frames } = window.__xrEmu;
+      const controls = window.__p1Helpers;
+      controls.setHeadPose(device.position.x, device.position.y - 0.75, device.position.z);
+      await frames(3);
+
+      const origin = {
+        x: device.position.x + 0.2,
+        y: device.position.y - 0.23,
+        z: device.position.z,
+      };
+      for (const t of app.placement.placedTurrets) {
+        const point = {
+          x: t.position.x + t.normal.x * 0.054,
+          y: t.position.y + t.normal.y * 0.054,
+          z: t.position.z + t.normal.z * 0.054,
+        };
+        controls.aimController('right', origin, point);
+        await frames(3);
+        await controls.pressButton('right', 'trigger', 2, 3);
+        const selected = app.turretInspector.turret;
+        if (!selected) continue;
+        const range = app.turretInspector.rangeRoot;
+        const boundary = range.getObjectByName('turret-inspector-range-boundary');
+        return {
+          turretId: selected.id,
+          inspectorVisible: app.turretInspector.xrRoot.visible,
+          rangeVisible: range.visible,
+          renderedRange: boundary?.scale.x,
+          expectedRange: selected.stats.rangeM,
+          centeredOnTurret:
+            range.position.distanceTo({
+              x: selected.position.x,
+              y: selected.position.y,
+              z: selected.position.z,
+            }) < 1e-5,
+          refund: selected.investedCredits / 2,
+        };
+      }
+      return null;
+    });
+    await snap(page, '14-xr-turret-inspection-and-range.jpg');
+    const sale = await page.evaluate(async () => {
+      const app = window.__riftBastionApp;
+      const selected = app.turretInspector.turret;
+      if (!selected) return null;
+      const creditsBefore = app.sim.getState().credits;
+      await window.__p1Helpers.pressControl('turret-inspector-sell');
+      return {
+        sold: !app.sim.getTurret(selected.id),
+        creditIncrease: app.sim.getState().credits - creditsBefore,
+        inspectorClosed: !app.turretInspector.xrRoot.visible,
+        rangeHidden: !app.turretInspector.rangeRoot.visible,
+      };
+    });
+    record(
+      'xr-inspect-range-and-sell-placed-turret',
+      Boolean(
+        selection?.inspectorVisible &&
+          selection.rangeVisible &&
+          selection.centeredOnTurret &&
+          selection.renderedRange === selection.expectedRange &&
+          sale?.sold &&
+          sale.creditIncrease >= selection.refund &&
+          sale.inspectorClosed &&
+          sale.rangeHidden,
+      ),
+      { selection, sale },
     );
 
     // Clean XR session exit

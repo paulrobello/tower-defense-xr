@@ -1045,6 +1045,7 @@ export function createTurretPlacementController(
   let lastRayDirection: Vec3 | null = null;
   let lastSurfaceHit: SurfaceRayHit | null = null;
   let lastValidation: PlacementValidationResult | null = null;
+  let xrPlacementSuppressed = false;
 
   // Tracks which surface (if any) was active when the user detached into hover-pod mode
   let detachedFromSurfaceId: string | null = null;
@@ -1725,12 +1726,14 @@ export function createTurretPlacementController(
     },
     updateFromXrFrame(frame, referenceSpace, dtSec, useInterfaceRay) {
       if (!active) {
+        xrPlacementSuppressed = false;
         placementRays?.clear();
         return null;
       }
 
       const inputSources = xrSources(frame);
       if (inputSources.length === 0) {
+        xrPlacementSuppressed = false;
         placementRays?.clear();
         return null;
       }
@@ -1750,6 +1753,7 @@ export function createTurretPlacementController(
 
       const rayTargets: PlacementRayTarget[] = [];
       let activeValidation: PlacementValidationResult | null = null;
+      let aimingSourceSuppressed = false;
 
       for (const source of inputSources) {
         const pose = frame.getPose(source.targetRaySpace, referenceSpace);
@@ -1761,7 +1765,10 @@ export function createTurretPlacementController(
           buttonEdgesBySource.set(source, edges);
         }
         edges.update(source.gamepad);
-        if (useInterfaceRay?.(source)) continue;
+        if (useInterfaceRay?.(source)) {
+          if (source === aimingSource) aimingSourceSuppressed = true;
+          continue;
+        }
 
         const origin = new THREE.Vector3(
           pose.transform.position.x,
@@ -1821,12 +1828,21 @@ export function createTurretPlacementController(
         }
       }
 
+      xrPlacementSuppressed = aimingSourceSuppressed;
+      if (aimingSourceSuppressed) {
+        lastValidation = null;
+        ghost.setVisible(false);
+        ghost.reasonLabel.visible = false;
+      } else {
+        ghost.setVisible(active);
+      }
       placementRays?.update(rayTargets);
       return activeValidation;
     },
     confirmXrPlacement(frame, referenceSpace, source) {
       if (
         !active ||
+        xrPlacementSuppressed ||
         source !== aimingSourceFor(xrSources(frame)) ||
         source.gamepad?.buttons[1]?.pressed
       )

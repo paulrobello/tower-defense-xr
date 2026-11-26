@@ -284,6 +284,46 @@ describe('Spatial Audio Engine (P4-T5)', () => {
     engine.dispose();
   });
 
+  it('plays the confirmation cue on wave clear', async () => {
+    const mock = createMockAudioContext();
+    globalThis.fetch = vi.fn(async () => ({
+      ok: true,
+      arrayBuffer: async () => new ArrayBuffer(32),
+    })) as unknown as typeof fetch;
+    const engine = createSpatialAudioEngine({ audioContextFactory: () => mock.ctx });
+    engine.registerManifestCues([
+      {
+        id: 'mission-confirm',
+        family: 'core-waves',
+        loop: false,
+        ogg: '/assets/audio/sfx/mission-confirm.ogg',
+        mp3: '/assets/audio/sfx/mission-confirm.mp3',
+        durationSec: 1,
+      },
+    ]);
+    await engine.unlock();
+    await vi.waitFor(() => expect(engine.loadedCueCount).toBe(1));
+
+    engine.processSimEvents(
+      [
+        {
+          type: 'wave-cleared',
+          tick: 200,
+          timeSec: 200 / 60,
+          waveNumber: 1,
+          clearBonusCredits: 70,
+          totalCredits: 230,
+          remainingCoreHp: 100,
+          totalScore: 140,
+        },
+      ],
+      { turrets: [], portals: [], victory: false } as unknown as CombatSimulationState,
+    );
+    expect(mock.sources).toHaveLength(1);
+    expect(mock.sources[0]?.start).toHaveBeenCalledTimes(1);
+    engine.dispose();
+  });
+
   it('starts one opt-in preview music loop after unlock and respects music mute', async () => {
     const mock = createMockAudioContext();
     globalThis.fetch = vi.fn(async () => ({

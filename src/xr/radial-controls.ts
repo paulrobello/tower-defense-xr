@@ -15,7 +15,7 @@
  *     `Launch Wave`, and center `Cancel`.
  *   - **Turret Command Wheel** (aiming at an existing placed turret): `Upgrade (T1->T2 / T2->T3)`
  *     (disabled at `T3` or insufficient credits), `Priority (First/Strongest/Closest/Air)`,
- *     `Relocate`, `Sell (75%)`, and center `Close`.
+ *     `Relocate`, `Sell (50%)`, and center `Close`.
  * - **Selection Precedence (`webxr.md`):** Both controller lasers remain active while open. Either
  *   trigger can select the wedge its laser points at; deliberate thumbstick tilt on the opening
  *   controller takes priority over the opening controller's laser; neutral stick + no ray target on
@@ -287,7 +287,7 @@ export function buildBuildWheelItems(
 
 /**
  * Builds the live Turret Command Wheel wedge descriptors (`Upgrade`, `Priority`, `Relocate`,
- * `Sell (75%)`) for an existing placed turret. Center disc is `Close`.
+ * `Sell (50%)`) for an existing placed turret. Center disc is `Close`.
  */
 export function buildTurretCommandWheelItems(
   target: RadialTurretTarget,
@@ -341,7 +341,7 @@ export function buildTurretCommandWheelItems(
     {
       id: 'turret:sell',
       icon: 'sell',
-      label: `Sell (75%)\n+${sellRefund} CR`,
+      label: `Sell (50%)\n+${sellRefund} CR`,
       disabled: false,
     },
   ];
@@ -452,6 +452,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   const inverseParentMatrix = new THREE.Matrix4();
   const rayActions = new Map<XRInputSource, RadialChoiceId>();
   const rayCells = new Map<XRInputSource, PanelHit>();
+  const panelRayHits = new Set<XRInputSource>();
   const panelPresses = new Map<XRInputSource, PanelHit>();
   const worldPresses = new Map<XRInputSource, (selection: XRInputSourceEvent) => void>();
   let pointedPanels: readonly XrPanelTarget[] = [];
@@ -530,11 +531,12 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       aimObject.position.set(position.x, position.y, position.z);
       aimObject.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w);
       const hit = roots.length ? pointer.castFrom(aimObject, roots) : null;
+      if (hit) panelRayHits.add(source);
       const panel = hit && targets.find((target) => target.root === hit.root);
       const cell = hit && panel?.cellAt(hit.object);
       if (panel && cell) rayCells.set(source, { panel, cell });
       if (
-        cell ||
+        hit ||
         !placement?.active ||
         panelModal ||
         anyGripHeld ||
@@ -546,7 +548,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
           origin: aimObject.position.clone(),
           direction: new THREE.Vector3(0, 0, -1).applyQuaternion(aimObject.quaternion),
           distance: hit?.distance ?? 0.85,
-          contact: Boolean(cell),
+          contact: Boolean(hit),
           valid: true,
         });
       }
@@ -768,6 +770,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
     panelPresses.clear();
     worldPresses.clear();
     rayCells.clear();
+    panelRayHits.clear();
     clearPanelHover();
     panelModal = false;
     anyGripHeld = false;
@@ -813,7 +816,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       if (source && isControllerGripPressed(source)) return true;
       if (
         source &&
-        (gripSuppressedTriggers.has(source) || rayCells.has(source) || panelPresses.has(source))
+        (gripSuppressedTriggers.has(source) || panelRayHits.has(source) || panelPresses.has(source))
       )
         return true;
       if (menu?.root.visible) return true;
@@ -831,6 +834,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       menu?.update(dtSec);
       panelModal = busy;
       rayCells.clear();
+      panelRayHits.clear();
 
       const inputSources = [...(frame.session?.inputSources ?? [])];
       const activeSet = new Set<XRInputSource>(inputSources);
@@ -1028,7 +1032,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       }
       if (!menu?.root.visible) {
         const hit = rayCells.get(source);
-        if (!hit) return false;
+        if (!hit) return panelModal || panelRayHits.has(source);
         panelPresses.set(source, hit);
         return true;
       }
@@ -1073,7 +1077,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
           panelPress.panel.activate(panelPress.cell);
         return true;
       }
-      if (panelModal || rayCells.has(source)) return true;
+      if (panelModal || panelRayHits.has(source)) return true;
 
       if (!menu?.root.visible && (!press || press.generation === 0)) {
         return false;

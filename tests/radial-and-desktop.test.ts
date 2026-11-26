@@ -225,7 +225,7 @@ function settleRadialAnimation(
 describe('Radial Wheel Context Builders (Build & Turret Command)', () => {
   it('computes live affordability badges and disables unaffordable or capped turrets', () => {
     const affordable = buildBuildWheelItems({
-      credits: 130,
+      credits: 260,
       activeTurretCount: 2,
       hardTurretCap: HARD_TURRET_CAP,
       canLaunchWave: true,
@@ -237,10 +237,10 @@ describe('Radial Wheel Context Builders (Build & Turret Command)', () => {
       'build:rail-sniper',
       'wave:launch',
     ]);
-    // 130 CR: Autocannon (100) & Cryo-Arc (125) affordable; Plasma (135) & Rail (150) disabled
+    // 260 CR covers the Autocannon and Cryo-Arc prices individually.
     expect(affordable[0].disabled).toBe(false);
     expect(affordable[0].label).toContain('M44 Autocannon');
-    expect(affordable[0].label).toContain('100 CR');
+    expect(affordable[0].label).toContain('200 CR');
     expect(affordable[1].disabled).toBe(true);
     expect(affordable[1].disabledReason).toBe('NO CREDITS');
     expect(affordable[2].disabled).toBe(false);
@@ -262,14 +262,14 @@ describe('Radial Wheel Context Builders (Build & Turret Command)', () => {
     expect(capped[4].disabled).toBe(true);
   });
 
-  it('builds Turret Command items with T1->T2/T2->T3 upgrades, T3 max disable, priority cycle, relocate, and 75% sell', () => {
+  it('builds Turret Command items with T1->T2/T2->T3 upgrades, T3 max disable, priority cycle, relocate, and 50% sell', () => {
     const t1: RadialTurretTarget = {
       id: 'turret-1',
       kind: 'autocannon',
       tier: 'T1',
       priority: 'first',
     };
-    const itemsT1 = buildTurretCommandWheelItems(t1, 150);
+    const itemsT1 = buildTurretCommandWheelItems(t1, 300);
     expect(itemsT1.map((i) => i.id)).toEqual([
       'turret:upgrade',
       'turret:priority',
@@ -278,12 +278,12 @@ describe('Radial Wheel Context Builders (Build & Turret Command)', () => {
     ]);
     expect(itemsT1[0].disabled).toBe(false);
     expect(itemsT1[0].label).toContain('T1->T2');
-    expect(itemsT1[0].label).toContain('130 CR');
+    expect(itemsT1[0].label).toContain('260 CR');
     expect(itemsT1[1].label).toContain('First');
     expect(itemsT1[1].label).toContain('Strongest');
     expect(itemsT1[2].disabled).toBe(false);
-    expect(itemsT1[3].label).toContain('75%');
-    expect(itemsT1[3].label).toContain('+75 CR');
+    expect(itemsT1[3].label).toContain('50%');
+    expect(itemsT1[3].label).toContain('+100 CR');
 
     // Insufficient credits disables upgrade & relocate while leaving priority and sell enabled
     const lowCredits = buildTurretCommandWheelItems(t1, 10);
@@ -422,7 +422,7 @@ describe('XR Radial Controls (Build Wheel, Turret Command Wheel, Grip Suppressio
     const radial = createXrRadialControls({
       scene,
       actionBus: bus,
-      getBuildState: () => ({ credits: 300, activeTurretCount: 3 }),
+      getBuildState: () => ({ credits: 600, activeTurretCount: 3 }),
       getAimedTurret: () => targetTurret,
       onBeginRelocate: (id) => relocatedIds.push(id),
     });
@@ -749,7 +749,7 @@ describe('Tactical HUD (Spatial XR + Desktop Strip + Recentering)', () => {
 
     const query = (key: string) => container.querySelector(`[data-hud="${key}"]`) as HTMLElement;
     expect(query('core-hp').textContent).toBe('CORE 100/100');
-    expect(query('credits').textContent).toBe('200 CR');
+    expect(query('credits').textContent).toBe('400 CR');
     expect(query('wave').textContent).toBe('WAVE 0/12');
     expect(query('turrets').textContent).toBe('TURRETS 0/14');
     expect(query('primary-action').textContent).toBe('Lock Core');
@@ -783,6 +783,12 @@ describe('Tactical HUD (Spatial XR + Desktop Strip + Recentering)', () => {
     expect(query('wave').textContent).toBe('WAVE 3/12');
     expect(query('turrets').textContent).toBe('TURRETS 6/14');
     expect(query('primary-action').textContent).toBe('Launch Wave');
+
+    hud.updateState({ phase: 'wave', enemiesRemaining: 13 });
+    expect(query('enemies-left').textContent).toBe('ENEMIES LEFT 13');
+    expect(hud.xrRoot.getObjectByName('tactical-hud-core-fill')?.scale.x).toBeCloseTo(0.84);
+    hud.updateState({ phase: 'intermission', enemiesRemaining: 0 });
+    expect(query('enemies-left').textContent).toBe('ENEMIES LEFT 0');
 
     // XR mode hides desktop strip, shows XR root, and XR panel activation dispatches with source 'xr'
     hud.setMode('xr');

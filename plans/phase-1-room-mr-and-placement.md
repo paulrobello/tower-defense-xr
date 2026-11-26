@@ -59,7 +59,7 @@
   - Wire `@par/xr-workspace`'s `createXrRadialMenu` (click either thumbstick to open; deliberate stick tilt or either controller laser + trigger selects; second click dismisses; grip never accidentally activates triggers per `webxr.md` Controller Contract).
   - Build two radial contexts:
     - **Build Wheel** (empty space/surface): 4 turret types (Autocannon, Plasma Mortar, Cryo-Arc, Rail Sniper) with live cost badges + Launch Next Wave + Cancel.
-    - **Inspect/Command Wheel** (pointing at an existing turret): Upgrade Tier (`T1→T2→T3`), Target Priority cycle (`First / Strongest / Closest / Air`), Relocate, Sell (`75%` refund), Close.
+    - **Inspect/Command Wheel** (pointing at an existing turret): Upgrade Tier (`T1→T2→T3`), Target Priority cycle (`First / Strongest / Closest / Air`), Relocate, Sell (`50%` refund), Close.
   - Build compact movable tactical HUD (`@par/xr-workspace` `createMenuPanel` + `CachedTextBatch` + `keepAbove`) displaying Core HP, Requisition Credits, Wave counter, Turrets `N/14`, Settings button, and both-stick 1-second recenter support.
   - Map 100% of Calibration, Surface/Hover Placement (mouse ray + scroll wheel depth), Radial/Hotkeys (`1–4`, `U`, `R`, `X`, `T`, `Space`), and HUD controls onto the shared desktop action bus (`src/desktop/controls.ts`).
 - **Verification:** `vitest` verifies controller grip-suppression invariant, radial selection/cancel ownership, and desktop-to-action-bus parity; `make checkall` passes.
