@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { Matrix4 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../src/core/prng.ts';
 import { createVirtualRoomModel } from '../src/mr/virtual-room.ts';
@@ -18,6 +19,7 @@ import {
   samplePathAtDistance,
   segmentIntersectsPolygonInterior2D,
 } from '../src/nav/graph.ts';
+import { createRoomMeshFlightTest } from '../src/nav/room-mesh.ts';
 import { selectPortalAnchors } from '../src/xr/calibration.ts';
 
 function makeRectNavSurface(params: {
@@ -312,6 +314,157 @@ describe('P2-T1 Hybrid 3D Room Navigation Graph (src/nav/graph.ts)', () => {
       const horizSep = distanceXZ2D(a, b);
       expect(horizSep).toBeGreaterThan(0.25);
       expect(a.x).toBeLessThan(b.x);
+    }
+  });
+
+  it('routes every aerial lane and Disruptor around staggered scanned wall corners', () => {
+    const floor = makeRectNavSurface({
+      id: 'scan-floor',
+      kind: 'floor',
+      center: { x: 0, y: 0, z: 0 },
+      normal: { x: 0, y: 1, z: 0 },
+      width: 6,
+      depth: 6,
+    });
+    const walls = [
+      { x: 0, z: -3, width: 6 },
+      { x: -1, z: -1, width: 4 },
+      { x: 1, z: 1, width: 4 },
+    ].map(({ x, z, width }, i) =>
+      makeRectNavSurface({
+        id: `scan-wall-${i}`,
+        kind: 'wall',
+        center: { x, y: 1.2, z },
+        normal: { x: 0, y: 0, z: 1 },
+        width,
+        depth: 2.4,
+      }),
+    );
+    const portal: NavPortalAnchorInput = {
+      id: 'scan-portal',
+      position: { x: 0, y: 1.2, z: -3 },
+      normal: { x: 0, y: 0, z: 1 },
+      surfaceId: 'scan-wall-0',
+      hostKind: 'wall',
+    };
+    const core = { x: 0, y: 0.8, z: 2.5 };
+    const lanes = [-1, 0, 1];
+    const graph = buildNavigationGraph({
+      surfaces: [floor, ...walls],
+      coreAnchor: core,
+      portalAnchors: [portal],
+      aerialLaneIndices: lanes,
+    });
+    const paths = [
+      ...lanes.map((lane) => graph.getAirPath(portal.id, lane)),
+      computeDisruptorDetourPath(portal.position, [{ x: 1.5, y: 1, z: -1.5 }], core, graph),
+    ];
+    for (const path of paths) {
+      if (!path) throw new Error('Expected an aerial path');
+      const end = samplePathAtDistance(path, path.totalLength).position;
+      expect(distanceVec3(end, core)).toBeCloseTo(0.234, 6);
+      for (const segment of path.segments) {
+        expect(segment.end.z).toBeGreaterThan(-3);
+        for (const wall of walls.slice(1)) {
+          expect(
+            segmentIntersectsPolygonInterior2D(segment.start, segment.end, wall.polygon, 0.02),
+          ).toBe(false);
+        }
+      }
+    }
+  });
+
+  it('holds flyers on their side of a scanned wall when the Core is unreachable', () => {
+    const floor = makeRectNavSurface({
+      id: 'split-floor',
+      kind: 'floor',
+      center: { x: 0, y: 0, z: 0 },
+      normal: { x: 0, y: 1, z: 0 },
+      width: 5,
+      depth: 5,
+    });
+    const wall = makeRectNavSurface({
+      id: 'split-wall',
+      kind: 'wall',
+      center: { x: 0, y: 1.2, z: 0 },
+      normal: { x: 0, y: 0, z: 1 },
+      width: 5,
+      depth: 2.4,
+    });
+    const portal: NavPortalAnchorInput = {
+      id: 'split-portal',
+      position: { x: 0, y: 1.2, z: -2.2 },
+      normal: { x: 0, y: 0, z: 1 },
+    };
+    const core = { x: 0, y: 0.8, z: 2 };
+    const graph = buildNavigationGraph({
+      surfaces: [floor, wall],
+      coreAnchor: core,
+      portalAnchors: [portal],
+    });
+    const disruptor = computeDisruptorDetourPath(
+      portal.position,
+      [
+        { x: 0, y: 1.2, z: 1 },
+        { x: 0, y: 1.2, z: -1 },
+      ],
+      core,
+      graph,
+    );
+    const lane = graph.getAirPath(portal.id, 0);
+    if (!lane) throw new Error('Expected an aerial path');
+    expect(disruptor.totalLength).toBeGreaterThan(0.5);
+    for (const path of [lane, disruptor]) {
+      for (const point of path.waypoints) {
+        expect(point.position.z).toBeLessThan(0);
+      }
+    }
+  });
+
+  it('stops aerial routes at raw room mesh triangles without a semantic wall', () => {
+    const floor = makeRectNavSurface({
+      id: 'mesh-test-floor',
+      kind: 'floor',
+      center: { x: 0, y: 0, z: 0 },
+      normal: { x: 0, y: 1, z: 0 },
+      width: 5,
+      depth: 5,
+    });
+    const meshFlightTest = createRoomMeshFlightTest([
+      {
+        meshVertices: new Float32Array([-3, 0, 0, 3, 0, 0, 3, 3, 0, -3, 3, 0]),
+        meshIndices: new Uint32Array([0, 1, 2, 0, 2, 3]),
+        meshWorldMatrix: new Matrix4().makeTranslation(0, 0, 0.25),
+      },
+    ]);
+    if (!meshFlightTest) throw new Error('Expected a raw room mesh collider');
+    const portal: NavPortalAnchorInput = {
+      id: 'mesh-test-portal',
+      position: { x: 0, y: 1.2, z: -2 },
+      normal: { x: 0, y: 0, z: 1 },
+    };
+    const core = { x: 0, y: 0.8, z: 2 };
+    expect(meshFlightTest(portal.position, core, true)).toBe(true);
+    expect(meshFlightTest(core, portal.position, false)).toBe(true);
+    expect(meshFlightTest({ x: 0, y: 1, z: 0.25 }, core, true)).toBe(false);
+
+    const graph = buildNavigationGraph({
+      surfaces: [floor],
+      coreAnchor: core,
+      portalAnchors: [portal],
+      aerialSpanBlocked: meshFlightTest,
+    });
+    const lane = graph.getAirPath(portal.id);
+    if (!lane) throw new Error('Expected an aerial path');
+    const disruptor = computeDisruptorDetourPath(
+      portal.position,
+      [{ x: 0.2, y: 1.2, z: 1 }],
+      core,
+      graph,
+    );
+    for (const path of [lane, disruptor]) {
+      expect(path.totalLength).toBeGreaterThan(1);
+      expect(samplePathAtDistance(path, path.totalLength).position.z).toBeLessThan(0.25);
     }
   });
 

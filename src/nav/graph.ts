@@ -202,6 +202,12 @@ export interface DisruptorDetourOptions {
   readonly laneIndex?: number;
 }
 
+export type AerialSpanBlocked = (
+  start: Readonly<Vec3>,
+  end: Readonly<Vec3>,
+  leavingPortal: boolean,
+) => boolean;
+
 export interface BuildNavigationGraphInput {
   /** Room surfaces (floor, table/obstacle footprints, walls, ceiling). Omit if `roomModel` is provided. */
   readonly surfaces?: readonly NavSurfaceInput[];
@@ -228,6 +234,7 @@ export interface BuildNavigationGraphInput {
   readonly aerialLaneSpacingM?: number;
   /** Precomputed aerial lane indices per portal (default `[-2, -1, 0, 1, 2]`). */
   readonly aerialLaneIndices?: readonly number[];
+  readonly aerialSpanBlocked?: AerialSpanBlocked;
 }
 
 export interface RoomNavigationGraph {
@@ -247,6 +254,8 @@ export interface RoomNavigationGraph {
   readonly obstacleClearanceM: number;
   readonly portals: readonly NavPortalAnchorInput[];
   readonly obstacles: readonly NavObstacle[];
+  readonly aerialBarriers: readonly AerialBarrier[];
+  readonly aerialSpanBlocked?: AerialSpanBlocked;
   readonly grid: FloorNavigationGrid;
   /** Crawler surface path per portal ID. */
   readonly surfacePaths: Readonly<Record<string, NavigationPath>>;
@@ -719,6 +728,12 @@ interface RawWaypointSpec {
   readonly locomotionMode: LocomotionMode;
 }
 
+interface AerialBarrier {
+  readonly surfaceId: string;
+  readonly a: Point2D;
+  readonly b: Point2D;
+}
+
 function buildNavigationPathFromSpecs(params: {
   readonly id: string;
   readonly portalId: string;
@@ -759,7 +774,10 @@ function buildNavigationPathFromSpecs(params: {
   } else if (filtered.length === 1) {
     const only = filtered[0] as RawWaypointSpec;
     filtered.push({
-      position: { x: only.position.x, y: only.position.y, z: only.position.z - 0.01 },
+      position:
+        layer === 'air'
+          ? { ...only.position, y: only.position.y - 0.01 }
+          : { ...only.position, z: only.position.z - 0.01 },
       normal: only.normal,
       locomotionMode: only.locomotionMode,
     });
@@ -1095,6 +1113,144 @@ function extractFloorObstacles(
   }
 
   return obstacles;
+}
+
+/** Projects scanned vertical walls into thin XZ barriers for aerial routing. */
+function extractAerialBarriers(surfaces: readonly NavSurfaceInput[]): AerialBarrier[] {
+  const barriers: AerialBarrier[] = [];
+  for (const surface of surfaces) {
+    if (surface.kind !== 'wall') continue;
+    const hull = computeConvexHullXZ(surface.polygon.map((p) => ({ x: p.x, z: p.z })));
+    if (hull.length < 2) continue;
+    let a = hull[0] as Point2D;
+    let b = hull[1] as Point2D;
+    let longest = distanceXZ2D(a, b);
+    for (let i = 0; i < hull.length; i += 1) {
+      for (let j = i + 1; j < hull.length; j += 1) {
+        const candidate = distanceXZ2D(hull[i] as Point2D, hull[j] as Point2D);
+        if (candidate > longest) {
+          longest = candidate;
+          a = hull[i] as Point2D;
+          b = hull[j] as Point2D;
+        }
+      }
+    }
+    if (longest > 0.05) barriers.push({ surfaceId: surface.id, a, b });
+  }
+  return barriers;
+}
+
+function aerialSegmentClear(
+  a: Readonly<Point2D>,
+  b: Readonly<Point2D>,
+  barriers: readonly AerialBarrier[],
+  clearanceM: number,
+  relaxStart = false,
+  relaxEnd = false,
+  portal?: NavPortalAnchorInput,
+): boolean {
+  return barriers.every((wall) => {
+    const startDistance = Math.sqrt(
+      pointToSegmentDistanceSq2D(a.x, a.z, wall.a.x, wall.a.z, wall.b.x, wall.b.z).distSq,
+    );
+    const endDistance = Math.sqrt(
+      pointToSegmentDistanceSq2D(b.x, b.z, wall.a.x, wall.a.z, wall.b.x, wall.b.z).distSq,
+    );
+    if (relaxStart && wall.surfaceId === portal?.surfaceId && startDistance < 1e-6) {
+      // A flush portal can start on its own wall, provided the first span leaves toward the room.
+      return (b.x - a.x) * portal.normal.x + (b.z - a.z) * portal.normal.z > 1e-6;
+    }
+    if (segmentsIntersect2D(a, b, wall.a, wall.b)) return false;
+    const clearance = Math.min(
+      clearanceM,
+      relaxStart ? startDistance : clearanceM,
+      relaxEnd ? endDistance : clearanceM,
+    );
+    return segmentToSegmentDistance2D(a, b, wall.a, wall.b) >= clearance - 1e-6;
+  });
+}
+
+function routeAerialXZ(
+  start: Readonly<Point2D>,
+  end: Readonly<Point2D>,
+  barriers: readonly AerialBarrier[],
+  clearanceM: number,
+  bounds: RoomNavigationGraph['roomBounds'] | undefined,
+  portal?: NavPortalAnchorInput,
+): readonly Readonly<Point2D>[] | null {
+  if (aerialSegmentClear(start, end, barriers, clearanceM, true, true, portal)) return [start, end];
+
+  const nodes: Readonly<Point2D>[] = [start, end];
+  for (const { a, b } of barriers) {
+    const length = distanceXZ2D(a, b);
+    const tx = (b.x - a.x) / length;
+    const tz = (b.z - a.z) / length;
+    for (const [endpoint, direction] of [
+      [a, -1],
+      [b, 1],
+    ] as const) {
+      for (const side of [-1, 1]) {
+        const point = {
+          x: endpoint.x + clearanceM * (tx * direction * 2 - tz * side),
+          z: endpoint.z + clearanceM * (tz * direction * 2 + tx * side),
+        };
+        if (
+          bounds &&
+          (point.x < bounds.min.x ||
+            point.x > bounds.max.x ||
+            point.z < bounds.min.z ||
+            point.z > bounds.max.z)
+        )
+          continue;
+        nodes.push(point);
+      }
+    }
+  }
+
+  const distances = new Float64Array(nodes.length).fill(Infinity);
+  const previous = new Int32Array(nodes.length).fill(-1);
+  const visited = new Uint8Array(nodes.length);
+  distances[0] = 0;
+
+  for (;;) {
+    let current = -1;
+    for (let i = 0; i < nodes.length; i += 1) {
+      if (
+        !visited[i] &&
+        (distances[i] as number) < (current < 0 ? Infinity : (distances[current] as number))
+      ) {
+        current = i;
+      }
+    }
+    if (current < 0) return null;
+    if (current === 1) break;
+    visited[current] = 1;
+    const point = nodes[current] as Point2D;
+    for (let next = 1; next < nodes.length; next += 1) {
+      if (visited[next]) continue;
+      const candidate = nodes[next] as Point2D;
+      const distance = (distances[current] as number) + distanceXZ2D(point, candidate);
+      if (
+        distance >= (distances[next] as number) ||
+        !aerialSegmentClear(
+          point,
+          candidate,
+          barriers,
+          clearanceM,
+          current === 0,
+          next === 1,
+          portal,
+        )
+      )
+        continue;
+      distances[next] = distance;
+      previous[next] = current;
+    }
+  }
+
+  const route: Readonly<Point2D>[] = [];
+  for (let i = 1; i >= 0; i = previous[i] as number) route.push(nodes[i] as Point2D);
+  return route.reverse();
 }
 
 function isPointClearOfObstacles(
@@ -2061,6 +2217,8 @@ function buildAerialCorridorPath(params: {
   readonly ceilingY: number;
   readonly roomBounds: { readonly min: Vec3; readonly max: Vec3 };
   readonly obstacles: readonly NavObstacle[];
+  readonly aerialBarriers: readonly AerialBarrier[];
+  readonly aerialSpanBlocked?: AerialSpanBlocked;
   readonly nominalFlightAltitudeM: number;
   readonly aerialClearanceM: number;
 }): NavigationPath {
@@ -2073,6 +2231,8 @@ function buildAerialCorridorPath(params: {
     ceilingY,
     roomBounds,
     obstacles,
+    aerialBarriers,
+    aerialSpanBlocked,
     nominalFlightAltitudeM,
     aerialClearanceM,
   } = params;
@@ -2113,6 +2273,7 @@ function buildAerialCorridorPath(params: {
     }
   }
 
+  const clearance = Math.max(0.08, aerialClearanceM * 0.55);
   const numSteps = 8;
   const specs: RawWaypointSpec[] = [];
   const wallPad = 0.18;
@@ -2163,6 +2324,36 @@ function buildAerialCorridorPath(params: {
     });
   }
 
+  const clear = specs.every(
+    (spec, i) =>
+      i === 0 ||
+      aerialSegmentClear(
+        (specs[i - 1] as RawWaypointSpec).position,
+        spec.position,
+        aerialBarriers,
+        clearance,
+        i === 1,
+        i === specs.length - 1,
+        portal,
+      ),
+  );
+  if (!clear || firstBlockedAerialSpan(specs, aerialSpanBlocked, 1, true) < specs.length) {
+    const route = routeAerialXZ(startPos, endPos, aerialBarriers, clearance, roomBounds, portal);
+    specs.length = 1;
+    if (route)
+      appendAerialRoute(
+        specs,
+        route,
+        endPos.y,
+        corridorCruiseY,
+        ceilingY,
+        obstacles,
+        aerialClearanceM,
+      );
+  }
+
+  specs.length = firstBlockedAerialSpan(specs, aerialSpanBlocked, 1, true);
+
   return buildNavigationPathFromSpecs({
     id: `air-${portal.id}-lane-${laneIndex}`,
     portalId: portal.id,
@@ -2184,6 +2375,47 @@ function extractPlainVec3(item: Readonly<Vec3> | { readonly position: Readonly<V
   return cloneVec3(item);
 }
 
+function firstBlockedAerialSpan(
+  specs: readonly RawWaypointSpec[],
+  blocked: AerialSpanBlocked | undefined,
+  firstIndex: number,
+  leavingPortal: boolean,
+): number {
+  if (!blocked) return specs.length;
+  for (let i = firstIndex; i < specs.length; i += 1) {
+    const start = (specs[i - 1] as RawWaypointSpec).position;
+    const end = (specs[i] as RawWaypointSpec).position;
+    if (blocked(start, end, leavingPortal && i === 1)) return i;
+  }
+  return specs.length;
+}
+
+function appendAerialRoute(
+  specs: RawWaypointSpec[],
+  route: readonly Readonly<Point2D>[],
+  endY: number,
+  cruiseY: number,
+  ceilingY: number,
+  obstacles: readonly NavObstacle[],
+  clearanceM: number,
+): void {
+  for (let r = 1; r < route.length; r += 1) {
+    const a = route[r - 1] as Point2D;
+    const b = route[r] as Point2D;
+    const steps = Math.max(2, Math.ceil(distanceXZ2D(a, b) / 0.55));
+    for (let i = 1; i <= steps; i += 1) {
+      const t = i / steps;
+      const x = a.x + (b.x - a.x) * t;
+      const z = a.z + (b.z - a.z) * t;
+      const y =
+        r === route.length - 1 && i === steps
+          ? endY
+          : computeSafeAerialAltitudeAtXZ(x, z, cruiseY, ceilingY, obstacles, clearanceM);
+      specs.push({ position: { x, y, z }, normal: UP_NORMAL, locomotionMode: 'fly' });
+    }
+  }
+}
+
 /**
  * Computes a smooth 3D aerial flight path for a `Rift Disruptor` from `fromPos` that detours
  * within EMP range (`<= 1.2 m`) of active turrets before continuing toward `corePos`.
@@ -2202,6 +2434,7 @@ export function computeDisruptorDetourPath(
   const floorY = graph?.floorY ?? 0;
   const ceilingY = graph?.ceilingY ?? floorY + 2.8;
   const obstacles = graph?.obstacles ?? [];
+  const aerialBarriers = graph?.aerialBarriers ?? [];
   const aerialClearanceM = graph?.aerialClearanceM ?? DEFAULT_AERIAL_CLEARANCE_M;
   const baseFlightY = Math.min(
     ceilingY - 0.22,
@@ -2239,7 +2472,7 @@ export function computeDisruptorDetourPath(
     .slice(0, maxDetours)
     .sort((a, b) => a.along - b.along);
 
-  const controlAnchors: Vec3[] = [cloneVec3(fromPos)];
+  const controlAnchors: Vec3[] = [];
 
   for (const entry of scoredTurrets) {
     const tPos = entry.turret;
@@ -2271,40 +2504,44 @@ export function computeDisruptorDetourPath(
 
   controlAnchors.push(endPos);
 
-  // Subdivide each control span smoothly while clearing obstacle heights
-  const specs: RawWaypointSpec[] = [];
-  for (let i = 0; i + 1 < controlAnchors.length; i += 1) {
-    const a = controlAnchors[i] as Vec3;
-    const b = controlAnchors[i + 1] as Vec3;
-    const spanDist = distanceVec3(a, b);
-    const subSteps = Math.max(2, Math.min(6, Math.ceil(spanDist / 0.55)));
-
-    for (let s = 0; s < subSteps; s += 1) {
-      if (i > 0 && s === 0) continue;
-      const t = s / subSteps;
-      const smoothT = t * t * (3 - 2 * t);
-      const x = a.x + (b.x - a.x) * t;
-      const z = a.z + (b.z - a.z) * t;
-      let y = a.y + (b.y - a.y) * smoothT;
-      if (s > 0) {
-        y = Math.max(
-          y,
-          computeSafeAerialAltitudeAtXZ(x, z, y, ceilingY, obstacles, aerialClearanceM * 0.7),
-        );
-      }
-      specs.push({
-        position: { x, y, z },
-        normal: UP_NORMAL,
-        locomotionMode: 'fly',
-      });
+  const specs: RawWaypointSpec[] = [
+    { position: cloneVec3(fromPos), normal: UP_NORMAL, locomotionMode: 'fly' },
+  ];
+  const entryPortal = graph?.portals.find(
+    (portal) =>
+      (options.portalId === undefined || portal.id === options.portalId) &&
+      distanceVec3(portal.position, fromPos) < 1e-5,
+  );
+  for (const anchor of controlAnchors) {
+    const firstIndex = specs.length;
+    const start = (specs[firstIndex - 1] as RawWaypointSpec).position;
+    const route = routeAerialXZ(
+      start,
+      anchor,
+      aerialBarriers,
+      0.12,
+      graph?.roomBounds,
+      specs.length === 1 ? entryPortal : undefined,
+    );
+    if (route) {
+      appendAerialRoute(
+        specs,
+        route,
+        anchor.y,
+        baseFlightY,
+        ceilingY,
+        obstacles,
+        aerialClearanceM * 0.7,
+      );
+      const blockedIndex = firstBlockedAerialSpan(
+        specs,
+        graph?.aerialSpanBlocked,
+        firstIndex,
+        Boolean(entryPortal),
+      );
+      if (blockedIndex < specs.length) specs.length = anchor === endPos ? blockedIndex : firstIndex;
     }
   }
-
-  specs.push({
-    position: endPos,
-    normal: UP_NORMAL,
-    locomotionMode: 'fly',
-  });
 
   return buildNavigationPathFromSpecs({
     id: `disruptor-detour-${options.portalId ?? 'active'}`,
@@ -2462,6 +2699,8 @@ export function buildNavigationGraph(input: BuildNavigationGraphInput): RoomNavi
     coreInfo.surfaceId,
     obstacleClearanceM,
   );
+  const aerialBarriers = extractAerialBarriers(surfaces);
+  const { aerialSpanBlocked } = input;
 
   const grid = buildFloorNavigationGrid({
     minX: roomBounds.min.x,
@@ -2504,6 +2743,8 @@ export function buildNavigationGraph(input: BuildNavigationGraphInput): RoomNavi
         ceilingY,
         roomBounds,
         obstacles,
+        aerialBarriers,
+        ...(aerialSpanBlocked ? { aerialSpanBlocked } : {}),
         nominalFlightAltitudeM,
         aerialClearanceM,
       });
@@ -2526,6 +2767,8 @@ export function buildNavigationGraph(input: BuildNavigationGraphInput): RoomNavi
     obstacleClearanceM,
     portals,
     obstacles,
+    aerialBarriers,
+    ...(aerialSpanBlocked ? { aerialSpanBlocked } : {}),
     grid,
     surfacePaths,
     airPaths,
@@ -2549,6 +2792,8 @@ export function buildNavigationGraph(input: BuildNavigationGraphInput): RoomNavi
         ceilingY,
         roomBounds,
         obstacles,
+        aerialBarriers,
+        ...(aerialSpanBlocked ? { aerialSpanBlocked } : {}),
         nominalFlightAltitudeM,
         aerialClearanceM,
       });

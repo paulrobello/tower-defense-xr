@@ -134,7 +134,7 @@ export const STARTING_CREDITS = 400;
 /** Core Bastion maximum hit points (`100` makes percentage star ratings exact). */
 export const CORE_MAX_HP = 100;
 
-/** Initial preparation phase duration before Wave 1 auto-launches (seconds). */
+/** Initial preparation countdown duration in seconds. */
 export const INITIAL_PREP_DURATION_SEC = 20;
 
 /** Standard intermission build countdown between waves (seconds, skippable for bonus credits). */

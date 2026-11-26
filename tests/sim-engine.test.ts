@@ -371,6 +371,40 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
     });
   });
 
+  it('waits for explicit launch after prep and after an expired intermission', () => {
+    const sim = createCombatSimulation({
+      seed: 0xfeed,
+      initialPrepDurationSec: SIM_FIXED_DT * 2,
+      waves: [
+        {
+          ...MISSION_WAVES[0],
+          spawnGroups: [],
+          intermissionAfterSec: SIM_FIXED_DT * 2,
+        },
+        {
+          ...MISSION_WAVES[1],
+          spawnGroups: [],
+        },
+      ],
+    });
+
+    sim.runTicks(3);
+    expect(sim.getState().phase).toBe('prep');
+    expect(sim.getState().prepRemainingSec).toBe(0);
+    expect(sim.launchWave().ok).toBe(true);
+    expect(sim.getState().phase).toBe('wave');
+
+    sim.tick();
+    expect(sim.getState().phase).toBe('intermission');
+    sim.runTicks(3);
+    expect(sim.getState().phase).toBe('intermission');
+    expect(sim.getState().intermissionRemainingSec).toBe(0);
+
+    const launch = sim.launchWave();
+    expect(launch).toMatchObject({ ok: true, waveNumber: 2, bonusCredits: 0 });
+    expect(sim.getState().phase).toBe('wave');
+  });
+
   describe('4 Distinct Weapon Systems', () => {
     it('Autocannon deals rapid kinetic tracer hits that are reduced by 50% against Carapace Brute frontal armor', () => {
       const sim = createCombatSimulation({ seed: 101, startingCredits: 500 });
@@ -755,7 +789,6 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
     ] as const) {
       const sim = createCombatSimulation({
         seed: 42,
-        autoLaunchInitialWave: false,
         coreAnchor: { x: 0, y: coreY, z: 1.5 },
       });
       const core = sim.getState().corePosition;
@@ -835,7 +868,6 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       const sim = createCombatSimulation({
         seed: 0x2026_b45,
         startingCredits: slots.length * getTurretBuildCost('autocannon'),
-        autoLaunchInitialWave: false,
       });
 
       for (const position of slots) {

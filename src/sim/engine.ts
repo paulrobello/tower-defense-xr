@@ -747,8 +747,6 @@ export interface CombatSimulationConfig {
   readonly initialPhase?: SimCombatPhase;
   /** When `true`, starts Wave 1 immediately upon creation instead of waiting in `'prep'`. */
   readonly autoStartWave1?: boolean;
-  /** Allow the initial countdown to launch Wave 1 automatically. */
-  readonly autoLaunchInitialWave?: boolean;
   /** Initial prep countdown duration in seconds (defaults to `INITIAL_PREP_DURATION_SEC = 20`). */
   readonly initialPrepDurationSec?: number;
   /** Custom wave table override (defaults to `WAVES`). */
@@ -1071,12 +1069,10 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
   let phase: SimCombatPhase = config.initialPhase ?? 'prep';
   let currentWave = 0;
   let wavesCleared = 0;
-  const autoLaunchInitialWave = config.autoLaunchInitialWave ?? true;
-  let prepRemainingSec = autoLaunchInitialWave
-    ? typeof config.initialPrepDurationSec === 'number' && config.initialPrepDurationSec >= 0
+  let prepRemainingSec =
+    typeof config.initialPrepDurationSec === 'number' && config.initialPrepDurationSec >= 0
       ? config.initialPrepDurationSec
-      : INITIAL_PREP_DURATION_SEC
-    : 0;
+      : INITIAL_PREP_DURATION_SEC;
   let intermissionRemainingSec = 0;
   let waveElapsedSec = 0;
 
@@ -2465,19 +2461,12 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
     if (phase === 'victory' || phase === 'defeat') return;
 
     if (phase === 'prep') {
-      if (!autoLaunchInitialWave) return;
       prepRemainingSec = Math.max(0, prepRemainingSec - dt);
-      if (prepRemainingSec <= 1e-7) {
-        beginWave(1, 0);
-      }
       return;
     }
 
     if (phase === 'intermission') {
       intermissionRemainingSec = Math.max(0, intermissionRemainingSec - dt);
-      if (intermissionRemainingSec <= 1e-7) {
-        beginWave(currentWave + 1, 0);
-      }
       return;
     }
 

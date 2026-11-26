@@ -1571,7 +1571,26 @@ try {
         y: device.position.y - 0.23,
         z: device.position.z,
       };
-      app.placement.cancelPlacement();
+      app.placement.beginBuild('autocannon');
+      await frames(3);
+      const wasPlacing = app.placement.active;
+      await controls.pressButton('left', 'y-button', 2, 3);
+      const placementCancelled =
+        wasPlacing && !app.placement.active && !app.placement.ghost.group.visible;
+
+      let idleBeamLength = 0;
+      for (const x of [-2.2, 2.2, -1.5]) {
+        controls.aimController('right', origin, { x, y: 1.9, z: -2.4 });
+        await frames(3);
+        const idleRay = app.shell.xrOverlayRoot
+          .getObjectByName('rift-bastion-radial-rays')
+          ?.getObjectByName('placement-ray-right');
+        if (!idleRay?.visible || idleRay.getObjectByName('placement-ray-contact')?.visible) {
+          continue;
+        }
+        idleBeamLength = idleRay.getObjectByName('placement-ray-beam')?.scale.y ?? 0;
+        break;
+      }
       const distanceFromController = (turret) =>
         Math.hypot(
           turret.position.x - origin.x,
@@ -1617,6 +1636,10 @@ try {
               spokes.scale.x === selected.stats.rangeM &&
               !spokes.material.depthTest,
           ),
+          placementCancelled,
+          idleBeamLength,
+          aimPoint: point,
+          origin,
           turretId: selected.id,
           selectedAimedTurret: selected.id === t.id,
           laserReached,
@@ -1638,6 +1661,37 @@ try {
       return null;
     });
     await snap(page, '14-xr-turret-inspection-and-range.jpg');
+    const cancel = await page.evaluate(async (witness) => {
+      if (!witness) return null;
+      const app = window.__riftBastionApp;
+      const controls = window.__p1Helpers;
+      await controls.pressButton('left', 'y-button', 2, 3);
+      const selectionCancelled =
+        !app.turretInspector.xrRoot.visible &&
+        !app.turretInspector.rangeRoot.visible &&
+        Boolean(app.sim.getTurret(witness.turretId));
+      controls.aimController('right', witness.origin, witness.aimPoint);
+      await window.__xrEmu.frames(3);
+      await controls.pressButton('right', 'trigger', 2, 3);
+      return {
+        selectionCancelled,
+        reselected: app.turretInspector.turret?.id === witness.turretId,
+      };
+    }, selection);
+    record(
+      'xr-full-reach-and-y-cancels-placement-and-selection',
+      Boolean(
+        selection?.placementCancelled &&
+          selection.idleBeamLength > 1.5 &&
+          cancel?.selectionCancelled &&
+          cancel.reselected,
+      ),
+      {
+        idleBeamLength: selection?.idleBeamLength,
+        placementCancelled: selection?.placementCancelled,
+        cancel,
+      },
+    );
     const sale = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
       const selected = app.turretInspector.turret;

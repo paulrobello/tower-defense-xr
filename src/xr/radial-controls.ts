@@ -146,6 +146,7 @@ export interface XrRadialControlsOptions {
   readonly atlas?: TacticalAtlasResource;
   readonly onSelectBuildKind?: (kind: TurretKind) => void;
   readonly onBeginRelocate?: (turretId: string) => void;
+  readonly onCancel?: () => void;
   readonly onActionDispatched?: (action: RadialActionId, targetTurretId: string | null) => void;
   readonly onRecenter?: () => void;
 }
@@ -453,6 +454,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   const rayActions = new Map<XRInputSource, RadialChoiceId>();
   const rayCells = new Map<XRInputSource, PanelHit>();
   const panelRayHits = new Set<XRInputSource>();
+  let cancelButtonHeld = false;
   const panelPresses = new Map<XRInputSource, PanelHit>();
   const worldPresses = new Map<XRInputSource, (selection: XRInputSourceEvent) => void>();
   let pointedPanels: readonly XrPanelTarget[] = [];
@@ -548,11 +550,12 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
           !hit && !panelModal
             ? placement?.pickPlacedTurretHit(aimObject.position, direction)
             : null;
+        // A near miss still casts across the room, so players can use the beam to aim.
         beams.push({
           source,
           origin: aimObject.position.clone(),
           direction,
-          distance: hit?.distance ?? turretHit?.distance ?? 0.85,
+          distance: hit?.distance ?? turretHit?.distance ?? 8,
           contact: Boolean(hit || turretHit),
           valid: true,
         });
@@ -776,6 +779,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
     worldPresses.clear();
     rayCells.clear();
     panelRayHits.clear();
+    cancelButtonHeld = false;
     clearPanelHover();
     panelModal = false;
     anyGripHeld = false;
@@ -886,6 +890,23 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
           if (selectingSource === known) selectingSource = null;
         }
       }
+
+      const yPressed = inputSources.some(
+        (source) =>
+          source.handedness === 'left' && !source.hand && source.gamepad?.buttons[5]?.pressed,
+      );
+      if (yPressed && !cancelButtonHeld) {
+        closeMenu();
+        invalidatePendingTriggers();
+        panelPresses.clear();
+        worldPresses.clear();
+        for (const source of inputSources) {
+          if (source.gamepad?.buttons[0]?.pressed) gripSuppressedTriggers.add(source);
+        }
+        openingCandidate = null;
+        options.onCancel?.();
+      }
+      cancelButtonHeld = yPressed;
 
       anyGripHeld = gripHeld;
       const externalBusy = busy || Boolean(options.isBusy?.());

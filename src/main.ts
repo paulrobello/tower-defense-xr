@@ -22,6 +22,7 @@ import { createRoomSurfaceModel, type RoomSurface, type RoomSurfaceModel } from 
 import { createShadowCatcherManager, type ShadowCatcherManager } from './mr/shadow-catchers.ts';
 import { createVirtualRoomSurfaces } from './mr/virtual-room.ts';
 import { buildNavigationGraph, type RoomNavigationGraph } from './nav/graph.ts';
+import { createRoomMeshFlightTest } from './nav/room-mesh.ts';
 import { createPerfHud, type PerfHud } from './perf/hud.ts';
 import { createPerfRecorder, type PerfRecorder } from './perf/recorder.ts';
 import { createPersistStore, type PersistStore } from './persist/store.ts';
@@ -376,7 +377,6 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
   let currentSim: CombatSimulation = createCombatSimulation({
     seed,
-    autoLaunchInitialWave: false,
     navGraph: currentNavGraph,
     surfaces: roomModel.surfaces,
     coreAnchor: calibration.coreAnchor,
@@ -464,6 +464,11 @@ export function mountApp(container: HTMLElement): AppRuntime {
     renderOrder: OVERLAY_RENDER_ORDER + 30,
     onActionDispatched: () => {
       audio.play('radial-tick');
+    },
+    onCancel: () => {
+      selectedXrTurretId = null;
+      placement.cancelPlacement();
+      syncTacticalHud();
     },
     getBuildState: () => {
       const simState = currentSim.getState();
@@ -686,8 +691,10 @@ export function mountApp(container: HTMLElement): AppRuntime {
       isSyncingTurretAction = false;
     }
 
+    const aerialSpanBlocked = createRoomMeshFlightTest(roomModel.surfaces);
     currentNavGraph = buildNavigationGraph({
       roomModel,
+      ...(aerialSpanBlocked ? { aerialSpanBlocked } : {}),
       coreAnchor: calibration.coreAnchor,
       portalAnchors: calibration.portalAnchors,
     });
@@ -697,7 +704,6 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
     currentSim = createCombatSimulation({
       seed,
-      autoLaunchInitialWave: false,
       navGraph: currentNavGraph,
       surfaces: roomModel.surfaces,
       coreAnchor: calibration.coreAnchor,

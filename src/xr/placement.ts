@@ -13,7 +13,7 @@
  * - **Thumbstick Push/Pull Hover-Pod Mode (`hover-pod`):** Pushing/pulling the aiming thumbstick
  *   forward/backward (above deadzone, elapsed-time scaled) detaches smoothly into mid-air
  *   repulsor hover-pod mode at adjustable depth (`0.8–5.0 m`), switching the ghost mount preview
- *   to the glowing repulsor ring. Pressing B/Y (explicit re-snap toggle) or aiming back onto a
+ *   to the glowing repulsor ring. Pressing B or aiming back onto a
  *   valid surface with a neutral stick returns cleanly to surface-snap.
  * - **Visual Hologram Ghost:** Color-coded cyan (`0x2de2ff`, valid `surface-clamp`), violet-cyan
  *   (`0x7c8cff`, valid `hover-pod`), or crimson (`0xff3b5c`) with a crisp Troika SDF reason label
@@ -187,7 +187,7 @@ export interface PlacementRayUpdateOptions {
   readonly stickY?: number;
   /** Elapsed frame delta in seconds for time-scaled thumbstick depth movement. */
   readonly dtSec?: number;
-  /** Explicit B/Y button toggle or re-snap request returning from `hover-pod` to `surface-clamp`. */
+  /** Explicit re-snap request returning from `hover-pod` to `surface-clamp`. */
   readonly resnap?: boolean;
   /**
    * When true, a neutral stick (`|stickY| <= deadzone`) over any valid attachable surface
@@ -1082,11 +1082,13 @@ export function createTurretPlacementController(
       // While placing, only a direct hit takes priority over the nearby build surface.
       // With no placement active, give the body more tolerance for distant selection.
       const pickMargin = active ? 1.15 : 1.65;
-      const radius = record.collider.radiusM * pickMargin * GAMEPLAY_OBJECT_SCALE;
+      const bodyRadius = record.collider.radiusM * pickMargin * GAMEPLAY_OBJECT_SCALE;
       const ocx = rayOrigin.x - cx;
       const ocy = rayOrigin.y - cy;
       const ocz = rayOrigin.z - cz;
       const b = ocx * dx + ocy * dy + ocz * dz;
+      const aimTolerance = active ? 0 : Math.min(0.1, Math.max(0, -b) * 0.018);
+      const radius = bodyRadius + aimTolerance;
       const c = ocx * ocx + ocy * ocy + ocz * ocz - radius * radius;
       const disc = b * b - c;
       if (disc < 0) continue;
@@ -1828,8 +1830,9 @@ export function createTurretPlacementController(
         const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(quat).normalize();
 
         if (source === aimingSource) {
-          // Brief B/Y button press (buttons[5] or buttons[4]) forces re-snap to surface mode
-          const resnapPressed = edges.pressed(5) || edges.pressed(4);
+          // A/X or right-hand B re-snaps; left-hand Y is reserved for cancel.
+          const resnapPressed =
+            edges.pressed(4) || (source.handedness !== 'left' && edges.pressed(5));
 
           activeValidation = controller.updateFromRay(
             { x: origin.x, y: origin.y, z: origin.z },
