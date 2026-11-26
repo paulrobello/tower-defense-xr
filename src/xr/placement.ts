@@ -42,7 +42,6 @@ import {
   getNextTurretTier,
   getTurretBuildCost,
   getTurretDefinition,
-  getTurretSellRefund,
   getTurretTierStats,
   getTurretUpgradeCost,
   HARD_TURRET_CAP,
@@ -54,6 +53,7 @@ import {
   TURRET_FOOTPRINT_RADIUS_M,
   TURRET_MOUNT_PROFILES,
   TURRET_RELOCATE_COST,
+  TURRET_SELL_REFUND_RATIO,
   type TurretKind,
   type TurretMountProfileId,
   type TurretTierId,
@@ -216,6 +216,7 @@ export interface PlacedTurretRecord {
   readonly id: string;
   readonly kind: TurretKind;
   tier: TurretTierId;
+  upgradeTargetTier?: TurretTierId | null;
   priority: TargetPriority;
   mountProfile: TurretMountProfileId;
   position: Vec3;
@@ -2197,7 +2198,8 @@ export function createTurretPlacementController(
     sellTurret(turretId, source = 'xr') {
       const existing = placedTurretsMap.get(turretId);
       if (!existing) return 0;
-      const refund = getTurretSellRefund(existing.kind, existing.tier);
+      if (existing.upgradeTargetTier) return 0;
+      const refund = Math.round(existing.investedCredits * TURRET_SELL_REFUND_RATIO);
       controller.removeTurret(turretId);
       if (internalCredits !== undefined && !options.getCredits) {
         internalCredits += refund;

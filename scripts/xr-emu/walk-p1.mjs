@@ -714,7 +714,7 @@ try {
     );
 
     // Helper inside page to aim controller at target, verify validation, pull trigger, and inspect placed record.
-    const surfacePlacements = await page.evaluate(async () => {
+    const { results: surfacePlacements, liveAffordability } = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
       const rightOrigin = { x: 0.25, y: 1.05, z: 1.1 };
 
@@ -742,8 +742,6 @@ try {
         }
       }
 
-      // Fund all four mount checks independently of the two-turret opening budget.
-      app.debugGrantCredits(400);
       const targets = [
         { label: 'floor', expectedKind: 'floor', point: { x: -0.9, y: 0.0, z: -0.55 } },
         { label: 'table', expectedKind: 'table', point: { x: 1.6, y: 0.74, z: 0.0 } },
@@ -761,6 +759,7 @@ try {
       }
 
       const results = [];
+      let liveAffordability = false;
       for (const target of targets) {
         const beforeCount = app.placement.turretCount;
         window.__p1Helpers.setStick('right', 0, 0);
@@ -806,10 +805,38 @@ try {
           inSim: simTurret?.mountProfile === 'surface-clamp',
           position: placed?.position ?? null,
         });
+        if (target.label === 'floor') {
+          const controls = window.__p1Helpers;
+          const { frames } = window.__xrEmu;
+          app.placement.cancelPlacement();
+          controls.aimController('right', rightOrigin, { x: 0, y: 1.4, z: -1.5 });
+          await frames(3);
+          await controls.pressButton('right', 'thumbstick', 2, 2);
+          for (let frame = 0; frame < 60 && !app.radialControls.interactive; frame += 1) {
+            await frames(2);
+          }
+          const wheel = app.radialControls.root.getObjectByName('radial-menu');
+          const locked = app.radialControls.items.find(
+            (item) => item.id.startsWith('build:') && item.disabledReason === 'NO CREDITS',
+          );
+          app.debugGrantCredits(400);
+          await frames(5);
+          if (locked) {
+            const latest = app.radialControls.items.find((item) => item.id === locked.id);
+            liveAffordability =
+              app.radialControls.root.getObjectByName('radial-menu') === wheel &&
+              app.radialControls.interactive &&
+              latest?.disabled === false &&
+              !latest.label.includes('(LOW)');
+          }
+          await controls.pressButton('left', 'y-button', 2, 12);
+          app.placement.beginBuild('autocannon');
+        }
       }
-      return results;
+      return { results, liveAffordability };
     });
 
+    record('xr-open-wheel-reacts-to-credits', liveAffordability, { liveAffordability });
     await snap(page, '05-xr-surface-turrets.jpg');
     for (const res of surfacePlacements) {
       record(
@@ -1747,6 +1774,90 @@ try {
         cancel,
       },
     );
+    const upgrade = await page.evaluate(async () => {
+      const app = window.__riftBastionApp;
+      const selected = app.turretInspector.turret;
+      if (!selected) return null;
+      const turret = app.sim.getTurret(selected.id);
+      if (!turret) return null;
+      const controls = window.__p1Helpers;
+      const { frames } = window.__xrEmu;
+      app.debugGrantCredits(1000);
+      turret.hp = turret.maxHp - 27;
+      await frames(3);
+      const repairTurret = app.sim.repairTurret;
+      let repairWitness = null;
+      app.sim.repairTurret = (id) => {
+        const beforeRepair = app.sim.getState().credits;
+        const expectedCost = Math.ceil(turret.maxHp - turret.hp);
+        const result = repairTurret(id);
+        repairWitness = {
+          id,
+          ok: result.ok,
+          cost: result.cost,
+          expectedCost,
+          remainingCredits: result.remainingCredits,
+          chargedExactly: result.remainingCredits === beforeRepair - expectedCost,
+          restoredHealth: turret.hp === turret.maxHp,
+        };
+        return result;
+      };
+      try {
+        await controls.pressControl('turret-inspector-repair');
+      } finally {
+        app.sim.repairTurret = repairTurret;
+      }
+      const repaired = Boolean(
+        repairWitness?.ok &&
+          repairWitness.cost > 0 &&
+          repairWitness.cost === repairWitness.expectedCost &&
+          repairWitness.chargedExactly &&
+          repairWitness.restoredHealth,
+      );
+      const invested = turret.investedCredits;
+      await controls.pressControl('turret-inspector-upgrade');
+      const bar = app.blockouts.turrets
+        .get(turret.id)
+        ?.group.getObjectByName('turret-upgrade-progress');
+      const beganOffline =
+        turret.tier === 'T1' &&
+        turret.upgradeTargetTier === 'T2' &&
+        turret.upgradeDurationSec === 2 &&
+        Boolean(bar?.visible);
+      const blockedSale =
+        !app.turretInspector.panel.activate('sell') && Boolean(app.sim.getTurret(turret.id));
+      app.sim.runTicks(55);
+      await frames(4);
+      const stillUpgrading = turret.tier === 'T1' && turret.upgradeRemainingSec > 0;
+      app.sim.runTicks(80);
+      await frames(5);
+      const restored =
+        turret.tier === 'T2' &&
+        turret.upgradeTargetTier === null &&
+        app.turretInspector.turret?.tier === 'T2' &&
+        turret.investedCredits > invested;
+      return {
+        repaired,
+        repairWitness,
+        beganOffline,
+        blockedSale,
+        stillUpgrading,
+        restored,
+        refund: turret.investedCredits / 2,
+      };
+    });
+    record(
+      'xr-inspector-repair-and-delayed-upgrade',
+      Boolean(
+        upgrade?.repaired &&
+          upgrade.beganOffline &&
+          upgrade.blockedSale &&
+          upgrade.stillUpgrading &&
+          upgrade.restored,
+      ),
+      upgrade,
+    );
+
     const sale = await page.evaluate(async () => {
       const app = window.__riftBastionApp;
       const selected = app.turretInspector.turret;
@@ -1774,7 +1885,7 @@ try {
           selection.centeredOnTurret &&
           selection.renderedRange === selection.expectedRange &&
           sale?.sold &&
-          sale.creditIncrease >= selection.refund &&
+          sale.creditIncrease >= (upgrade?.refund ?? selection.refund) &&
           sale.inspectorClosed &&
           sale.rangeHidden,
       ),

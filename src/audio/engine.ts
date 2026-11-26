@@ -947,7 +947,21 @@ export function createSpatialAudioEngine(
 
       // 3. Dispatch discrete SimEvents to their exact approved SFX cues
       for (const ev of events) {
+        if ((ev as SimEvent & { type: string }).type === 'enemy-ranged-fired') {
+          const rangedEvent = ev as SimEvent & { fromPosition: Vec3 };
+          play('plasma-launch', { position: rangedEvent.fromPosition, gainScale: 0.52 });
+          continue;
+        }
         switch (ev.type) {
+          case 'turret-upgrade-started': {
+            const upgradeEvent = ev as SimEvent & {
+              turretId: string;
+              durationSec: number;
+            };
+            const turret = simState.turrets.find((t) => t.id === upgradeEvent.turretId);
+            play('turret-servo', { position: turret?.position ?? null, gainScale: 1.15 });
+            break;
+          }
           case 'turret-placed':
             play(ev.mountProfile === 'hover-pod' ? 'hover-pod' : 'surface-clamp', {
               position: ev.position,

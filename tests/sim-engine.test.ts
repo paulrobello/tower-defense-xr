@@ -280,6 +280,8 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       expect(upT2.cost).toBe(260);
       expect(upT2.turret?.investedCredits).toBe(460);
       expect(upT2.remainingCredits).toBe(540);
+      sim.runTicks(120);
+      expect(sim.getTurret('turret-alpha')?.tier).toBe('T2');
 
       const upT3 = sim.upgradeTurret('turret-alpha');
       expect(upT3.ok).toBe(true);
@@ -288,6 +290,7 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       expect(upT3.cost).toBe(380);
       expect(upT3.turret?.investedCredits).toBe(840);
       expect(upT3.remainingCredits).toBe(160);
+      sim.runTicks(180);
 
       // Further upgrade at T3 is rejected with MAX_TIER
       const upMax = sim.upgradeTurret('turret-alpha');
@@ -355,6 +358,7 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       const turretId = firstTurret.id;
 
       bus.dispatch({ type: 'turret/upgrade', turretId });
+      sim.runTicks(120);
       expect(sim.getTurret(turretId)?.tier).toBe('T2');
 
       bus.dispatch({ type: 'turret/set-priority', turretId, priority: 'air' });
@@ -573,6 +577,7 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
 
       // Upgrade to T2: chains across 3 targets with 45% slow
       sim.upgradeTurret('cryo-1');
+      sim.runTicks(120);
       const cryoTurretT2 = sim.getTurret('cryo-1');
       if (!cryoTurretT2) throw new Error('Expected cryo-1');
       cryoTurretT2.fireCooldownSec = 0;
@@ -583,6 +588,7 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
 
       // Upgrade to T3: chains across all 4 targets with 55% slow
       sim.upgradeTurret('cryo-1');
+      sim.runTicks(180);
       cryoTurretT2.fireCooldownSec = 0;
       const t3Tick = sim.tick();
       const t3Chain = t3Tick.events.find((e) => e.type === 'cryo-chain');
@@ -605,7 +611,9 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
 
       // Upgrade to T3 (damage 195, armorPierce 1.0, antiAir 1.8, bossBonus 1.7)
       sim.upgradeTurret('rail-1');
+      sim.runTicks(120);
       sim.upgradeTurret('rail-1');
+      sim.runTicks(180);
       const t3Stats = getTurretTierStats('rail-sniper', 'T3');
       expect(t3Stats.armorPierceFactor).toBe(1.0);
       expect(t3Stats.antiAirMultiplier).toBe(1.8);
@@ -721,7 +729,9 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
         priority: 'strongest',
       });
       sim.upgradeTurret('boss-killer');
+      sim.runTicks(120);
       sim.upgradeTurret('boss-killer');
+      sim.runTicks(180);
 
       const closeTurret = sim.placeTurret({
         id: 'frontline-turret',
@@ -746,7 +756,7 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       boss.bossSummonTimerSec = SIM_FIXED_DT;
       boss.bossSuppressionTimerSec = SIM_FIXED_DT;
 
-      const stepRes = sim.runTicks(5);
+      const stepRes = sim.runTicks(12);
       // 1. Rail Sniper hit drops Boss below 2800 HP (<= 50%), triggering Phase 2!
       const phase2Ev = stepRes.events.find((e) => e.type === 'boss-phase2');
       expect(phase2Ev).toBeDefined();
@@ -1061,5 +1071,66 @@ describe('P2-T4 Deterministic 60 Hz Combat Simulation Engine & 3D Spatial Hash',
       expect(shot).toBeDefined();
       expect(shot?.targetEnemyId).toBe(visibleEnemy.id);
     });
+  });
+
+  it('repairs damaged turrets and blocks sale while upgrading', () => {
+    const sim = createCombatSimulation({ startingCredits: 500 });
+    const placed = sim.placeTurret({
+      id: 'repair-me',
+      kind: 'autocannon',
+      position: { x: -0.8, y: 0, z: 0.4 },
+      mountProfile: 'surface-clamp',
+      surfaceKind: 'floor',
+    });
+    expect(placed.ok).toBe(true);
+    const turret = sim.getTurret('repair-me');
+    if (!turret) throw new Error('missing turret');
+    turret.hp = 63;
+    const repair = sim.repairTurret('repair-me');
+    expect(repair.ok).toBe(true);
+    expect(repair.cost).toBe(37);
+    expect(turret.hp).toBe(100);
+    const up = sim.upgradeTurret('repair-me');
+    expect(up.ok).toBe(true);
+    const blocked = sim.sellTurret('repair-me');
+    expect(blocked.ok).toBe(false);
+    expect(blocked.reason).toBe('UPGRADE_IN_PROGRESS');
+  });
+
+  it('makes a Rift Spitter stop and fire at the Core outside melee range', () => {
+    const sim = createCombatSimulation({ seed: 917 });
+    sim.launchWave();
+    const enemy = sim.debugSpawnEnemy('rift-spitter');
+    const core = sim.navGraph.corePosition;
+    enemy.position = { x: core.x + 1.1, y: core.y, z: core.z };
+    const first = sim.runTicks(1);
+    const bolt = first.events.find(
+      (event) => event.type === 'enemy-ranged-fired' && event.enemyId === enemy.id,
+    );
+    expect(bolt?.type).toBe('enemy-ranged-fired');
+    if (bolt?.type !== 'enemy-ranged-fired') throw new Error('Expected a ranged shot');
+    expect(bolt.fromPosition.x - bolt.toPosition.x).toBeCloseTo(1.1);
+    expect(first.state.coreHp).toBeLessThan(first.state.maxCoreHp);
+    expect(sim.getEnemy(enemy.id)?.effectiveSpeedMps).toBe(0);
+    sim.runTicks(10);
+    expect(sim.getEnemy(enemy.id)?.position).toEqual(bolt.fromPosition);
+  });
+
+  it('destroys a turret when a nearby enemy reaches it without refund', () => {
+    const sim = createCombatSimulation({ startingCredits: 500 });
+    sim.placeTurret({
+      id: 'frontline',
+      kind: 'autocannon',
+      position: { x: 0, y: 0, z: 0.2 },
+      mountProfile: 'surface-clamp',
+      surfaceKind: 'floor',
+    });
+    const turret = sim.getTurret('frontline');
+    if (!turret) throw new Error('missing turret');
+    turret.hp = 1;
+    sim.debugSpawnEnemy('skitter-crawler', { position: turret.position, hp: 500 });
+    const result = sim.tick();
+    expect(result.events.some((e) => e.type === 'turret-destroyed')).toBe(true);
+    expect(sim.getTurret('frontline')).toBeUndefined();
   });
 });

@@ -74,7 +74,7 @@ describe('P2-T2 Content Data Tables & 12-Wave Mission Script', () => {
     const summary = assertValidContentTables();
     expect(summary.turretCount).toBe(4);
     expect(summary.tierCountPerTurret).toBe(3);
-    expect(summary.enemyCount).toBe(5);
+    expect(summary.enemyCount).toBe(6);
     expect(summary.waveCount).toBe(12);
     expect(summary.maxPortalsObserved).toBe(4);
     expect(summary.maxActiveEnemyCapObserved).toBeLessThanOrEqual(25);
@@ -208,16 +208,17 @@ describe('P2-T2 Content Data Tables & 12-Wave Mission Script', () => {
     });
   });
 
-  describe('Enemies (5 bio-mechanical / insectoid invader archetypes)', () => {
-    it('defines all 5 archetypes with movement layers, budgets, and special abilities', () => {
+  describe('Enemies (6 bio-mechanical / insectoid invader archetypes)', () => {
+    it('defines all 6 archetypes with movement layers, budgets, and special abilities', () => {
       expect(ENEMY_IDS).toEqual([
         'skitter-crawler',
         'wasp-skimmer',
         'carapace-brute',
         'rift-disruptor',
+        'rift-spitter',
         'apex-broodlord',
       ]);
-      expect(ENEMY_LIST).toHaveLength(5);
+      expect(ENEMY_LIST).toHaveLength(6);
 
       const crawler = getEnemyDefinition('skitter-crawler');
       expect(crawler.movementLayer).toBe('surface');
@@ -370,6 +371,14 @@ describe('P2-T2 Content Data Tables & 12-Wave Mission Script', () => {
       expect(computeEarlyLaunchBonus(15)).toBe(30);
       expect(computeEarlyLaunchBonus(7.5)).toBe(15);
       expect(computeEarlyLaunchBonus(0)).toBe(0);
+    });
+
+    it('introduces Rift Spitters in Wave 7 and includes them in later waves', () => {
+      for (const wave of WAVES) {
+        expect(wave.spawnGroups.some((group) => group.enemyId === 'rift-spitter')).toBe(
+          wave.waveNumber >= 7,
+        );
+      }
     });
 
     it('paces total 12-wave mission duration strictly inside 10–15 minutes (600–900 seconds)', () => {

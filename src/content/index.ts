@@ -161,8 +161,8 @@ export function validateContentTables(): ContentValidationResult {
   }
 
   // 2. Validate enemy archetypes
-  if (ENEMY_LIST.length !== 5) {
-    errors.push(`Expected 5 enemy archetypes, found ${ENEMY_LIST.length}`);
+  if (ENEMY_LIST.length !== 6) {
+    errors.push(`Expected 6 enemy archetypes, found ${ENEMY_LIST.length}`);
   }
   const validEnemySet = new Set<string>(ENEMY_IDS);
   for (const enemy of ENEMY_LIST) {

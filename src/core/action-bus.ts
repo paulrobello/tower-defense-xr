@@ -41,6 +41,7 @@ export type GameAction =
   // Turrets
   | { type: 'turret/build'; kind: TurretKind; position: Vec3; surfaceId?: string }
   | { type: 'turret/upgrade'; turretId: string }
+  | { type: 'turret/repair'; turretId: string }
   | { type: 'turret/relocate'; turretId: string; position: Vec3; surfaceId?: string }
   | { type: 'turret/sell'; turretId: string }
   | { type: 'turret/set-priority'; turretId: string; priority: TargetPriority }

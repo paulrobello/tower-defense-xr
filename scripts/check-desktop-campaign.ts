@@ -392,6 +392,11 @@ try {
       turrets,
       hoverRailMount: hoverRail?.mountProfile ?? null,
       hoverRailY: hoverRail?.position.y ?? 0,
+      assetMountVisible:
+        railBlockout?.group.children.some(
+          (group) =>
+            group.name.startsWith('aaa-turret-') && group.visible && group.children[0]?.visible,
+        ) ?? false,
       hoverPodGroupVisible: railBlockout?.hoverPodGroup.visible ?? false,
       clampGroupVisible: railBlockout?.clampMountGroup.visible ?? true,
     };
@@ -404,7 +409,7 @@ try {
       builtSummary.kinds.length === 4 &&
       builtSummary.hoverRailMount === 'hover-pod' &&
       builtSummary.hoverRailY > 0.8 &&
-      builtSummary.hoverPodGroupVisible === true &&
+      (builtSummary.hoverPodGroupVisible || builtSummary.assetMountVisible) &&
       builtSummary.clampGroupVisible === false,
     builtSummary,
   );
@@ -425,6 +430,14 @@ try {
   await page.mouse.click(autoSelectPt.clientX, autoSelectPt.clientY);
   await page.keyboard.press('u');
   await waitAnimationFrames(page, 2);
+  const beganUpgrade = await page.evaluate((id) => {
+    const turret = window.__riftBastionApp?.sim.getTurret(id);
+    return (
+      turret?.tier === 'T1' && turret.upgradeTargetTier === 'T2' && turret.upgradeDurationSec === 2
+    );
+  }, autocannonTurret.id);
+  await page.evaluate(() => window.__riftBastionApp?.sim.runTicks(120));
+  await waitAnimationFrames(page, 3);
 
   const upgradeSummary = await page.evaluate((turretId) => {
     const app = window.__riftBastionApp;
@@ -442,7 +455,8 @@ try {
 
   record(
     'desktop-turret-upgrade-t1-to-t2',
-    upgradeSummary.tier === 'T2' &&
+    beganUpgrade &&
+      upgradeSummary.tier === 'T2' &&
       upgradeSummary.level === 2 &&
       upgradeSummary.investedCredits === 460 &&
       upgradeSummary.blockoutTier === 'T2' &&
@@ -642,7 +656,7 @@ try {
   // 4. Use `?debug` shortcuts (`debugGrantCredits` + full 14-turret T3 defense
   //    + `debugJumpToWave(12)`) -> Boss spawn -> Phase 2 -> Victory overlay
   // =========================================================================
-  const defenseSetup = await page.evaluate(() => {
+  const defenseSetup = await page.evaluate(async () => {
     const app = window.__riftBastionApp;
     if (!app) throw new Error('Missing app');
 
@@ -700,6 +714,10 @@ try {
           app.bus.dispatch({ type: 'turret/upgrade', turretId: turret.id }, 'desktop');
         }
       }
+      app.sim.runTicks(tierPass === 'T1' ? 120 : 180);
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      );
     }
 
     const wave12 = app.debugJumpToWave(12);

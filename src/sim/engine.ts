@@ -53,9 +53,11 @@ import {
   getNextTurretTier,
   getTurretBuildCost,
   getTurretDefinition,
+  getTurretRepairCost,
   getTurretSellRefund,
   getTurretTierStats,
   getTurretUpgradeCost,
+  getTurretUpgradeDurationSec,
   getWaveDefinition,
   HARD_TURRET_CAP,
   INITIAL_PREP_DURATION_SEC,
@@ -272,6 +274,14 @@ export interface SimTurret {
   isEmpImmune: boolean;
   /** Convenience flag: `redeployCooldownSec > 0`. */
   isRedeploying: boolean;
+  hp: number;
+  maxHp: number;
+  /** Tier being applied after the upgrade timer completes, or `null` when idle. */
+  upgradeTargetTier: TurretTierId | null;
+  /** Seconds remaining in the current upgrade, or `0` when idle. */
+  upgradeRemainingSec: number;
+  /** Duration of the current upgrade, or `0` when idle. */
+  upgradeDurationSec: number;
   /** Currently acquired enemy ID, or `null` if idle. */
   targetEnemyId: string | null;
   /** Horizontal aiming yaw in radians (`atan2(dx, dz)`). */
@@ -294,6 +304,7 @@ export interface SimEnemy {
   effectiveSpeedMps: number;
   /** True while the enemy is holding at the visible Core shield perimeter. */
   attackingCore: boolean;
+  attackingTurretId: string | null;
   readonly movementLayer: MovementLayer;
   position: Vec3;
   tangent: Vec3;
@@ -335,6 +346,7 @@ export interface SimEnemy {
   readonly spawnTick: number;
   /** Seconds until this enemy's next Core strike while attacking. */
   coreAttackCooldownSec: number;
+  turretAttackCooldownSec: number;
 }
 
 export interface SimProjectile {
@@ -403,6 +415,39 @@ export interface TurretUpgradedEvent extends SimEventBase {
   readonly cost: number;
   readonly investedCredits: number;
   readonly remainingCredits: number;
+}
+
+export interface TurretUpgradeStartedEvent extends SimEventBase {
+  readonly type: 'turret-upgrade-started';
+  readonly turretId: string;
+  readonly kind: TurretKind;
+  readonly previousTier: TurretTierId;
+  readonly tier: TurretTierId;
+  readonly cost: number;
+  readonly durationSec: number;
+  readonly remainingCredits: number;
+}
+
+export interface TurretRepairedEvent extends SimEventBase {
+  readonly type: 'turret-repaired';
+  readonly turretId: string;
+  readonly hp: number;
+  readonly maxHp: number;
+  readonly cost: number;
+  readonly remainingCredits: number;
+}
+
+export interface TurretDestroyedEvent extends SimEventBase {
+  readonly type: 'turret-destroyed';
+  readonly turretId: string;
+  readonly position: Vec3;
+}
+
+export interface EnemyRangedFiredEvent extends SimEventBase {
+  readonly type: 'enemy-ranged-fired';
+  readonly enemyId: string;
+  readonly fromPosition: Vec3;
+  readonly toPosition: Vec3;
 }
 
 export interface TurretRelocatedEvent extends SimEventBase {
@@ -590,6 +635,10 @@ export interface MissionEndedEvent extends SimEventBase {
 
 export type SimEvent =
   | TurretPlacedEvent
+  | TurretUpgradeStartedEvent
+  | TurretRepairedEvent
+  | TurretDestroyedEvent
+  | EnemyRangedFiredEvent
   | TurretUpgradedEvent
   | TurretRelocatedEvent
   | TurretSoldEvent
@@ -644,7 +693,11 @@ export interface PlaceTurretResult {
   readonly validation: PlacementValidationResult;
 }
 
-export type UpgradeFailureReason = 'TURRET_NOT_FOUND' | 'MAX_TIER' | 'INSUFFICIENT_CREDITS';
+export type UpgradeFailureReason =
+  | 'TURRET_NOT_FOUND'
+  | 'MAX_TIER'
+  | 'INSUFFICIENT_CREDITS'
+  | 'UPGRADE_IN_PROGRESS';
 
 export interface UpgradeTurretResult {
   readonly ok: boolean;
@@ -693,8 +746,16 @@ export interface RelocateTurretResult {
 export interface SellTurretResult {
   readonly ok: boolean;
   readonly turret: SimTurret | null;
-  readonly reason: 'TURRET_NOT_FOUND' | null;
+  readonly reason: 'TURRET_NOT_FOUND' | 'UPGRADE_IN_PROGRESS' | null;
   readonly refundCredits: number;
+  readonly remainingCredits: number;
+}
+
+export interface RepairTurretResult {
+  readonly ok: boolean;
+  readonly turret: SimTurret | null;
+  readonly reason: 'TURRET_NOT_FOUND' | 'ALREADY_FULL' | 'INSUFFICIENT_CREDITS' | null;
+  readonly cost: number;
   readonly remainingCredits: number;
 }
 
@@ -821,6 +882,7 @@ export interface CombatSimulation {
   /** Live & intermission turret commands. */
   placeTurret(input: PlaceTurretInput): PlaceTurretResult;
   upgradeTurret(turretId: string): UpgradeTurretResult;
+  repairTurret(turretId: string): RepairTurretResult;
   setTurretPriority(turretId: string, priority: SimTargetPriority): SetTurretPriorityResult;
   relocateTurret(
     turretIdOrInput: string | RelocateTurretInput,
@@ -1351,6 +1413,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       speedMps: def.speedMps,
       effectiveSpeedMps: def.speedMps,
       attackingCore: false,
+      attackingTurretId: null,
       movementLayer: def.movementLayer,
       position: startPosition,
       tangent: cloneVec3(initialSample.tangent),
@@ -1383,6 +1446,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       bossSuppressionTimerSec: def.bossAbility?.suppressionPulseIntervalSec ?? 10.5,
       spawnTick: tickCount,
       coreAttackCooldownSec: 0,
+      turretAttackCooldownSec: 0,
     };
 
     enemies.push(enemy);
@@ -1687,9 +1751,23 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
     // 2. Reject targets blocked by any scanned room wall/ceiling/floor surface along the sightline.
     const blockout = turret.stats.blockout;
     const pivotHeight = (blockout.baseHeightM + blockout.headHeightM / 2) * GAMEPLAY_OBJECT_SCALE;
-    const ax = turret.position.x + up.x * pivotHeight;
-    const ay = turret.position.y + up.y * pivotHeight;
-    const az = turret.position.z + up.z * pivotHeight;
+    return hasRoomLineOfSight(
+      {
+        x: turret.position.x + up.x * pivotHeight,
+        y: turret.position.y + up.y * pivotHeight,
+        z: turret.position.z + up.z * pivotHeight,
+      },
+      targetPos,
+      turret.surfaceId,
+    );
+  }
+
+  function hasRoomLineOfSight(
+    origin: Readonly<Vec3>,
+    targetPos: Readonly<Vec3>,
+    ignoredSurfaceId?: string | null,
+  ): boolean {
+    const { x: ax, y: ay, z: az } = origin;
     const dx = targetPos.x - ax;
     const dy = targetPos.y - ay;
     const dz = targetPos.z - az;
@@ -1698,7 +1776,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       if (surface.kind !== 'wall' && surface.kind !== 'ceiling' && surface.kind !== 'floor') {
         continue;
       }
-      if (surface.id === turret.surfaceId) continue;
+      if (surface.id === ignoredSurfaceId) continue;
       if (surface.polygon.length < 3) continue;
 
       const nLen = Math.hypot(surface.normal.x, surface.normal.y, surface.normal.z);
@@ -2167,6 +2245,32 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
 
   function stepTurrets(dt: number): void {
     for (const turret of turrets) {
+      if (turret.upgradeTargetTier !== null) {
+        turret.upgradeRemainingSec = Math.max(0, turret.upgradeRemainingSec - dt);
+        if (turret.upgradeRemainingSec <= 1e-7) {
+          const previousTier = turret.tier;
+          const completedTier = turret.upgradeTargetTier;
+          const nextStats = getTurretTierStats(turret.kind, completedTier);
+          turret.tier = completedTier;
+          turret.level = nextStats.level;
+          turret.stats = nextStats;
+          turret.upgradeTargetTier = null;
+          turret.upgradeDurationSec = 0;
+          emitEvent({
+            type: 'turret-upgraded',
+            tick: tickCount,
+            timeSec,
+            turretId: turret.id,
+            kind: turret.kind,
+            previousTier,
+            tier: completedTier,
+            cost: getTurretUpgradeCost(turret.kind, previousTier) ?? 0,
+            investedCredits: turret.investedCredits,
+            remainingCredits: credits,
+          });
+        }
+      }
+
       // 1. Update EMP / Boss suppression disable & post-recovery immunity timers
       if (turret.disabledRemainingSec > 0) {
         turret.disabledRemainingSec = Math.max(0, turret.disabledRemainingSec - dt);
@@ -2204,7 +2308,11 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       }
 
       // Disrupted or redeploying turrets cannot acquire targets or fire
-      if (turret.disabledRemainingSec > 0 || turret.redeployCooldownSec > 0) {
+      if (
+        turret.upgradeTargetTier !== null ||
+        turret.disabledRemainingSec > 0 ||
+        turret.redeployCooldownSec > 0
+      ) {
         turret.targetEnemyId = null;
         continue;
       }
@@ -2288,15 +2396,86 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
           ? def.bossAbility.phase2SpeedMultiplier
           : 1.0;
       const effectiveSpeed = enemy.speedMps * phase2Mult * (1 - enemy.slowFactor);
-      if (!enemy.attackingCore) {
+      const rangedAttackRangeM = def.rangedAttackRangeM;
+      const corePosition = currentNavGraph.corePosition;
+      const contactDistance = CORE_SHIELD_RADIUS_M + enemy.collisionRadiusM * GAMEPLAY_OBJECT_SCALE;
+      const coreDistance = distanceVec3(enemy.position, corePosition);
+      const rangedCoreShot =
+        rangedAttackRangeM !== undefined &&
+        coreDistance <= rangedAttackRangeM &&
+        hasRoomLineOfSight(enemy.position, corePosition, currentNavGraph.coreSurfaceId);
+      if (
+        rangedAttackRangeM !== undefined &&
+        enemy.attackingCore &&
+        coreDistance > contactDistance &&
+        !rangedCoreShot
+      ) {
+        enemy.attackingCore = false;
+      }
+
+      let targetTurret: SimTurret | undefined;
+      let targetDistance = Infinity;
+      if (!enemy.isBoss && !def.disruptorAbility && !enemy.attackingCore) {
+        const radius = rangedAttackRangeM ?? 0.45;
+        for (const turret of turretSpatialHash.queryRadius(enemy.position, radius)) {
+          const distance = distanceVec3(enemy.position, turret.position);
+          if (
+            turret.hp <= 0 ||
+            distance > radius ||
+            distance > targetDistance ||
+            (distance === targetDistance && targetTurret && turret.id >= targetTurret.id) ||
+            !hasTurretLineOfSight(turret, enemy.position)
+          )
+            continue;
+          targetTurret = turret;
+          targetDistance = distance;
+        }
+      }
+
+      if (targetTurret) {
+        enemy.effectiveSpeedMps = 0;
+        enemy.attackingTurretId = targetTurret.id;
+        enemy.turretAttackCooldownSec = Math.max(0, enemy.turretAttackCooldownSec - dt);
+        if (enemy.turretAttackCooldownSec <= 1e-7) {
+          enemy.turretAttackCooldownSec = CORE_ATTACK_INTERVAL_SEC;
+          targetTurret.hp = Math.max(0, targetTurret.hp - enemy.coreDamage);
+          if (rangedAttackRangeM !== undefined) {
+            emitEvent({
+              type: 'enemy-ranged-fired',
+              tick: tickCount,
+              timeSec,
+              enemyId: enemy.id,
+              fromPosition: cloneVec3(enemy.position),
+              toPosition: cloneVec3(targetTurret.position),
+            });
+          }
+          if (targetTurret.hp <= 0) {
+            const index = turrets.indexOf(targetTurret);
+            if (index >= 0) turrets.splice(index, 1);
+            turretSpatialHash.remove(targetTurret, targetTurret.position);
+            emitEvent({
+              type: 'turret-destroyed',
+              tick: tickCount,
+              timeSec,
+              turretId: targetTurret.id,
+              position: cloneVec3(targetTurret.position),
+            });
+          }
+        }
+      } else {
+        enemy.attackingTurretId = null;
+        if (rangedCoreShot && !enemy.attackingCore) {
+          enemy.attackingCore = true;
+          enemy.effectiveSpeedMps = 0;
+          enemy.coreAttackCooldownSec = 0;
+        }
+      }
+
+      if (!enemy.attackingCore && !targetTurret) {
         const previousDistance = enemy.distanceAlongPath;
         enemy.effectiveSpeedMps = effectiveSpeed;
         enemy.distanceAlongPath += effectiveSpeed * dt;
         let sample = samplePathAtDistance(enemy.path, enemy.distanceAlongPath);
-        const corePosition = currentNavGraph.corePosition;
-        // Contact is between the shield and the enemy body, whose art is scaled in XR.
-        const contactDistance =
-          CORE_SHIELD_RADIUS_M + enemy.collisionRadiusM * GAMEPLAY_OBJECT_SCALE;
         const nextCoreDistance = distanceVec3(sample.position, corePosition);
         if (nextCoreDistance <= contactDistance + 1e-7) {
           // Clamp the crossing tick to the visible dome for floor and elevated Core routes.
@@ -2397,6 +2576,16 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       if (enemy.attackingCore && enemy.coreAttackCooldownSec <= 1e-7 && coreHp > 0) {
         enemy.coreAttackCooldownSec = CORE_ATTACK_INTERVAL_SEC;
         coreHp = Math.max(0, coreHp - enemy.coreDamage);
+        if (rangedAttackRangeM !== undefined) {
+          emitEvent({
+            type: 'enemy-ranged-fired',
+            tick: tickCount,
+            timeSec,
+            enemyId: enemy.id,
+            fromPosition: cloneVec3(enemy.position),
+            toPosition: cloneVec3(corePosition),
+          });
+        }
         emitEvent({
           type: 'core-hit',
           tick: tickCount,
@@ -2665,6 +2854,11 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       isDisrupted: false,
       isEmpImmune: false,
       isRedeploying: false,
+      upgradeTargetTier: null,
+      upgradeRemainingSec: 0,
+      upgradeDurationSec: 0,
+      hp: 100,
+      maxHp: 100,
       targetEnemyId: null,
       yaw: 0,
       pitch: 0,
@@ -2717,6 +2911,18 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       };
     }
 
+    if (turret.upgradeTargetTier !== null) {
+      return {
+        ok: false,
+        turret,
+        reason: 'UPGRADE_IN_PROGRESS',
+        previousTier: turret.tier,
+        tier: turret.upgradeTargetTier,
+        cost: 0,
+        remainingCredits: credits,
+      };
+    }
+
     const nextTier = getNextTurretTier(turret.tier);
     const upgradeCost = getTurretUpgradeCost(turret.kind, turret.tier);
     if (!nextTier || upgradeCost === null) {
@@ -2744,24 +2950,25 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
     }
 
     const previousTier = turret.tier;
-    const nextStats = getTurretTierStats(turret.kind, nextTier);
     credits -= upgradeCost;
-    turret.tier = nextTier;
-    turret.level = nextStats.level;
-    turret.stats = nextStats;
     turret.investedCredits += upgradeCost;
     turret.sellRefundCredits = Math.round(turret.investedCredits * TURRET_SELL_REFUND_RATIO);
+    const durationSec = getTurretUpgradeDurationSec(previousTier);
+    turret.upgradeTargetTier = nextTier;
+    turret.upgradeRemainingSec = durationSec;
+    turret.upgradeDurationSec = durationSec;
+    turret.targetEnemyId = null;
 
     emitEvent({
-      type: 'turret-upgraded',
+      type: 'turret-upgrade-started',
       tick: tickCount,
       timeSec,
       turretId: turret.id,
       kind: turret.kind,
       previousTier,
-      tier: turret.tier,
+      tier: nextTier,
       cost: upgradeCost,
-      investedCredits: turret.investedCredits,
+      durationSec,
       remainingCredits: credits,
     });
 
@@ -2770,7 +2977,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       turret,
       reason: null,
       previousTier,
-      tier: turret.tier,
+      tier: nextTier,
       cost: upgradeCost,
       remainingCredits: credits,
     };
@@ -2805,6 +3012,36 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
       priority: turret.priority,
       reason: null,
     };
+  }
+
+  function repairTurret(turretId: string): RepairTurretResult {
+    const turret = turrets.find((t) => t.id === turretId);
+    if (!turret)
+      return {
+        ok: false,
+        turret: null,
+        reason: 'TURRET_NOT_FOUND',
+        cost: 0,
+        remainingCredits: credits,
+      };
+    const cost = getTurretRepairCost(turret.hp, turret.maxHp);
+    if (cost === 0)
+      return { ok: false, turret, reason: 'ALREADY_FULL', cost: 0, remainingCredits: credits };
+    if (credits < cost)
+      return { ok: false, turret, reason: 'INSUFFICIENT_CREDITS', cost, remainingCredits: credits };
+    credits -= cost;
+    turret.hp = turret.maxHp;
+    emitEvent({
+      type: 'turret-repaired',
+      tick: tickCount,
+      timeSec,
+      turretId,
+      hp: turret.hp,
+      maxHp: turret.maxHp,
+      cost,
+      remainingCredits: credits,
+    });
+    return { ok: true, turret, reason: null, cost, remainingCredits: credits };
   }
 
   function relocateTurret(
@@ -2928,6 +3165,15 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
         ok: false,
         turret: null,
         reason: 'TURRET_NOT_FOUND',
+        refundCredits: 0,
+        remainingCredits: credits,
+      };
+    }
+    if (turret.upgradeTargetTier !== null) {
+      return {
+        ok: false,
+        turret,
+        reason: 'UPGRADE_IN_PROGRESS',
         refundCredits: 0,
         remainingCredits: credits,
       };
@@ -3078,7 +3324,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
 
     for (const t of state.turrets) {
       parts.push(
-        `T:${t.id}:${t.kind}:${t.tier}:${t.mountProfile}:${t.priority}:${quantize(t.position.x)},${quantize(t.position.y)},${quantize(t.position.z)}:${t.investedCredits}:${quantize(t.fireCooldownSec)}:${quantize(t.redeployCooldownSec)}:${quantize(t.disabledRemainingSec)}:${quantize(t.empImmunityRemainingSec)}:${t.shotsFired}:${t.kills}`,
+        `T:${t.id}:${t.kind}:${t.tier}:${t.upgradeTargetTier ?? '-'}:${quantize(t.upgradeRemainingSec)}:${quantize(t.hp)}/${quantize(t.maxHp)}:${t.mountProfile}:${t.priority}:${quantize(t.position.x)},${quantize(t.position.y)},${quantize(t.position.z)}:${t.investedCredits}:${quantize(t.fireCooldownSec)}:${quantize(t.redeployCooldownSec)}:${quantize(t.disabledRemainingSec)}:${quantize(t.empImmunityRemainingSec)}:${t.shotsFired}:${t.kills}`,
       );
     }
 
@@ -3161,6 +3407,9 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
         break;
       case 'turret/upgrade':
         upgradeTurret(action.turretId);
+        break;
+      case 'turret/repair':
+        repairTurret(action.turretId);
         break;
       case 'turret/relocate':
         relocateTurret({
@@ -3289,6 +3538,7 @@ export function createCombatSimulation(config: CombatSimulationConfig = {}): Com
 
     placeTurret,
     upgradeTurret,
+    repairTurret,
     setTurretPriority,
     relocateTurret,
     sellTurret,

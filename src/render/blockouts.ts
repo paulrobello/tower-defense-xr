@@ -91,6 +91,7 @@ const ENEMY_LOCOMOTION_STRIDE_M: Readonly<Record<EnemyId, number>> = {
   'wasp-skimmer': 0.42,
   'carapace-brute': 0.52,
   'rift-disruptor': 0.32,
+  'rift-spitter': 0.4,
   'apex-broodlord': 0.92,
 };
 
@@ -139,11 +140,18 @@ export interface TurretBlockout {
   readonly bodyMaterial: THREE.MeshStandardMaterial;
   readonly accentMaterial: THREE.MeshStandardMaterial;
   readonly empMaterial: THREE.MeshBasicMaterial;
+  readonly upgradeBarGroup: THREE.Group;
+  readonly upgradeBarFill: THREE.Mesh;
+  readonly healthBarGroup: THREE.Group;
+  readonly healthBarFill: THREE.Mesh;
   recoilOffsetM: number;
   rotarySpinAngle: number;
   isDisrupted: boolean;
   yaw: number;
   pitch: number;
+  upgradeAnimationRemainingSec: number;
+  upgradeAnimationDurationSec: number;
+  upgradeReemergeRemainingSec: number;
 }
 
 export interface EnemyBlockout {
@@ -642,6 +650,7 @@ export function createBlockoutRenderer(
   function defaultEnemyLocomotionClip(simEnemy: SimEnemy): string {
     switch (simEnemy.archetypeId) {
       case 'skitter-crawler':
+      case 'rift-spitter':
         return simEnemy.locomotionMode === 'climb' ? 'climb_wall' : 'crawl_floor';
       case 'wasp-skimmer':
         return 'hover_fly';
@@ -1433,6 +1442,84 @@ export function createBlockoutRenderer(
     empHaloGroup.add(empSparkOcta, empSparkRing);
     group.add(empHaloGroup);
 
+    // The bar is attached to the turret so it follows wall/ceiling mounts without
+    // allocating per-frame geometry. Its fill scale is updated from sim progress.
+    const upgradeBarGroup = new THREE.Group();
+    upgradeBarGroup.name = 'turret-upgrade-progress';
+    upgradeBarGroup.position.y = b.totalHeightM + 0.14;
+    const upgradeBarBg = new THREE.Mesh(
+      trackGeo(new THREE.PlaneGeometry(0.28, 0.026)),
+      trackMat(
+        new THREE.MeshBasicMaterial({
+          color: 0x111827,
+          transparent: true,
+          opacity: 0.9,
+          depthWrite: false,
+        }),
+        'world-object',
+        entityMats,
+        entityBindings,
+      ),
+    );
+    upgradeBarBg.name = 'turret-upgrade-progress-bg';
+    const upgradeBarFill = new THREE.Mesh(
+      trackGeo(new THREE.PlaneGeometry(0.26, 0.016)),
+      trackMat(
+        new THREE.MeshBasicMaterial({
+          color: 0x22d3ee,
+          transparent: true,
+          opacity: 0.98,
+          depthWrite: false,
+        }),
+        'world-object',
+        entityMats,
+        entityBindings,
+      ),
+    );
+    upgradeBarFill.name = 'turret-upgrade-progress-fill';
+    upgradeBarFill.position.z = 0.002;
+    upgradeBarGroup.add(upgradeBarBg, upgradeBarFill);
+    upgradeBarGroup.visible = false;
+    group.add(upgradeBarGroup);
+
+    const healthBarGroup = new THREE.Group();
+    healthBarGroup.name = 'turret-health';
+    healthBarGroup.position.y = b.totalHeightM + 0.14;
+    const healthBarBg = new THREE.Mesh(
+      trackGeo(new THREE.PlaneGeometry(0.28, 0.026)),
+      trackMat(
+        new THREE.MeshBasicMaterial({
+          color: 0x111827,
+          transparent: true,
+          opacity: 0.9,
+          depthWrite: false,
+        }),
+        'world-object',
+        entityMats,
+        entityBindings,
+      ),
+    );
+    healthBarBg.name = 'turret-health-bg';
+    const healthBarFill = new THREE.Mesh(
+      trackGeo(new THREE.PlaneGeometry(0.26, 0.016)),
+      trackMat(
+        new THREE.MeshBasicMaterial({
+          color: 0xef4444,
+          transparent: true,
+          opacity: 0.98,
+          depthWrite: false,
+        }),
+        'world-object',
+        entityMats,
+        entityBindings,
+      ),
+    );
+    healthBarFill.name = 'turret-health-fill';
+    healthBarFill.position.z = 0.002;
+    healthBarGroup.add(healthBarBg, healthBarFill);
+    healthBarGroup.visible = false;
+    group.add(healthBarGroup);
+
     turretsGroup.add(group);
 
     return {
@@ -1452,11 +1539,18 @@ export function createBlockoutRenderer(
       bodyMaterial,
       accentMaterial,
       empMaterial,
+      upgradeBarGroup,
+      upgradeBarFill,
+      healthBarGroup,
+      healthBarFill,
       recoilOffsetM: 0,
       rotarySpinAngle: 0,
       isDisrupted: simTurret.isDisrupted,
       yaw: simTurret.yaw,
       pitch: simTurret.pitch,
+      upgradeAnimationRemainingSec: 0,
+      upgradeAnimationDurationSec: 0.65,
+      upgradeReemergeRemainingSec: 0,
     };
   }
 
@@ -1586,6 +1680,27 @@ export function createBlockoutRenderer(
       empRing.rotation.x = Math.PI / 2;
       empRing.position.set(0, b.heightM * 0.5, 0);
       bodyGroup.add(empRing);
+    } else if (simEnemy.archetypeId === 'rift-spitter') {
+      // Ranged Rift Spitter: olive armored shell with a lime luminous firing chamber.
+      const shell = new THREE.Mesh(sharedOctaGeo, primaryMaterial);
+      shell.name = 'spitter-shell';
+      shell.scale.set(b.widthM * 0.46, b.heightM * 0.52, b.lengthM * 0.5);
+      shell.position.set(0, b.heightM * 0.5, 0);
+      shell.castShadow = true;
+      bodyGroup.add(shell);
+
+      const chamber = new THREE.Mesh(sharedOctaGeo, accentMaterial);
+      chamber.name = 'spitter-luminous-chamber';
+      chamber.scale.set(b.widthM * 0.22, b.heightM * 0.24, b.lengthM * 0.2);
+      chamber.position.set(0, b.heightM * 0.52, b.lengthM * 0.42);
+      bodyGroup.add(chamber);
+
+      const vent = new THREE.Mesh(sharedTorusGeo, accentMaterial);
+      vent.name = 'spitter-chamber-ring';
+      vent.scale.setScalar(b.widthM * 0.3);
+      vent.rotation.x = Math.PI / 2;
+      vent.position.copy(chamber.position);
+      bodyGroup.add(vent);
     } else {
       // Wave 12 Boss: Apex Broodlord Matriarch (0.92 m × 0.78 m × 0.84 m) + Phase-2 molten armor cracks
       const carapace = new THREE.Mesh(sharedBoxGeo, primaryMaterial);
@@ -1815,6 +1930,21 @@ export function createBlockoutRenderer(
 
   function processEvents(events: readonly SimEvent[]): void {
     for (const ev of events) {
+      if ((ev as SimEvent & { type: string }).type === 'enemy-ranged-fired') {
+        const rangedEvent = ev as SimEvent & {
+          fromPosition: Vec3;
+          toPosition: Vec3;
+        };
+        if (activeTracers.length >= MAX_INSTANCED_TRACERS) activeTracers.shift();
+        activeTracers.push({
+          from: { ...rangedEvent.fromPosition },
+          to: { ...rangedEvent.toPosition },
+          elapsedSec: 0,
+          durationSec: 0.2,
+          colorHex: 0xa3e635,
+        });
+        continue;
+      }
       switch (ev.type) {
         case 'core-hit': {
           coreBastion.hitFlashRemainingSec = 0.35;
@@ -2221,6 +2351,20 @@ export function createBlockoutRenderer(
 
       // 3. Sync 4 Turrets × 3 Tiers (Tier Upgrade Silhouette, Yaw/Pitch, Recoil, EMP Halo)
       const seenTurrets = new Set<string>();
+      for (const ev of events) {
+        const upgradeEvent = ev as SimEvent & {
+          type: string;
+          turretId?: string;
+          durationSec?: number;
+        };
+        if (upgradeEvent.type !== 'turret-upgrade-started' || !upgradeEvent.turretId) continue;
+        const record = turretsMap.get(upgradeEvent.turretId);
+        if (record) {
+          record.upgradeAnimationDurationSec = Math.max(0.1, upgradeEvent.durationSec ?? 0.65);
+          record.upgradeAnimationRemainingSec = record.upgradeAnimationDurationSec;
+          record.upgradeReemergeRemainingSec = 0;
+        }
+      }
       for (const simTurret of snapshot.turrets) {
         seenTurrets.add(simTurret.id);
         let turretBlockout = turretsMap.get(simTurret.id);
@@ -2245,7 +2389,61 @@ export function createBlockoutRenderer(
             turretBlockout.bodyMaterial,
             turretBlockout.accentMaterial,
           );
+          // The simulation changes tier on completion. Keep the completed silhouette
+          // low for one short reveal so it rises smoothly instead of popping in.
+          turretBlockout.upgradeAnimationRemainingSec = 0;
+          turretBlockout.upgradeReemergeRemainingSec = 0.35;
         }
+
+        const upgradeState = simTurret as SimTurret & {
+          upgradeRemainingSec?: number;
+          upgradeDurationSec?: number;
+          upgradeTargetTier?: TurretTierId | null;
+        };
+        const simUpgradeDuration = upgradeState.upgradeDurationSec ?? 0;
+        const simUpgradeRemaining = upgradeState.upgradeRemainingSec ?? 0;
+        if (simUpgradeDuration > 0 && simUpgradeRemaining > 0) {
+          turretBlockout.upgradeAnimationDurationSec = simUpgradeDuration;
+          turretBlockout.upgradeAnimationRemainingSec = simUpgradeRemaining;
+        } else if (turretBlockout.upgradeAnimationRemainingSec > 0) {
+          turretBlockout.upgradeAnimationRemainingSec = Math.max(
+            0,
+            turretBlockout.upgradeAnimationRemainingSec - stepDt,
+          );
+        }
+        turretBlockout.upgradeReemergeRemainingSec = Math.max(
+          0,
+          turretBlockout.upgradeReemergeRemainingSec - stepDt,
+        );
+        const upgrading =
+          simUpgradeRemaining > 0 || turretBlockout.upgradeAnimationRemainingSec > 0;
+        const upgradeProgress =
+          simUpgradeDuration > 0
+            ? THREE.MathUtils.clamp(1 - simUpgradeRemaining / simUpgradeDuration, 0, 1)
+            : 1;
+        const reemergeProgress =
+          turretBlockout.upgradeReemergeRemainingSec > 0
+            ? THREE.MathUtils.clamp(1 - turretBlockout.upgradeReemergeRemainingSec / 0.35, 0, 1)
+            : 1;
+        const sinkProgress = upgrading
+          ? THREE.MathUtils.smoothstep(upgradeProgress, 0, 0.25)
+          : 1 - THREE.MathUtils.smoothstep(reemergeProgress, 0, 1);
+        const animatedBaseHeight = getTurretTierStats(simTurret.kind, simTurret.tier).blockout
+          .baseHeightM;
+        turretBlockout.yawRing.position.y = animatedBaseHeight * (1 - sinkProgress * 0.92);
+        turretBlockout.upgradeBarGroup.visible = upgrading;
+        turretBlockout.upgradeBarFill.scale.x = Math.max(0.001, upgradeProgress);
+        turretBlockout.upgradeBarFill.position.x = -0.13 * (1 - upgradeProgress);
+        const turretHp = (simTurret as SimTurret & { hp?: number; maxHp?: number }).hp;
+        const turretMaxHp = (simTurret as SimTurret & { hp?: number; maxHp?: number }).maxHp;
+        const turretHpRatio =
+          turretMaxHp && turretMaxHp > 0 && turretHp !== undefined
+            ? THREE.MathUtils.clamp(turretHp / turretMaxHp, 0, 1)
+            : 1;
+        const turretDamaged = turretHpRatio < 1 && turretHpRatio > 0;
+        turretBlockout.healthBarGroup.visible = turretDamaged && !upgrading;
+        turretBlockout.healthBarFill.scale.x = Math.max(0.001, turretHpRatio);
+        turretBlockout.healthBarFill.position.x = -0.13 * (1 - turretHpRatio);
 
         // Mount base visibility (`surface-clamp` legs vs `hover-pod` repulsor ring)
         turretBlockout.mountProfile = simTurret.mountProfile;
@@ -2258,6 +2456,9 @@ export function createBlockoutRenderer(
           (simTurret.position.z - _camWorldPos.z) ** 2;
         const desiredTurretLod: 0 | 1 = turretDistSq > TURRET_LOD1_DIST_SQ ? 1 : 0;
         const turretView = ensureTurretAsset(turretBlockout, simTurret, desiredTurretLod);
+        if (turretView) {
+          turretView.headRoot.position.y = -animatedBaseHeight * sinkProgress * 0.92;
+        }
         if (!turretView) {
           turretBlockout.clampMountGroup.visible = !isHover;
           turretBlockout.hoverPodGroup.visible = isHover;

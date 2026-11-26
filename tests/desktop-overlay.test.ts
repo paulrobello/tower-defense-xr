@@ -57,7 +57,8 @@ describe('desktop launch overlay', () => {
       expect(envelope.source).toBe('desktop');
       received.push(action);
     });
-    createLaunchOverlay(root, bus, fakeXr().view);
+    const overlay = createLaunchOverlay(root, bus, fakeXr().view);
+    overlay.setLaunchReady?.(true);
     expect(control(root, 'enter-xr').textContent).toBe(ENTER_XR_LABEL);
     expect(control(root, 'play-desktop').textContent).toBe('Play Desktop');
     expect(control(root, 'settings').textContent).toBe('Settings');
@@ -74,8 +75,10 @@ describe('desktop launch overlay', () => {
   it('disables the enter button while a request is pending or XR is unsupported', () => {
     const root = document.createElement('div');
     const xr = fakeXr();
-    createLaunchOverlay(root, createActionBus(), xr.view);
+    const overlay = createLaunchOverlay(root, createActionBus(), xr.view);
     const enter = control(root, 'enter-xr') as HTMLButtonElement;
+    expect(enter.disabled).toBe(true);
+    overlay.setLaunchReady?.(true);
     expect(enter.disabled).toBe(false);
     xr.set({ status: 'requesting' });
     expect(enter.disabled).toBe(true);
@@ -202,6 +205,8 @@ describe('desktop bootstrap shell', () => {
     expect(shell.scene.background).not.toBeNull();
     expect(shell.xr.state.framebufferScale).toBe(1.2);
     expect(shell.xr.state.foveation).toBe(1);
+
+    shell.overlay.setLaunchReady?.(true);
 
     // Play Desktop hides launch overlay and unlocks orbit controls.
     bus.dispatch({ type: 'menu/play-desktop' }, 'desktop');

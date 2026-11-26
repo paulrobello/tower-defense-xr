@@ -3,10 +3,16 @@ import {
   createMenuPanel,
   keepAbove,
   type MenuPanel,
+  type MenuRow,
   OVERLAY_RENDER_ORDER,
 } from '@par/xr-workspace';
 import * as THREE from 'three';
-import { TURRET_SELL_REFUND_RATIO } from '../content/turrets.ts';
+import {
+  getNextTurretTier,
+  getTurretRepairCost,
+  getTurretUpgradeCost,
+  TURRET_SELL_REFUND_RATIO,
+} from '../content/turrets.ts';
 import type { SimTurret } from '../sim/engine.ts';
 import { configureFonts } from './fonts.ts';
 import { createBatchedTextMember, createChamferPlate, TACTICAL_PLATE } from './tactical-style.ts';
@@ -14,6 +20,8 @@ import { createBatchedTextMember, createChamferPlate, TACTICAL_PLATE } from './t
 interface TurretInspectorOptions {
   readonly container: HTMLElement;
   readonly renderOrder?: number;
+  readonly onUpgrade: (turret: Readonly<SimTurret>) => void;
+  readonly onRepair: (turret: Readonly<SimTurret>) => void;
   readonly onSell: (turret: Readonly<SimTurret>) => void;
   readonly onClose: () => void;
 }
@@ -25,7 +33,7 @@ export interface TurretInspector {
   readonly desktopElement: HTMLElement;
   readonly turret: Readonly<SimTurret> | null;
   setMode(mode: 'desktop' | 'xr'): void;
-  setTurret(turret: Readonly<SimTurret> | null): void;
+  setTurret(turret: Readonly<SimTurret> | null, credits?: number): void;
   dispose(): void;
 }
 
@@ -99,9 +107,37 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
   let mode: 'desktop' | 'xr' = 'desktop';
   let selected: Readonly<SimTurret> | null = null;
   let disposed = false;
+  let upgradeAvailable = false;
+  let repairAvailable = false;
+  let sellAvailable = true;
   const activateSell = (): void => {
-    if (selected) options.onSell(selected);
+    if (selected && sellAvailable) options.onSell(selected);
   };
+  const activateUpgrade = (): void => {
+    if (selected && upgradeAvailable) options.onUpgrade(selected);
+  };
+  const activateRepair = (): void => {
+    if (selected && repairAvailable) options.onRepair(selected);
+  };
+  const actionRows = (upgradeLabel: string, repairLabel: string, sellLabel: string): MenuRow[] => [
+    [
+      {
+        id: 'upgrade',
+        label: upgradeLabel,
+        ...(upgradeAvailable ? { onSelect: activateUpgrade } : {}),
+      },
+      {
+        id: 'repair',
+        label: repairLabel,
+        ...(repairAvailable ? { onSelect: activateRepair } : {}),
+      },
+    ],
+    [
+      { id: 'sell', label: sellLabel, ...(sellAvailable ? { onSelect: activateSell } : {}) },
+      { id: 'close', label: 'Close', onSelect: options.onClose },
+    ],
+  ];
+
   const width = 0.56;
   const telemetryHeight = 0.143;
   const panel = createMenuPanel({
@@ -110,12 +146,8 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
     rowHeight: 0.057,
     cellGap: 0.014,
     hoverColor: 0x86f9ff,
-    rows: [
-      [
-        { id: 'sell', label: 'Sell', onSelect: activateSell },
-        { id: 'close', label: 'Close', onSelect: options.onClose },
-      ],
-    ],
+    rowGap: 0.008,
+    rows: actionRows('Upgrade', 'Repair', 'Sell'),
   });
   panel.root.position.set(0, -telemetryHeight, 0.002);
 
@@ -176,11 +208,11 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
     -0.023,
     -0.002,
   );
-  for (const x of [-width / 6, width / 6]) {
+  for (const x of [-width / 4, 0, width / 4]) {
     plate(new THREE.PlaneGeometry(0.0014, 0.054), TACTICAL_PLATE.frame, x, -0.094, -0.001);
   }
 
-  const statLabels = ['Range', 'Damage', 'Fire rate'];
+  const statLabels = ['Range', 'Damage', 'Fire rate', 'Health'];
   const fontUrl = configureFonts().main;
   const textBatch = new CachedTextBatch();
   textBatch.name = 'turret-inspector-telemetry';
@@ -205,7 +237,7 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
     'center',
   );
   const stats = statLabels.map((label, index) => {
-    const x = ((index - 1) * width) / 3;
+    const x = ((index - 1.5) * width) / 4;
     const caption = createBatchedTextMember(
       label.toUpperCase(),
       fontUrl,
@@ -244,7 +276,7 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
   heading.append(title, tierBadge);
   const metricStrip = doc.createElement('dl');
   metricStrip.style.cssText =
-    'display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:12px 0;' +
+    'display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:12px 0;' +
     'border:1px solid #346979;background:#143342;';
   const desktopValues = statLabels.map((label, index) => {
     const metric = doc.createElement('div');
@@ -261,12 +293,27 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
   });
   const actions = doc.createElement('div');
   actions.style.cssText = 'display:flex;gap:7px;';
-  const sell = doc.createElement('button');
-  sell.type = 'button';
-  sell.dataset.turretAction = 'sell';
   const actionStyle =
     'flex:1;min-height:30px;border-radius:1px 7px 1px 7px;padding:5px 9px;cursor:pointer;' +
     'font:600 12px/1.2 system-ui,-apple-system,sans-serif;letter-spacing:.04em;';
+  const maintenanceActions = doc.createElement('div');
+  maintenanceActions.style.cssText = 'display:flex;gap:7px;margin-bottom:7px;';
+  const upgrade = doc.createElement('button');
+  upgrade.type = 'button';
+  upgrade.dataset.turretAction = 'upgrade';
+  upgrade.style.cssText = `${actionStyle}background:#0a5362;color:#eef8fc;border:1px solid #53e4f2;`;
+  upgrade.disabled = true;
+  upgrade.addEventListener('click', activateUpgrade);
+  const repair = doc.createElement('button');
+  repair.type = 'button';
+  repair.dataset.turretAction = 'repair';
+  repair.style.cssText = `${actionStyle}background:#143342;color:#b9f5e5;border:1px solid #438592;`;
+  repair.disabled = true;
+  repair.addEventListener('click', activateRepair);
+  maintenanceActions.append(upgrade, repair);
+  const sell = doc.createElement('button');
+  sell.type = 'button';
+  sell.dataset.turretAction = 'sell';
   sell.style.cssText = `${actionStyle}background:#463525;color:#ffd166;border:1px solid #bd8e47;`;
   sell.addEventListener('click', activateSell);
   const close = doc.createElement('button');
@@ -276,7 +323,7 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
   close.style.cssText = `${actionStyle}background:#102934;color:#eef8fc;border:1px solid #346979;`;
   close.addEventListener('click', options.onClose);
   actions.append(sell, close);
-  desktopElement.append(heading, metricStrip, actions);
+  desktopElement.append(heading, metricStrip, maintenanceActions, actions);
   options.container.append(desktopElement);
 
   const syncVisibility = (): void => {
@@ -286,7 +333,7 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
   };
 
   let readout = '';
-  function setTurret(turret: Readonly<SimTurret> | null): void {
+  function setTurret(turret: Readonly<SimTurret> | null, credits = 0): void {
     if (disposed) return;
     const changedSelection = turret?.id !== selected?.id;
     selected = turret;
@@ -297,11 +344,61 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
     rangeRoot.position.set(position.x, position.y, position.z);
     rangeBoundary.scale.setScalar(tier.rangeM);
     spokes.scale.setScalar(tier.rangeM);
-    const values = [`${tier.rangeM} m`, String(tier.damage), `${tier.fireRateHz}/s`];
-    const sellText = `Sell +${Math.round(turret.investedCredits * TURRET_SELL_REFUND_RATIO)} CR`;
-    const nextReadout = `${turret.name} ${turret.tier} ${values.join(' ')} ${sellText}`;
+    const values = [
+      `${tier.rangeM} m`,
+      String(tier.damage),
+      `${tier.fireRateHz}/s`,
+      `${Math.ceil(turret.hp)}/${turret.maxHp}`,
+    ];
+    const pending = turret.upgradeTargetTier;
+    const canSell = pending === null;
+    const refund = Math.round(turret.investedCredits * TURRET_SELL_REFUND_RATIO);
+    const sellLabel = canSell ? `Sell +${refund} CR` : 'Sell after upgrade';
+    const nextTier = getNextTurretTier(turret.tier);
+    const cost = getTurretUpgradeCost(turret.kind, turret.tier);
+    const canUpgrade = pending === null && cost !== null && credits >= cost;
+    const upgradeLabel = pending
+      ? `Upgrading to ${pending}`
+      : !nextTier || cost === null
+        ? 'Max tier'
+        : canUpgrade
+          ? `Upgrade ${nextTier} · ${cost} CR`
+          : `Upgrade · ${cost} CR needed`;
+    const repairCost = getTurretRepairCost(turret.hp, turret.maxHp);
+    const canRepair = repairCost > 0 && credits >= repairCost;
+    const repairLabel =
+      repairCost === 0
+        ? 'Full health'
+        : canRepair
+          ? `Repair · ${repairCost} CR`
+          : `Repair · ${repairCost} CR needed`;
+    const nextReadout = `${turret.name} ${turret.tier} ${values.join(' ')} ${sellLabel} ${upgradeLabel} ${repairLabel}`;
     if (readout === nextReadout) return;
     readout = nextReadout;
+    if (
+      upgradeAvailable !== canUpgrade ||
+      repairAvailable !== canRepair ||
+      sellAvailable !== canSell
+    ) {
+      upgradeAvailable = canUpgrade;
+      repairAvailable = canRepair;
+      sellAvailable = canSell;
+      panel.setRows(actionRows(upgradeLabel, repairLabel, sellLabel));
+    } else {
+      panel.setLabel('upgrade', upgradeLabel);
+      panel.setLabel('repair', repairLabel);
+      panel.setLabel('sell', sellLabel);
+    }
+    for (const [button, label, enabled] of [
+      [upgrade, upgradeLabel, canUpgrade],
+      [repair, repairLabel, canRepair],
+      [sell, sellLabel, canSell],
+    ] as const) {
+      button.textContent = label;
+      button.disabled = !enabled;
+      button.style.opacity = enabled ? '1' : '0.65';
+      button.style.cursor = enabled ? 'pointer' : 'default';
+    }
     nameText.text = turret.name;
     nameText.sync();
     tierText.text = turret.tier;
@@ -313,10 +410,8 @@ export function createTurretInspector(options: TurretInspectorOptions): TurretIn
       if (desktopValue) desktopValue.textContent = value.text;
     }
     textBatch.revision += 1;
-    panel.setLabel('sell', sellText);
     title.textContent = turret.name;
     tierBadge.textContent = turret.tier;
-    sell.textContent = sellText;
   }
 
   syncVisibility();

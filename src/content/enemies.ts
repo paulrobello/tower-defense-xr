@@ -14,6 +14,7 @@ export const ENEMY_IDS = [
   'wasp-skimmer',
   'carapace-brute',
   'rift-disruptor',
+  'rift-spitter',
   'apex-broodlord',
 ] as const;
 
@@ -124,6 +125,7 @@ export interface EnemyDefinition {
   readonly armor: EnemyArmorProfile;
   /** Damage inflicted on the Core Bastion if this unit reaches the Core perimeter. */
   readonly coreDamage: number;
+  readonly rangedAttackRangeM?: number;
   /** Requisition credits awarded when destroyed. */
   readonly creditBounty: number;
   /** Mission score points awarded when destroyed. */
@@ -316,6 +318,45 @@ export const ENEMIES: Readonly<Record<EnemyId, EnemyDefinition>> = {
       maxMaterials: 2,
       textureSizePx: 1024,
       lodSwapDistanceM: 6.0,
+    },
+  },
+  'rift-spitter': {
+    id: 'rift-spitter',
+    name: 'Rift Spitter',
+    shortName: 'Spitter',
+    archetypeLabel: 'Ranged Artillery',
+    summary:
+      'A ground invader that stops at firing distance and spits charged bolts at exposed defenses.',
+    maxHp: 160,
+    speedMps: 0.52,
+    movementLayer: 'surface',
+    canDescendWallToFloor: true,
+    nominalFlightAltitudeM: 0,
+    armor: {
+      kineticReduction: 0,
+      plasmaReduction: 0,
+      cryoReduction: 0,
+      railReduction: 0,
+      frontalPlate: false,
+      slowResistance: 0,
+    },
+    coreDamage: 4,
+    rangedAttackRangeM: 1.65,
+    creditBounty: 10,
+    scoreValue: 30,
+    collisionRadiusM: 0.17,
+    isBoss: false,
+    primaryColorHex: '#52604a',
+    emissiveColorHex: '#b9f472',
+    disruptorAbility: null,
+    bossAbility: null,
+    blockout: { lengthM: 0.4, widthM: 0.3, heightM: 0.24, healthBarOffsetHeightM: 0.34 },
+    meshBudget: {
+      maxTris: 4500,
+      maxBones: 24,
+      maxMaterials: 2,
+      textureSizePx: 1024,
+      lodSwapDistanceM: 6,
     },
   },
   'apex-broodlord': {

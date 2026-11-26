@@ -264,6 +264,47 @@ describe('Radial Wheel Context Builders (Build & Turret Command)', () => {
     expect(capped[4].disabled).toBe(true);
   });
 
+  it('refreshes a purchase in place without accepting a trigger pressed while it was unaffordable', () => {
+    const source = createFakeController({
+      handedness: 'right',
+      position: new THREE.Vector3(0, 1.2, 0),
+    });
+    const controllers = [source];
+    const select = vi.fn();
+    let credits = 0;
+    const radial = createXrRadialControls({
+      scene: new THREE.Scene(),
+      actionBus: createActionBus(),
+      getBuildState: () => ({ credits, activeTurretCount: 0 }),
+      onSelectBuildKind: select,
+    });
+    let time = settleRadialAnimation(radial, controllers, 0, 1);
+    source.setState({ stickClick: true });
+    time = settleRadialAnimation(radial, controllers, time, 1);
+    source.setState({ stickClick: false, stickX: 0, stickY: -0.9 });
+    time = settleRadialAnimation(radial, controllers, time);
+    const root = radial.root.getObjectByName('radial-menu');
+    const item = () => radial.items.find((entry) => entry.id === 'build:autocannon');
+    expect(item()?.disabled).toBe(true);
+    expect(item()?.label).toContain('(LOW)');
+    expect(radial.hoveredAction).toBe('build:autocannon');
+    expect(radial.handleSelectStart(source.source)).toBe(true);
+
+    credits = 400;
+    settleRadialAnimation(radial, controllers, time, 1);
+    expect(radial.root.getObjectByName('radial-menu')).toBe(root);
+    expect(radial.interactive).toBe(true);
+    expect(item()?.disabled).toBe(false);
+    expect(item()?.label).not.toContain('(LOW)');
+    expect(radial.handleSelect(source.source)).toBe(true);
+    expect(radial.isOpen).toBe(true);
+    expect(select).not.toHaveBeenCalled();
+    expect(radial.handleSelectStart(source.source)).toBe(true);
+    expect(radial.handleSelect(source.source)).toBe(true);
+    expect(select).toHaveBeenCalledWith('autocannon');
+    radial.dispose();
+  });
+
   it('builds Turret Command items with T1->T2/T2->T3 upgrades, T3 max disable, priority cycle, relocate, and 50% sell', () => {
     const t1: RadialTurretTarget = {
       id: 'turret-1',
@@ -1129,14 +1170,25 @@ describe('Turret inspector readouts', () => {
     const onSell = vi.fn();
     const onClose = vi.fn();
     const container = document.createElement('div');
-    const inspector = createTurretInspector({ container, onSell, onClose });
+    const inspector = createTurretInspector({
+      container,
+      onUpgrade: vi.fn(),
+      onRepair: vi.fn(),
+      onSell,
+      onClose,
+    });
     inspector.setTurret(turret);
     expect(inspector.desktopElement.hidden).toBe(false);
     const values = Array.from(
       inspector.desktopElement.querySelectorAll('dd'),
       (value) => value.textContent,
     );
-    expect(values).toEqual(['2.16 m', String(turret.stats.damage), `${turret.stats.fireRateHz}/s`]);
+    expect(values).toEqual([
+      '2.16 m',
+      String(turret.stats.damage),
+      `${turret.stats.fireRateHz}/s`,
+      '100/100',
+    ]);
     inspector.desktopElement
       .querySelector<HTMLButtonElement>('[data-turret-action="close"]')
       ?.click();

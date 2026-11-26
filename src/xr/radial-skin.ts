@@ -1,7 +1,7 @@
-import { createScalableLabel } from '@par/xr-workspace';
+import { createScalableLabel, updateScalableLabel } from '@par/xr-workspace';
 import * as THREE from 'three';
 import type { TacticalAtlasResource } from '../ui/tactical-atlas.ts';
-import type { RadialItemDescriptor } from './radial-controls.ts';
+import type { RadialActionId, RadialItemDescriptor } from './radial-controls.ts';
 
 export const BASTION_RADIAL_THEME = {
   glass: '#26323d',
@@ -37,10 +37,19 @@ export function skinRadialMenu(
   root: THREE.Group,
   items: readonly RadialItemDescriptor[],
   atlas: TacticalAtlasResource,
+  textColor: string = BASTION_RADIAL_THEME.text,
 ) {
   const materials: THREE.Material[] = [];
   const geometries: THREE.BufferGeometry[] = [];
-  const disabled: THREE.MeshBasicMaterial[] = [];
+  const wedges = new Map<
+    RadialActionId,
+    {
+      readonly fill: THREE.MeshBasicMaterial;
+      readonly label: THREE.Mesh;
+      readonly badge: THREE.Mesh | null;
+      disabled: boolean;
+    }
+  >();
   const fills: THREE.MeshBasicMaterial[] = [];
   let settled = false;
   let disposed = false;
@@ -57,7 +66,7 @@ export function skinRadialMenu(
         !child.userData.labelTextObject &&
         child.name !== 'radial-outline',
     ) as THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial> | undefined;
-    if (!label || !fill) continue;
+    if (!(label instanceof THREE.Mesh) || !fill) continue;
     const outline = group.getObjectByName('radial-outline');
     if (outline) {
       outline.position.z = 0.001;
@@ -101,22 +110,22 @@ export function skinRadialMenu(
     }
     const item = items.find((entry) => entry.id === action);
     if (!item) continue;
-    if (item.disabled) disabled.push(fill.material);
     const detail = item.label.split('\n')[1];
-    if (detail) {
-      const badge = createScalableLabel(detail, 0.167, 0.032, {
-        backplate: false,
-        fontSize: 0.019,
-      });
+    const badge = detail
+      ? createScalableLabel(detail, 0.167, 0.032, {
+          backplate: false,
+          fontSize: 0.019,
+        })
+      : null;
+    if (badge) {
       badge.name = 'bastion-cost-badge';
       badge.position.set(0, -0.043, 0.006);
       badge.raycast = noHit;
       const text = badge.userData.labelTextObject;
-      text.color = item.disabled ? '#ffb3bd' : action === 'turret:priority' ? '#9be5ef' : '#ffd278';
       text.renderOrder = 4;
-      text.sync();
       label.add(badge);
     }
+    wedges.set(item.id, { fill: fill.material, label, badge, disabled: item.disabled });
     void atlas.get().then((loaded) => {
       if (disposed || !loaded || !item.icon) return;
       const cell = loaded.icons[item.icon];
@@ -148,14 +157,45 @@ export function skinRadialMenu(
       geometries.push(geometry);
     });
   }
+  function updateItems(nextItems: readonly RadialItemDescriptor[]): void {
+    for (const item of nextItems) {
+      const wedge = wedges.get(item.id);
+      if (!wedge) continue;
+      wedge.disabled = item.disabled;
+      const [name, detail] = item.label.split('\n');
+      const title = wedge.label.userData.labelTextObject;
+      if (name && wedge.label.userData.labelText !== name) {
+        const offset = title.position.clone();
+        updateScalableLabel(wedge.label, name);
+        title.position.copy(offset);
+      }
+      title.color = item.disabled ? '#9caeb9' : textColor;
+      title.sync();
+      if (wedge.badge) {
+        const text = wedge.badge.userData.labelTextObject;
+        updateScalableLabel(wedge.badge, detail ?? '');
+        text.color = item.disabled
+          ? '#ffb3bd'
+          : item.id === 'turret:priority'
+            ? '#9be5ef'
+            : '#ffd278';
+        text.sync();
+      }
+    }
+  }
+  updateItems(items);
+
   return {
+    updateItems,
     settle() {
       if (settled) return;
       settled = true;
       for (const fill of fills) fill.opacity = 1;
     },
     applyDisabled() {
-      for (const material of disabled) material.color.setHex(0x672d40);
+      for (const wedge of wedges.values()) {
+        if (wedge.disabled) wedge.fill.color.setHex(0x672d40);
+      }
     },
     dispose() {
       disposed = true;

@@ -73,6 +73,8 @@ export interface AssetLoaderProgress {
   readonly total: number;
   readonly ready: boolean;
   readonly precompiled: boolean;
+  /** True only after required runtime assets and shader preparation are complete. */
+  readonly readyForLaunch: boolean;
 }
 
 export type AssetLoaderListener = (progress: Readonly<AssetLoaderProgress>) => void;
@@ -230,6 +232,7 @@ export function createRuntimeAssetLibrary(
       total: totalCount,
       ready,
       precompiled,
+      readyForLaunch: ready && precompiled,
     };
     for (const fn of listeners) fn(snap);
   };
@@ -386,7 +389,13 @@ export function createRuntimeAssetLibrary(
       return manifest;
     },
     get progress() {
-      return { loaded: loadedCount, total: totalCount, ready, precompiled };
+      return {
+        loaded: loadedCount,
+        total: totalCount,
+        ready,
+        precompiled,
+        readyForLaunch: ready && precompiled,
+      };
     },
     get ready() {
       return ready;
@@ -487,7 +496,13 @@ export function createRuntimeAssetLibrary(
     },
     subscribe(listener) {
       listeners.add(listener);
-      listener({ loaded: loadedCount, total: totalCount, ready, precompiled });
+      listener({
+        loaded: loadedCount,
+        total: totalCount,
+        ready,
+        precompiled,
+        readyForLaunch: ready && precompiled,
+      });
       return () => {
         listeners.delete(listener);
       };

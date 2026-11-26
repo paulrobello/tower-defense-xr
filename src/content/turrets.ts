@@ -19,6 +19,12 @@ export { TARGET_PRIORITIES, type TargetPriority, TURRET_KINDS, type TurretKind, 
 
 export const TURRET_TIERS = ['T1', 'T2', 'T3'] as const;
 export type TurretTierId = (typeof TURRET_TIERS)[number];
+
+export const TURRET_UPGRADE_DURATIONS_SEC: Readonly<Record<TurretTierId, number>> = {
+  T1: 2,
+  T2: 3,
+  T3: 0,
+};
 export type TurretTierNumber = 1 | 2 | 3;
 
 export const TURRET_MOUNT_IDS = ['surface-clamp', 'hover-pod'] as const;
@@ -904,6 +910,14 @@ export function getTurretUpgradeCost(
   const next = getNextTurretTier(currentTier);
   if (!next) return null;
   return getTurretTierStats(kind, next).cost;
+}
+
+export function getTurretUpgradeDurationSec(currentTier: TurretTierId | TurretTierNumber): number {
+  return TURRET_UPGRADE_DURATIONS_SEC[normalizeTurretTier(currentTier)];
+}
+
+export function getTurretRepairCost(hp: number, maxHp: number): number {
+  return Math.ceil(Math.max(0, maxHp - hp));
 }
 
 export function getTurretCumulativeCost(

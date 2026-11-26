@@ -189,7 +189,7 @@ describe('Phase 4 AAA Runtime Pipeline (P4-T1, P4-T2, P4-T3)', () => {
 
     const fakeAssets: RuntimeAssetLibrary = {
       manifest: null,
-      progress: { loaded: 40, total: 40, ready: true, precompiled: true },
+      progress: { loaded: 40, total: 40, ready: true, precompiled: true, readyForLaunch: true },
       ready: true,
       broodlordPhase2Emissive: null,
       loadAll: async () => true,
@@ -313,7 +313,7 @@ describe('Phase 4 AAA Runtime Pipeline (P4-T1, P4-T2, P4-T3)', () => {
 
     const fakeAssets: RuntimeAssetLibrary = {
       manifest: null,
-      progress: { loaded: 40, total: 40, ready: true, precompiled: true },
+      progress: { loaded: 40, total: 40, ready: true, precompiled: true, readyForLaunch: true },
       ready: true,
       broodlordPhase2Emissive: null,
       loadAll: async () => true,

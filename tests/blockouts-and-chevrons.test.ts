@@ -27,7 +27,7 @@ import {
   projectThreatDirection,
 } from '../src/ui/threat-chevrons.ts';
 
-describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invaders, Instanced FX)', () => {
+describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 6 Invaders, Instanced FX)', () => {
   it('aligns the shot origin and launch direction with the displayed barrel on floor and wall mounts', () => {
     for (const kind of TURRET_KINDS) {
       for (const kindOfSurface of ['floor', 'wall'] as const) {
@@ -257,6 +257,17 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
     }
     renderer.syncFromSim(sim.getState(), sim.drainEvents(), 1 / 60);
 
+    for (const id of placedIds) {
+      const blockout = renderer.turrets.get(id);
+      expect(blockout?.upgradeBarGroup.visible).toBe(true);
+      expect(blockout?.healthBarGroup.visible).toBe(false);
+    }
+    for (let step = 0; step < 240; step += 1) {
+      const frame = sim.tick();
+      renderer.syncFromSim(frame.state, frame.events, 1 / 60);
+      if (frame.state.turrets.every((turret) => turret.upgradeTargetTier === null)) break;
+    }
+
     for (let i = 0; i < TURRET_KINDS.length; i += 1) {
       const kind = TURRET_KINDS[i] as TurretKind;
       const id = placedIds[i] as string;
@@ -277,6 +288,11 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
       expect(up.tier).toBe('T3');
     }
     renderer.syncFromSim(sim.getState(), sim.drainEvents(), 1 / 60);
+    for (let step = 0; step < 240; step += 1) {
+      const frame = sim.tick();
+      renderer.syncFromSim(frame.state, frame.events, 1 / 60);
+      if (frame.state.turrets.every((turret) => turret.upgradeTargetTier === null)) break;
+    }
 
     for (let i = 0; i < TURRET_KINDS.length; i += 1) {
       const kind = TURRET_KINDS[i] as TurretKind;
@@ -317,7 +333,7 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
     renderer.dispose();
   });
 
-  it('renders all 5 invader archetypes, cryo-slow cyan frost tint, Apex Broodlord Boss Phase-2 armor cracks, instanced HP bars, and pooled weapon FX', () => {
+  it('renders all 6 invader archetypes, cryo-slow cyan frost tint, Apex Broodlord Boss Phase-2 armor cracks, instanced HP bars, and pooled weapon FX', () => {
     const scene = new THREE.Scene();
     const renderer = createBlockoutRenderer(scene);
     const sim = createCombatSimulation({
@@ -369,9 +385,9 @@ describe('P2-T5: BlockoutRenderer (Core, Portals, 4 Turrets × 3 Tiers, 5 Invade
     const stepRes = sim.runTicks(4);
     renderer.syncFromSim(stepRes.state, stepRes.events, 0.03);
 
-    expect(renderer.enemies.size).toBe(5);
-    expect(renderer.hpBgInstancedMesh.count).toBe(5);
-    expect(renderer.hpFillInstancedMesh.count).toBe(5);
+    expect(renderer.enemies.size).toBe(6);
+    expect(renderer.hpBgInstancedMesh.count).toBe(6);
+    expect(renderer.hpFillInstancedMesh.count).toBe(6);
 
     // Weapon FX pools must be active after turrets fire
     const totalActiveFx =

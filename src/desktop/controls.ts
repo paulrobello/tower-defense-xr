@@ -441,7 +441,8 @@ export function createDesktopControls(options: DesktopControlsOptions): DesktopC
     const record = placement?.getTurret(turretId);
     switch (action) {
       case 'turret:upgrade':
-        if (record && getNextTurretTier(record.tier) === null) return false;
+        if (record && (record.upgradeTargetTier || getNextTurretTier(record.tier) === null))
+          return false;
         actionBus.dispatch({ type: 'turret/upgrade', turretId }, 'desktop');
         return true;
       case 'turret:priority': {
@@ -466,6 +467,7 @@ export function createDesktopControls(options: DesktopControlsOptions): DesktopC
         return began;
       }
       case 'turret:sell':
+        if (record?.upgradeTargetTier) return false;
         priorityOverrides.delete(turretId);
         setSelectedTurretInternal(null);
         actionBus.dispatch({ type: 'turret/sell', turretId }, 'desktop');

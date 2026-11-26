@@ -391,8 +391,13 @@ export function mountApp(container: HTMLElement): AppRuntime {
 
   let syncedAssetsReady = false;
   const unsubAssets = assets.subscribe((prog) => {
-    if (prog.total > 0 && !prog.ready) {
-      shell.overlay.setLoadStatus?.(`Loading AAA assets (${prog.loaded}/${prog.total})…`);
+    shell.overlay.setLaunchReady?.(prog.readyForLaunch);
+    if (!prog.ready) {
+      shell.overlay.setLoadStatus?.(
+        prog.total > 0
+          ? `Loading game assets (${prog.loaded}/${prog.total})…`
+          : 'Loading game assets…',
+      );
     } else if (prog.ready && !prog.precompiled) {
       shell.overlay.setLoadStatus?.('Precompiling shaders…');
     } else {
@@ -409,11 +414,15 @@ export function mountApp(container: HTMLElement): AppRuntime {
   });
   void assets
     .loadAll()
-    .then((ok) => {
-      if (ok) return assets.precompile(shell.renderer, shell.scene, shell.camera);
-      return undefined;
+    .then(async (ok) => {
+      if (!ok) {
+        shell.overlay.setLoadStatus?.('Game assets failed to load. Reload to try again.');
+        return;
+      }
+      await tacticalAtlas.get();
+      await assets.precompile(shell.renderer, shell.scene, shell.camera);
     })
-    .catch(() => undefined);
+    .catch(() => shell.overlay.setLoadStatus?.('Game assets failed to load. Reload to try again.'));
 
   const placement = createTurretPlacementController({
     roomModel,
@@ -441,8 +450,19 @@ export function mountApp(container: HTMLElement): AppRuntime {
       if (!shell.xr.presenting) desktopControls.setSelectedTurret(null);
       syncTacticalHud();
     },
+    onUpgrade: (turret) => {
+      bus.dispatch(
+        { type: 'turret/upgrade', turretId: turret.id },
+        shell.xr.presenting ? 'xr' : 'desktop',
+      );
+    },
+    onRepair: (turret) => {
+      bus.dispatch(
+        { type: 'turret/repair', turretId: turret.id },
+        shell.xr.presenting ? 'xr' : 'desktop',
+      );
+    },
     onSell: (turret) => {
-      if (selectedXrTurretId === turret.id) selectedXrTurretId = null;
       bus.dispatch(
         { type: 'turret/sell', turretId: turret.id },
         shell.xr.presenting ? 'xr' : 'desktop',
@@ -473,16 +493,13 @@ export function mountApp(container: HTMLElement): AppRuntime {
       placement.cancelPlacement();
       syncTacticalHud();
     },
-    getBuildState: () => {
-      const simState = currentSim.getState();
-      return {
-        credits: simState.credits,
-        activeTurretCount: simState.turrets.length,
-        hardTurretCap: HARD_TURRET_CAP,
-        canLaunchWave: state.phase === 'prep' || state.phase === 'intermission',
-        phase: state.phase,
-      };
-    },
+    getBuildState: () => ({
+      credits: tacticalHud.state.credits,
+      activeTurretCount: tacticalHud.state.activeTurrets,
+      hardTurretCap: HARD_TURRET_CAP,
+      canLaunchWave: state.phase === 'prep' || state.phase === 'intermission',
+      phase: state.phase,
+    }),
     isBusy: () =>
       xrSettings.visible || turretInspector.xrRoot.visible || state.phase === 'calibrate',
     getMovableWidgets: () => [
@@ -628,7 +645,10 @@ export function mountApp(container: HTMLElement): AppRuntime {
           ? selectedXrTurretId
           : desktopControls.state.selectedTurretId
         : null;
-    turretInspector.setTurret(inspectorId ? (currentSim.getTurret(inspectorId) ?? null) : null);
+    turretInspector.setTurret(
+      inspectorId ? (currentSim.getTurret(inspectorId) ?? null) : null,
+      simState.credits,
+    );
 
     const showHud = inXr
       ? !xrSettings.visible && !missionOverlay.visible && !turretInspector.xrRoot.visible
@@ -978,6 +998,8 @@ export function mountApp(container: HTMLElement): AppRuntime {
         const rec = placement.getTurret(action.turretId);
         if (rec) {
           rec.tier = res.turret.tier;
+          rec.visual.userData.turretTier = res.turret.tier;
+          rec.upgradeTargetTier = res.turret.upgradeTargetTier;
           rec.investedCredits = res.turret.investedCredits;
         }
       }
@@ -985,6 +1007,15 @@ export function mountApp(container: HTMLElement): AppRuntime {
       const upgradeEvents = currentSim.drainEvents();
       blockouts.syncFromSim(upgradeState, upgradeEvents, 0);
       audio.processSimEvents(upgradeEvents, upgradeState);
+      syncTacticalHud();
+    }),
+    bus.on('turret/repair', (action) => {
+      const result = currentSim.repairTurret(action.turretId);
+      if (!result.ok) return;
+      const repairState = currentSim.getState();
+      const repairEvents = currentSim.drainEvents();
+      blockouts.syncFromSim(repairState, repairEvents, 0);
+      audio.processSimEvents(repairEvents, repairState);
       syncTacticalHud();
     }),
     bus.on('turret/relocate', (action) => {
@@ -1033,10 +1064,12 @@ export function mountApp(container: HTMLElement): AppRuntime {
       if (isSyncingTurretAction) return;
       isSyncingTurretAction = true;
       try {
-        currentSim.sellTurret(action.turretId);
-        if (placement.getTurret(action.turretId)) {
-          placement.removeTurret(action.turretId);
-        }
+        const result = currentSim.sellTurret(action.turretId);
+        if (!result.ok) return;
+        if (selectedXrTurretId === action.turretId) selectedXrTurretId = null;
+        if (desktopControls.state.selectedTurretId === action.turretId)
+          desktopControls.setSelectedTurret(null);
+        placement.removeTurret(action.turretId);
       } finally {
         isSyncingTurretAction = false;
       }
@@ -1055,6 +1088,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
       syncTacticalHud();
     }),
     bus.on('wave/launch', () => {
+      if (!assets.progress.readyForLaunch) return;
       if (state.phase !== 'prep' && state.phase !== 'intermission') return;
       const res = currentSim.launchWave();
       if (res.ok && state.can('wave')) {
@@ -1148,6 +1182,22 @@ export function mountApp(container: HTMLElement): AppRuntime {
       const stepRes = currentSim.step(dt);
       const simState = stepRes.state;
       const events = currentSim.drainEvents();
+      for (const event of events) {
+        if (event.type === 'turret-upgraded') {
+          const record = placement.getTurret(event.turretId);
+          if (record) {
+            record.tier = event.tier;
+            record.visual.userData.turretTier = event.tier;
+            record.upgradeTargetTier = null;
+            record.investedCredits = event.investedCredits;
+          }
+        } else if (event.type === 'turret-destroyed') {
+          placement.removeTurret(event.turretId);
+          if (selectedXrTurretId === event.turretId) selectedXrTurretId = null;
+          if (desktopControls.state.selectedTurretId === event.turretId)
+            desktopControls.setSelectedTurret(null);
+        }
+      }
 
       if (simState.phase !== state.phase && state.can(simState.phase)) {
         state.transition(simState.phase, 'sim-step');
@@ -1215,6 +1265,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
   };
 
   const ensureActiveCombatPhaseForDebug = (): void => {
+    if (!assets.progress.readyForLaunch) throw new Error('Game assets are still loading.');
     if (state.phase === 'title') {
       desktopPlaying = true;
       state.transition('calibrate', 'debug');

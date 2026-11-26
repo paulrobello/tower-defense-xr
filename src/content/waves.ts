@@ -572,9 +572,17 @@ export const WAVES: readonly WaveDefinition[] = [
       {
         groupId: 'w7-crawlers-p0',
         enemyId: 'skitter-crawler',
-        count: 11,
+        count: 9,
         portalIndex: 0,
         startDelaySec: 0,
+        spawnIntervalSec: 1.9,
+      },
+      {
+        groupId: 'w7-spitters-p0',
+        enemyId: 'rift-spitter',
+        count: 2,
+        portalIndex: 0,
+        startDelaySec: 17.1,
         spawnIntervalSec: 1.9,
       },
       {
@@ -637,9 +645,17 @@ export const WAVES: readonly WaveDefinition[] = [
       {
         groupId: 'w8-crawlers-p1',
         enemyId: 'skitter-crawler',
-        count: 11,
+        count: 9,
         portalIndex: 1,
         startDelaySec: 2,
+        spawnIntervalSec: 1.9,
+      },
+      {
+        groupId: 'w8-spitters-p1',
+        enemyId: 'rift-spitter',
+        count: 2,
+        portalIndex: 1,
+        startDelaySec: 19.1,
         spawnIntervalSec: 1.9,
       },
       {
@@ -699,9 +715,17 @@ export const WAVES: readonly WaveDefinition[] = [
       {
         groupId: 'w9-crawlers-p1',
         enemyId: 'skitter-crawler',
-        count: 11,
+        count: 8,
         portalIndex: 1,
         startDelaySec: 2,
+        spawnIntervalSec: 1.9,
+      },
+      {
+        groupId: 'w9-spitters-p1',
+        enemyId: 'rift-spitter',
+        count: 3,
+        portalIndex: 1,
+        startDelaySec: 17.2,
         spawnIntervalSec: 1.9,
       },
       {
@@ -772,9 +796,17 @@ export const WAVES: readonly WaveDefinition[] = [
       {
         groupId: 'w10-crawlers-p2',
         enemyId: 'skitter-crawler',
-        count: 12,
+        count: 9,
         portalIndex: 2,
         startDelaySec: 4,
+        spawnIntervalSec: 1.8,
+      },
+      {
+        groupId: 'w10-spitters-p2',
+        enemyId: 'rift-spitter',
+        count: 3,
+        portalIndex: 2,
+        startDelaySec: 20.2,
         spawnIntervalSec: 1.8,
       },
       {
@@ -829,9 +861,17 @@ export const WAVES: readonly WaveDefinition[] = [
       {
         groupId: 'w11-crawlers-p0',
         enemyId: 'skitter-crawler',
-        count: 12,
+        count: 9,
         portalIndex: 0,
         startDelaySec: 0,
+        spawnIntervalSec: 1.7,
+      },
+      {
+        groupId: 'w11-spitters-p0',
+        enemyId: 'rift-spitter',
+        count: 3,
+        portalIndex: 0,
+        startDelaySec: 15.3,
         spawnIntervalSec: 1.7,
       },
       {
@@ -915,10 +955,18 @@ export const WAVES: readonly WaveDefinition[] = [
       {
         groupId: 'w12-crawlers-escort-p1',
         enemyId: 'skitter-crawler',
-        count: 10,
+        count: 7,
         portalIndex: 1,
         startDelaySec: 0,
-        spawnIntervalSec: 2.0,
+        spawnIntervalSec: 2,
+      },
+      {
+        groupId: 'w12-spitters-p1',
+        enemyId: 'rift-spitter',
+        count: 3,
+        portalIndex: 1,
+        startDelaySec: 14,
+        spawnIntervalSec: 2,
       },
       {
         groupId: 'w12-disruptors-p2',

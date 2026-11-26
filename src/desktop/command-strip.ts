@@ -66,14 +66,14 @@ export function createDesktopCommandStrip(
         lastSnapshot.hardTurretCap === snapshot.hardTurretCap &&
         lastTarget?.id === target?.id &&
         lastTarget?.tier === target?.tier &&
+        lastTarget?.upgradeTargetTier === target?.upgradeTargetTier &&
+        lastTarget?.investedCredits === target?.investedCredits &&
         lastTarget?.priority === target?.priority &&
         lastSelected === selected
       )
         return;
       lastSnapshot = snapshot;
-      lastTarget = target
-        ? { id: target.id, kind: target.kind, tier: target.tier, priority: target.priority }
-        : null;
+      lastTarget = target ? { ...target } : null;
       lastSelected = selected;
       const items = target
         ? buildTurretCommandWheelItems(target, snapshot.credits)

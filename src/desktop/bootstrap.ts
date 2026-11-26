@@ -63,7 +63,9 @@ export type XrEntryView = Pick<XrSessionManager, 'state' | 'subscribe' | 'clearE
 export interface LaunchOverlay {
   readonly element: HTMLElement;
   readonly visible: boolean;
+  readonly launchReady: boolean;
   setLoadStatus?(text: string | null): void;
+  setLaunchReady?(ready: boolean): void;
   show(): void;
   hide(): void;
   dispose(): void;
@@ -212,12 +214,15 @@ export function createLaunchOverlay(
 
   let unsupportedDismissed = false;
   let visible = true;
+  let launchReady = false;
 
   function render(state: Readonly<XrManagerState>): void {
     const requesting = state.status === 'requesting';
     enterButton.textContent = requesting ? ENTER_XR_PENDING_LABEL : ENTER_XR_LABEL;
-    enterButton.disabled = requesting || state.supported === false;
+    enterButton.disabled = !launchReady || requesting || state.supported === false;
+    desktopButton.disabled = !launchReady;
     applyStyle(enterButton, { opacity: enterButton.disabled ? '0.5' : '1' });
+    applyStyle(desktopButton, { opacity: desktopButton.disabled ? '0.5' : '1' });
     const message =
       state.error ??
       (visible && state.supported === false && !unsupportedDismissed
@@ -241,6 +246,9 @@ export function createLaunchOverlay(
     get visible() {
       return visible;
     },
+    get launchReady() {
+      return launchReady;
+    },
     setLoadStatus(text) {
       if (!text) {
         loadStatus.textContent = '';
@@ -249,6 +257,10 @@ export function createLaunchOverlay(
         loadStatus.textContent = text;
         applyStyle(loadStatus, { display: 'block' });
       }
+    },
+    setLaunchReady(ready) {
+      launchReady = ready;
+      render(xr.state);
     },
     show() {
       visible = true;
@@ -743,12 +755,14 @@ export function createDesktopShell(options: DesktopShellOptions): DesktopShell {
 
   const unsubscribers = [
     bus.on('xr/enter', () => {
+      if (!overlay.launchReady) return;
       void xr.enter();
     }),
     bus.on('xr/exit', () => {
       void xr.exit();
     }),
     bus.on('menu/play-desktop', () => {
+      if (!overlay.launchReady) return;
       desktopPlaying = true;
       if (!xr.presenting) applyPresentation(false);
     }),

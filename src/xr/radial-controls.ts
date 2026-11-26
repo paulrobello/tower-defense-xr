@@ -54,6 +54,7 @@ import {
   type TargetPriority,
   TURRET_KINDS,
   TURRET_RELOCATE_COST,
+  TURRET_SELL_REFUND_RATIO,
   type TurretKind,
   type TurretTierId,
   type Vec3,
@@ -107,6 +108,8 @@ export interface RadialTurretTarget {
   readonly id: string;
   readonly kind: TurretKind;
   readonly tier: TurretTierId;
+  readonly upgradeTargetTier?: TurretTierId | null;
+  readonly investedCredits?: number;
   readonly priority: TargetPriority;
 }
 
@@ -187,9 +190,6 @@ export interface XrRadialControls {
   reset(): void;
   dispose(): void;
 }
-
-const DISABLED_WEDGE_COLOR = 0x161d24;
-const DISABLED_WEDGE_OPACITY = 0.42;
 
 const RADIAL_TURRET_LABELS: Readonly<Record<TurretKind, string>> = {
   autocannon: 'M44 Autocannon',
@@ -301,15 +301,19 @@ export function buildTurretCommandWheelItems(
   const available = Math.max(0, Math.floor(credits));
   const nextTier = getNextTurretTier(target.tier);
   const upgradeCost = getTurretUpgradeCost(target.kind, target.tier);
-  const upgradeDisabled = nextTier === null || upgradeCost === null || available < upgradeCost;
-  const upgradeDisabledReason =
-    nextTier === null || upgradeCost === null
+  const upgrading = Boolean(target.upgradeTargetTier);
+  const upgradeDisabled =
+    upgrading || nextTier === null || upgradeCost === null || available < upgradeCost;
+  const upgradeDisabledReason = upgrading
+    ? 'UPGRADE IN PROGRESS'
+    : nextTier === null || upgradeCost === null
       ? 'MAX TIER'
       : available < upgradeCost
         ? 'NO CREDITS'
         : undefined;
-  const upgradeLabel =
-    nextTier === null || upgradeCost === null
+  const upgradeLabel = upgrading
+    ? `Upgrading to ${target.upgradeTargetTier}`
+    : nextTier === null || upgradeCost === null
       ? 'Upgrade\nMAX (T3)'
       : available >= upgradeCost
         ? `Upgrade ${target.tier}->${nextTier}\n${upgradeCost} CR`
@@ -317,7 +321,10 @@ export function buildTurretCommandWheelItems(
 
   const nextPrio = nextTargetPriority(target.priority);
   const relocateAffordable = available >= TURRET_RELOCATE_COST;
-  const sellRefund = getTurretSellRefund(target.kind, target.tier);
+  const sellRefund =
+    target.investedCredits === undefined
+      ? getTurretSellRefund(target.kind, target.tier)
+      : Math.round(target.investedCredits * TURRET_SELL_REFUND_RATIO);
   const upgradeIcon = nextTier === 'T2' ? 'tier-2' : 'tier-3';
 
   return [
@@ -346,8 +353,9 @@ export function buildTurretCommandWheelItems(
     {
       id: 'turret:sell',
       icon: 'sell',
-      label: `Sell (50%)\n+${sellRefund} CR`,
-      disabled: false,
+      label: upgrading ? 'Sell (50%)\nUPGRADING' : `Sell (50%)\n+${sellRefund} CR`,
+      disabled: upgrading,
+      ...(upgrading ? { disabledReason: 'UPGRADE IN PROGRESS' } : {}),
     },
   ];
 }
@@ -374,35 +382,10 @@ function toTurretTarget(record: PlacedTurretRecord | null | undefined): RadialTu
     id: record.id,
     kind: record.kind,
     tier: record.tier,
+    upgradeTargetTier: record.upgradeTargetTier ?? null,
+    investedCredits: record.investedCredits,
     priority: record.priority,
   };
-}
-
-function applyDisabledWedgeStyling(
-  menuRoot: THREE.Group,
-  items: readonly RadialItemDescriptor[],
-): void {
-  const disabledSet = new Set<string>(items.filter((item) => item.disabled).map((item) => item.id));
-  if (disabledSet.size === 0) return;
-
-  menuRoot.traverse((node) => {
-    const action = node.userData.radialAction as string | undefined;
-    if (!action || !disabledSet.has(action)) return;
-    if ((node as THREE.Mesh).isMesh) {
-      const mat = (node as THREE.Mesh).material as THREE.MeshBasicMaterial | undefined;
-      if (mat && 'color' in mat && typeof mat.opacity === 'number') {
-        mat.color.setHex(DISABLED_WEDGE_COLOR);
-        mat.opacity = DISABLED_WEDGE_OPACITY;
-      }
-    }
-    const textObj = node.userData.labelTextObject as
-      | { color: string | number; sync?: () => void }
-      | undefined;
-    if (textObj) {
-      textObj.color = '#6f8291';
-      textObj.sync?.();
-    }
-  });
 }
 
 /**
@@ -438,6 +421,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
   let context: RadialContextMode | null = null;
   let targetTurret: RadialTurretTarget | null = null;
   let activeItems: RadialItemDescriptor[] = [];
+  let lastBuildState: RadialBuildStateSnapshot | null = null;
   let disabledActions = new Set<RadialActionId>();
   let hoveredAction: RadialChoiceId | null = null;
   let selectingSource: XRInputSource | null = null;
@@ -656,6 +640,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
     context = null;
     targetTurret = null;
     activeItems = [];
+    lastBuildState = null;
     disabledActions.clear();
   }
 
@@ -677,7 +662,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
       theme,
       centerLabel: nextContext === 'turret' ? 'Close' : 'Cancel',
     });
-    skin = skinRadialMenu(menu.root, items, atlas);
+    skin = skinRadialMenu(menu.root, items, atlas, theme.text);
     root.add(menu.root);
 
     nav = createStickRadialNavigation<RadialActionId, XRInputSource>({
@@ -692,10 +677,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
           press.generation = -1;
         }
         menu?.open();
-        if (menu) {
-          applyDisabledWedgeStyling(menu.root, activeItems);
-          skin?.applyDisabled();
-        }
+        skin?.applyDisabled();
       },
       onClose: () => {
         closeMenu();
@@ -724,6 +706,42 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
     // and the stick must be released before a second click dismisses.
     nav.update(source, { pressed: false, x: 0, y: 0 });
     nav.update(source, { pressed: true, x: 0, y: 0 });
+  }
+
+  function refreshOpenItems(): void {
+    if (!menu?.isOpen || !context) return;
+    const next = resolveBuildState();
+    if (
+      lastBuildState?.credits === next.credits &&
+      lastBuildState?.activeTurretCount === next.activeTurretCount &&
+      lastBuildState?.hardTurretCap === next.hardTurretCap &&
+      lastBuildState?.canLaunchWave === next.canLaunchWave &&
+      lastBuildState?.phase === next.phase
+    )
+      return;
+
+    lastBuildState = { ...next };
+    const items =
+      context === 'build'
+        ? buildBuildWheelItems(next)
+        : targetTurret
+          ? buildTurretCommandWheelItems(targetTurret, next.credits)
+          : [];
+
+    if (
+      items.every(
+        (item, index) =>
+          item.label === activeItems[index]?.label &&
+          item.disabled === activeItems[index]?.disabled &&
+          item.disabledReason === activeItems[index]?.disabledReason,
+      )
+    )
+      return;
+
+    activeItems = items;
+    disabledActions = new Set(items.filter((item) => item.disabled).map((item) => item.id));
+    skin?.updateItems(items);
+    skin?.applyDisabled();
   }
 
   function executeAction(action: RadialActionId): void {
@@ -983,6 +1001,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
           }
         }
       } else if (owner?.gamepad && menu?.isOpen && nav) {
+        refreshOpenItems();
         // Drive open wheel with opening thumbstick + both controller lasers
         const stick = readStickAxes(owner.gamepad);
         const stickDown = isControllerStickClicked(owner);
@@ -1053,7 +1072,6 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
             ? (triggerStart.get(selectingSource)?.action ?? null)
             : nextHover;
           menu.setHovered(hoveredAction);
-          applyDisabledWedgeStyling(menu.root, activeItems);
           skin?.applyDisabled();
         }
       }
@@ -1078,16 +1096,20 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         panelPresses.set(source, hit);
         return true;
       }
+      refreshOpenItems();
       const aimed = rayActions.get(source) ?? null;
       const eligible = Boolean(menu.interactive && (source === owner || aimed !== null));
       const resolved = nav ? nav.selectionFor(source, aimed) : aimed;
       // Neutral stick + no ray target on opener confirms Cancel.
       const capturedAction: RadialChoiceId | null = eligible ? (resolved ?? 'cancel') : null;
+      const available =
+        capturedAction === 'cancel' ||
+        (capturedAction !== null && !disabledActions.has(capturedAction));
       triggerStart.set(source, {
-        generation: eligible ? generation : -1,
+        generation: eligible && available ? generation : -1,
         action: capturedAction,
       });
-      if (eligible) {
+      if (eligible && available) {
         selectingSource = source;
       }
       return true;
@@ -1125,6 +1147,7 @@ export function createXrRadialControls(options: XrRadialControlsOptions): XrRadi
         return false;
       }
 
+      refreshOpenItems();
       if (menu?.interactive && press && press.generation === generation) {
         const chosen = press.action;
         if (!chosen || chosen === 'cancel') {
