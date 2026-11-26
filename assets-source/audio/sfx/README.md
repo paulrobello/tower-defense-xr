@@ -21,14 +21,19 @@ Opus and MP3 options. Starting any clip pauses the previous player. The rift amb
 control for comparison across several wraps. Its louder original is included for comparison.
 For Quest, the owner can open the same URL in Quest Browser using the USB-reversed preview port.
 
-The optimized review bundle lives in `.local/rift-sfx/audition-dist`. The default game build and
-Pages workflow exclude the page and audio. Keep isolated clips, the private bundle, and the source
-archive out of public repositories, static hosting, and standalone downloads. The normal game dev
+The optimized review bundle lives in `.local/rift-sfx/audition-dist`. The Pages workflow excludes the private audition
+bundle and source archive. Keep isolated clips out of public repositories, static hosting, and
+standalone downloads. The normal game dev
 server denies the SFX archive, audition entry and assets, and private build directory.
 
-Clean production builds play built-in synthesized effects for the same cues. When the private
-recordings are staged locally, the engine uses the decoded recordings as they become available.
-Both sources use the same spatial routing, voice limits, and SFX volume control.
+The game bundles the 28 approved recordings inside its executable audio module. It decodes the
+recordings through Web Audio with Opus and MP3 support. Synthesis is the fallback if both decoders
+fail. GitHub Actions can build from a clean checkout because the executable module is checked in.
+
+With the approved staging files restored, regenerate the module with
+`bun scripts/assets/pack-game-sfx.ts --pack`. The packer checks the catalog approval hash and each
+source derivative before embedding it. The build checks both embedded formats against the catalog
+without needing the private archive.
 
 ## Inspect or rebuild
 
@@ -73,7 +78,8 @@ See `usage.json` for the reconciliation. Generating and retrying through
 `scripts/assets/generate-sfx.py` consumes included ElevenLabs credits. Routine offline rebuilding
 and validation use the archived sources.
 
-Paid-plan terms allow commercial game incorporation subject to the applicable terms and
+The embedded recordings are distributed for use in Rift Bastion under the ElevenLabs Sound Effects
+terms. Paid-plan terms allow commercial game incorporation subject to the applicable terms and
 prohibited-use policy. ElevenCreative's Sound Effects Exhibit 4 restricts distributing or making
 available isolated clips. Archive and audition access are private. See the
 [paid-plan billing documentation](https://elevenlabs.io/docs/overview/administration/billing),

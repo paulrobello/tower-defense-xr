@@ -1,6 +1,7 @@
 import { OVERLAY_RENDER_ORDER } from '@par/xr-workspace';
 import * as THREE from 'three';
 import { createSpatialAudioEngine, type SpatialAudioEngine } from './audio/engine.ts';
+import { readRecordedGameCue } from './audio/recorded-game-sfx.ts';
 import { GAMEPLAY_OBJECT_SCALE, RIFT_PORTAL_SPEC } from './content/index.ts';
 import { type ActionBus, createActionBus } from './core/action-bus.ts';
 import { createSeededStreams, resolveSeed } from './core/prng.ts';
@@ -249,6 +250,7 @@ export function mountApp(container: HTMLElement): AppRuntime {
   const assets = createRuntimeAssetLibrary({ renderer: shell.renderer });
   const tacticalAtlas = createTacticalAtlas();
   const audio = createSpatialAudioEngine({
+    recordedCueBytes: readRecordedGameCue,
     previewMusic: true,
     initialVolumes: {
       masterVolume: initial.masterVolume,

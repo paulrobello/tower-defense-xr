@@ -1,8 +1,8 @@
 import { createHash } from 'node:crypto';
-import { existsSync } from 'node:fs';
 import { copyFile, mkdir, mkdtemp, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { stageWorkspaceAssets } from '@par/xr-workspace/stage-assets';
+import { verifyRecordedGameSfx } from './assets/pack-game-sfx.ts';
 
 interface SourceModelRecord {
   readonly id: string;
@@ -26,27 +26,6 @@ interface SourceMaterialTextureRecord {
 interface SourceMaterialManifest {
   readonly version: number;
   readonly textures: readonly SourceMaterialTextureRecord[];
-}
-
-interface SourceSfxDerivativeRecord {
-  readonly file: string;
-  readonly sha256: string;
-  readonly bytes: number;
-  readonly duration_seconds: number;
-}
-
-interface SourceSfxCatalogEntry {
-  readonly id: string;
-  readonly family: string;
-  readonly loop: boolean;
-  readonly derivatives: {
-    readonly ogg: SourceSfxDerivativeRecord;
-    readonly mp3: SourceSfxDerivativeRecord;
-  };
-}
-
-interface SourceSfxCatalog {
-  readonly cues: readonly SourceSfxCatalogEntry[];
 }
 
 export interface PromotedModelEntry {
@@ -94,6 +73,7 @@ function sha256Hex(buf: Buffer): string {
 const root = resolve(import.meta.dirname, '..');
 const publicDir = join(root, 'public');
 const assetsDir = join(publicDir, 'assets');
+await verifyRecordedGameSfx(root);
 await mkdir(join(root, '.local'), { recursive: true });
 const temp = await mkdtemp(join(root, '.local', 'stage-'));
 
@@ -261,58 +241,16 @@ try {
     }
   }
 
-  // 6. Stage owner-approved ElevenLabs SFX for in-game runtime playback (when local archive is present)
-  const sfxStagingDir = join(root, 'assets-source/audio/sfx/staging');
-  const sfxCatalogPath = join(sfxStagingDir, 'catalog.json');
-  const promotedSfx: PromotedSfxEntry[] = [];
-  if (existsSync(sfxCatalogPath)) {
-    const sfxCatalog = JSON.parse(await readFile(sfxCatalogPath, 'utf8')) as SourceSfxCatalog;
-    const sfxDstDir = join(assetsDir, 'audio/sfx');
-    let stagedAny = false;
-    for (const cue of sfxCatalog.cues) {
-      const oggSrc = join(sfxStagingDir, cue.derivatives.ogg.file);
-      const mp3Src = join(sfxStagingDir, cue.derivatives.mp3.file);
-      if (!existsSync(oggSrc) || !existsSync(mp3Src)) continue;
-      if (!stagedAny) {
-        await mkdir(sfxDstDir, { recursive: true });
-        stagedAny = true;
-      }
-      const [oggBytes, mp3Bytes] = await Promise.all([readFile(oggSrc), readFile(mp3Src)]);
-      const oggSha = sha256Hex(oggBytes);
-      const mp3Sha = sha256Hex(mp3Bytes);
-      if (oggSha !== cue.derivatives.ogg.sha256) {
-        throw new Error(
-          `SHA-256 mismatch while staging SFX ${cue.derivatives.ogg.file}: expected ${cue.derivatives.ogg.sha256}, got ${oggSha}`,
-        );
-      }
-      if (mp3Sha !== cue.derivatives.mp3.sha256) {
-        throw new Error(
-          `SHA-256 mismatch while staging SFX ${cue.derivatives.mp3.file}: expected ${cue.derivatives.mp3.sha256}, got ${mp3Sha}`,
-        );
-      }
-      await Promise.all([
-        writeFile(join(sfxDstDir, cue.derivatives.ogg.file), oggBytes),
-        writeFile(join(sfxDstDir, cue.derivatives.mp3.file), mp3Bytes),
-      ]);
-      promotedSfx.push({
-        id: cue.id,
-        family: cue.family,
-        loop: cue.loop,
-        ogg: `/assets/audio/sfx/${cue.derivatives.ogg.file}`,
-        mp3: `/assets/audio/sfx/${cue.derivatives.mp3.file}`,
-        durationSec: cue.derivatives.ogg.duration_seconds,
-      });
-    }
-  }
+  // Older builds staged isolated recordings here. The game now bundles its audio.
+  await rm(join(assetsDir, 'audio/sfx'), { recursive: true, force: true });
 
-  // 7. Write hash-checked runtime manifest
   const runtimeManifest: RuntimeAssetManifest = {
     version: 1,
     generatedFrom: 'assets-source/models/manifest.json',
     basisTranscoderDir: '/assets/basis/',
     models: promotedModels,
     materials: promotedMaterials,
-    sfx: promotedSfx,
+    sfx: [],
     extras,
   };
   await writeFile(

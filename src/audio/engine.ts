@@ -1,8 +1,7 @@
 /**
  * Web Audio API 3D Spatial SFX Engine (`src/audio/engine.ts`, P4-T5).
  *
- * Integrates all 28 owner-approved ElevenLabs mastered SFX cues (`/assets/audio/sfx/*.ogg` with
- * `.mp3` fallback) into the runtime with:
+ * Integrates the 28 game recordings with Opus and MP3 decoding support and provides:
  * - User-gesture unlock (`pointerdown`, `keydown`, `touchstart`) and visibility/focus pause-resume.
  * - Per-frame 3D `AudioListener` pose synchronization from the active Desktop or WebXR camera.
  * - 3D `PannerNode` spatialization for world-space combat, turret, enemy, and portal cues plus
@@ -311,6 +310,7 @@ export interface SpatialAudioEngineOptions {
   readonly initialVolumes?: Partial<AudioVolumes>;
   readonly audioContextFactory?: () => AudioContext;
   readonly nowMs?: () => number;
+  readonly recordedCueBytes?: (cue: SfxCueId, format: 'ogg' | 'mp3') => ArrayBuffer;
   /** Enables the temporary local preview loop while owner music is unavailable. */
   readonly previewMusic?: boolean;
 }
@@ -370,7 +370,8 @@ export function createSpatialAudioEngine(
 ): SpatialAudioEngine {
   const nowMs =
     options.nowMs ?? (() => (typeof performance !== 'undefined' ? performance.now() : Date.now()));
-  const preferOgg = supportsOggOpus();
+  const formats = supportsOggOpus() ? (['ogg', 'mp3'] as const) : (['mp3', 'ogg'] as const);
+  const recordedCueBytes = options.recordedCueBytes;
 
   let volumes: AudioVolumes = {
     masterVolume: clamp01(options.initialVolumes?.masterVolume ?? 0.8),
@@ -393,6 +394,11 @@ export function createSpatialAudioEngine(
   const decodedBuffers = new Map<SfxCueId, AudioBuffer>();
   const builtinBuffers = new Map<SfxCueId, AudioBuffer>();
   const failedCueLoads = new Set<SfxCueId>();
+  const queuedRecordedCues = new Set<SfxCueId>();
+
+  function hasCueRecording(cueId: SfxCueId): boolean {
+    return recordedCueBytes !== undefined || cueUrls.has(cueId);
+  }
 
   function getPlayableBuffer(cueId: SfxCueId, context: AudioContext): AudioBuffer {
     const decoded = decodedBuffers.get(cueId);
@@ -475,17 +481,21 @@ export function createSpatialAudioEngine(
     }
   }
 
+  async function fetchAudioBytes(url: string): Promise<ArrayBuffer | null> {
+    if (typeof fetch !== 'function') return null;
+    const response = await fetch(url);
+    return response.ok ? response.arrayBuffer() : null;
+  }
+
   async function decodeFirstAvailable(
     context: AudioContext,
-    urls: readonly string[],
+    loadBytes: (format: 'ogg' | 'mp3') => Promise<ArrayBuffer | null> | ArrayBuffer | null,
   ): Promise<AudioBuffer | null> {
-    if (typeof fetch !== 'function') return null;
-    for (const url of urls) {
+    for (const format of formats) {
       if (disposed) return null;
       try {
-        const response = await fetch(url);
-        if (!response.ok) continue;
-        const bytes = await response.arrayBuffer();
+        const bytes = await loadBytes(format);
+        if (!bytes) continue;
         if (disposed) return null;
         const buffer = await context.decodeAudioData(bytes);
         return disposed ? null : buffer;
@@ -503,10 +513,8 @@ export function createSpatialAudioEngine(
     if (previewMusicSource || volumes.musicVolume === 0) return;
 
     const path = '/assets/audio/music/rift-bastion-preview';
-    const formats = preferOgg ? ['ogg', 'mp3'] : ['mp3', 'ogg'];
-    previewMusicLoad ??= decodeFirstAvailable(
-      context,
-      formats.map((format) => `${path}.${format}`),
+    previewMusicLoad ??= decodeFirstAvailable(context, (format) =>
+      fetchAudioBytes(`${path}.${format}`),
     );
     const buffer = await previewMusicLoad;
     if (!buffer || disposed || previewMusicSource || volumes.musicVolume === 0) return;
@@ -532,10 +540,12 @@ export function createSpatialAudioEngine(
 
     const entry = cueUrls.get(cueId);
     const context = ensureContext();
-    if (!entry || !context || failedCueLoads.has(cueId)) return null;
+    if (!context || (!entry && !recordedCueBytes) || failedCueLoads.has(cueId)) return null;
 
-    const urls = preferOgg ? [entry.ogg, entry.mp3] : [entry.mp3, entry.ogg];
-    const promise = decodeFirstAvailable(context, urls)
+    const promise = decodeFirstAvailable(context, (format) => {
+      if (recordedCueBytes) return recordedCueBytes(cueId, format);
+      return entry ? fetchAudioBytes(entry[format]) : null;
+    })
       .then((buffer) => {
         if (!disposed) {
           if (buffer) decodedBuffers.set(cueId, buffer);
@@ -554,7 +564,8 @@ export function createSpatialAudioEngine(
   function preloadCoreCues(): void {
     if (disposed || !ctx) return;
     // Warm all registered cues in the background once unlocked so combat cues fire with 0 ms latency
-    for (const cueId of cueUrls.keys()) {
+    const cueIds = recordedCueBytes ? (Object.keys(SFX_CUE_CONFIGS) as SfxCueId[]) : cueUrls.keys();
+    for (const cueId of cueIds) {
       void loadCueBuffer(cueId);
     }
   }
@@ -624,7 +635,7 @@ export function createSpatialAudioEngine(
       return;
     }
     if (
-      cueUrls.has('rift-ambient') &&
+      hasCueRecording('rift-ambient') &&
       !decodedBuffers.has('rift-ambient') &&
       !failedCueLoads.has('rift-ambient')
     ) {
@@ -689,6 +700,19 @@ export function createSpatialAudioEngine(
     const context = ensureContext();
     if (!context || !sfxBusGain || !criticalBusGain) return false;
     if (context.state === 'suspended' && !unlocked) return false;
+
+    if (recordedCueBytes && !decodedBuffers.has(cueId) && !failedCueLoads.has(cueId)) {
+      if (queuedRecordedCues.has(cueId)) return false;
+      queuedRecordedCues.add(cueId);
+      const queued = playOptions.position
+        ? { ...playOptions, position: { ...playOptions.position } }
+        : playOptions;
+      void loadCueBuffer(cueId).then(() => {
+        queuedRecordedCues.delete(cueId);
+        play(cueId, queued);
+      });
+      return true;
+    }
 
     // Enforce total and per-family voice caps
     const familyCap = FAMILY_VOICE_CAPS[cfg.family];
@@ -1041,6 +1065,7 @@ export function createSpatialAudioEngine(
       decodedBuffers.clear();
       builtinBuffers.clear();
       failedCueLoads.clear();
+      queuedRecordedCues.clear();
       inflightLoads.clear();
       if (previewMusicSource) {
         try {

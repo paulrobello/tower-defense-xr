@@ -295,6 +295,46 @@ describe('Spatial Audio Engine (P4-T5)', () => {
     engine.dispose();
   });
 
+  it('plays the game recording after codec fallback and coalesces requests while it decodes', async () => {
+    const mock = createMockAudioContext();
+    const request = vi.fn();
+    globalThis.fetch = request as unknown as typeof fetch;
+    const publishedBuffer = { duration: 0.42 } as AudioBuffer;
+    let releaseDecode: (buffer: AudioBuffer) => void = () => {};
+    const delayed = new Promise<AudioBuffer>((resolve) => {
+      releaseDecode = resolve;
+    });
+    const attemptedFormats: string[] = [];
+    mock.raw.decodeAudioData.mockImplementation(async (buffer?: ArrayBuffer) => {
+      const code = buffer ? new Uint8Array(buffer)[0] : 0;
+      if (code === 1) throw new Error('Codec not supported');
+      return code === 2 ? delayed : publishedBuffer;
+    });
+    const engine = createSpatialAudioEngine({
+      audioContextFactory: () => mock.ctx,
+      recordedCueBytes: (cue, format) => {
+        if (cue !== 'surface-clamp') return Uint8Array.of(3).buffer;
+        attemptedFormats.push(format);
+        return Uint8Array.of(attemptedFormats.length).buffer;
+      },
+    });
+
+    await engine.unlock();
+    expect(engine.play('surface-clamp', { position: { x: 1, y: 0, z: 0 } })).toBe(true);
+    expect(engine.play('surface-clamp')).toBe(false);
+    expect(mock.sources).toHaveLength(0);
+    await vi.waitFor(() => expect(attemptedFormats).toHaveLength(2));
+    expect(new Set(attemptedFormats)).toEqual(new Set(['ogg', 'mp3']));
+    releaseDecode(publishedBuffer);
+    await vi.waitFor(() => expect(mock.sources[0]?.start).toHaveBeenCalledTimes(1));
+    expect(mock.sources[0]?.buffer).toBe(publishedBuffer);
+    expect(mock.panners[0]?.positionX.value).toBe(1);
+    expect(engine.loadedCueCount).toBe(28);
+    expect(mock.raw.createBuffer).not.toHaveBeenCalled();
+    expect(request).not.toHaveBeenCalled();
+    engine.dispose();
+  });
+
   it('plays and reuses built-in effects when the public manifest has no recordings', async () => {
     const mock = createMockAudioContext();
     const request = vi.fn();
