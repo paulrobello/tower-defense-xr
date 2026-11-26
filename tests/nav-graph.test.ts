@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { Matrix4 } from 'three';
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../src/core/prng.ts';
+import { createRoomMeshFlightTest } from '../src/mr/flight-collision.ts';
 import { createVirtualRoomModel } from '../src/mr/virtual-room.ts';
 import {
   buildNavigationGraph,
@@ -19,7 +20,6 @@ import {
   samplePathAtDistance,
   segmentIntersectsPolygonInterior2D,
 } from '../src/nav/graph.ts';
-import { createRoomMeshFlightTest } from '../src/nav/room-mesh.ts';
 import { selectPortalAnchors } from '../src/xr/calibration.ts';
 
 function makeRectNavSurface(params: {

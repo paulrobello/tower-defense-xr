@@ -1,7 +1,7 @@
 import { Box3, Ray, Triangle, Vector3 } from 'three';
 import { Octree } from 'three/addons/math/Octree.js';
-import type { RoomSurface } from '../mr/room-scan.ts';
-import type { AerialSpanBlocked } from './graph.ts';
+import type { AerialSpanBlocked } from '../nav/graph.ts';
+import type { RoomSurface } from './room-scan.ts';
 
 const PORTAL_EXIT_TOLERANCE_M = 0.015;
 

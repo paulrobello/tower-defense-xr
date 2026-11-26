@@ -12,6 +12,7 @@ import {
 } from './desktop/bootstrap.ts';
 import { createDesktopCommandStrip } from './desktop/command-strip.ts';
 import { createDesktopControls, type DesktopControls } from './desktop/controls.ts';
+import { createRoomMeshFlightTest } from './mr/flight-collision.ts';
 import {
   createOcclusionController,
   type OcclusionController,
@@ -22,7 +23,6 @@ import { createRoomSurfaceModel, type RoomSurface, type RoomSurfaceModel } from 
 import { createShadowCatcherManager, type ShadowCatcherManager } from './mr/shadow-catchers.ts';
 import { createVirtualRoomSurfaces } from './mr/virtual-room.ts';
 import { buildNavigationGraph, type RoomNavigationGraph } from './nav/graph.ts';
-import { createRoomMeshFlightTest } from './nav/room-mesh.ts';
 import { createPerfHud, type PerfHud } from './perf/hud.ts';
 import { createPerfRecorder, type PerfRecorder } from './perf/recorder.ts';
 import { createPersistStore, type PersistStore } from './persist/store.ts';

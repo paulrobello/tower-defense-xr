@@ -2,9 +2,8 @@
 
 ## State
 
-- November 22, 2026, Pacific time. Local `main` contains the public playtest fixes and unpublished Phase 3 asset and review commits awaiting Owner Checkpoint 2.
-- The verified public build on `origin/main` commit `ae65f0d` is `037506dfadf7`. [Live Quest build](https://rift-bastion.pardev.net/?v=037506dfadf7) · [CI and deployment](https://github.com/paulrobello/tower-defense-xr/actions/runs/45085086024)
-- Local `main` contains unpublished Phase 3 asset and review work. Base public playtest fixes on `origin/main` in a sibling worktree so the release contains only intended changes. The separate `codex/rift-radial-theme` worktree holds candidate `304e811` and its local review evidence. Paul granted standing approval to push and deploy verified Rift Bastion changes. Asset promotion still has its own approval checkpoint.
+- November 25, 2026, Pacific time. The local release includes the November Quest playtest fixes and the approved Phase 4 runtime assets and radial theme. The legacy radial worktree contains private review tooling and evidence.
+- Use the [production manifest](https://rift-bastion.pardev.net/version.json) and [main CI runs](https://github.com/paulrobello/tower-defense-xr/actions/workflows/ci.yml?query=branch%3Amain) to identify the build under test. The most recent controller and wall-routing evidence is in `.local/evidence/2026-11-25-quest-navigation/`.
 
 ### Prior rendering pass (`1939c78` / build `8fdcd8aad564`)
 
@@ -19,7 +18,7 @@
 
 ### Retest the Quest fixes on one build
 
-Use `037506dfadf7` for the open playtest items. Test with **Auto Depth** and **Room Mesh**, and use **Off** as the comparison if geometry disappears. Record the build, occlusion mode, tracked surface, controller hand, and whether the issue appears before or after **Lock Core**.
+Use the build served by the production manifest for the open playtest items. Test with **Auto Depth** and **Room Mesh**, and use **Off** as the comparison if geometry disappears. Record the build, occlusion mode, tracked surface, controller hand, and whether the issue appears before or after **Lock Core**.
 
 | Item | Physical check still needed |
 | --- | --- |
@@ -32,11 +31,9 @@ The 3:27–3:29 PM PST captures and trace are in `.local/headset/quest-20261122-
 
 ### Unblock and finish Phase 4
 
-- **P3-T6 / P3-T7** still show Owner Checkpoint 2 as open. Reconcile the owner’s approval against the exact reviewed batch SHA-256 `fef4524a7d46821336beecb348e36ecfed3aee20fbac82c27ff7b29a6e7eac09` and record it before promoting the models, materials and icons. The [art review index](docs/art-review-index.md#owner-checkpoint-2) lists what the digest covers and the selected manifests.
-- **P4-T1** promotes the approved GLB/KTX2 assets, icon atlas and key art into `public/assets/` with a hash-checked runtime manifest. Add the loader and precompile veil. Check sockets, animation clips, mount orientation, tier and LOD swaps, and shader links after loading. The current public build still uses blockouts.
-- **P4-T6** integrates the private radial theme after the icon promotion. Rebase or transplant `304e811` onto the current runtime and repeat the desktop and IWER controller tests. The current runtime routes each XR press to one action, which the theme integration must preserve.
-- **P4-T2 / P4-T3** add procedural lighting, shadows, the Rift shader and pooled combat effects after asset promotion. Check portal seams at oblique angles, keep total stereo draw calls at or below 200, and test the VFX budget of 2,500 active effects and 12 additional draw calls at the planned stress load.
-- **P4-T5** needs the eight owner-supplied Suno WAVs. Archive their original bytes, master six loops and two stingers, then integrate music and the 28 approved ElevenLabs SFX with spatial playback and bounded voices. The [SFX review](assets-source/audio/sfx/README.md) points to the private source archive and audition build. Keep private takes and review bundles outside the public release.
+- **P4-T1 / P4-T2 / P4-T3** need physical verification of promoted assets and effects. Check mount orientation, material and LOD swaps, portal seams at oblique angles, and stereo draw calls under stress.
+- **P4-T6** needs physical confirmation that both radial wheels are readable at arm’s length and oblique angles, and that each trigger press fires one action.
+- **P4-T5** needs the eight owner-supplied Suno WAVs. Archive their original bytes, master six loops and two stingers, and test the published mix. The current release includes a preview music loop. The 28 approved SFX are available in local builds with the private masters staged. Keep private takes and review bundles outside the public release.
 
 ### Complete Phase 5 on the promoted runtime
 
@@ -54,11 +51,11 @@ The 3:27–3:29 PM PST captures and trace are in `.local/headset/quest-20261122-
 
 ## Unresolved issues
 
-- Build `037506dfadf7` awaits a physical Quest retest of the floor, ceilings, portal depth, and black rectangle in the table above. Earlier hardware measurements are playtest evidence and leave the full Phase 5 frame floor open.
-- Phase 3 runtime promotion is waiting on the recorded batch approval. Phase 4 music is waiting on the owner WAVs.
+- Retest the floor, ceilings, portal depth and black rectangle on physical Quest. Also verify full-room turret selection, Y cancel, manual launches after countdown expiry, and flying enemies at scanned wall corners. The full Phase 5 frame floor remains open.
+- Phase 4 music is waiting on the owner WAVs.
 
 ## Next steps
 
 1. Retest the live build on Quest using the table above. Reopen or close the individual board items based on the observed outcomes and save matching frame traces.
-2. Resolve the Phase 3 approval record and verify the selected hashes, then promote the assets and integrate the radial theme against current input handling. Continue lighting, effects, and audio in the Phase 4 dependency order.
+2. Verify the promoted assets, lighting, effects and radial input on the physical headset. Master the owner WAVs when available.
 3. Run the Phase 5 automated stress suite and physical baseline once the promoted runtime is ready. Run `make checkall-ci` before publishing, watch the Pages job, and verify `version.json` matches the tested candidate.
