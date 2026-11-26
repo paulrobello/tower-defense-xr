@@ -417,6 +417,84 @@ describe('Portal candidate selection (>= 2.0 m clearance, 180° vs 360° arc, sm
     }
   });
 
+  it('chooses a flat scanned wall patch away from an unlabeled recess and a protruding fixture', () => {
+    const wall = makeRectSurface({
+      id: 'wall-with-recess',
+      semanticLabel: 'wall',
+      orientation: 'vertical',
+      center: new THREE.Vector3(0, 1.4, -2.9),
+      normal: new THREE.Vector3(0, 0, 1),
+      right: new THREE.Vector3(1, 0, 0),
+      width: 6,
+      depth: 2.8,
+    });
+    const mesh: RoomSurface = {
+      ...wall,
+      id: 'unlabeled-room-mesh',
+      kind: 'other',
+      source: 'mesh',
+      semanticLabel: null,
+      bounds: new THREE.Box3(new THREE.Vector3(-3, 0, -3.08), new THREE.Vector3(3, 2.8, -2.75)),
+      meshWorldMatrix: new THREE.Matrix4().makeTranslation(0, 0, -2.9),
+      meshVertices: new Float32Array([
+        -3, 0, 0.025, -0.58, 0, 0.025, -0.58, 2.8, 0.025, -3, 2.8, 0.025, 0.58, 0, 0.025, 3, 0,
+        0.025, 3, 2.8, 0.025, 0.58, 2.8, 0.025, -0.58, 0, -0.18, 0.58, 0, -0.18, 0.58, 2.8, -0.18,
+        -0.58, 2.8, -0.18, 1, 0.93, 0.15, 1.9, 0.93, 0.15, 1.9, 1.97, 0.15, 1, 1.97, 0.15,
+      ]),
+      meshIndices: new Uint32Array([
+        0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7, 8, 9, 10, 8, 10, 11, 12, 13, 14, 12, 14, 15,
+      ]),
+    };
+    const portals = selectPortalAnchors({
+      surfaces: [wall, mesh],
+      coreAnchor: coreAtOrigin,
+      playerYaw: 0,
+      playArc: 'front-180',
+      maxPortals: 3,
+    });
+    expect(portals).toHaveLength(3);
+    for (const portal of portals) {
+      expect(portal.surfaceId).toBe(wall.id);
+      expect(portal.position.z).toBeCloseTo(-2.875, 5);
+      expect(Math.abs(portal.position.x)).toBeGreaterThan(0.78);
+      if (portal.position.y > 0.7 && portal.position.y < 2.2) {
+        expect(portal.position.x < 0.8 || portal.position.x > 2.1).toBe(true);
+      }
+    }
+  });
+
+  it('keeps portals in the seated arc when the mesh face stands forward of its fitted plane', () => {
+    const wall = makeRectSurface({
+      id: 'arc-edge-wall',
+      semanticLabel: 'wall',
+      orientation: 'vertical',
+      center: new THREE.Vector3(3, 1.4, -0.02),
+      normal: new THREE.Vector3(0, 0, 1),
+      right: new THREE.Vector3(1, 0, 0),
+      width: 1.9,
+      depth: 2.8,
+    });
+    const mesh: RoomSurface = {
+      ...wall,
+      id: 'arc-edge-mesh',
+      source: 'mesh',
+      kind: 'other',
+      semanticLabel: null,
+      bounds: new THREE.Box3(new THREE.Vector3(2.05, 0, 0.02), new THREE.Vector3(3.95, 2.8, 0.02)),
+      meshWorldMatrix: new THREE.Matrix4().makeTranslation(0, 0, 0.02),
+      meshVertices: new Float32Array([2.05, 0, 0, 3.95, 0, 0, 3.95, 2.8, 0, 2.05, 2.8, 0]),
+      meshIndices: new Uint32Array([0, 1, 2, 0, 2, 3]),
+    };
+    const portals = selectPortalAnchors({
+      surfaces: [wall, mesh],
+      coreAnchor: coreAtOrigin,
+      playerYaw: 0,
+      playArc: 'front-180',
+    });
+    expect(portals.some((portal) => portal.surfaceId === wall.id)).toBe(false);
+    expect(validateCalibration(coreAtOrigin, portals, 'front-180', 0).valid).toBe(true);
+  });
+
   it('keeps wall portals clear of doorways, keeps ceiling portals inside ceiling corners, and rejects portals behind walls', () => {
     const northWallWithDoor = makeRectSurface({
       id: 'wall-north-door',
@@ -467,8 +545,8 @@ describe('Portal candidate selection (>= 2.0 m clearance, 180° vs 360° arc, sm
       center: new THREE.Vector3(-1.9, 2.8, -2.0),
       normal: new THREE.Vector3(0, -1, 0),
       right: new THREE.Vector3(1, 0, 0),
-      width: 0.9,
-      depth: 0.9,
+      width: 0.42,
+      depth: 0.42,
     });
 
     const portals = selectPortalAnchors({
@@ -483,10 +561,10 @@ describe('Portal candidate selection (>= 2.0 m clearance, 180° vs 360° arc, sm
     expect(portals.some((p) => p.surfaceId === 'wall-outside-room')).toBe(false);
     // Never pick the undersized corner ceiling strip where the portal rim would clip through walls
     expect(portals.some((p) => p.surfaceId === 'ceiling-narrow-strip')).toBe(false);
-    // Any portal placed on wall-north-door must sit clear of the central doorway (|x| >= 0.5 + 0.595)
+    // A rim that reaches the doorway height must clear its horizontal opening.
     for (const p of portals) {
-      if (p.surfaceId === 'wall-north-door') {
-        expect(Math.abs(p.position.x)).toBeGreaterThan(1.0);
+      if (p.surfaceId === 'wall-north-door' && p.position.y < 2.5) {
+        expect(Math.abs(p.position.x)).toBeGreaterThan(0.73);
       }
       // Virtual fallback rifts must also stay on the room side of wall-west (x >= -2.4)
       expect(p.position.x).toBeGreaterThanOrEqual(-2.41);

@@ -10,13 +10,14 @@
  * - Continuous looping spatial `rift-ambient` emitters anchored at each open Dimensional Rift Portal.
  * - Per-family voice caps and priority ducking so heavy Wave 12 volleys never clip Quest speakers.
  * - Live synchronization with `SettingsStore` (`masterVolume`, `sfxVolume`) and graceful degradation
- *   in headless test environments or checkouts without staged audio.
+ *   in headless environments, with built-in synthesis when recordings are unavailable.
  */
 
 import * as THREE from 'three';
 import type { Vec3 } from '../content/index.ts';
 import type { RuntimeSfxManifestEntry } from '../render/asset-loader.ts';
 import type { CombatSimulationState, SimEvent, SimPortalState } from '../sim/engine.ts';
+import { createBuiltinSfxBuffer } from './builtin-sfx.ts';
 
 export type SfxCueId =
   | 'surface-clamp'
@@ -390,6 +391,18 @@ export function createSpatialAudioEngine(
 
   const cueUrls = new Map<SfxCueId, { readonly ogg: string; readonly mp3: string }>();
   const decodedBuffers = new Map<SfxCueId, AudioBuffer>();
+  const builtinBuffers = new Map<SfxCueId, AudioBuffer>();
+  const failedCueLoads = new Set<SfxCueId>();
+
+  function getPlayableBuffer(cueId: SfxCueId, context: AudioContext): AudioBuffer {
+    const decoded = decodedBuffers.get(cueId);
+    if (decoded) return decoded;
+    const cached = builtinBuffers.get(cueId);
+    if (cached) return cached;
+    const buffer = createBuiltinSfxBuffer(context, cueId);
+    builtinBuffers.set(cueId, buffer);
+    return buffer;
+  }
   const inflightLoads = new Map<SfxCueId, Promise<AudioBuffer | null>>();
   const lastPlayedAtMs = new Map<SfxCueId, number>();
   const activeVoices = new Set<ActiveVoice>();
@@ -519,12 +532,15 @@ export function createSpatialAudioEngine(
 
     const entry = cueUrls.get(cueId);
     const context = ensureContext();
-    if (!entry || !context) return null;
+    if (!entry || !context || failedCueLoads.has(cueId)) return null;
 
     const urls = preferOgg ? [entry.ogg, entry.mp3] : [entry.mp3, entry.ogg];
     const promise = decodeFirstAvailable(context, urls)
       .then((buffer) => {
-        if (buffer && !disposed) decodedBuffers.set(cueId, buffer);
+        if (!disposed) {
+          if (buffer) decodedBuffers.set(cueId, buffer);
+          else failedCueLoads.add(cueId);
+        }
         return buffer;
       })
       .finally(() => {
@@ -607,16 +623,18 @@ export function createSpatialAudioEngine(
       configurePanner(existing.panner, position);
       return;
     }
-    const buffer = decodedBuffers.get('rift-ambient');
-    if (!buffer) {
-      void loadCueBuffer('rift-ambient').then((loaded) => {
+    if (
+      cueUrls.has('rift-ambient') &&
+      !decodedBuffers.has('rift-ambient') &&
+      !failedCueLoads.has('rift-ambient')
+    ) {
+      void loadCueBuffer('rift-ambient').then(() => {
         const currentPos = lastOpenPortals.get(portalId);
-        if (loaded && !disposed && currentPos) {
-          startPortalAmbient(portalId, currentPos);
-        }
+        if (currentPos) startPortalAmbient(portalId, currentPos);
       });
       return;
     }
+    const buffer = getPlayableBuffer('rift-ambient', ctx);
 
     const source = ctx.createBufferSource();
     source.buffer = buffer;
@@ -672,13 +690,6 @@ export function createSpatialAudioEngine(
     if (!context || !sfxBusGain || !criticalBusGain) return false;
     if (context.state === 'suspended' && !unlocked) return false;
 
-    const buffer = decodedBuffers.get(cueId);
-    if (!buffer) {
-      // Kick off lazy decode so subsequent triggers play immediately
-      void loadCueBuffer(cueId);
-      return false;
-    }
-
     // Enforce total and per-family voice caps
     const familyCap = FAMILY_VOICE_CAPS[cfg.family];
     if (
@@ -701,6 +712,10 @@ export function createSpatialAudioEngine(
       stopVoice(victim);
     }
 
+    if (cueUrls.has(cueId) && !decodedBuffers.has(cueId) && !failedCueLoads.has(cueId)) {
+      void loadCueBuffer(cueId);
+    }
+    const buffer = getPlayableBuffer(cueId, context);
     lastPlayedAtMs.set(cueId, now);
 
     const source = context.createBufferSource();
@@ -1024,6 +1039,8 @@ export function createSpatialAudioEngine(
       prevTurretTarget.clear();
       railChargedTurrets.clear();
       decodedBuffers.clear();
+      builtinBuffers.clear();
+      failedCueLoads.clear();
       inflightLoads.clear();
       if (previewMusicSource) {
         try {

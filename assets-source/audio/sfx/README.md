@@ -26,6 +26,10 @@ Pages workflow exclude the page and audio. Keep isolated clips, the private bund
 archive out of public repositories, static hosting, and standalone downloads. The normal game dev
 server denies the SFX archive, audition entry and assets, and private build directory.
 
+Clean production builds play built-in synthesized effects for the same cues. When the private
+recordings are staged locally, the engine uses the decoded recordings as they become available.
+Both sources use the same spatial routing, voice limits, and SFX volume control.
+
 ## Inspect or rebuild
 
 `contract.json` records the four cue families, gameplay triggers, exact prompts, processing

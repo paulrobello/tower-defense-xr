@@ -96,6 +96,15 @@ function createMockAudioContext() {
       panners.push(node);
       return node;
     }),
+    createBuffer: vi.fn((_channels: number, length: number, sampleRate: number) => {
+      const samples = new Float32Array(length);
+      return {
+        duration: length / sampleRate,
+        length,
+        sampleRate,
+        getChannelData: () => samples,
+      } as unknown as AudioBuffer;
+    }),
     decodeAudioData: vi.fn(
       async () => ({ duration: 0.5, length: 24000, sampleRate: 48000 }) as unknown as AudioBuffer,
     ),
@@ -235,7 +244,7 @@ describe('Spatial Audio Engine (P4-T5)', () => {
     expect(engine.activeVoiceCount).toBe(0);
   });
 
-  it('degrades silently when staged SFX files are absent (404) and handles sim events safely', async () => {
+  it('plays a built-in wave cue when the registered recordings return 404', async () => {
     const mock = createMockAudioContext();
     globalThis.fetch = vi.fn(async () => ({
       ok: false,
@@ -280,7 +289,51 @@ describe('Spatial Audio Engine (P4-T5)', () => {
         emptySim,
       ),
     ).not.toThrow();
+    expect(mock.sources[0]?.start).toHaveBeenCalledTimes(1);
+    expect(mock.raw.createBuffer).toHaveBeenCalledTimes(1);
 
+    engine.dispose();
+  });
+
+  it('plays and reuses built-in effects when the public manifest has no recordings', async () => {
+    const mock = createMockAudioContext();
+    const request = vi.fn();
+    globalThis.fetch = request as unknown as typeof fetch;
+    let now = 0;
+    const engine = createSpatialAudioEngine({
+      audioContextFactory: () => mock.ctx,
+      nowMs: () => now,
+    });
+    engine.registerManifestCues([]);
+    await engine.unlock();
+
+    const position = { x: 1, y: 1, z: -2 };
+    expect(engine.play('autocannon-burst', { position })).toBe(true);
+    now += 1000;
+    expect(engine.play('autocannon-burst', { position })).toBe(true);
+    expect(mock.sources[0]?.buffer).toBe(mock.sources[1]?.buffer);
+    expect(mock.panners[0]?.positionX.value).toBe(position.x);
+    expect(
+      mock.sources[0]?.buffer?.getChannelData(0).some((sample) => Math.abs(sample) > 0.05),
+    ).toBe(true);
+    engine.syncOpenPortals([
+      {
+        id: 'portal-1',
+        portalIndex: 0,
+        position,
+        normal: { x: 0, y: 0, z: 1 },
+        hostKind: 'wall',
+        isOpen: true,
+        openedAtTick: 1,
+      },
+    ]);
+    const loop = mock.sources.find((source) => source.loop)?.buffer?.getChannelData(0);
+    if (!loop) throw new Error('Expected the portal ambience to play');
+    expect(Math.abs((loop[loop.length - 1] ?? 0) - (loop[0] ?? 0))).toBeLessThan(0.01);
+    expect(request).not.toHaveBeenCalled();
+
+    engine.setVolumes({ sfxVolume: 0 });
+    expect(engine.play('mission-confirm')).toBe(false);
     engine.dispose();
   });
 

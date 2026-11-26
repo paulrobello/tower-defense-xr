@@ -17,6 +17,7 @@ import * as THREE from 'three';
 import { CORE_BASTION_SPEC, GAMEPLAY_OBJECT_SCALE, RIFT_PORTAL_SPEC } from '../content/waves.ts';
 import type { ActionBus, PlayArc, Vec3 } from '../core/action-bus.ts';
 import type { GameStateMachine } from '../core/state.ts';
+import { createPortalSupportProbe } from '../mr/portal-support.ts';
 import type { RoomSurface, RoomSurfaceModel, SurfaceAnchor, SurfaceKind } from '../mr/room-scan.ts';
 import { DEFAULT_SETTINGS, SETTINGS_STORAGE_KEY, type SettingsStore } from '../settings/store.ts';
 
@@ -63,8 +64,10 @@ export const DEFAULT_PORTAL_WIDTH = RIFT_PORTAL_SPEC.apertureWidthM;
 export const DEFAULT_PORTAL_HEIGHT = RIFT_PORTAL_SPEC.apertureHeightM;
 
 /** Full outer half-extents of a Rift Portal including its physical bezel rim. */
-const PORTAL_OUTER_HALF_WIDTH_M = DEFAULT_PORTAL_WIDTH * 0.5 + RIFT_PORTAL_SPEC.rimThicknessM;
-const PORTAL_OUTER_HALF_HEIGHT_M = DEFAULT_PORTAL_HEIGHT * 0.5 + RIFT_PORTAL_SPEC.rimThicknessM;
+const PORTAL_OUTER_HALF_WIDTH_M =
+  (DEFAULT_PORTAL_WIDTH * 0.5 + RIFT_PORTAL_SPEC.rimThicknessM) * GAMEPLAY_OBJECT_SCALE;
+const PORTAL_OUTER_HALF_HEIGHT_M =
+  (DEFAULT_PORTAL_HEIGHT * 0.5 + RIFT_PORTAL_SPEC.rimThicknessM) * GAMEPLAY_OBJECT_SCALE;
 const PORTAL_POLYGON_CLEARANCE_M = 0.03;
 const PORTAL_CORNER_CLEARANCE_M = 0.04;
 const PORTAL_OPENING_CLEARANCE_M = 0.06;
@@ -864,7 +867,7 @@ function portalFitsInsideHostSurface(
   candidatePos: Readonly<Vec3>,
   portalNormal: Readonly<Vec3>,
 ): boolean {
-  if (surface.localPolygon.length < 3) return true;
+  if (surface.localPolygon.length < 3) return false;
   const invWorld = surface.worldMatrix.clone().invert();
   const rimPoints = samplePortalOuterRimPoints(candidatePos, portalNormal);
   const localPt = new THREE.Vector3();
@@ -959,7 +962,7 @@ function portalOverlapsOpening(
 function portalClipsAdjacentSurface(
   candidatePos: Readonly<Vec3>,
   portalNormal: Readonly<Vec3>,
-  hostSurface: RoomSurface,
+  hostSurface: RoomSurface | null,
   structuralSurfaces: readonly RoomSurface[],
 ): boolean {
   const rimPoints = samplePortalOuterRimPoints(
@@ -973,11 +976,11 @@ function portalClipsAdjacentSurface(
   const hitPt = new THREE.Vector3();
 
   for (const other of structuralSurfaces) {
-    if (other.id === hostSurface.id || other.localPolygon.length < 3) continue;
+    if (other.id === hostSurface?.id || other.localPolygon.length < 3) continue;
     const parallelDot = Math.abs(
-      hostSurface.normal.x * other.normal.x +
-        hostSurface.normal.y * other.normal.y +
-        hostSurface.normal.z * other.normal.z,
+      portalNormal.x * other.normal.x +
+        portalNormal.y * other.normal.y +
+        portalNormal.z * other.normal.z,
     );
     if (parallelDot > 0.85) continue;
 
@@ -1114,15 +1117,14 @@ function generateSurfacePortalSamples(surface: RoomSurface): Array<{
   if (surface.kind === 'wall') {
     const fractions = [-0.85, -0.55, -0.25, 0, 0.25, 0.55, 0.85];
     const xIsVertical = localXWorldY > 0.7;
-    for (const f of fractions) {
-      if (f === 0) continue;
-      const lx = xIsVertical ? midX : midX + f * halfX;
-      const lz = xIsVertical ? midZ + f * halfZ : midZ;
-      tmp.set(lx, 0, lz).applyMatrix4(surface.worldMatrix);
-      samples.push({
-        position: { x: tmp.x, y: tmp.y, z: tmp.z },
-        isCenter: false,
-      });
+    for (const across of fractions) {
+      for (const height of [-0.55, 0, 0.55]) {
+        if (across === 0 && height === 0) continue;
+        const lx = midX + (xIsVertical ? height : across) * halfX;
+        const lz = midZ + (xIsVertical ? across : height) * halfZ;
+        tmp.set(lx, 0, lz).applyMatrix4(surface.worldMatrix);
+        samples.push({ position: { x: tmp.x, y: tmp.y, z: tmp.z }, isCenter: false });
+      }
     }
   } else if (surface.kind === 'ceiling') {
     const ceilingFractions = [-0.75, -0.35, 0, 0.35, 0.75];
@@ -1169,12 +1171,16 @@ export function selectPortalAnchors(input: SelectPortalAnchorsInput): readonly P
   const checkPlayerArc =
     playerPosition !== undefined &&
     isWithinPlayArc(playerPosition, corePos, playerYaw, 'front-180');
+  const fitsArc = (position: Readonly<Vec3>): boolean =>
+    isWithinPlayArc(corePos, position, playerYaw, playArc) &&
+    (!checkPlayerArc || isWithinPlayArc(playerPosition, position, playerYaw, playArc));
 
   const structuralSurfaces = input.surfaces.filter(
     (s) => s.kind === 'wall' || s.kind === 'ceiling' || s.kind === 'floor',
   );
   const wallSurfaces = structuralSurfaces.filter((s) => s.kind === 'wall');
   const openingSurfaces = input.surfaces.filter(isOpeningSurface);
+  const support = createPortalSupportProbe(input.surfaces);
 
   const candidates: RawPortalCandidate[] = [];
   for (const surface of input.surfaces) {
@@ -1182,15 +1188,7 @@ export function selectPortalAnchors(input: SelectPortalAnchorsInput): readonly P
     const samples = generateSurfacePortalSamples(surface);
     for (const sample of samples) {
       const dist = distance3D(sample.position, corePos);
-      if (dist < minDistance) continue;
-      if (!isWithinPlayArc(corePos, sample.position, playerYaw, playArc)) continue;
-      if (
-        checkPlayerArc &&
-        playerPosition &&
-        !isWithinPlayArc(playerPosition, sample.position, playerYaw, playArc)
-      ) {
-        continue;
-      }
+      if (dist < minDistance || !fitsArc(sample.position)) continue;
 
       const normal = computeInwardPortalNormal(surface.normal, sample.position, corePos);
       // Enforce full rim polygon containment, doorway/opening clearance, corner clearance, and
@@ -1202,23 +1200,36 @@ export function selectPortalAnchors(input: SelectPortalAnchorsInput): readonly P
       ) {
         continue;
       }
-      if (portalClipsAdjacentSurface(sample.position, normal, surface, structuralSurfaces)) {
+      const footprint = samplePortalOuterRimPoints(sample.position, normal);
+      footprint.push(
+        ...samplePortalOuterRimPoints(
+          sample.position,
+          normal,
+          PORTAL_OUTER_HALF_WIDTH_M * 0.5,
+          PORTAL_OUTER_HALF_HEIGHT_M * 0.5,
+        ).slice(1),
+      );
+      const faceNormal = new THREE.Vector3(normal.x, normal.y, normal.z);
+      const offset = support.getMountOffset(footprint, faceNormal, surface);
+      if (offset === null) continue;
+      const position = {
+        x: sample.position.x + normal.x * offset,
+        y: sample.position.y + normal.y * offset,
+        z: sample.position.z + normal.z * offset,
+      };
+      const distanceFromCore = distance3D(position, corePos);
+      if (distanceFromCore < minDistance || (offset !== 0 && !fitsArc(position))) continue;
+      if (portalClipsAdjacentSurface(position, normal, surface, structuralSurfaces)) continue;
+      if (findWallIntersectionAlongSegment(corePos, position, wallSurfaces, surface.id) !== null)
         continue;
-      }
-      if (
-        findWallIntersectionAlongSegment(corePos, sample.position, wallSurfaces, surface.id) !==
-        null
-      ) {
-        continue;
-      }
 
-      const azimuthFromCore = computeRelativeAzimuth(corePos, sample.position, playerYaw);
+      const azimuthFromCore = computeRelativeAzimuth(corePos, position, playerYaw);
       candidates.push({
         surfaceId: surface.id,
         hostKind: surface.kind,
-        position: sample.position,
+        position,
         normal,
-        distanceFromCore: dist,
+        distanceFromCore,
         azimuthFromCore,
         isSurfaceCenter: sample.isCenter,
       });
@@ -1298,7 +1309,7 @@ export function selectPortalAnchors(input: SelectPortalAnchorsInput): readonly P
             (135 * Math.PI) / 180,
           ];
     const virtualDistances = [2.8, 3.05, 3.25, 3.45];
-    const targetCount = Math.min(maxPortals, Math.max(minPortals, MAX_PORTAL_ANCHORS));
+    const targetCount = minPortals;
 
     for (const respectWalls of [true, false] as const) {
       if (!respectWalls && selected.length >= minPortals) break;
@@ -1353,7 +1364,16 @@ export function selectPortalAnchors(input: SelectPortalAnchorsInput): readonly P
           y: 0,
           z: -dirZ / normalLen,
         };
+        if (portalClipsAdjacentSurface(position, normal, null, structuralSurfaces)) continue;
+        if (
+          support.crossesRoomMesh(
+            samplePortalOuterRimPoints(position, normal),
+            new THREE.Vector3(normal.x, normal.y, normal.z),
+          )
+        )
+          continue;
         const exactDistance = distance3D(position, corePos);
+        if (exactDistance < minDistance) continue;
 
         selected.push({
           id: `virtual-rift-${selected.length + 1}`,
